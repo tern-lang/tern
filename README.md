@@ -1,6 +1,6 @@
-![Snap](https://raw.githubusercontent.com/snapscript/snap-site/master/www.snapscript.org/img/logo.png)
+![Tern](https://raw.githubusercontent.com/snapscript/snap-site/master/www.snapscript.org/img/logo.png)
   
-Snap is an optionally typed object oriented language with first class functions and coroutines.
+Tern is an optionally typed object oriented language with first class functions and coroutines.
 It borrows concepts and constructs from many sources including Swift, JavaScript, Java, and 
 Scala amongst others. It is interpreted and has no intermediate representation, so there is 
 no need to compile or build your application.
@@ -90,7 +90,7 @@ and development environment.
 
 ## Overview
 
-Snap is an optionally typed scripting language for the [JVM](https://en.wikipedia.org/wiki/Java_virtual_machine) 
+Tern is an optionally typed scripting language for the [JVM](https://en.wikipedia.org/wiki/Java_virtual_machine) 
 and is compatible with all Android variants
 such as [Dalvik](https://en.wikipedia.org/wiki/Dalvik_(software)) and [ART](https://en.wikipedia.org/wiki/Android_Runtime). The learning curve is small for anyone with experience of Java, JavaScript, or a similar 
 imperative  language. It has excellent integration with the host platform and can 
@@ -102,7 +102,7 @@ interpreter and has a development environment which allows scripts to be debugge
 
 ### Parallel Compilation
 
-Snap programs can be separated in to multiple source files that define the types and functions representing 
+Tern programs can be separated in to multiple source files that define the types and functions representing 
 the execution flow. To minimise start times the parsing and assembly of the source is performed in parallel. 
 Once defined the execution graph is joined in to a single executable and static analysis is performed.
 
@@ -122,7 +122,7 @@ numbers the source was scanned from, and a type index classifying the source cha
 #### Grammar 
 
 To make sense of the source code a custom grammar is required. The grammar used for compilation of
-the Snap language leverages a custom framework that uses a variant of [Bacus Naur Form](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form). It is defined 
+the Tern language leverages a custom framework that uses a variant of [Bacus Naur Form](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form). It is defined 
 using special rules and literal values that form the basis of a [Recursive Descendant Parser](https://en.wikipedia.org/wiki/Recursive_descent_parser).
 
 | Rule  | Semantics |
@@ -199,7 +199,7 @@ let instance = eval("new " + type + "()");
 ### Command Directive
 
 The command directive is used to tell command interpreters where the interpreter for the source is located. This is 
-is often called the [Shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) directive and is interpreted by common shells like bash. The first line of any Snap 
+is often called the [Shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) directive and is interpreted by common shells like bash. The first line of any Tern 
 source file can contain this command directive.
 
 ```sh
@@ -209,13 +209,13 @@ source file can contain this command directive.
 ### Example Programs
 
 The best way to learn any language is through examples. Below is a collection of examples from applications that
-have been written in Snap. The source code for these examples are available on Github and are free to download.
+have been written in Tern. The source code for these examples are available on Github and are free to download.
 
 #### Mario
 
 This is a clone of the [Mario](https://en.wikipedia.org/wiki/Mario_Bros.) game comes with the full source code in addition to the images and sounds. It has
 been written twice, once with full static typing and one with dynamic typing. Below is a YouTube video of the 
-program being run and debugged with Snap Studio.
+program being run and debugged with Tern Studio.
 
 [![Debug Desktop Game](http://img.youtube.com/vi/6vo2y83unG0/0.jpg)](https://www.youtube.com/watch?v=6vo2y83unG0)
 
@@ -242,7 +242,7 @@ actions to program behaviour. The Android game framework can be found on Github 
 #### Flappy Bird
 
 This is a clone of the [Flappy Bird](https://en.wikipedia.org/wiki/Flappy_Bird) game and is targeted for Android. Below is a YouTube vide of the application
-being run and debugged remotely with Snap Studio.
+being run and debugged remotely with Tern Studio.
 
 [![Debug Android Game](http://img.youtube.com/vi/w-baBQbZ5dI/0.jpg)](https://www.youtube.com/watch?v=w-baBQbZ5dI)
 
@@ -264,7 +264,7 @@ shapes are painted on the screen with AWT primitives.
   
 ### Language  
   
-Learning how to code applications with Snap is easy, particularly if you have experience with Java, Javascript, 
+Learning how to code applications with Tern is easy, particularly if you have experience with Java, Javascript, 
 or a similar language. Below you will find various sections illustrating the basics, where you will learn about 
 types, functions, and the various statements and expressions that can be used. 
   
@@ -867,7 +867,7 @@ In any object oriented language types are required. A type is basically a way to
 and functions within a named scope. All types can have generic parameters allowing the static analyser to verify
 interactions with the type.
 
-The type system for Snap is independent to the type system native to the JVM. To integrate with the JVM type
+The type system for Tern is independent to the type system native to the JVM. To integrate with the JVM type
 system ASM byte code generation and Dex code generation are leveraged to create bridges between native
 types and those constructed from the script execution flow.
 
@@ -1208,8 +1208,8 @@ Download - [http://www.snapscript.org/download/snap.zip](http://www.snapscript.o
 
 ### Development Environment
 
-The development environment, Snap Studio, is written with HTML5 and TypeScript. It comes packaged as a standalone application 
-leveraging the [Chrome Embedded Framework](https://en.wikipedia.org/wiki/Chromium_Embedded_Framework). Running an application from Snap Studio is as simple has pressing the 
+The development environment, Tern Studio, is written with HTML5 and TypeScript. It comes packaged as a standalone application 
+leveraging the [Chrome Embedded Framework](https://en.wikipedia.org/wiki/Chromium_Embedded_Framework). Running an application from Tern Studio is as simple has pressing the 
 play button. This will initiate a bootstrapping process where the interpreter is downloaded in to a harness once
 this bootstrapping process has completed the source program is downloaded and executed. Stepping through the
 code can be done by setting break points.

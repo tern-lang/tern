@@ -237,7 +237,7 @@ constraints.
 In order to run on Android a framework was required to perform double buffering and map user
 actions to program behaviour. The Android game framework can be found on Github within this profile.
    
-[Source Code](https://github.com/tern-lang/tern-studio/blob/master/tern-studio/work/android/mario/src/mario/start.snap)
+[Source Code](https://github.com/tern-lang/tern-studio/blob/master/tern-studio/work/android/mario/src/mario)
 
 #### Flappy Bird
 

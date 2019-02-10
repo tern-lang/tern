@@ -1,0 +1,118 @@
+# default imports
+
+lang = java.lang {
+   AbstractMethodError, Appendable, ArithmeticException, ArrayIndexOutOfBoundsException, ArrayStoreException,
+   AssertionError, AutoCloseable, Boolean, BootstrapMethodError, Byte,
+   CharSequence, Character, Class, ClassCastException, ClassCircularityError,
+   ClassFormatError, ClassLoader, ClassNotFoundException, ClassValue, CloneNotSupportedException,
+   Cloneable, Comparable, Compiler, Deprecated, Double,
+   Enum, EnumConstantNotPresentException, Error, Exception, ExceptionInInitializerError,
+   Float, FunctionalInterface, IllegalAccessError, IllegalAccessException, IllegalArgumentException,
+   IllegalMonitorStateException, IllegalStateException, IllegalThreadStateException, IncompatibleClassChangeError, IndexOutOfBoundsException,
+   InheritableThreadLocal, InstantiationError, InstantiationException, Integer, InternalError,
+   InterruptedException, Iterable, LinkageError, Long, Math,
+   NegativeArraySizeException, NoClassDefFoundError, NoSuchFieldError, NoSuchFieldException, NoSuchMethodError,
+   NoSuchMethodException, NullPointerException, Number, NumberFormatException, Object,
+   OutOfMemoryError, Override, Package, Process, ProcessBuilder,
+   Readable, ReflectiveOperationException, Runnable, Runtime, RuntimeException,
+   RuntimePermission, SafeVarargs, SecurityException, SecurityManager, Short,
+   StackOverflowError, StackTraceElement, StrictMath, String, StringBuffer,
+   StringBuilder, StringIndexOutOfBoundsException, SuppressWarnings, System, Thread,
+   ThreadDeath, ThreadGroup, ThreadLocal, Throwable, TypeNotPresentException,
+   UnknownError, UnsatisfiedLinkError, UnsupportedClassVersionError, UnsupportedOperationException, VerifyError,
+   VirtualMachineError, Void, *
+}
+
+applet = java.applet {}
+awt = java.awt {}
+beans = java.beans {}
+
+io = java.io {
+   BufferedInputStream, BufferedOutputStream, BufferedReader, BufferedWriter, ByteArrayInputStream,
+   ByteArrayOutputStream, CharArrayReader, CharArrayWriter, CharConversionException, Closeable,
+   Console, DataInput, DataInputStream, DataOutput, DataOutputStream,
+   EOFException, Externalizable, File, FileDescriptor, FileFilter,
+   FileInputStream, FileNotFoundException, FileOutputStream, FilePermission, FileReader,
+   FileWriter, FilenameFilter, FilterInputStream, FilterOutputStream, FilterReader,
+   FilterWriter, Flushable, IOError, IOException, InputStream,
+   InputStreamReader, InterruptedIOException, InvalidClassException, InvalidObjectException, LineNumberInputStream,
+   LineNumberReader, NotActiveException, NotSerializableException, ObjectInput, ObjectInputStream,
+   ObjectInputValidation, ObjectOutput, ObjectOutputStream, ObjectStreamClass, ObjectStreamConstants,
+   ObjectStreamException, ObjectStreamField, OptionalDataException, OutputStream, OutputStreamWriter,
+   PipedInputStream, PipedOutputStream, PipedReader, PipedWriter, PrintStream,
+   PrintWriter, PushbackInputStream, PushbackReader, RandomAccessFile, Reader,
+   SequenceInputStream, Serializable, SerializablePermission, StreamCorruptedException, StreamTokenizer,
+   StringBufferInputStream, StringReader, StringWriter, SyncFailedException, UTFDataFormatException,
+   UncheckedIOException, UnsupportedEncodingException, WriteAbortedException, Writer, *
+}
+   
+math = java.math {}
+
+net = java.net {
+   Authenticator, BindException, CacheRequest, CacheResponse, ConnectException,
+   ContentHandler, ContentHandlerFactory, CookieHandler, CookieManager, CookiePolicy,
+   CookieStore, DatagramPacket, DatagramSocket, DatagramSocketImpl, DatagramSocketImplFactory,
+   FileNameMap, HttpCookie, HttpRetryException, HttpURLConnection, IDN,
+   Inet4Address, Inet6Address, InetAddress, InetSocketAddress, InterfaceAddress,
+   JarURLConnection, MalformedURLException, MulticastSocket, NetPermission, NetworkInterface,
+   NoRouteToHostException, PasswordAuthentication, PortUnreachableException, ProtocolException, ProtocolFamily,
+   Proxy, ProxySelector, ResponseCache, SecureCacheResponse, ServerSocket,
+   Socket, SocketAddress, SocketException, SocketImpl, SocketImplFactory,
+   SocketOption, SocketOptions, SocketPermission, SocketTimeoutException, StandardProtocolFamily,
+   StandardSocketOptions, URI, URISyntaxException, URL, URLClassLoader,
+   URLConnection, URLDecoder, URLEncoder, URLPermission, URLStreamHandler,
+   URLStreamHandlerFactory, UnknownHostException, UnknownServiceException, *
+}
+   
+nio = java.nio {}
+rmi = java.rmi, javax.rmi {}
+security = java.security, javax.security {}
+sql = java.sql, javax.security {}
+text = java.text {}
+time = java.time {}
+
+util = java.util {
+   AbstractCollection, AbstractList, AbstractMap, AbstractQueue, AbstractSequentialList,
+   AbstractSet, ArrayDeque, ArrayList, Arrays, Base64,
+   BitSet, Calendar, Collection, Collections, Comparator,
+   ConcurrentModificationException, Currency, Date, Deque, Dictionary,
+   DoubleSummaryStatistics, DuplicateFormatFlagsException, EmptyStackException, EnumMap, EnumSet,
+   Enumeration, EventListener, EventListenerProxy, EventObject, FormatFlagsConversionMismatchException,
+   Formattable, FormattableFlags, Formatter, FormatterClosedException, GregorianCalendar,
+   HashMap, HashSet, Hashtable, IdentityHashMap, IllegalFormatCodePointException,
+   IllegalFormatConversionException, IllegalFormatException, IllegalFormatFlagsException, IllegalFormatPrecisionException, IllegalFormatWidthException,
+   IllformedLocaleException, InputMismatchException, IntSummaryStatistics, InvalidPropertiesFormatException, Iterator,
+   LinkedHashMap, LinkedHashSet, LinkedList, List, ListIterator,
+   ListResourceBundle, Locale, LongSummaryStatistics, Map, MissingFormatArgumentException,
+   MissingFormatWidthException, MissingResourceException, NavigableMap, NavigableSet, NoSuchElementException,
+   Objects, Observable, Observer, Optional, OptionalDouble,
+   OptionalInt, OptionalLong, PrimitiveIterator, PriorityQueue, Properties,
+   PropertyPermission, PropertyResourceBundle, Queue, Random, RandomAccess,
+   ResourceBundle, Scanner, ServiceConfigurationError, ServiceLoader, Set,
+   SimpleTimeZone, SortedMap, SortedSet, Spliterator, Spliterators,
+   SplittableRandom, Stack, StringJoiner, StringTokenizer, TimeZone,
+   Timer, TimerTask, TooManyListenersException, TreeMap, TreeSet,
+   UUID, UnknownFormatConversionException, UnknownFormatFlagsException, Vector, WeakHashMap, *
+}
+
+# javax imports
+
+accessibility = javax.accessibility {}
+annotation = javax.annotation {}
+imageio = javax.imageio {}
+management = javax.management {}
+naming = javax.naming {}
+print = javax.print {}
+script = javax.script {}
+sound = javax.sound {}
+swing = javax.swing {}
+tools = javax.tools {}
+xml = javax.xml {}
+
+# snap imports
+
+core = tern.core { Context }
+resume = tern.core.resume { Yield, Promise, Task, Answer }
+compile = tern.compile {}
+common = tern.common {}
+

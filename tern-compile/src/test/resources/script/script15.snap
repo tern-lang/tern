@@ -1,0 +1,5 @@
+try {
+	out.println("try");
+}finally{
+	out.println("finally");
+}

@@ -1,0 +1,674 @@
+import swing.JPanelInterface;
+import swing.JPanelAdapter;
+import awt.Color;
+import awt.Dimension;
+import awt.Graphics;
+import awt.event.MouseEvent;
+import awt.event.MouseMotionListener;
+import io.IOException;
+import io.InputStream;
+import io.StreamTokenizer;
+
+import swing.JFrame;
+import swing.JPanel;
+
+/**
+ * A fairly conventional 3D matrix object that can transform sets of 3D points
+ * and perform a variety of manipulations on the transform
+ */
+class Matrix3D {
+   var xx = 0.0f;
+   var xy = 0.0f;
+   var xz = 0.0f;
+   var xo = 0.0f;
+   var yx = 0.0f;
+   var yy = 0.0f;
+   var yz = 0.0f;
+   var yo = 0.0f;
+   var zx = 0.0f;
+   var zy = 0.0f;
+   var zz = 0.0f;
+   var zo = 0.0f;
+   static const PI = 3.14159265;
+
+   /** Create a new unit matrix */
+   new() {
+      this.xx = 1.0f;
+      this.yy = 1.0f;
+      this.zz = 1.0f;
+   }
+
+
+   /** Scale by f in all dimensions */
+   scale(f) {
+      xx *= f;
+      xy *= f;
+      xz *= f;
+      xo *= f;
+      yx *= f;
+      yy *= f;
+      yz *= f;
+      yo *= f;
+      zx *= f;
+      zy *= f;
+      zz *= f;
+      zo *= f;
+   }
+
+   /** Scale along each axis independently */
+   scale(xf, yf, zf) {
+      xx *= xf;
+      xy *= xf;
+      xz *= xf;
+      xo *= xf;
+      yx *= yf;
+      yy *= yf;
+      yz *= yf;
+      yo *= yf;
+      zx *= zf;
+      zy *= zf;
+      zz *= zf;
+      zo *= zf;
+   }
+
+   /** Translate the origin */
+   translate(x, y, z) {
+      xo += x;
+      yo += y;
+      zo += z;
+   }
+
+   /** rotate theta degrees about the y axis */
+   yrot(theta) {
+      theta *= (PI / 180);
+      var ct = Math.cos(theta);
+      var st = Math.sin(theta);
+
+      var Nxx = (xx * ct + zx * st);
+      var Nxy = (xy * ct + zy * st);
+      var Nxz = (xz * ct + zz * st);
+      var Nxo = (xo * ct + zo * st);
+
+      var Nzx = (zx * ct - xx * st);
+      var Nzy = (zy * ct - xy * st);
+      var Nzz = (zz * ct - xz * st);
+      var Nzo = (zo * ct - xo * st);
+
+      xo = Nxo;
+      xx = Nxx;
+      xy = Nxy;
+      xz = Nxz;
+      zo = Nzo;
+      zx = Nzx;
+      zy = Nzy;
+      zz = Nzz;
+   }
+
+   /** rotate theta degrees about the x axis */
+   xrot(theta) {
+      theta *= (PI / 180);
+      var ct = Math.cos(theta);
+      var st = Math.sin(theta);
+
+      var Nyx = (yx * ct + zx * st);
+      var Nyy = (yy * ct + zy * st);
+      var Nyz = (yz * ct + zz * st);
+      var Nyo = (yo * ct + zo * st);
+
+      var Nzx = (zx * ct - yx * st);
+      var Nzy = (zy * ct - yy * st);
+      var Nzz = (zz * ct - yz * st);
+      var Nzo = (zo * ct - yo * st);
+
+      yo = Nyo;
+      yx = Nyx;
+      yy = Nyy;
+      yz = Nyz;
+      zo = Nzo;
+      zx = Nzx;
+      zy = Nzy;
+      zz = Nzz;
+   }
+
+   /** rotate theta degrees about the z axis */
+   zrot(theta) {
+      theta *= (PI / 180);
+      var ct = Math.cos(theta);
+      var st = Math.sin(theta);
+
+      var Nyx = (yx * ct + xx * st);
+      var Nyy = (yy * ct + xy * st);
+      var Nyz = (yz * ct + xz * st);
+      var Nyo = (yo * ct + xo * st);
+
+      var Nxx = (xx * ct - yx * st);
+      var Nxy = (xy * ct - yy * st);
+      var Nxz = (xz * ct - yz * st);
+      var Nxo = (xo * ct - yo * st);
+
+      yo = Nyo;
+      yx = Nyx;
+      yy = Nyy;
+      yz = Nyz;
+      xo = Nxo;
+      xx = Nxx;
+      xy = Nxy;
+      xz = Nxz;
+   }
+
+   /** Multiply this matrix by a second: M = M*R */
+   mult(rhs) {
+      var lxx = xx * rhs.xx + yx * rhs.xy + zx * rhs.xz;
+      var lxy = xy * rhs.xx + yy * rhs.xy + zy * rhs.xz;
+      var lxz = xz * rhs.xx + yz * rhs.xy + zz * rhs.xz;
+      var lxo = xo * rhs.xx + yo * rhs.xy + zo * rhs.xz + rhs.xo;
+
+      var lyx = xx * rhs.yx + yx * rhs.yy + zx * rhs.yz;
+      var lyy = xy * rhs.yx + yy * rhs.yy + zy * rhs.yz;
+      var lyz = xz * rhs.yx + yz * rhs.yy + zz * rhs.yz;
+      var lyo = xo * rhs.yx + yo * rhs.yy + zo * rhs.yz + rhs.yo;
+
+      var lzx = xx * rhs.zx + yx * rhs.zy + zx * rhs.zz;
+      var lzy = xy * rhs.zx + yy * rhs.zy + zy * rhs.zz;
+      var lzz = xz * rhs.zx + yz * rhs.zy + zz * rhs.zz;
+      var lzo = xo * rhs.zx + yo * rhs.zy + zo * rhs.zz + rhs.zo;
+
+      xx = lxx;
+      xy = lxy;
+      xz = lxz;
+      xo = lxo;
+
+      yx = lyx;
+      yy = lyy;
+      yz = lyz;
+      yo = lyo;
+
+      zx = lzx;
+      zy = lzy;
+      zz = lzz;
+      zo = lzo;
+   }
+
+   /** Reinitialize to the unit matrix */
+   unit() {
+      xo = 0.0f;
+      xx = 1.0f;
+      xy = 0.0f;
+      xz = 0.0f;
+      yo = 0.0f;
+      yx = 0.0f;
+      yy = 1.0f;
+      yz = 0.0f;
+      zo = 0.0f;
+      zx = 0.0f;
+      zy = 0.0f;
+      zz = 1.0f;
+   }
+   /**
+    * Transform nvert points from v into tv. v contains the input coordinates in
+    * floating point. Three successive entries in the array constitute a point.
+    * tv ends up holding the transformed points as integers; three successive
+    * entries per point
+    */
+   transform(v, tv, nvert) {
+      var lxx = xx;
+      var lxy = xy;
+      var lxz = xz;
+      var lxo = xo;
+      var lyx = yx;
+      var lyy = yy;
+      var lyz = yz;
+      var lyo = yo;
+      var lzx = zx;
+      var lzy = zy;
+      var lzz = zz;
+      var lzo = zo;
+      var i = nvert * 3;
+      i -= 3; 
+      while(i >= 0) {
+         var x = v[i];
+        var y = v[i + 1];
+        var z = v[i + 2];
+         tv[i] = Math.round(x * lxx + y * lxy + z * lxz + lxo);
+         tv[i + 1] = Math.round(x * lyx + y * lyy + z * lyz + lyo);
+         tv[i + 2] = Math.round(x * lzx + y * lzy + z * lzz + lzo);
+         i -= 3;
+      }
+   }
+
+   toString() {
+      return "[" + xo + "," + xx + "," + xy + "," + xz + ";" + yo + "," + yx + "," + yy + "," + yz + ";" + zo + "," + zx + "," + zy + "," + zz + "]";
+   }
+}
+
+/** The representation of a 3D model */
+class Model3D {
+   var vert;
+   var tvert;
+   var nvert=0;
+   var maxvert=0;
+   var con;
+   var ncon=0;
+   var maxcon=0;
+   var transformed;
+   var mat;
+
+   var xmin=0.0f;
+   var xmax=0.0f;
+   var ymin=0.0f;
+   var ymax=0.0f;
+   var zmin=0.0f;
+   var zmax=0.0f;
+
+   new() {
+      mat = new Matrix3D();
+      mat.xrot(20);
+      mat.yrot(30);
+   }
+
+   /** Create a 3D model by parsing an input stream */
+   new(is) {
+      mat = new Matrix3D();
+      mat.xrot(20);
+      mat.yrot(30);
+      parse(is);
+   }
+   parse(is) {
+         var st = new StreamTokenizer(is);
+         st.eolIsSignificant(true);
+         //st.commentChar(35);
+         try {
+            while (true) {
+               var token = st.nextToken();
+
+               if (token == StreamTokenizer.TT_EOL) {
+                  continue;
+               } else if (token == StreamTokenizer.TT_WORD) {
+                  if ("v".equals(st.sval)) {
+                     var x = 0.0;
+                     var y = 0.0;
+                     var z = 0.0;
+                     if (st.nextToken() == StreamTokenizer.TT_NUMBER) {
+                        x = st.nval;
+                        if (st.nextToken() == StreamTokenizer.TT_NUMBER) {
+                           y = st.nval;
+                           if (st.nextToken() == StreamTokenizer.TT_NUMBER)
+                              z = st.nval;
+                        }
+                     }
+                     addVert(x, y, z);
+                     while (st.ttype != StreamTokenizer.TT_EOL && st.ttype != StreamTokenizer.TT_EOF)
+                        st.nextToken();
+                  } else if ("f".equals(st.sval) || "fo".equals(st.sval) || "l".equals(st.sval)) {
+                     var start = -1;
+                     var prev = -1;
+                     var n = -1;
+                     while (true)
+                        if (st.nextToken() == StreamTokenizer.TT_NUMBER) {
+                           n = st.nval;
+                           if (prev >= 0)
+                              add(prev - 1, n - 1);
+                           if (start < 0)
+                              start = n;
+                           prev = n;
+                        } else if (st.ttype == '/')
+                           st.nextToken();
+                        else
+                           break;
+                     if (start >= 0)
+                        add(start - 1, prev - 1);
+                     if (st.ttype != StreamTokenizer.TT_EOL)
+                        return;
+                  } else {
+                     while (st.nextToken() != StreamTokenizer.TT_EOL && st.ttype != StreamTokenizer.TT_EOF){}
+                        
+                  }
+               }else {
+                  break;
+               }
+            }
+         } finally {
+            is.close();
+            if (st.ttype != StreamTokenizer.TT_EOF) {
+               throw new IOException(st.toString());
+            }
+         }
+   }
+
+   /** Add a vertex to this model */
+   addVert(x, y, z) {
+      var i = nvert;
+      if (i >= maxvert)
+         if (vert == null) {
+            maxvert = 100;
+            vert = new Float[maxvert * 3];
+         } else {
+            maxvert *= 2;
+            var nv = new Float[maxvert * 3];
+            System.arraycopy(vert, 0, nv, 0, vert.size());
+            vert = nv;
+         }
+      i *= 3;
+      vert[i] = x;
+      vert[i + 1] = y;
+      vert[i + 2] = z;
+      return nvert++;
+   }
+
+   /** Add a line from vertex p1 to vertex p2 */
+   add(p1, p2) {
+      var i = ncon;
+      if (p1 >= nvert || p2 >= nvert)
+         return;
+      if (i >= maxcon)
+         if (con == null) {
+            maxcon = 100;
+            con = new Integer[maxcon];
+         } else {
+            maxcon *= 2;
+            var nv = new Integer[maxcon];
+            System.arraycopy(con, 0, nv, 0, con.size());
+            con = nv;
+         }
+      if (p1 > p2) {
+         var t = p1;
+         p1 = p2;
+         p2 = t;
+      }
+      con[i] = (p1 << 16) | p2;
+      ncon = i + 1;
+   }
+
+   /** Transform all the points in this model */
+   transform() {
+      if (transformed || nvert <= 0)
+         return;
+      if (tvert == null || tvert.size() < nvert * 3)
+         tvert = new Integer[nvert * 3];
+      mat.transform(vert, tvert, nvert);
+      transformed = true;
+   }
+
+   /*
+    * Quick Sort implementation
+    */
+   quickSort(a, left, right) {
+      var leftIndex = left;
+      var rightIndex = right;
+      var partionElement;
+      if (right > left) {
+
+         /*
+          * Arbitrarily establishing partition element as the midpoint of the
+          * array.
+          */
+         partionElement = a[(left + right) / 2];
+
+         // loop through the array until indices cross
+         while (leftIndex <= rightIndex) {
+            /*
+             * find the first element that is greater than or equal to the
+             * partionElement starting from the leftIndex.
+             */
+            while ((leftIndex < right) && (a[leftIndex] < partionElement))
+               ++leftIndex;
+
+            /*
+             * find an element that is smaller than or equal to the
+             * partionElement starting from the rightIndex.
+             */
+            while ((rightIndex > left) && (a[rightIndex] > partionElement))
+               --rightIndex;
+
+            // if the indexes have not crossed, swap
+            if (leftIndex <= rightIndex) {
+               swap(a, leftIndex, rightIndex);
+               ++leftIndex;
+               --rightIndex;
+            }
+         }
+
+         /*
+          * If the right index has not reached the left side of array must now
+          * sort the left partition.
+          */
+         if (left < rightIndex)
+            quickSort(a, left, rightIndex);
+
+         /*
+          * If the left index has not reached the right side of array must now
+          * sort the right partition.
+          */
+         if (leftIndex < right)
+            quickSort(a, leftIndex, right);
+
+      }
+   }
+
+   swap(a, i, j) {
+      var t;
+      t = a[i];
+      a[i] = a[j];
+      a[j] = t;
+   }
+
+   /** eliminate duplicate lines */
+   compress() {
+      var limit = ncon;
+      var c = con;
+      quickSort(con, 0, ncon - 1);
+      var d = 0;
+      var pp1 = -1;
+      for (var i = 0; i < limit; i++) {
+         var p1 = c[i];
+         if (pp1 != p1) {
+            c[d] = p1;
+            d++;
+         }
+         pp1 = p1;
+      }
+      ncon = d;
+   }
+
+   static var gr;
+
+   /**
+    * Paint this model to a graphics context. It uses the matrix associated with
+    * this model to map from model space to screen space. The next version of
+    * the browser should have double buffering, which will make this *much*
+    * nicer
+    */
+   paint(g) {
+      if (vert == null || nvert <= 0)
+         return;
+      transform();
+      if (gr == null) {
+         gr = new Color[16];
+         for (var i = 0; i < 16; i++) {
+            var grey = Math.round(170 * (1 - Math.pow(i / 15.0, 2.3)));
+            gr[i] = new Color(grey, grey, grey);
+         }
+      }
+      var lg = 0;
+      var lim = ncon;
+      var c = con;
+      var v = tvert;
+      if (lim <= 0 || nvert <= 0)
+         return;
+      for (var i = 0; i < lim; i++) {
+         var t = c[i];
+         var p1 = ((t >> 16) & 0xFFFF) * 3;
+         var p2 = (t & 0xFFFF) * 3;
+         var grey = v[p1 + 2] + v[p2 + 2];
+         if (grey < 0)
+            grey = 0;
+         if (grey > 15)
+            grey = 15;
+         if (grey != lg) {
+            lg = grey;
+            g.setColor(gr[grey]);
+         }
+         g.drawLine(v[p1], v[p1 + 1], v[p2], v[p2 + 1]);
+      }
+   }
+
+   /** Find the bounding box of this model */
+   findBB() {
+      if (nvert <= 0)
+         return;
+      var v = vert;
+      var xmin = v[0];
+      var xmax = xmin;
+      var ymin = v[1];
+      var ymax = ymin;
+      var zmin = v[2];
+      var zmax = zmin;
+      var i = nvert * 3;
+      i -= 3; 
+      while(i >= 0) {
+         var x = v[i];
+         if (x < xmin)
+            xmin = x;
+         if (x > xmax)
+            xmax = x;
+         var y = v[i + 1];
+         if (y < ymin)
+            ymin = y;
+         if (y > ymax)
+            ymax = y;
+         var z = v[i + 2];
+         if (z < zmin)
+            zmin = z;
+         if (z > zmax)
+            zmax = z;
+
+         i -= 3;
+      }
+      this.xmax = xmax;
+      this.xmin = xmin;
+      this.ymax = ymax;
+      this.ymin = ymin;
+      this.zmax = zmax;
+      this.zmin = zmin;
+   }
+}
+
+/** An applet to put a 3D model into a page */
+class ThreeD with JPanelInterface with MouseMotionListener {
+   var md;
+   var painted = true;
+   var xfac;
+   var prevx;
+   var prevy;
+   var xtheta;
+   var ytheta;
+   var scalefudge = 1;
+   var amat = new Matrix3D();
+   var tmat = new Matrix3D();
+   var message = null;
+   var panel;
+
+   init(panel) {
+      try {
+         scalefudge = Float.valueOf("0.8").floatValue();
+      } catch (e) {
+      }
+      
+      amat.yrot(20);
+      amat.xrot(20);
+      this.panel = panel;
+      panel.setVisible(true);
+      panel.setSize(new Dimension(600, 600));
+      var is = null;
+      try {
+         Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+         is = ThreeD.class.getModule().getResource("/wireframe/cube.spec");
+         var m = new Model3D(is);
+         md = m;
+         m.findBB();
+         m.compress();
+         var xw = m.xmax - m.xmin;
+         var yw = m.ymax - m.ymin;
+         var zw = m.zmax - m.zmin;
+         if (yw > xw)
+            xw = yw;
+         if (zw > xw)
+            xw = zw;
+         var f1 = panel.getSize().width / xw;
+         var f2 = panel.getSize().height / xw;
+         var min = (f1 < f2) ? f1 : f2;
+         xfac = 0.7f * min * scalefudge;
+      } catch (e) {
+         e.printStackTrace();
+         md = null;
+         message = e.toString();
+      }
+      try {
+         if (is != null)
+            is.close();
+      } catch (e) {
+         e.printStackTrace();
+      }
+      panel.repaint();
+   }
+
+   mouseMoved(e) {
+      prevx = e.getX();
+      prevy = e.getY();
+   }
+
+   mouseDragged(e) {
+      var x = e.getX();
+      var y = e.getY();
+      tmat.unit();
+      var xtheta = (prevy - y) * 360.0f / panel.getSize().width;
+      var ytheta = (x - prevx) * 360.0f / panel.getSize().height;
+      tmat.xrot(xtheta);
+      tmat.yrot(ytheta);
+      amat.mult(tmat);
+      if (painted) {
+         painted = false;
+         panel.repaint();
+      }
+      prevx = x;
+      prevy = y;
+   }
+
+   update(panel, g) {
+      paint(panel, g);
+   }
+
+   paint(panel, g) {
+      g.clearRect(0, 0, panel.getSize().width, panel.getSize().height);
+      if (md != null) {
+         md.mat.unit();
+         md.mat.translate((-1*(md.xmin + md.xmax)) / 2, (-1*(md.ymin + md.ymax) / 2), (-1*(md.zmin + md.zmax)) / 2);
+         md.mat.mult(amat);
+         // md.mat.scale(xfac, -xfac, 8 * xfac / size().width);
+         md.mat.scale(xfac, -xfac, 16 * xfac / panel.getSize().width);
+         md.mat.translate(panel.getSize().width / 2, panel.getSize().height / 2, 8);
+         md.transformed = false;
+         md.paint(g);
+         painted = true;
+      } else if (message != null) {
+         g.drawString("Error in model:", 3, 20);
+         g.drawString(message, 10, 40);
+      }
+   }
+
+}
+
+function start()  {
+    var d = new ThreeD();
+    var panel = new JPanelAdapter(d);
+    var f = new JFrame();
+    d.init(panel);
+    f.add(panel);
+    f.getContentPane().addMouseMotionListener(d);
+    f.setSize(new Dimension(600, 600));
+    f.setVisible(true);
+    Thread.sleep(1000000);
+}
+
+start();
+

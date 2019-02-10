@@ -1,0 +1,149 @@
+
+/*
+ * This is really really crap!! to specific!!
+ */
+function editPasswordInput(text: String) {
+   var dialog : Dialog = screen.openInputDialog('accountPasswordDialog', 'password');
+
+   dialog.setAttribute('text', text);
+   dialog.setAttribute('name', 'password');
+   dialog.setAttribute('functionOpenLock', 'this.context.getCanvas("password").getInput().setPassword(false)');
+   dialog.setAttribute('functionCloseLock', 'this.context.getCanvas("password").getInput().setPassword(true)' );                
+   dialog.showDialog();
+
+   var splash : Fade = context.getCanvas('splash');
+   var content : Fade = context.getCanvas('content');
+   
+   if(splash != null) {
+      splash.setForceHide(true);
+   } 
+   if(content != null) {
+      content.setForceShow(true);
+   } 
+   var formInput : FormInput = context.getCanvas('password');
+   var textBox : TextBox = formInput.getInput();
+
+   if(textBox != null) {
+      textBox.setFocused(false);
+   }
+}
+
+/*
+ * This is really really crap!! to specific!!
+ */
+function editConfirmPasswordInput(text: String) {
+   var dialog : Dialog = screen.openInputDialog('accountPasswordDialog', 'confirmPassword');
+
+   dialog.setAttribute('text', text);
+   dialog.setAttribute('name', 'confirmPassword');
+   dialog.setAttribute('functionOpenLock', 'this.context.getCanvas("confirmPassword").getInput().setPassword(false)');
+   dialog.setAttribute('functionCloseLock', 'this.context.getCanvas("confirmPassword").getInput().setPassword(true)' );                
+   dialog.showDialog();
+
+   var splash : Fade = context.getCanvas('splash');
+   var content : Fade = context.getCanvas('content');
+   
+   if(splash != null) {
+      splash.setForceHide(true);
+   } 
+   if(content != null) {
+      content.setForceShow(true);
+   } 
+   var formInput : FormInput = context.getCanvas('confirmPassword');
+   var textBox : TextBox = formInput.getInput();
+
+   if(textBox != null) {
+      textBox.setFocused(false);
+   }
+}
+
+function editTextInput(text: String, name: String) {
+   var dialog : Dialog = screen.openInputDialog('accountDialog', name);
+
+   dialog.setAttribute('text', text);
+   dialog.setAttribute('name', name);
+   dialog.showDialog(); 
+   
+   var splash : Fade = context.getCanvas('splash');
+   var content : Fade = context.getCanvas('content');
+   
+   if(splash != null) {
+      splash.setForceHide(true);
+   } 
+   if(content != null) {
+      content.setForceShow(true);
+   } 
+   var formInput : FormInput = context.getCanvas(name);
+   var textBox : TextBox = formInput.getInput();
+
+   if(textBox != null) {
+      textBox.setFocused(false);
+   }
+} 
+
+function signInUser() {
+   var dialog : Dialog = screen.openDialog('spinnerDialog');
+   var toggle : Toggle = context.getCanvas('signIn');
+   
+   if(toggle != null) {
+      toggle.toggle();
+   }
+   dialog.showDialog();
+   formController.submitForm("signInForm"); 
+} 
+
+function signOutUser() {
+   var dialog : Dialog = screen.openDialog('spinnerDialog');
+   var button : Toggle = context.getCanvas('signOut');
+   
+   dialog.showDialog();    
+   signOutController.signOut();
+   screen.showPage('home');
+   button.toggle();
+} 
+   
+function checkUserName() {
+   var dialog : Dialog = screen.openDialog('spinnerDialog');
+   var toggle : Toggle = context.getCanvas('next');
+   
+   if(toggle != null) {
+      toggle.toggle();
+   }
+   dialog.showDialog();
+   formController.submitForm("registerForm"); 
+} 
+
+function registerUser() {
+   var dialog : Dialog = screen.openDialog('spinnerDialog');
+   var toggle : Toggle = context.getCanvas('next');
+   
+   if(toggle != null) {
+      toggle.toggle();
+   }
+   dialog.showDialog();  
+   formController.submitForm("registerForm"); 
+}
+
+function verifyPassword() {
+   var dialog : Dialog = screen.openDialog('spinnerDialog');
+   var toggle : Toggle = context.getCanvas('next');
+   
+   if(toggle != null) {
+      toggle.toggle();
+   }
+   dialog.showDialog();
+   formController.submitForm("registerForm"); 
+}
+
+function showIcons() {
+   var flow : Flow = context.getCanvas('actionBar');
+      
+   if(flow != null) {
+     flow.setVisible("soundIcon");
+     flow.setVisible("homeIcon");    
+     flow.setVisible("backIcon");        
+   }             
+}
+
+showIcons();
+

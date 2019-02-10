@@ -1,0 +1,103 @@
+import static lang.System.*;
+import text.DecimalFormat;
+
+class TestTimer{
+   function timeTests(){
+      for(var f in this.class.functions){
+         if(f.name.startsWith("test")){
+            var start=currentTimeMillis();            
+            f.invocation.invoke(this,this);
+            var finish=currentTimeMillis();
+            var duration=finish-start;
+            System.out.println("Time for "+f.name+"() was "+duration+" ms");
+         }
+      }
+   }
+}
+
+class Special extends Base{
+   var x;
+   var y;
+   var z;
+   new(x:Number,y:Number):super(x){
+      this.x=x;
+      this.y=y;
+      this.z=0;
+   }
+   foo(x){
+      this.z-=x;
+   }
+   test(){
+      x+=y;
+   }
+}
+class Base {
+   var v;
+   new(v){
+      this.v=v;
+   }
+   test(){}
+      
+   
+}
+class SpecialSpecial extends Special{
+   var x;// XXX do something about these fields, they need to be shadowed
+   var y; // XXX do something about these!!
+   new(x:Number,y:Number):super(x+1,y+1){
+      this.x=x;
+      this.y=y;
+   }
+   foo(x){
+      System.out.println("SpecialSpecial.foo");
+   }
+   test(){
+      super.foo(x); // this could be dodgy as the super methods are not virtual!!
+      x*=y;      
+   }
+   done(){
+      var format=new DecimalFormat("###,###,###,###.00");
+      System.out.println("x="+format.format(x)+" super.x="+format.format(super.x)+" super.z="+format.format(super.z));
+   }
+}
+class StaticMethod{
+   static max(a,b){
+      if(a>b){
+         return a;
+      }
+      return b;
+   }
+}
+class SimpleTest extends TestTimer{
+   function testCount(){
+      var format=new DecimalFormat("###,###,###,###.00");
+      var j=0;
+      for(var i=0;i<1000000;i++){
+         j+=i;
+      }
+      System.out.println("result of 1 million iterations is="+format.format(j));
+   }
+   function testInstantiate(){
+      for(var i=0;i<100000;i++){
+         var v=new Special(i,i+1);
+         v.test();
+      }
+   }   
+   function testInstantiateWithThree(){
+      var v=new SpecialSpecial(0,1);
+      for(var i=0;i<100000;i++){
+         v=new SpecialSpecial(i,i+1);
+         v.test();
+      }
+      v.done();
+   }   
+   function testStaticMethod(){
+      for(var i=0;i<100000;i++){
+         StaticMethod.max(i,i+1);
+      }
+   }   
+}
+var test = new SimpleTest();
+
+test.timeTests();
+
+

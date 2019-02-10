@@ -1,0 +1,32 @@
+
+
+var arr1 = [1,2,3];
+print(arr1);
+print(["a", "b", "c"]);
+print([1, 2, 3, "x", "z", new Date()]);
+print([1, 2, 3, "x", "z", [44,55,66]]);
+print(["a", [1,2,3], "b", "c"]);
+print([3, [11, 22], -1, "a", -2, -3]);
+
+var w = 600;
+
+print([-2, -w, 66]);
+
+//
+// Sphere: radius, [cx,  cy,  cz], R,  G,  B, specular exponent, reflectiveness 
+// R, G, B in [0, 9], reflectiveness in [0..9].
+var spheres = [
+  w, [ 0, -w, 0],  9, 9, 0,  w,  2,  // Yellow sphere
+  1, [ 0,  0, 3],  9, 0, 0,  w,  3,  // Red sphere
+  1, [-2,  1, 4],  0, 9, 0,  9,  4,  // Green sphere
+  1, [ 2,  1, 4],  0, 0, 9,  w,  5   // Blue sphere
+];
+print(spheres);
+print([w/2,11,w+1,[1,"a",w+"ss"],Double.NaN]);
+
+
+function print(list){
+	for(var x in list){
+		System.out.println(x);
+	}
+}

@@ -1,0 +1,7 @@
+function demo()
+{
+var  key = "";
+var str="";
+
+return(str1);
+}

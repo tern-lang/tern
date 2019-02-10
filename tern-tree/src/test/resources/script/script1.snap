@@ -1,0 +1,10 @@
+import static lang.Math.*;
+
+var v1 : Number = round(1.22d);
+var v2 : String = 'some stuff='+v1+"\nother stuff"+'\nyet more'+v1;
+
+try {
+	out.println(v2);
+} catch(e){
+	out.println(e);
+}

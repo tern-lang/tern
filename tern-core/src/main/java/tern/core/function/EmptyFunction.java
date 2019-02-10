@@ -1,0 +1,102 @@
+package tern.core.function;
+
+import static java.util.Collections.EMPTY_LIST;
+import static tern.core.ModifierType.ABSTRACT;
+import static tern.core.ModifierType.FUNCTION;
+import static tern.core.Reserved.METHOD_CLOSURE;
+import static tern.core.constraint.Constraint.NONE;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import tern.core.annotation.Annotation;
+import tern.core.constraint.Constraint;
+import tern.core.type.Type;
+
+public class EmptyFunction implements Function {
+
+   private final List<Annotation> annotations;
+   private final Signature signature;
+   private final String name;
+   private final int modifiers;
+
+   public EmptyFunction(Signature signature){
+      this(signature, METHOD_CLOSURE);
+   }
+   
+   public EmptyFunction(Signature signature, String name){
+      this(signature, name, ABSTRACT.mask);
+   }
+
+   public EmptyFunction(Signature signature, String name, int modifiers){
+      this.annotations = new ArrayList<Annotation>();
+      this.signature = signature;
+      this.modifiers = modifiers;
+      this.name = name;
+   }
+   
+   @Override
+   public int getModifiers(){
+      return modifiers & FUNCTION.mask;
+   }
+   
+   @Override
+   public Type getHandle() {
+      return null;
+   }
+   
+   @Override
+   public Constraint getConstraint() {
+      return NONE;
+   }
+   
+   @Override
+   public Type getSource() {
+      return null;
+   }
+   
+   @Override
+   public Object getProxy() {
+      return null;
+   }
+   
+   @Override
+   public Object getProxy(Class require) {
+      return null;
+   }
+   
+   @Override
+   public String getName(){
+      return name;
+   }
+   
+   @Override
+   public Signature getSignature(){
+      return signature;
+   }
+   
+   @Override
+   public List<Constraint> getGenerics() {
+      return EMPTY_LIST;
+   }
+   
+   @Override
+   public List<Annotation> getAnnotations() {
+      return annotations;
+   }
+   
+   @Override
+   public Invocation getInvocation(){
+      return null;
+   }
+   
+   @Override
+   public String getDescription() {
+      return name + signature;
+   }
+   
+   @Override
+   public String toString(){
+      return name + signature;
+   }
+}

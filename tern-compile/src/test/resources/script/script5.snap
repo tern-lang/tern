@@ -1,0 +1,8 @@
+var obj = {};
+ 
+Object.defineProperty( obj, "value", {
+  value: true,
+  writable: false,
+  enumerable: true,
+  configurable: true
+});

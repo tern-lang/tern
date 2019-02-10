@@ -1,0 +1,25 @@
+function fibonacci() {
+	var fib = [];
+	fib[0] = 1;
+	fib[1] = 1;
+	for (var i = 2; i <= 100; i++) {
+		fib[i] = fib[i - 2] + fib[i - 1];
+	}
+	return fib;
+}
+
+function fibExec(times) {
+	var start = new Date().getTime();
+	for (var n = 0; n < times; n++) {
+		fibonacci();
+	}
+	var duration = times + ": " + (new Date().getTime() - start);
+	System.err.println(duration);
+}
+
+fibExec(1);
+fibExec(10);
+fibExec(100);
+fibExec(1000);
+fibExec(10000);
+fibExec(100000);

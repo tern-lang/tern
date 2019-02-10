@@ -1,0 +1,15 @@
+function demo()
+{
+var  key = "";
+var str="";
+// Iterate the properties.
+for(key in student)
+{
+str1 = str1+ student[key];
+}
+return(str1);
+}
+var newParagraph = document.createElement("p");
+var newText = document.createTextNode(demo());
+newParagraph.appendChild(newText);
+document.body.appendChild(newParagraph);

@@ -1,0 +1,84 @@
+class Chain {
+    var first = null;
+
+    function new(size) {
+        var last = null;
+        var current = null;
+        for (var i = 0; i < size; i++) {
+            current = new Person(i);
+            if (first == null) first = current;
+            if (last != null) {
+                last.setNext(current);
+                current.setPrev(last);
+            }
+            last = current;
+        }
+        first.setPrev(last);
+        last.setNext(first);
+    }
+
+    function kill(nth) {
+        var current = first;
+        var shout = 1;
+        while (current.getNext() != current) {
+            shout = current.shout(shout, nth);
+            current = current.getNext();
+        }
+        first = current;
+        return current;
+    }
+
+    function getFirst() {
+        return first;
+    }
+}
+
+
+class Person {
+    var count;
+    var prev = null;
+    var next = null;
+
+    function new(count) {
+        this.count = count;
+    }
+
+    function shout(shout, deadif) {
+        if (shout < deadif) return (shout + 1);
+        this.getPrev().setNext(this.getNext());
+        this.getNext().setPrev(this.getPrev());
+        return 1;
+    }
+
+    function getCount() {
+        return this.count;
+    }
+
+    function getPrev() {
+        return prev;
+    }
+
+    function setPrev(prev) {
+        this.prev = prev;
+    }
+
+    function getNext() {
+        return next;
+    }
+
+    function setNext(next)
+
+    {
+        this.next = next;
+    }
+}
+
+var ITER = 100;
+var start = System.nanoTime();
+for (var i = 0; i < ITER; i++) {
+	System.out.println("Iteration: "+i);
+    var chain = new Chain(40);
+    chain.kill(3);
+}
+var end = System.nanoTime();
+System.out.println("Time per iteration = " + ((end - start) / (ITER)) + " nanoseconds.");

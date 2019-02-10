@@ -1,0 +1,32 @@
+import static lang.Math.*;
+import security.SecureRandom;
+
+function sort (a) {//shellsort
+    var increment = a.size() / 2;
+    while (increment > 0) {
+       for (var i = increment; i < a.size(); i++) {
+          var j = i;
+          var temp = a[i];
+          while (j >= increment && a[j - increment] > temp) {
+             a[j] = a[j - increment];
+             j = j - increment;
+          }
+          a[j] = temp;
+       }
+       if (increment == 2) {
+          increment = 1;
+       } else {
+          increment = floor(increment * (5.0 / 11));
+       }
+    }
+}
+var random=new SecureRandom();
+var a = [];
+for(var i = 0; i < 10; i++){
+	var value = random.nextInt(100);	
+	a.add(value);
+}
+sort(a);
+for(var i in a){
+	out.println("shell="+i+" length="+a.size());
+}

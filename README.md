@@ -223,21 +223,21 @@ program being run and debugged with Tern Studio.
 
 The statically typed implementation performs type checking throughout.
 
-[Source Code](https://github.com/snapscript/snap-develop/tree/master/snap-studio/work/demo/games/src/mario)
+[Source Code](https://github.com/tern-lang/tern-studio/tree/master/tern-studio/work/demo/games/src/mario)
 
 ##### Dynamically Typed
 
 The dynamically typed implementation is identical to the statically typed implementation without type
 constraints.
 
-[Source Code](https://github.com/snapscript/snap-develop/tree/master/snap-studio/work/games/mario/src/mario)
+[Source Code](https://github.com/tern-lang/tern-studio/tree/master/tern-studio/work/games/mario/src/mario)
    
 ##### Android   
 
 In order to run on Android a framework was required to perform double buffering and map user
 actions to program behaviour. The Android game framework can be found on Github within this profile.
    
-[Source Code](https://github.com/snapscript/snap-develop/blob/master/snap-studio/work/android/mario/src/mario/start.snap)
+[Source Code](https://github.com/tern-lang/tern-studio/blob/master/tern-studio/work/android/mario/src/mario/start.snap)
 
 #### Flappy Bird
 
@@ -246,21 +246,21 @@ being run and debugged remotely with Tern Studio.
 
 [![Debug Android Game](http://img.youtube.com/vi/w-baBQbZ5dI/0.jpg)](https://www.youtube.com/watch?v=w-baBQbZ5dI)
 
-[Source Code](https://github.com/snapscript/snap-develop/tree/master/snap-studio/work/android/flappybird/src/flappybird)
+[Source Code](https://github.com/tern-lang/tern-studio/tree/master/tern-studio/work/android/flappybird/src/flappybird)
         
 #### Space Invaders
 
 This is a very basic clone of the classic [Space Invaders](https://en.wikipedia.org/wiki/Space_Invaders) game. The implementation is short but leverages some
 of the more interesting language features such as async await.
 
-[Source Code](https://github.com/snapscript/snap-develop/tree/master/snap-studio/work/demo/games/src/spaceinvaders)
+[Source Code](https://github.com/tern-lang/tern-studio/tree/master/tern-studio/work/demo/games/src/spaceinvaders)
   
 #### Tetris
 
 This is a very basic clone of the classic [Tetris](https://en.wikipedia.org/wiki/Tetris) game. The implementation does not leverage graphics or sounds and
 shapes are painted on the screen with AWT primitives.
 
-[Source Code](https://github.com/snapscript/snap-develop/tree/master/snap-studio/work/demo/games/src/tetris)
+[Source Code](https://github.com/tern-lang/tern-studio/tree/master/tern-studio/work/demo/games/src/tetris)
   
 ### Language  
   

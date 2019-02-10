@@ -3,7 +3,6 @@ package tern.tree.function;
 import static tern.core.constraint.Constraint.NONE;
 import static tern.core.variable.Value.NULL;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import tern.core.Compilation;
@@ -22,8 +21,8 @@ import tern.core.module.Module;
 import tern.core.module.Path;
 import tern.core.scope.Scope;
 import tern.core.scope.index.Address;
-import tern.core.scope.index.ScopeIndex;
 import tern.core.scope.index.LocalValueFinder;
+import tern.core.scope.index.ScopeIndex;
 import tern.core.trace.Trace;
 import tern.core.trace.TraceEvaluation;
 import tern.core.trace.TraceInterceptor;

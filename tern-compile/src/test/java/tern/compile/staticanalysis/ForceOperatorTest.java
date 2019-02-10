@@ -58,7 +58,7 @@ public class ForceOperatorTest extends TestCase {
       } catch(VerifyException e) {
          e.getErrors().get(0).getCause().printStackTrace();
          String message =  e.getErrors().get(0).getDescription();
-         assertEquals("Function 'foo()' not found for 'default.Foo' in /default.snap at line 11", message);
+         assertEquals("Function 'foo()' not found for 'default.Foo' in /default.tern at line 11", message);
          failure = true;
       }
       assertTrue("Should be a compile error", failure);

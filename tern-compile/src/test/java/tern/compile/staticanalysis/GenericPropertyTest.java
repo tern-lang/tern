@@ -100,9 +100,9 @@ public class GenericPropertyTest extends CompileTestCase {
       assertCompileSuccess(SUCCESS_4);
       assertCompileSuccess(SUCCESS_5);
       assertCompileSuccess(SUCCESS_6);
-      assertCompileError(FAILURE_1, "Function 'longValue()' not found for 'lang.String' in /default.snap at line 5");
-      assertCompileError(FAILURE_2, "Function 'longValue()' not found for 'lang.String' in /default.snap at line 5");
-      assertCompileError(FAILURE_3, "Function 'longValue()' not found for 'lang.String' in /default.snap at line 7");
-      assertCompileError(FAILURE_4, "Function 'longValue()' not found for 'lang.String' in /default.snap at line 7");
+      assertCompileError(FAILURE_1, "Function 'longValue()' not found for 'lang.String' in /default.tern at line 5");
+      assertCompileError(FAILURE_2, "Function 'longValue()' not found for 'lang.String' in /default.tern at line 5");
+      assertCompileError(FAILURE_3, "Function 'longValue()' not found for 'lang.String' in /default.tern at line 7");
+      assertCompileError(FAILURE_4, "Function 'longValue()' not found for 'lang.String' in /default.tern at line 7");
    }
 }

@@ -21,9 +21,9 @@ public class ModuleEvalTest extends ScriptTestCase {
    "assert eval('new Shape.Point(1,2)', 'example').x == 1;\n";
 
    public void testModuleEval() throws Exception {
-      addScript("/example/Shape.snap", SOURCE_1);
-      addScript("/run.snap", SOURCE_2);     
-      assertScriptExecutes("/run.snap");
+      addScript("/example/Shape.tern", SOURCE_1);
+      addScript("/run.tern", SOURCE_2);
+      assertScriptExecutes("/run.tern");
    }
    
 }

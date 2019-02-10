@@ -8,8 +8,8 @@ import junit.framework.TestCase;
 public class MinifierTest extends TestCase {
    
    public void testMinifier1() throws Exception{
-      System.err.println(minify("/test_source1.snap"));
-      System.err.println(minify("/test_source2.snap"));
+      System.err.println(minify("/test_source1.tern"));
+      System.err.println(minify("/test_source2.tern"));
    }
    
    public String minify(String resource) throws Exception {

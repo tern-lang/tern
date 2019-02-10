@@ -31,14 +31,14 @@ public class IncrementAndDecrementCompileTest extends CompileTestCase {
    "--x;\n"; 
    
    public void testModificationOfConstants() throws Exception {
-      assertCompileError(FAILURE_1, "Illegal ++ of constant in /default.snap at line 1");
-      assertCompileError(FAILURE_2, "Illegal ++ of constant in /default.snap at line 1");
-      assertCompileError(FAILURE_3, "Illegal ++ of constant in /default.snap at line 1");
-      assertCompileError(FAILURE_4, "Illegal ++ of constant in /default.snap at line 1");      
-      assertCompileError(FAILURE_5, "Illegal ++ of type 'lang.String' in /default.snap at line 2");
-      assertCompileError(FAILURE_6, "Illegal ++ of type 'lang.String' in /default.snap at line 2");
-      assertCompileError(FAILURE_7, "Illegal -- of type 'lang.String' in /default.snap at line 2");
-      assertCompileError(FAILURE_8, "Illegal -- of type 'lang.String' in /default.snap at line 2");        
+      assertCompileError(FAILURE_1, "Illegal ++ of constant in /default.tern at line 1");
+      assertCompileError(FAILURE_2, "Illegal ++ of constant in /default.tern at line 1");
+      assertCompileError(FAILURE_3, "Illegal ++ of constant in /default.tern at line 1");
+      assertCompileError(FAILURE_4, "Illegal ++ of constant in /default.tern at line 1");
+      assertCompileError(FAILURE_5, "Illegal ++ of type 'lang.String' in /default.tern at line 2");
+      assertCompileError(FAILURE_6, "Illegal ++ of type 'lang.String' in /default.tern at line 2");
+      assertCompileError(FAILURE_7, "Illegal -- of type 'lang.String' in /default.tern at line 2");
+      assertCompileError(FAILURE_8, "Illegal -- of type 'lang.String' in /default.tern at line 2");
    }
 
 }

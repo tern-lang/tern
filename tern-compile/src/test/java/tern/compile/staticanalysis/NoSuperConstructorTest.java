@@ -51,11 +51,11 @@ public class NoSuperConstructorTest extends ScriptTestCase {
    "}";
    
    public void testMissingSuperConstructor() throws Exception {
-      addScript("/com/test/foo/Foo.snap", SOURCE_1);
-      addScript("/com/test/foo/Bar.snap", SOURCE_2);      
-      addScript("/com/test/foo/Demo.snap", SOURCE_3);  
-      addScript("/com/test/foo.snap", SOURCE_4);  
-      assertExpressionEvaluates("/com/test/foo.snap", "main()", "com.test.foo", new AssertionCallback() {
+      addScript("/com/test/foo/Foo.tern", SOURCE_1);
+      addScript("/com/test/foo/Bar.tern", SOURCE_2);
+      addScript("/com/test/foo/Demo.tern", SOURCE_3);
+      addScript("/com/test/foo.tern", SOURCE_4);
+      assertExpressionEvaluates("/com/test/foo.tern", "main()", "com.test.foo", new AssertionCallback() {
          public void onSuccess(Context context, Object result) throws Exception{
             throw new IllegalStateException("Missing constructor");
          }

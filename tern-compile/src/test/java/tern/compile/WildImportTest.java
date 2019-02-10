@@ -42,10 +42,10 @@ public class WildImportTest extends ScriptTestCase {
    "}";
          
    public void testImports() throws Exception {
-      addScript("/test.snap", SOURCE_1);
-      addScript("/test/Bar.snap", SOURCE_2);   
-      addScript("/foo/Foo.snap", SOURCE_3);  
-      addScript("/blah/Blah.snap", SOURCE_4);  
-      assertScriptExecutes("/test.snap"); 
+      addScript("/test.tern", SOURCE_1);
+      addScript("/test/Bar.tern", SOURCE_2);
+      addScript("/foo/Foo.tern", SOURCE_3);
+      addScript("/blah/Blah.tern", SOURCE_4);
+      assertScriptExecutes("/test.tern");
    }
 }

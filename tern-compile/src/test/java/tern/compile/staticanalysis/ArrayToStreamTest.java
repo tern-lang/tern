@@ -79,9 +79,9 @@ public class ArrayToStreamTest extends CompileTestCase {
       assertCompileSuccess(SUCCESS_5);
       assertCompileSuccess(SUCCESS_6);
       assertCompileSuccess(SUCCESS_7);
-      assertCompileError(FAILURE_1, "Function 'longValue()' not found for 'lang.String' in /default.snap at line 2");
-      assertCompileError(FAILURE_2, "Function 'toUpperCase()' not found for 'lang.Integer' in /default.snap at line 5");
-      assertCompileError(FAILURE_3, "Function 'toUpperCase()' not found for 'lang.Integer' in /default.snap at line 2");
-      assertCompileError(FAILURE_4, "Function 'substring(lang.Integer)' not found for 'lang.Integer' in /default.snap at line 2");
+      assertCompileError(FAILURE_1, "Function 'longValue()' not found for 'lang.String' in /default.tern at line 2");
+      assertCompileError(FAILURE_2, "Function 'toUpperCase()' not found for 'lang.Integer' in /default.tern at line 5");
+      assertCompileError(FAILURE_3, "Function 'toUpperCase()' not found for 'lang.Integer' in /default.tern at line 2");
+      assertCompileError(FAILURE_4, "Function 'substring(lang.Integer)' not found for 'lang.Integer' in /default.tern at line 2");
    }
 }

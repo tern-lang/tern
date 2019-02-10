@@ -9,8 +9,8 @@ public class ScriptParser {
 
    private static final String GRAMMAR_FILE = "grammar.txt";
    private static final String ROOT = "C:/Work/development/snapscript/snap-develop/snap-develop/work/android";
-   //private static final String FILE = "/mario/screens/GameScreen.snap";
-   private static final String FILE = "/mario/objects/mario/Mario.snap";
+   //private static final String FILE = "/mario/screens/GameScreen.tern";
+   private static final String FILE = "/mario/objects/mario/Mario.tern";
          
    public static void main(String[] list) throws Exception {
       File file = new File(ROOT + FILE);

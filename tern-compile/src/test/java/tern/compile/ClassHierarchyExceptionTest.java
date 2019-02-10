@@ -22,7 +22,7 @@ public class ClassHierarchyExceptionTest extends ScriptTestCase {
          executable.execute();
       }catch(VerifyException e) {
          e.printStackTrace();
-         assertEquals(e.getErrors().get(0).toString(), "No type found for 'NoSuchClass' in 'default' in /default.snap at line 1");
+         assertEquals(e.getErrors().get(0).toString(), "No type found for 'NoSuchClass' in 'default' in /default.tern at line 1");
       }
    }
 

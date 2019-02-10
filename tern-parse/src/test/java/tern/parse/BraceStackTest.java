@@ -14,7 +14,7 @@ import tern.common.store.Store;
 public class BraceStackTest extends TestCase {
    
    public void testBraceStack() throws Exception {
-      List<Token> tokens = createTokens("test_source1.snap");
+      List<Token> tokens = createTokens("test_source1.tern");
       BraceStack stack = new BraceStack();
       
       for(Token token : tokens) {

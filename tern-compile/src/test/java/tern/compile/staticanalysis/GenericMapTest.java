@@ -53,8 +53,8 @@ public class GenericMapTest extends CompileTestCase {
       assertCompileSuccess(SUCCESS_1);
       assertCompileSuccess(SUCCESS_2);
       assertCompileSuccess(SUCCESS_3);
-      assertCompileError(FAILURE_1, "Function 'longValue()' not found for 'lang.String' in /default.snap at line 2");
-      assertCompileError(FAILURE_2, "Function 'longValue()' not found for 'lang.String' in /default.snap at line 2");
-      assertCompileError(FAILURE_3, "Function 'longValue()' not found for 'lang.String' in /default.snap at line 9");
+      assertCompileError(FAILURE_1, "Function 'longValue()' not found for 'lang.String' in /default.tern at line 2");
+      assertCompileError(FAILURE_2, "Function 'longValue()' not found for 'lang.String' in /default.tern at line 2");
+      assertCompileError(FAILURE_3, "Function 'longValue()' not found for 'lang.String' in /default.tern at line 9");
    }
 }

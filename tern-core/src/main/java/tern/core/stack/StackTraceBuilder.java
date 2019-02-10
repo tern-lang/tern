@@ -1,6 +1,6 @@
 package tern.core.stack;
 
-import static tern.core.Reserved.IMPORT_SNAPSCRIPT;
+import static tern.core.Reserved.IMPORT_TERN;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class StackTraceBuilder {
          StackTraceElement trace = actual[i];
          String source = trace.getClassName();
          
-         if(!source.startsWith(IMPORT_SNAPSCRIPT)) { // not really correct, stripping required elements!
+         if(!source.startsWith(IMPORT_TERN)) { // not really correct, stripping required elements!
             list.add(trace);
          }
       } 

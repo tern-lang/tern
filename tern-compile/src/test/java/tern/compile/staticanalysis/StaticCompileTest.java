@@ -99,7 +99,7 @@ public class StaticCompileTest extends TestCase {
       } catch(VerifyException e) {
          e.getErrors().get(0).getCause().printStackTrace();
          String message =  e.getErrors().get(0).getDescription();
-         assertEquals(message, "Variable 'x' does not match constraint 'lang.Integer' in /default.snap at line 2");
+         assertEquals(message, "Variable 'x' does not match constraint 'lang.Integer' in /default.tern at line 2");
          failure = true;
       }
       assertTrue("Should be a compile failure", failure);
@@ -114,7 +114,7 @@ public class StaticCompileTest extends TestCase {
       } catch(VerifyException e) {
          e.getErrors().get(0).getCause().printStackTrace();
          String message =  e.getErrors().get(0).getDescription();
-         assertEquals(message, "Variable 'f' does not match constraint 'lang.Integer' in /default.snap at line 3");
+         assertEquals(message, "Variable 'f' does not match constraint 'lang.Integer' in /default.tern at line 3");
          failure = true;
       }
       assertTrue("Should be a compile failure", failure);

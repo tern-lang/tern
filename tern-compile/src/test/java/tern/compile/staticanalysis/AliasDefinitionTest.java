@@ -123,9 +123,9 @@ public class AliasDefinitionTest extends CompileTestCase {
       assertCompileSuccess(SUCCESS_6);
       assertCompileSuccess(SUCCESS_7);
       assertCompileSuccess(SUCCESS_8);
-      assertCompileError(FAILURE_1, "Function 'intValue()' not found for 'lang.String' in /default.snap at line 3");
-      assertCompileError(FAILURE_2, "Function 'intValue()' not found for 'lang.String' in /default.snap at line 8");
-      assertCompileError(FAILURE_3, "Function 'substring(lang.Integer)' not found for 'lang.Integer' in /default.snap at line 7");
-      assertCompileError(FAILURE_4, "Function 'substring(lang.Integer)' not found for 'lang.Integer' in /default.snap at line 11");
+      assertCompileError(FAILURE_1, "Function 'intValue()' not found for 'lang.String' in /default.tern at line 3");
+      assertCompileError(FAILURE_2, "Function 'intValue()' not found for 'lang.String' in /default.tern at line 8");
+      assertCompileError(FAILURE_3, "Function 'substring(lang.Integer)' not found for 'lang.Integer' in /default.tern at line 7");
+      assertCompileError(FAILURE_4, "Function 'substring(lang.Integer)' not found for 'lang.Integer' in /default.tern at line 11");
    }
 }

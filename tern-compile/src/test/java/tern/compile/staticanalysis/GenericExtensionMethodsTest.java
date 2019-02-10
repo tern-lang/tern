@@ -18,6 +18,6 @@ public class GenericExtensionMethodsTest extends CompileTestCase {
       assertCompileSuccess(SUCCESS_1);
       assertCompileSuccess(SUCCESS_2);
       assertCompileSuccess(SUCCESS_3);
-      assertCompileError(FAILURE_1, "Function 'toUpperCase()' not found for 'io.File' in /default.snap at line 1");
+      assertCompileError(FAILURE_1, "Function 'toUpperCase()' not found for 'io.File' in /default.tern at line 1");
    }
 }

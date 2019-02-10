@@ -41,10 +41,10 @@ public class NewInstanceEvaluationTest extends ScriptTestCase {
    "value.test();\n";
    
    public void testEvaluation() throws Exception {
-      addScript("/base/Base.snap", SOURCE_1);
-      addScript("/test/Other.snap", SOURCE_2);    
-      assertExpressionEvaluates("/test/Other.snap", "new Other().test()", "test");
-      assertExpressionEvaluates("/test/Other.snap", "new Other()", "test", new AssertionCallback() {
+      addScript("/base/Base.tern", SOURCE_1);
+      addScript("/test/Other.tern", SOURCE_2);
+      assertExpressionEvaluates("/test/Other.tern", "new Other().test()", "test");
+      assertExpressionEvaluates("/test/Other.tern", "new Other()", "test", new AssertionCallback() {
          @Override
          public void onSuccess(Context context, Object result) {
             assertNotNull(result);
@@ -64,10 +64,10 @@ public class NewInstanceEvaluationTest extends ScriptTestCase {
    }
    
    public void testEvaluationReturnValue() throws Exception {
-      addScript("/base/Base.snap", SOURCE_1);
-      addScript("/test/Other.snap", SOURCE_2);   
-      addScript("/run.snap", SOURCE_3);    
-      assertScriptExecutes("/run.snap");
+      addScript("/base/Base.tern", SOURCE_1);
+      addScript("/test/Other.tern", SOURCE_2);
+      addScript("/run.tern", SOURCE_3);
+      assertScriptExecutes("/run.tern");
    }
    
 }

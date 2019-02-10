@@ -67,7 +67,7 @@ public class FunctionConstraintCompileTest extends TestCase {
       } catch(VerifyException e) {
          e.getErrors().get(0).getCause().printStackTrace();
          String message =  e.getErrors().get(0).getDescription();
-         assertEquals("Function 'c(default.Foo, lang.Integer)' not found for 'default.Funcs' in /default.snap at line 8", message);
+         assertEquals("Function 'c(default.Foo, lang.Integer)' not found for 'default.Funcs' in /default.tern at line 8", message);
          failure = true;
       }
       assertTrue("Should be a compile error", failure);

@@ -28,9 +28,9 @@ public class NestedEvalTest extends ScriptTestCase {
    "println(eval('new Other().test()'));\n";
          
    public void testImports() throws Exception {
-      addScript("/base/Base.snap", SOURCE_1);
-      addScript("/test/Other.snap", SOURCE_2);   
-      addScript("/test.snap", SOURCE_3);  
-      assertScriptExecutes("/test.snap"); 
+      addScript("/base/Base.tern", SOURCE_1);
+      addScript("/test/Other.tern", SOURCE_2);
+      addScript("/test.tern", SOURCE_3);
+      assertScriptExecutes("/test.tern");
    }
 }

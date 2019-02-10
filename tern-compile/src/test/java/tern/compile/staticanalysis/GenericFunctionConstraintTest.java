@@ -24,7 +24,7 @@ public class GenericFunctionConstraintTest extends CompileTestCase {
    public void testGenericFunction() throws Exception {
       assertCompileSuccess(SOURCE_1);
       assertCompileSuccess(SOURCE_2);
-      assertCompileError(FAILURE_1, "Function 'foo(lang.String)' hidden by generics in /default.snap at line 4");
+      assertCompileError(FAILURE_1, "Function 'foo(lang.String)' hidden by generics in /default.tern at line 4");
 
    }
 }

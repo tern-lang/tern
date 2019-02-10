@@ -125,15 +125,15 @@ public class PrivateAccessCompileTest extends CompileTestCase {
       assertCompileSuccess(SUCCESS_3);
       assertCompileSuccess(SUCCESS_4);
       assertCompileSuccess(SUCCESS_5);
-      assertCompileError(FAILURE_1, "Function 'func()' for 'default.Typ' is not accessible in /default.snap at line 3"); 
-      assertCompileError(FAILURE_2, "Function 'func()' for 'default.Typ' is not accessible in /default.snap at line 3"); 
-      assertCompileError(FAILURE_3, "Function 'func()' for 'default.Mod' is not accessible in /default.snap at line 3"); 
-      assertCompileError(FAILURE_4, "Property 'x' for 'default.Typ' is not accessible in /default.snap at line 3"); 
-      assertCompileError(FAILURE_5, "Property 'x' for 'default.Typ' is not accessible in /default.snap at line 3"); 
-      assertCompileError(FAILURE_6, "Property 'x' for 'default.Mod' is not accessible in /default.snap at line 3"); 
-      assertCompileError(FAILURE_7, "Property 'x' for 'default.Mod' is not accessible in /default.snap at line 3");
-      assertCompileError(FAILURE_8, "Function 'func()' for 'default.Typ' is not accessible in /default.snap at line 5");
-      assertCompileError(FAILURE_9, "Function 'func()' for 'default.Typ' is not accessible in /default.snap at line 6"); 
+      assertCompileError(FAILURE_1, "Function 'func()' for 'default.Typ' is not accessible in /default.tern at line 3");
+      assertCompileError(FAILURE_2, "Function 'func()' for 'default.Typ' is not accessible in /default.tern at line 3");
+      assertCompileError(FAILURE_3, "Function 'func()' for 'default.Mod' is not accessible in /default.tern at line 3");
+      assertCompileError(FAILURE_4, "Property 'x' for 'default.Typ' is not accessible in /default.tern at line 3");
+      assertCompileError(FAILURE_5, "Property 'x' for 'default.Typ' is not accessible in /default.tern at line 3");
+      assertCompileError(FAILURE_6, "Property 'x' for 'default.Mod' is not accessible in /default.tern at line 3");
+      assertCompileError(FAILURE_7, "Property 'x' for 'default.Mod' is not accessible in /default.tern at line 3");
+      assertCompileError(FAILURE_8, "Function 'func()' for 'default.Typ' is not accessible in /default.tern at line 5");
+      assertCompileError(FAILURE_9, "Function 'func()' for 'default.Typ' is not accessible in /default.tern at line 6");
    }
 
 }

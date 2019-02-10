@@ -65,10 +65,10 @@ public class LateLinkImportTest extends ScriptTestCase {
    
    
    public void testLateLinkImports() throws Exception {
-      addScript("/com/test/foo/Foo.snap", SOURCE_1);
-      addScript("/com/test/foo/Bar.snap", SOURCE_2);      
-      addScript("/com/test/foo.snap", SOURCE_3);
-      assertExpressionEvaluates("/com/test/foo.snap", "main()", "com.test.foo");
+      addScript("/com/test/foo/Foo.tern", SOURCE_1);
+      addScript("/com/test/foo/Bar.tern", SOURCE_2);
+      addScript("/com/test/foo.tern", SOURCE_3);
+      assertExpressionEvaluates("/com/test/foo.tern", "main()", "com.test.foo");
       
       AssertionContext assertion = getContext();
       Context context = assertion.getContext();
@@ -88,16 +88,16 @@ public class LateLinkImportTest extends ScriptTestCase {
    }
    
    public void testLateLinkImportsAsFunctions() throws Exception {
-      addScript("/com/test/foo/Foo.snap", SOURCE_1);
-      addScript("/com/test/foo/Bar.snap", SOURCE_2);      
-      addScript("/com/test/foo.snap", SOURCE_4); // here we do no use the 'new; keyword
-      assertExpressionEvaluates("/com/test/foo.snap", "main()", "com.test.foo");
+      addScript("/com/test/foo/Foo.tern", SOURCE_1);
+      addScript("/com/test/foo/Bar.tern", SOURCE_2);
+      addScript("/com/test/foo.tern", SOURCE_4); // here we do no use the 'new; keyword
+      assertExpressionEvaluates("/com/test/foo.tern", "main()", "com.test.foo");
    }
    
    public void testLateLinkImportsAsFunctionsInType() throws Exception {
-      addScript("/com/test/foo/Foo.snap", SOURCE_1);
-      addScript("/com/test/foo/Bar.snap", SOURCE_2);      
-      addScript("/com/test/foo.snap", SOURCE_5); // here we do no use the 'new; keyword from a type
-      assertExpressionEvaluates("/com/test/foo.snap", "new Main().start()", "com.test.foo");
+      addScript("/com/test/foo/Foo.tern", SOURCE_1);
+      addScript("/com/test/foo/Bar.tern", SOURCE_2);
+      addScript("/com/test/foo.tern", SOURCE_5); // here we do no use the 'new; keyword from a type
+      assertExpressionEvaluates("/com/test/foo.tern", "new Main().start()", "com.test.foo");
    }
 }

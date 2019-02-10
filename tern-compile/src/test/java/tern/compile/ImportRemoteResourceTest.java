@@ -95,11 +95,11 @@ public class ImportRemoteResourceTest extends TestCase {
          
    public void testRemoteImports() throws Exception {
       Map<String, String> sources = new HashMap<String, String>();
-      sources.put("/resource/example.snap", SOURCE_1);
-      sources.put("/resource/demo.snap", SOURCE_2);
-      sources.put("/resource/builder/Builder.snap", SOURCE_3);  
-      sources.put("/resource/main.snap", SOURCE_4);  
-      sources.put("/resource/launch.snap", SOURCE_5);     
+      sources.put("/resource/example.tern", SOURCE_1);
+      sources.put("/resource/demo.tern", SOURCE_2);
+      sources.put("/resource/builder/Builder.tern", SOURCE_3);
+      sources.put("/resource/main.tern", SOURCE_4);
+      sources.put("/resource/launch.tern", SOURCE_5);
       System.err.println(SOURCE_3);
       MockServer server = new MockServer(sources, "/resource");
       try {
@@ -107,8 +107,8 @@ public class ImportRemoteResourceTest extends TestCase {
          Store store = new RemoteStore(address);
          Context context = new StoreContext(store, null);
          Compiler compiler = new ResourceCompiler(context);
-         Timer.timeExecution("testRemoteImports", compiler.compile("/main.snap"));
-         Timer.timeExecution("testRemoteImports", compiler.compile("/launch.snap"));
+         Timer.timeExecution("testRemoteImports", compiler.compile("/main.tern"));
+         Timer.timeExecution("testRemoteImports", compiler.compile("/launch.tern"));
       }finally{
          server.stop();
       }

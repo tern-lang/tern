@@ -17,7 +17,7 @@ public class ExpressionBuilderTest extends TestCase {
 
    private void analyzeScripts(SyntaxParser analyzer) throws Exception {      
       for(int i = 0; i < 100;i++) {
-            String source = ClassPathReader.load("/script"+i+".snap");
+            String source = ClassPathReader.load("/script"+i+".tern");
             if(source != null) {
                LexerBuilder.print(analyzer, source, "script");
                System.err.println();
@@ -29,12 +29,12 @@ public class ExpressionBuilderTest extends TestCase {
    private void testParsePerformance(SyntaxParser analyzer) throws Exception {
       int iterations = 1000;
       for(int i = 0; i < 100;i++) {
-         String source = ClassPathReader.load("/script"+i+".snap");
+         String source = ClassPathReader.load("/script"+i+".tern");
          if(source != null) {
             long start=System.currentTimeMillis();
             long last=start;
             for(int j=0;j<iterations;j++){
-               SyntaxNode list=analyzer.parse("/script"+i+".snap",source, "script");
+               SyntaxNode list=analyzer.parse("/script"+i+".tern",source, "script");
                assertNotNull(list);
                last=System.currentTimeMillis();
             }

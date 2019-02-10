@@ -125,17 +125,17 @@ public class ImportManagerTest extends ScriptTestCase {
    "assert l.b==b;\n";
    
    public void testImports() throws Exception {
-      addScript("/com/test/foo/Foo.snap", SOURCE_1);
-      addScript("/com/test/foo/Bar.snap", SOURCE_2);      
-      addScript("/com/test/demo/Demo.snap", SOURCE_3);
-      addScript("/com/test/builder/Builder.snap", SOURCE_4);  
-      addScript("/com/test/main.snap", SOURCE_5);  
-      addScript("/com/test/launch.snap", SOURCE_6);      
-      addScript("/com/test/graphics/Shape.snap", SOURCE_7); 
-      addScript("/com/test/draw.snap", SOURCE_8); 
-      assertScriptExecutes("/com/test/main.snap");
-      assertScriptExecutes("/com/test/launch.snap");
-      assertScriptExecutes("/com/test/draw.snap");
+      addScript("/com/test/foo/Foo.tern", SOURCE_1);
+      addScript("/com/test/foo/Bar.tern", SOURCE_2);
+      addScript("/com/test/demo/Demo.tern", SOURCE_3);
+      addScript("/com/test/builder/Builder.tern", SOURCE_4);
+      addScript("/com/test/main.tern", SOURCE_5);
+      addScript("/com/test/launch.tern", SOURCE_6);
+      addScript("/com/test/graphics/Shape.tern", SOURCE_7);
+      addScript("/com/test/draw.tern", SOURCE_8);
+      assertScriptExecutes("/com/test/main.tern");
+      assertScriptExecutes("/com/test/launch.tern");
+      assertScriptExecutes("/com/test/draw.tern");
       
       AssertionContext assertion = getContext();
       Context context = assertion.getContext();

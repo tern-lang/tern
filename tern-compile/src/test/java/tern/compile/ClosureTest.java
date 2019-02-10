@@ -127,7 +127,7 @@ public class ClosureTest extends TestCase {
    }
    
    public void testClosureParameters() throws Exception {
-      SyntaxNode node = new SyntaxCompiler(Reserved.GRAMMAR_FILE).compile().parse("/path.snap", SOURCE_5, GRAMMAR_SCRIPT);
+      SyntaxNode node = new SyntaxCompiler(Reserved.GRAMMAR_FILE).compile().parse("/path.tern", SOURCE_5, GRAMMAR_SCRIPT);
       System.out.println(SyntaxPrinter.print(node));
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       Executable executable = compiler.compile(SOURCE_5);
@@ -136,7 +136,7 @@ public class ClosureTest extends TestCase {
    }
 
    public void testAsyncClosure() throws Exception {
-      SyntaxNode node = new SyntaxCompiler(Reserved.GRAMMAR_FILE).compile().parse("/path.snap", SOURCE_6, GRAMMAR_SCRIPT);
+      SyntaxNode node = new SyntaxCompiler(Reserved.GRAMMAR_FILE).compile().parse("/path.tern", SOURCE_6, GRAMMAR_SCRIPT);
       System.out.println(SyntaxPrinter.print(node));
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       Executable executable = compiler.compile(SOURCE_6);
@@ -145,7 +145,7 @@ public class ClosureTest extends TestCase {
    }
 
    public void testAsyncWithBlockClosure() throws Exception {
-      SyntaxNode node = new SyntaxCompiler(Reserved.GRAMMAR_FILE).compile().parse("/path.snap", SOURCE_7, GRAMMAR_SCRIPT);
+      SyntaxNode node = new SyntaxCompiler(Reserved.GRAMMAR_FILE).compile().parse("/path.tern", SOURCE_7, GRAMMAR_SCRIPT);
       System.out.println(SyntaxPrinter.print(node));
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       Executable executable = compiler.compile(SOURCE_7);

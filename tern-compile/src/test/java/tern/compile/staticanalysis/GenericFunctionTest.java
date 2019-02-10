@@ -102,10 +102,10 @@ public class GenericFunctionTest extends CompileTestCase {
       assertCompileAndExecuteSuccess(SUCCESS_7);
       assertCompileAndExecuteSuccess(SUCCESS_8);
       assertCompileAndExecuteSuccess(SUCCESS_9);
-      assertCompileError(FAILURE_1, "Function 'substring(lang.Integer)' not found for 'lang.Double' in /default.snap at line 4");
-      assertCompileError(FAILURE_2, "Function 'substring(lang.Integer)' not found for 'lang.Integer' in /default.snap at line 6");
-      assertCompileError(FAILURE_3, "Function 'substring(lang.Integer)' not found for 'lang.Integer' in /default.snap at line 4");
-      assertCompileError(FAILURE_4, "Function 'intValue()' not found for 'lang.String' in /default.snap at line 4");
-      assertCompileError(FAILURE_5, "Generic parameter 'T' does not match 'lang.Runnable' in /default.snap at line 4");
+      assertCompileError(FAILURE_1, "Function 'substring(lang.Integer)' not found for 'lang.Double' in /default.tern at line 4");
+      assertCompileError(FAILURE_2, "Function 'substring(lang.Integer)' not found for 'lang.Integer' in /default.tern at line 6");
+      assertCompileError(FAILURE_3, "Function 'substring(lang.Integer)' not found for 'lang.Integer' in /default.tern at line 4");
+      assertCompileError(FAILURE_4, "Function 'intValue()' not found for 'lang.String' in /default.tern at line 4");
+      assertCompileError(FAILURE_5, "Generic parameter 'T' does not match 'lang.Runnable' in /default.tern at line 4");
    }
 }

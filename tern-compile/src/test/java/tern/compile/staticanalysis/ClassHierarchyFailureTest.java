@@ -138,11 +138,11 @@ public class ClassHierarchyFailureTest extends CompileTestCase {
       assertCompileSuccess(SUCCESS_1);
       assertCompileSuccess(SUCCESS_2);
       assertCompileSuccess(SUCCESS_3);         
-      assertCompileError(FAILURE_1, "Constructor 'new()' not found for 'default.X' in /default.snap at line 4");
-      assertCompileError(FAILURE_2, "Constructor 'new(default.Any)' not found for 'default.X' in /default.snap at line 4");
-      assertCompileError(FAILURE_3, "Constructor 'new(lang.String, lang.Integer)' not found for 'default.X' in /default.snap at line 4");
-      assertCompileError(FAILURE_4, "Invalid super class 'awt.event.KeyListener' for type 'default.GameListener' in /default.snap at line 4");
-      assertCompileError(FAILURE_5, "Invalid trait 'awt.event.KeyAdapter' for type 'default.GameListener' in /default.snap at line 4");       
+      assertCompileError(FAILURE_1, "Constructor 'new()' not found for 'default.X' in /default.tern at line 4");
+      assertCompileError(FAILURE_2, "Constructor 'new(default.Any)' not found for 'default.X' in /default.tern at line 4");
+      assertCompileError(FAILURE_3, "Constructor 'new(lang.String, lang.Integer)' not found for 'default.X' in /default.tern at line 4");
+      assertCompileError(FAILURE_4, "Invalid super class 'awt.event.KeyListener' for type 'default.GameListener' in /default.tern at line 4");
+      assertCompileError(FAILURE_5, "Invalid trait 'awt.event.KeyAdapter' for type 'default.GameListener' in /default.tern at line 4");
    }
 
 }

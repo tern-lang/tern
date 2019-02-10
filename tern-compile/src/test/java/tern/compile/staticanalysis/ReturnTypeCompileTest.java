@@ -63,10 +63,10 @@ public class ReturnTypeCompileTest extends CompileTestCase {
       assertCompileSuccess(SUCCESS_2);
       //assertCompileSuccess(SUCCESS_3);
       assertCompileSuccess(SUCCESS_4);
-      assertCompileError(FAILURE_1, "Cast from 'lang.Integer' to 'util.Map' is not possible in /default.snap at line 2");
-      assertCompileError(FAILURE_2, "Cast from 'lang.Integer' to 'util.Map' is not possible in /default.snap at line 5");
-      assertCompileError(FAILURE_3, "Cast from 'lang.String' to 'util.Map' is not possible in /default.snap at line 5");
-      assertCompileError(FAILURE_4, "Cast from 'lang.String' to 'util.Map' is not possible in /default.snap at line 2");
-      assertCompileError(FAILURE_5, "Cast from 'util.Map' to 'util.List' is not possible in /default.snap at line 4");
+      assertCompileError(FAILURE_1, "Cast from 'lang.Integer' to 'util.Map' is not possible in /default.tern at line 2");
+      assertCompileError(FAILURE_2, "Cast from 'lang.Integer' to 'util.Map' is not possible in /default.tern at line 5");
+      assertCompileError(FAILURE_3, "Cast from 'lang.String' to 'util.Map' is not possible in /default.tern at line 5");
+      assertCompileError(FAILURE_4, "Cast from 'lang.String' to 'util.Map' is not possible in /default.tern at line 2");
+      assertCompileError(FAILURE_5, "Cast from 'util.Map' to 'util.List' is not possible in /default.tern at line 4");
    }
 }

@@ -111,7 +111,7 @@ public class ForEachLoopCompileTest extends CompileTestCase {
       assertCompileSuccess(SUCCESS_9);
       assertCompileSuccess(SUCCESS_10);
       assertCompileSuccess(SUCCESS_11);      
-      assertCompileError(FAILURE_1, "Function 'toUpperCase()' not found for 'lang.Integer' in /default.snap at line 3");
-      assertCompileError(FAILURE_2, "Function 'intValue()' not found for 'lang.String' in /default.snap at line 3");       
+      assertCompileError(FAILURE_1, "Function 'toUpperCase()' not found for 'lang.Integer' in /default.tern at line 3");
+      assertCompileError(FAILURE_2, "Function 'intValue()' not found for 'lang.String' in /default.tern at line 3");
    }       
 }

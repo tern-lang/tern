@@ -63,7 +63,7 @@ public class GenericLocalPropertyTest extends CompileTestCase {
       assertCompileSuccess(SUCCESS_2);
       assertCompileSuccess(SUCCESS_3);
       assertCompileSuccess(SUCCESS_4);
-      assertCompileError(FAILURE_1, "Function 'toUpperCase()' not found for 'lang.Integer' in /default.snap at line 4");
-      assertCompileError(FAILURE_2, "Function 'containsKey(lang.Integer)' not found for 'util.List' in /default.snap at line 4");
+      assertCompileError(FAILURE_1, "Function 'toUpperCase()' not found for 'lang.Integer' in /default.tern at line 4");
+      assertCompileError(FAILURE_2, "Function 'containsKey(lang.Integer)' not found for 'util.List' in /default.tern at line 4");
    }
 }

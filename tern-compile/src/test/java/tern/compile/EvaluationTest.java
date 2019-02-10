@@ -43,11 +43,11 @@ public class EvaluationTest extends TestCase {
       
       assertEquals(evaluate("null!=null", "expression", model), Boolean.FALSE);
       assertEquals(evaluate("x>=y", "expression", model), true);
-      assertTrue(executeScript("script18.snap", model).isNormal());
-      assertTrue(executeScript("script14.snap", model).isNormal());
-      assertTrue(executeScript("script17.snap", model).isNormal());
-      assertTrue(executeScript("script16.snap", model).isNormal());
-      assertTrue(executeScript("script15.snap", model).isNormal());
+      assertTrue(executeScript("script18.tern", model).isNormal());
+      assertTrue(executeScript("script14.tern", model).isNormal());
+      assertTrue(executeScript("script17.tern", model).isNormal());
+      assertTrue(executeScript("script16.tern", model).isNormal());
+      assertTrue(executeScript("script15.tern", model).isNormal());
       // assertEquals(evaluate("x=12.0d", "expression", model), 12.0d);
       assertEquals(evaluate("[]", "expression", model), Arrays.asList());
       assertEquals(evaluate("\"x\"+\"y\"", "expression", model), "xy");
@@ -185,11 +185,11 @@ public class EvaluationTest extends TestCase {
       assertTrue(statement("return;", "return-statement", model).isReturn());
       assertTrue(statement("function one(){return 1;}var xx=one();", "script", model).isNormal());
 
-      assertTrue(executeScript("script1.snap", new HashMap<String, Object>(model)).isNormal());
-      assertTrue(executeScript("script9.snap", new HashMap<String, Object>(model)).isNormal());
-      assertTrue(executeScript("script10.snap", new HashMap<String, Object>(model)).isNormal());
-      assertTrue(executeScript("script11.snap", new HashMap<String, Object>(model)).isNormal());
-      assertTrue(executeScript("script12.snap", new HashMap<String, Object>(model)).isNormal());
+      assertTrue(executeScript("script1.tern", new HashMap<String, Object>(model)).isNormal());
+      assertTrue(executeScript("script9.tern", new HashMap<String, Object>(model)).isNormal());
+      assertTrue(executeScript("script10.tern", new HashMap<String, Object>(model)).isNormal());
+      assertTrue(executeScript("script11.tern", new HashMap<String, Object>(model)).isNormal());
+      assertTrue(executeScript("script12.tern", new HashMap<String, Object>(model)).isNormal());
    }
 
    public static Result executeScript(String source, Map<String, Object> model) throws Exception {
@@ -206,7 +206,7 @@ public class EvaluationTest extends TestCase {
       ModelScopeBuilder merger = new ModelScopeBuilder(context);
       Scope scope = merger.create(model, "default");
       SyntaxParser analyzer = compiler.compile();
-      SyntaxNode token = analyzer.parse("/default.snap", source, grammar);
+      SyntaxNode token = analyzer.parse("/default.tern", source, grammar);
       SyntaxPrinter.print(analyzer, source, grammar); // Evaluating the
                                                       // following
       Statement statement = (Statement) builder.assemble(token, new Path("xx"));

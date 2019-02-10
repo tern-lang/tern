@@ -211,12 +211,12 @@ public class IllegalConstructorCallTest extends CompileTestCase {
    public void testConstructorCalls() throws Exception {
       assertCompileSuccess(SUCCESS_1);
       assertCompileSuccess(SUCCESS_2);         
-      assertCompileError(FAILURE_1, "Type 'default.GameListener' is not a concrete class in /default.snap at line 5");
-      assertCompileError(FAILURE_2, "Type 'default.GameLoader' is not a concrete class in /default.snap at line 2");
-      assertCompileError(FAILURE_3, "Type 'default.GameDifficulty' is not a concrete class in /default.snap at line 11");
-      assertCompileError(FAILURE_4, "Type 'default.GameEnemy' is not a concrete class in /default.snap at line 5");
-      assertCompileError(FAILURE_5, "Constructor 'new()' not found for 'default.GameListener' in /default.snap at line 8");
-      assertCompileError(FAILURE_6, "Constructor 'new(lang.Integer)' not found for 'default.GameController' in /default.snap at line 42");
+      assertCompileError(FAILURE_1, "Type 'default.GameListener' is not a concrete class in /default.tern at line 5");
+      assertCompileError(FAILURE_2, "Type 'default.GameLoader' is not a concrete class in /default.tern at line 2");
+      assertCompileError(FAILURE_3, "Type 'default.GameDifficulty' is not a concrete class in /default.tern at line 11");
+      assertCompileError(FAILURE_4, "Type 'default.GameEnemy' is not a concrete class in /default.tern at line 5");
+      assertCompileError(FAILURE_5, "Constructor 'new()' not found for 'default.GameListener' in /default.tern at line 8");
+      assertCompileError(FAILURE_6, "Constructor 'new(lang.Integer)' not found for 'default.GameController' in /default.tern at line 42");
    }
 
 }

@@ -79,13 +79,13 @@ public class FunctionParseTest extends TestCase {
    private void testParsePerformance(SyntaxParser analyzer) throws Exception {
       int iterations = 1;
       for(int i = 0; i < 100;i++) {
-         String source = ClassPathReader.load("/script"+i+".snap");
+         String source = ClassPathReader.load("/script"+i+".tern");
          if(source != null) {
             long start=System.currentTimeMillis();
             long last=start;
             for(int j=0;j<iterations;j++){
                last=System.currentTimeMillis();
-               SyntaxNode list = analyzer.parse("/script"+i+".snap",source, "script");
+               SyntaxNode list = analyzer.parse("/script"+i+".tern",source, "script");
                assertNotNull(list);
             }
             long finish=System.currentTimeMillis();
@@ -99,7 +99,7 @@ public class FunctionParseTest extends TestCase {
 
    private void analyzeScripts(SyntaxParser analyzer) throws Exception {
       for(int i = 0; i < 100;i++) {
-         String source = ClassPathReader.load("/script"+i+".snap");
+         String source = ClassPathReader.load("/script"+i+".tern");
          if(source != null) {
             analyze(analyzer,source,"script");
          }
@@ -108,14 +108,14 @@ public class FunctionParseTest extends TestCase {
    
    private void analyzeScript(SyntaxParser analyzer, int num) throws Exception {
       int iterations = 10;      
-      String source = ClassPathReader.load("/script"+num+".snap");
+      String source = ClassPathReader.load("/script"+num+".tern");
       if(source != null) {
          //LexerBuilder.print(analyzer, source, "script");
          long start=System.currentTimeMillis();
          long last=start;
          for(int j=0;j<iterations;j++){
             last=System.currentTimeMillis();
-            SyntaxNode list = analyzer.parse("/script"+num+".snap",source, "script");
+            SyntaxNode list = analyzer.parse("/script"+num+".tern",source, "script");
             assertNotNull(list);
          }
          long finish=System.currentTimeMillis();

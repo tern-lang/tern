@@ -40,7 +40,7 @@ public class FindTest extends TestCase {
    "   }\n"+
    "}\n"+
    "\n"+
-   "var list = FileFinder.find(\"C:\\\\Work\\\\development\\\\github\\\\ngallagher.github.io\", \".snap\");\n"+
+   "var list = FileFinder.find(\"C:\\\\Work\\\\development\\\\github\\\\ngallagher.github.io\", \".tern\");\n"+
    "print(list);\n";
    
    public void testFind() throws Exception {

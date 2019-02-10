@@ -31,8 +31,8 @@ public class FunctionCallCompileTest extends CompileTestCase {
 
    
    public void testFunctionCallCompilation() throws Exception {
-      assertCompileError(FAILURE_1, "Function 'foo(lang.Integer[])' not found in scope in /default.snap at line 5");
-      assertCompileError(FAILURE_2, "Function 'go(lang.Integer[])' not found for 'default.Blah' in /default.snap at line 7");
-      assertCompileError(FAILURE_3, "Function 'go(lang.Integer[][])' not found for 'default.Blah' in /default.snap at line 8");        
+      assertCompileError(FAILURE_1, "Function 'foo(lang.Integer[])' not found in scope in /default.tern at line 5");
+      assertCompileError(FAILURE_2, "Function 'go(lang.Integer[])' not found for 'default.Blah' in /default.tern at line 7");
+      assertCompileError(FAILURE_3, "Function 'go(lang.Integer[][])' not found for 'default.Blah' in /default.tern at line 8");
    }
 }

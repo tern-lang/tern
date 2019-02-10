@@ -33,7 +33,7 @@ public class RemoteStoreTest extends TestCase {
       MockServer server = new MockServer(SOURCE, "text/plain", "OK", 200);
       URI address = server.start();
       RemoteStore store = new RemoteStore(address);
-      InputStream source = store.getInputStream("/path.snap"); 
+      InputStream source = store.getInputStream("/path.tern");
       ByteArrayOutputStream buffer = new ByteArrayOutputStream();
       byte[] chunk = new byte[1024];
       int count = 0;
@@ -52,7 +52,7 @@ public class RemoteStoreTest extends TestCase {
       boolean failure = false;
       
       try {
-         store.getInputStream("/path.snap"); 
+         store.getInputStream("/path.tern");
       }catch(StoreException e){
          e.printStackTrace();
          failure = true;
@@ -67,7 +67,7 @@ public class RemoteStoreTest extends TestCase {
       boolean failure = false;
       
       try {
-         store.getInputStream("/path.snap"); 
+         store.getInputStream("/path.tern");
       }catch(NotFoundException e){
          e.printStackTrace();
          failure = true;

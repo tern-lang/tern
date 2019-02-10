@@ -21,45 +21,45 @@ import tern.parse.SyntaxParser;
 import com.sun.management.ThreadMXBean;
 
 /*
-Time taken to parse /perf/perf4.snap was 506 size was 69220 compressed to 48660 and 2799 lines
-Time taken to parse /perf/perf4.snap was 330 size was 69220 compressed to 48660 and 2799 lines
-Time taken to parse /perf/perf4.snap was 313 size was 69220 compressed to 48660 and 2799 lines
-Time taken to parse /perf/perf4.snap was 284 size was 69220 compressed to 48660 and 2799 lines
-Time taken to parse /perf/perf4.snap was 278 size was 69220 compressed to 48660 and 2799 lines
-Time taken to parse /perf/perf4.snap was 295 size was 69220 compressed to 48660 and 2799 lines
-Time taken to parse /perf/perf4.snap was 294 size was 69220 compressed to 48660 and 2799 lines
-Time taken to parse /perf/perf4.snap was 265 size was 69220 compressed to 48660 and 2799 lines
-Time taken to parse /perf/perf4.snap was 265 size was 69220 compressed to 48660 and 2799 lines
-Time taken to parse /perf/perf4.snap was 263 size was 69220 compressed to 48660 and 2799 lines
-Time taken to compile /perf/perf4.snap was 827 size was 69220 compressed to 48660 and 2799 lines
-Time taken to compile /perf/perf4.snap was 431 size was 69220 compressed to 48660 and 2799 lines
-Time taken to compile /perf/perf4.snap was 374 size was 69220 compressed to 48660 and 2799 lines
-Time taken to compile /perf/perf4.snap was 315 size was 69220 compressed to 48660 and 2799 lines
-Time taken to compile /perf/perf4.snap was 318 size was 69220 compressed to 48660 and 2799 lines
-Time taken to compile /perf/perf4.snap was 446 size was 69220 compressed to 48660 and 2799 lines
-Time taken to compile /perf/perf4.snap was 302 size was 69220 compressed to 48660 and 2799 lines
-Time taken to compile /perf/perf4.snap was 334 size was 69220 compressed to 48660 and 2799 lines
-Time taken to compile /perf/perf4.snap was 323 size was 69220 compressed to 48660 and 2799 lines
-Time taken to compile /perf/perf4.snap was 315 size was 69220 compressed to 48660 and 2799 lines
-Time taken to parse /perf/perf4.snap was 258 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 506 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 330 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 313 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 284 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 278 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 295 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 294 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 265 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 265 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 263 size was 69220 compressed to 48660 and 2799 lines
+Time taken to compile /perf/perf4.tern was 827 size was 69220 compressed to 48660 and 2799 lines
+Time taken to compile /perf/perf4.tern was 431 size was 69220 compressed to 48660 and 2799 lines
+Time taken to compile /perf/perf4.tern was 374 size was 69220 compressed to 48660 and 2799 lines
+Time taken to compile /perf/perf4.tern was 315 size was 69220 compressed to 48660 and 2799 lines
+Time taken to compile /perf/perf4.tern was 318 size was 69220 compressed to 48660 and 2799 lines
+Time taken to compile /perf/perf4.tern was 446 size was 69220 compressed to 48660 and 2799 lines
+Time taken to compile /perf/perf4.tern was 302 size was 69220 compressed to 48660 and 2799 lines
+Time taken to compile /perf/perf4.tern was 334 size was 69220 compressed to 48660 and 2799 lines
+Time taken to compile /perf/perf4.tern was 323 size was 69220 compressed to 48660 and 2799 lines
+Time taken to compile /perf/perf4.tern was 315 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 258 size was 69220 compressed to 48660 and 2799 lines
 parse memory=243,812,552
-Time taken to parse /perf/perf4.snap was 258 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 258 size was 69220 compressed to 48660 and 2799 lines
 parse memory=243,812,552
-Time taken to parse /perf/perf4.snap was 258 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 258 size was 69220 compressed to 48660 and 2799 lines
 parse memory=243,812,552
-Time taken to parse /perf/perf4.snap was 259 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 259 size was 69220 compressed to 48660 and 2799 lines
 parse memory=243,812,552
 parse memory=243,812,552
-Time taken to parse /perf/perf4.snap was 256 size was 69220 compressed to 48660 and 2799 lines
-Time taken to parse /perf/perf4.snap was 256 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 256 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 256 size was 69220 compressed to 48660 and 2799 lines
 parse memory=243,812,552
-Time taken to parse /perf/perf4.snap was 261 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 261 size was 69220 compressed to 48660 and 2799 lines
 parse memory=243,812,488
-Time taken to parse /perf/perf4.snap was 267 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 267 size was 69220 compressed to 48660 and 2799 lines
 parse memory=243,808,520
-Time taken to parse /perf/perf4.snap was 255 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 255 size was 69220 compressed to 48660 and 2799 lines
 parse memory=243,808,520
-Time taken to parse /perf/perf4.snap was 254 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 254 size was 69220 compressed to 48660 and 2799 lines
 parse memory=243,808,520
 
 After bitset + sparse array
@@ -69,7 +69,7 @@ parse memory=222,557,832
              198,752,824
              181,242,224
               15,694,712 <-- check + build steps (two phase compiler)
-Time taken to parse /perf/perf4.snap was 161 size was 69220 compressed to 48660 and 2799 lines
+Time taken to parse /perf/perf4.tern was 161 size was 69220 compressed to 48660 and 2799 lines
  */
 
 //Assembly time  took 376
@@ -83,11 +83,11 @@ public class CompilePerformanceTest extends TestCase {
    }
    public void testCompilerPerformance() throws Exception {
       //compileScript("perf4.js");  
-     // compileScript("/script/script13.snap"); 
-      compileScript("/perf/perf4.snap"); 
-      compileScript("/perf/perf3.snap");
-      compileScript("/perf/perf2.snap");
-      compileScript("/perf/perf1.snap");
+     // compileScript("/script/script13.tern");
+      compileScript("/perf/perf4.tern");
+      compileScript("/perf/perf3.tern");
+      compileScript("/perf/perf2.tern");
+      compileScript("/perf/perf1.tern");
  /*     executeScript("perf2.js");    
       executeScript("perf3.js"); */   
    }

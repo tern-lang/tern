@@ -44,10 +44,10 @@ public class TypeLookupPerSecondTest extends ScriptTestCase {
    
    
    public void testTypeLookupPerformance() throws Exception {
-      addScript("/com/test/foo/Foo.snap", SOURCE_1);
-      addScript("/com/test/foo/Bar.snap", SOURCE_2);      
-      addScript("/com/test/foo.snap", SOURCE_3);
-      getContext().getCompiler().compile("/com/test/foo.snap").execute(new EmptyModel(), true);
+      addScript("/com/test/foo/Foo.tern", SOURCE_1);
+      addScript("/com/test/foo/Bar.tern", SOURCE_2);
+      addScript("/com/test/foo.tern", SOURCE_3);
+      getContext().getCompiler().compile("/com/test/foo.tern").execute(new EmptyModel(), true);
       Object foo = getContext().getContext().getEvaluator().evaluate(new EmptyModel(), "new Foo(1,2)", "com.test.foo");
       Object bar = getContext().getContext().getEvaluator().evaluate(new EmptyModel(), "new Bar(`22`)", "com.test.foo");
       Object str = new String();

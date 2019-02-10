@@ -45,18 +45,18 @@ public class ImplicitImportTest extends ScriptTestCase {
    "assert new Blah().func(112).toString() == 'nuh=(x=112 y=1)';\n";  
    
    public void testImplicitImportFromSameModule() throws Exception {
-      addScript("/example/Nuh.snap", SOURCE_1);
-      addScript("/example/Foo.snap", SOURCE_2);
-      addScript("/example/Blah.snap", SOURCE_3);
-      addScript("/example.snap", SOURCE_4);         
-      assertScriptExecutes("/example.snap");
+      addScript("/example/Nuh.tern", SOURCE_1);
+      addScript("/example/Foo.tern", SOURCE_2);
+      addScript("/example/Blah.tern", SOURCE_3);
+      addScript("/example.tern", SOURCE_4);
+      assertScriptExecutes("/example.tern");
    }
    
    public void testImplicitImports() throws Exception {
-      addScript("/example/Nuh.snap", SOURCE_1);
-      addScript("/example/Foo.snap", SOURCE_2);
-      addScript("/example/Blah.snap", SOURCE_3);
-      addScript("/main.snap", SOURCE_5);          
-      assertScriptExecutes("/main.snap");
+      addScript("/example/Nuh.tern", SOURCE_1);
+      addScript("/example/Foo.tern", SOURCE_2);
+      addScript("/example/Blah.tern", SOURCE_3);
+      addScript("/main.tern", SOURCE_5);
+      assertScriptExecutes("/main.tern");
    }
 }

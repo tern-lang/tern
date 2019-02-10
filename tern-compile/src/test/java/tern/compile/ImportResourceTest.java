@@ -72,12 +72,12 @@ public class ImportResourceTest extends ScriptTestCase {
    "println(demo);\n";   
          
    public void testImports() throws Exception {
-      addScript("/example.snap", SOURCE_1);
-      addScript("/demo.snap", SOURCE_2);
-      addScript("/builder/Builder.snap", SOURCE_3);  
-      addScript("/main.snap", SOURCE_4);  
-      addScript("/launch.snap", SOURCE_5);         
-      assertScriptExecutes("/main.snap");
-      assertScriptExecutes("/launch.snap");
+      addScript("/example.tern", SOURCE_1);
+      addScript("/demo.tern", SOURCE_2);
+      addScript("/builder/Builder.tern", SOURCE_3);
+      addScript("/main.tern", SOURCE_4);
+      addScript("/launch.tern", SOURCE_5);
+      assertScriptExecutes("/main.tern");
+      assertScriptExecutes("/launch.tern");
    }
 }

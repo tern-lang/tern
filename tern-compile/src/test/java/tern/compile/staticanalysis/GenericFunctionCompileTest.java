@@ -248,14 +248,14 @@ public class GenericFunctionCompileTest extends CompileTestCase {
       assertCompileSuccess(SUCCESS_13);
       assertCompileSuccess(SUCCESS_14);
       assertCompileSuccess(SUCCESS_15);
-      assertCompileError(FAILURE_1, "Function 'longValue()' not found for 'lang.String' in /default.snap at line 2");
-      assertCompileError(FAILURE_2, "Function 'substring(lang.Integer)' not found for 'lang.Integer' in /default.snap at line 2");
-      assertCompileError(FAILURE_3, "Function 'longValue()' not found for 'lang.String' in /default.snap at line 11");
-      assertCompileError(FAILURE_4, "Function 'func()' not found for 'lang.String' in /default.snap at line 13");
-      assertCompileError(FAILURE_5, "Function 'longValue()' not found for 'lang.String' in /default.snap at line 16");
-      assertCompileError(FAILURE_6, "Function 'get(lang.Boolean)' not found for 'util.List' in /default.snap at line 16");
-      assertCompileError(FAILURE_7, "Function 'longValue()' not found for 'lang.String' in /default.snap at line 2");
-      assertCompileError(FAILURE_8, "Function 'longValue()' not found for 'lang.String' in /default.snap at line 2");
-      assertCompileError(FAILURE_9, "Function 'longValue()' not found for 'lang.String' in /default.snap at line 2");
+      assertCompileError(FAILURE_1, "Function 'longValue()' not found for 'lang.String' in /default.tern at line 2");
+      assertCompileError(FAILURE_2, "Function 'substring(lang.Integer)' not found for 'lang.Integer' in /default.tern at line 2");
+      assertCompileError(FAILURE_3, "Function 'longValue()' not found for 'lang.String' in /default.tern at line 11");
+      assertCompileError(FAILURE_4, "Function 'func()' not found for 'lang.String' in /default.tern at line 13");
+      assertCompileError(FAILURE_5, "Function 'longValue()' not found for 'lang.String' in /default.tern at line 16");
+      assertCompileError(FAILURE_6, "Function 'get(lang.Boolean)' not found for 'util.List' in /default.tern at line 16");
+      assertCompileError(FAILURE_7, "Function 'longValue()' not found for 'lang.String' in /default.tern at line 2");
+      assertCompileError(FAILURE_8, "Function 'longValue()' not found for 'lang.String' in /default.tern at line 2");
+      assertCompileError(FAILURE_9, "Function 'longValue()' not found for 'lang.String' in /default.tern at line 2");
    }
 }

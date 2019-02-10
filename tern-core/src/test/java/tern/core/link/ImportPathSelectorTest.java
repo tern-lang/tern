@@ -33,8 +33,8 @@ public class ImportPathSelectorTest extends TestCase {
       final Map<String, byte[]> resources = new HashMap<String, byte[]>();
       
       resources.put("imports.txt", SOURCE.getBytes());
-      resources.put("/mario/core/Mario.snap", new byte[]{});
-      resources.put("/mario/core/MarioGame.snap", new byte[]{});
+      resources.put("/mario/core/Mario.tern", new byte[]{});
+      resources.put("/mario/core/MarioGame.tern", new byte[]{});
       
       final ClassLoader loader = new URLClassLoader(new URL[]{}) {
          @Override

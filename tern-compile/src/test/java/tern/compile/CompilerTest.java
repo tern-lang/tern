@@ -22,7 +22,7 @@ public class CompilerTest extends TestCase {
    private void compileScripts(Compiler compiler) throws Exception {
       int iterations = 100;
       for (int i = 0; i < iterations; i++) {
-         String source = ClassPathReader.load("/script/script" + i + ".snap");
+         String source = ClassPathReader.load("/script/script" + i + ".tern");
          if (source != null) {
             try {
                long start = System.currentTimeMillis();

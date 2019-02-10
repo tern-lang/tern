@@ -27,26 +27,26 @@ public class ThreadStackTest extends TestCase {
       ThreadStack stack = new ThreadStack();
       Throwable cause = new Throwable();
       
-      createTrace(stack, "/run.snap", 1);
-      createTrace(stack, "/run.snap", 13);
+      createTrace(stack, "/run.tern", 1);
+      createTrace(stack, "/run.tern", 13);
       createModuleFunction(stack, "start", "run.graphics.Launcher");
-      createTrace(stack, "/run.snap", 137);
+      createTrace(stack, "/run.tern", 137);
       createTypeFunction(stack, "paint", "Panel", "run.graphics");
-      createTrace(stack, "/run.snap", 413);
+      createTrace(stack, "/run.tern", 413);
       createTypeFunction(stack, "transform", "Panel", "run.graphics");
-      createTrace(stack, "/run.snap", 21);
+      createTrace(stack, "/run.tern", 21);
       createTypeFunction(stack, "getDimensions", "PanelLayout", "run.layout");
-      createTrace(stack, "/layout.snap", 33);
+      createTrace(stack, "/layout.tern", 33);
       
       StackTraceElement[] list =stack.build();
       cause.setStackTrace(list);
       cause.printStackTrace();
       
-      assertEquals(list[0].toString(), "run.layout.PanelLayout.getDimensions(/layout.snap:33)");
-      assertEquals(list[1].toString(), "run.graphics.Panel.transform(/run.snap:21)");
-      assertEquals(list[2].toString(), "run.graphics.Panel.paint(/run.snap:413)");
-      assertEquals(list[3].toString(), "run.graphics.Launcher.start(/run.snap:137)"); // module function
-      assertEquals(list[4].toString(), "run.main(/run.snap:13)");
+      assertEquals(list[0].toString(), "run.layout.PanelLayout.getDimensions(/layout.tern:33)");
+      assertEquals(list[1].toString(), "run.graphics.Panel.transform(/run.tern:21)");
+      assertEquals(list[2].toString(), "run.graphics.Panel.paint(/run.tern:413)");
+      assertEquals(list[3].toString(), "run.graphics.Launcher.start(/run.tern:137)"); // module function
+      assertEquals(list[4].toString(), "run.main(/run.tern:13)");
    }
    
    public static void createTrace(ThreadStack stack, String resource, int line){

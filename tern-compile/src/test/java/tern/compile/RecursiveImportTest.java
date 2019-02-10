@@ -45,11 +45,11 @@ public class RecursiveImportTest extends ScriptTestCase {
    "}";
          
    public void testImports() throws Exception {
-      addScript("/test.snap", SOURCE_1);
-      addScript("/test/Bar.snap", SOURCE_2);  
-      addScript("/test2.snap", SOURCE_3);  
-      addScript("/test2/Bar.snap", SOURCE_4);  
-      assertScriptExecutes("/test.snap");
-      assertScriptExecutes("/test2.snap");      
+      addScript("/test.tern", SOURCE_1);
+      addScript("/test/Bar.tern", SOURCE_2);
+      addScript("/test2.tern", SOURCE_3);
+      addScript("/test2/Bar.tern", SOURCE_4);
+      assertScriptExecutes("/test.tern");
+      assertScriptExecutes("/test2.tern");
    }
 }

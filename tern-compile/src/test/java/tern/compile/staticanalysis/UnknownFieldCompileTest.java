@@ -14,6 +14,6 @@ public class UnknownFieldCompileTest extends CompileTestCase {
    "new Color().func();\n";
 
    public void testInvalidVariable() throws Exception {
-      assertCompileError(FAILURE_1, "Property 'unknown' not found for 'default.Color' in /default.snap at line 6");
+      assertCompileError(FAILURE_1, "Property 'unknown' not found for 'default.Color' in /default.tern at line 6");
    }
 }

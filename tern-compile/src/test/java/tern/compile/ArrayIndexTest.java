@@ -47,7 +47,7 @@ public class ArrayIndexTest extends CompileTestCase {
    public void testIndex() throws Exception {
       assertCompileAndExecuteSuccess(SOURCE_1);
       assertCompileSuccess(SOURCE_2);
-      assertCompileError(FAILURE_1, "Function 'doubleVal()' not found for 'lang.Float' in /default.snap at line 5");
-      //assertCompileError(FAILURE_2, "Function 'doubleVal()' not found for 'lang.Float' in /default.snap at line 5");      
+      assertCompileError(FAILURE_1, "Function 'doubleVal()' not found for 'lang.Float' in /default.tern at line 5");
+      //assertCompileError(FAILURE_2, "Function 'doubleVal()' not found for 'lang.Float' in /default.tern at line 5");
    }
 }

@@ -23,16 +23,16 @@ public class MissingImportTest extends ScriptTestCase {
 
    
    public void testMissingFunction() throws Exception {
-      addScript("/com/test/foo/Tree.snap", SOURCE_1);
-      addScript("/com/test/foo.snap", SOURCE_2);     
+      addScript("/com/test/foo/Tree.tern", SOURCE_1);
+      addScript("/com/test/foo.tern", SOURCE_2);
 
       try {
-         assertExpressionEvaluates("/com/test/foo.snap", "main()", "com.test.foo");
+         assertExpressionEvaluates("/com/test/foo.tern", "main()", "com.test.foo");
       } catch(VerifyException e) { // this is wrong, should not throw error
          String message = e.getErrors().get(0).getDescription();
          System.err.println(message);
          e.printStackTrace();
-         assertEquals(message, "No type found for 'Node' in 'com.test.foo' in /com/test/foo/Tree.snap at line 3");   
+         assertEquals(message, "No type found for 'Node' in 'com.test.foo' in /com/test/foo/Tree.tern at line 3");
       } 
    }
 }

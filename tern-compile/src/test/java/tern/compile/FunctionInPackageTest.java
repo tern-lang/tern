@@ -27,9 +27,9 @@ public class FunctionInPackageTest extends ScriptTestCase {
    "}";
          
    public void testPackageWithFunction() throws Exception {
-      addScript("/test.snap", SOURCE_1);
-      addScript("/blah/Bar.snap", SOURCE_2);    
-      assertScriptExecutes("/test.snap");
-      assertScriptExecutes("/blah/Bar.snap");      
+      addScript("/test.tern", SOURCE_1);
+      addScript("/blah/Bar.tern", SOURCE_2);
+      assertScriptExecutes("/test.tern");
+      assertScriptExecutes("/blah/Bar.tern");
    }
 }

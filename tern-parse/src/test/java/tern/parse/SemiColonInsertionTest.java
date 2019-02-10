@@ -54,7 +54,7 @@ public class SemiColonInsertionTest extends TestCase {
       //System.err.println(compressText(SOURCE));
       //System.err.println(compressText(semiColonFree));
       
-      List<Token> tokens = replaceTokens(createTokens(semiColonFree, "/test.snap"));
+      List<Token> tokens = replaceTokens(createTokens(semiColonFree, "/test.tern"));
       
 //      for(Token token : tokens) {
 //         System.err.println("["+token.getValue()+"]");
@@ -62,13 +62,13 @@ public class SemiColonInsertionTest extends TestCase {
    }
    
    public void testSemiColonInsertionFromFile() throws Exception {
-      String source = new CacheStore(new ClassPathStore()).getString("test_source1.snap");
+      String source = new CacheStore(new ClassPathStore()).getString("test_source1.tern");
       String semiColonFree = source.replace(";", "");
       
       //System.err.println(compressText(SOURCE));
       //System.err.println(compressText(semiColonFree));
       
-      List<Token> tokens = replaceTokens(createTokens(semiColonFree, "test_source1.snap"));
+      List<Token> tokens = replaceTokens(createTokens(semiColonFree, "test_source1.tern"));
       
 //      for(Token token : tokens) {
 //         System.err.println("["+token.getValue()+"]");

@@ -48,12 +48,12 @@ public class GenericConstructorCompileTest extends CompileTestCase {
    public void testConstructorGenerics() throws Exception {
       assertCompileSuccess(SUCCESS_1);
       assertCompileSuccess(SUCCESS_2);
-      assertCompileError(FAILURE_1, "Generic parameter 'T' does not match 'util.List<lang.Object>' in /default.snap at line 2");
-      assertCompileError(FAILURE_2, "Generic parameter 'T' does not match 'util.List<lang.Object>' in /default.snap at line 2");
-      assertCompileError(FAILURE_3, "Generic parameter count for 'util.HashMap' is invalid in /default.snap at line 1");
-      assertCompileError(FAILURE_4, "Generic parameter count for 'util.HashMap' is invalid in /default.snap at line 1");
-      assertCompileError(FAILURE_5, "Generic parameter count for 'util.HashMap' is invalid in /default.snap at line 1");
-      assertCompileError(FAILURE_6, "Generic parameter count for 'util.List' is invalid in /default.snap at line 1");
-      //assertCompileError(FAILURE_7, "Generic parameter count for 'util.List' is invalid in /default.snap at line 1");
+      assertCompileError(FAILURE_1, "Generic parameter 'T' does not match 'util.List<lang.Object>' in /default.tern at line 2");
+      assertCompileError(FAILURE_2, "Generic parameter 'T' does not match 'util.List<lang.Object>' in /default.tern at line 2");
+      assertCompileError(FAILURE_3, "Generic parameter count for 'util.HashMap' is invalid in /default.tern at line 1");
+      assertCompileError(FAILURE_4, "Generic parameter count for 'util.HashMap' is invalid in /default.tern at line 1");
+      assertCompileError(FAILURE_5, "Generic parameter count for 'util.HashMap' is invalid in /default.tern at line 1");
+      assertCompileError(FAILURE_6, "Generic parameter count for 'util.List' is invalid in /default.tern at line 1");
+      //assertCompileError(FAILURE_7, "Generic parameter count for 'util.List' is invalid in /default.tern at line 1");
    }
 }

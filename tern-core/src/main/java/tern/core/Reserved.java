@@ -23,8 +23,8 @@ public interface Reserved {
    String METHOD_NOTIFY = "notify";
    String METHOD_NOTIFY_ALL = "notifyAll";
    String IMPORT_JAVA = "java.";
-   String IMPORT_SNAPSCRIPT = "tern.";
-   String SCRIPT_EXTENSION = ".snap";
+   String IMPORT_TERN = "tern.";
+   String SCRIPT_EXTENSION = ".tern";
    String DEFAULT_PACKAGE = "default";
    String DEFAULT_RESOURCE = "Unknown Source";
    String DEFAULT_PARAMETER = "a";

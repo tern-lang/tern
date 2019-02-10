@@ -141,7 +141,7 @@ using special rules and literal values that form the basis of a [Recursive Desce
 The formal grammar for the language is defined with these rules, it can be modified to extend the language
 or tweak existing behaviour. 
 
-[Language Grammar](https://github.com/snapscript/snap/blob/master/snap-parse/src/main/resources/grammar.txt)
+[Language Grammar](https://github.com/tern-lang/tern/blob/master/tern-parse/src/main/resources/grammar.txt)
 
 #### Lexical Analysis
 
@@ -172,7 +172,7 @@ The syntax tree is traversed in a depth first manner to determine what the instr
 traversal retreats back up from the leafs of the tree to the root instructions are assembled. This process is
 similar to how many other dependency injection system works.
 
-[Language Instructions](https://github.com/snapscript/snap/blob/master/snap-tree/src/main/resources/instruction.txt)
+[Language Instructions](https://github.com/tern-lang/tern/blob/master/tern-tree/src/main/resources/instruction.txt)
 
 ### Static Analysis
 
@@ -1204,7 +1204,7 @@ To run scripts as a standalone application you can download the interpreter. The
 be installed on the host machine. Once you have downloaded the interpreter you can begin running scripts right 
 away. All you need to do is specify the script file relative to the current directory.
 
-Download - [http://www.snapscript.org/download/snap.zip](http://www.snapscript.org/download/snap.zip)
+Download - [http://tern-lang.org/tern.zip](http://tern-lang.org/tern.zip)
 
 ### Development Environment
 
@@ -1214,56 +1214,56 @@ play button. This will initiate a bootstrapping process where the interpreter is
 this bootstrapping process has completed the source program is downloaded and executed. Stepping through the
 code can be done by setting break points.
 
-Download - [http://www.snapscript.org/download/snapd.zip](http://www.snapscript.org/download/snapd.zip)
+Download - [http://tern-lang.org/ternd.zip](http://tern-lang.org/ternd.zip)
 
 #### Breakpoints
 
 A breakpoint forces the debugger to suspend at a particular line when execution flow arrives at that line. Once
 suspended the developer can step in, out or over the statements.
 
-![Developer Breakpoints](https://raw.githubusercontent.com/snapscript/snap-site/master/images/debugger_breakpoints.png)
+![Developer Breakpoints](https://raw.githubusercontent.com/tern-lang/tern-site/master/www.tern-lang.org/img/screenshots/debugger_breakpoints.png)
 
 #### Console
 
 All output from the application is captured in the console and displayed. This console is a scrolling window and
 will keep only the most recent history up to a configurable number of lines.
 
-![Developer Console](https://raw.githubusercontent.com/snapscript/snap-site/master/images/debugger_console.png)
+![Developer Console](https://raw.githubusercontent.com/tern-lang/tern-site/master/www.tern-lang.org/img/screenshots/debugger_console.png)
 
 #### Variables
 
 When execution is suspended it is possible to evaluate expressions and look at variables on the stack and in
 the surrounding scope. These variables can be navigated by clicking through references.
 
-![Developer Variables](https://raw.githubusercontent.com/snapscript/snap-site/master/images/debugger_variables.png)
+![Developer Variables](https://raw.githubusercontent.com/tern-lang/tern-site/master/www.tern-lang.org/img/screenshots/debugger_variables.png)
 
 #### Threads
 
 At any time multiple threads may be suspended. A thread view is provided so that the developer can select the
 thread to debug and also to view the stack frames.
 
-![Developer Threads](https://raw.githubusercontent.com/snapscript/snap-site/master/images/debugger_threads.png)
+![Developer Threads](https://raw.githubusercontent.com/tern-lang/tern-site/master/www.tern-lang.org/img/screenshots/debugger_threads.png)
 
 #### Process View
 
 If there are multiple applications running from the development environment focus can only be given to one. It
 is possible to switch focus through the process view. Once focused an application can be debugged or terminated.
 
-![Developer Debug](https://raw.githubusercontent.com/snapscript/snap-site/master/images/debugger_agents.png)
+![Developer Debug](https://raw.githubusercontent.com/tern-lang/tern-site/master/www.tern-lang.org/img/screenshots/debugger_agents.png)
 
 #### Debug Perspective
 
 To capture as much relevant information on a single screen the debug perspectived can be used. This will allow
 the developer to see the threads and variables as well as the console.
 
-![Developer Debug Perspective](https://raw.githubusercontent.com/snapscript/snap-site/master/images/debugger_changelayout.png)
+![Developer Debug Perspective](https://raw.githubusercontent.com/tern-lang/tern-site/master/www.tern-lang.org/img/screenshots/debugger_changelayout.png)
 
 #### Full Screen
 
 When editing it can be useful to see the full screen. This perspective can be achieved by double clicking on
 the tab in focus.
 
-![Developer Full Screen](https://raw.githubusercontent.com/snapscript/snap-site/master/images/debugger_fullscreen.png)
+![Developer Full Screen](https://raw.githubusercontent.com/tern-lang/tern-site/master/www.tern-lang.org/img/screenshots/debugger_fullscreen.png)
 
 ### Debug Agent
 

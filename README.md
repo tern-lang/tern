@@ -274,8 +274,8 @@ For programs to be useful, we need to be able to work with some of the simplest 
 strings, structures, boolean values, and the like. Support for these basic types is much the same as you would 
 expected for Java, with some additional features such as string templates, map, set, and list literals.
 
-In order to reference values they must be associated with a variable. Variables are declared with the keyword 
-```let``` or ```const```. A variable can have an optional constraint by declaring a type. If constrained a 
+In order to reference values they must be associated with a variable. Variables are declared with the 
+keyword ```let``` or ```const```. A variable can have an optional constraint by declaring a type. If constrained a 
 variable can only reference values of the declared type.
 
 ```js

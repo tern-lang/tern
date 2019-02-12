@@ -56,14 +56,11 @@ public class FunctionProxyHandler implements ProxyHandler {
          }
          return function.equals(convert[0]);
       }
-      if(convert.length > 0) {
-         return invoke(proxy, name, convert, arguments); // arguments could be null
-      }
-      return invoke(proxy, name, convert, convert);
+      return invoke(proxy, name, convert);
    }
    
-   private Object invoke(Object proxy, String name, Object[] convert, Object[] arguments) throws Throwable {
-      Connection call = resolve(proxy, name, convert, arguments);  
+   private Object invoke(Object proxy, String name, Object[] arguments) throws Throwable {
+      Connection call = resolve(proxy, name, arguments);
       int width = arguments.length;
       
       if(call == null) {
@@ -77,7 +74,7 @@ public class FunctionProxyHandler implements ProxyHandler {
       return null;
    }
    
-   private Connection resolve(Object proxy, String name, Object[] convert, Object[] arguments) throws Throwable {
+   private Connection resolve(Object proxy, String name, Object[] arguments) throws Throwable {
       Type source = function.getSource();
 
       if(source != null) {
@@ -88,7 +85,7 @@ public class FunctionProxyHandler implements ProxyHandler {
             return new ProxyConnection(call, scope);
          }
       }
-      FunctionCall call = resolver.resolveValue(value, convert); // here arguments can be null!!! 
+      FunctionCall call = resolver.resolveValue(value, arguments); // here arguments can be null!!!
       
       if(call != null) {
          return new ProxyConnection(call, null);

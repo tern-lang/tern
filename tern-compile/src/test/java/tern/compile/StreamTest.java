@@ -50,7 +50,34 @@ public class StreamTest extends TestCase{
    private static final String SOURCE_7 =
    "import util.stream.IntStream;\n"+              
    "IntStream.range(0, i -> i + 2).limit(10).forEach(i -> println(i));";
-   
+
+   private static final String SOURCE_8 =
+   "trait HtmlElement {\n"+
+    "   render(b: StringBuilder);\n"+
+    "}\n"+
+    "class HeaderElement with HtmlElement {\n"+
+    "\n"+
+    "   override render(b: StringBuilder) {\n"+
+    "      b.append('<h1>Hello</h1>');\n"+
+    "   }\n"+
+    "}\n"+
+    "class ParagraphElement with HtmlElement {\n"+
+    "\n"+
+    "   override render(b: StringBuilder) {\n"+
+    "      b.append('<p>Talk</p>');\n"+
+    "   }\n"+
+    "}\n"+
+    "let builder = StringBuilder();\n"+
+    "let list = [];\n"+
+    "\n"+
+    "list.add(HeaderElement());\n"+
+    "list.add(ParagraphElement());\n"+
+    "\n"+
+    "list.stream().forEach(e -> {\n"+
+    "   e.render(builder);\n"+
+    "});\n";
+
+
    public void testScriptTypeDescription() throws Exception {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       System.err.println(SOURCE_1);
@@ -86,7 +113,7 @@ public class StreamTest extends TestCase{
       System.err.println(SOURCE_6);
       compiler.compile(SOURCE_6).execute(new EmptyModel());
    }
-   
+
    public void testIntStream() throws Exception {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       boolean failure = false;
@@ -100,5 +127,11 @@ public class StreamTest extends TestCase{
          assertEquals(e.getMessage(), "Function 'range(lang.Integer, default.anonymous)' not found for 'util.stream.IntStream'");
       }
       assertTrue("Exception should have been thrown", failure);
-   }  
+   }
+
+   public void testElementsInForEach() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      System.err.println(SOURCE_8);
+      compiler.compile(SOURCE_8).execute(new EmptyModel());
+   }
 }

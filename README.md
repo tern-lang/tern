@@ -1,4 +1,4 @@
-![Tern](https://raw.githubusercontent.com/tern-lang/tern-site/master/www.tern-lang.org/img/logo-small.png)
+![Tern](https://raw.githubusercontent.com/tern-lang/tern-site/master/tern-lang.org/img/logo-small.png)
   
 Tern is an optionally typed object oriented language with first class functions and coroutines.
 It borrows concepts and constructs from many sources including Swift, JavaScript, Java, and 
@@ -1221,49 +1221,49 @@ Download - [http://tern-lang.org/ternd.zip](http://tern-lang.org/ternd.zip)
 A breakpoint forces the debugger to suspend at a particular line when execution flow arrives at that line. Once
 suspended the developer can step in, out or over the statements.
 
-![Developer Breakpoints](https://raw.githubusercontent.com/tern-lang/tern-site/master/www.tern-lang.org/img/screenshots/debugger_breakpoints.png)
+![Developer Breakpoints](https://raw.githubusercontent.com/tern-lang/tern-site/master/tern-lang.org/img/screenshots/debugger_breakpoints.png)
 
 #### Console
 
 All output from the application is captured in the console and displayed. This console is a scrolling window and
 will keep only the most recent history up to a configurable number of lines.
 
-![Developer Console](https://raw.githubusercontent.com/tern-lang/tern-site/master/www.tern-lang.org/img/screenshots/debugger_console.png)
+![Developer Console](https://raw.githubusercontent.com/tern-lang/tern-site/master/tern-lang.org/img/screenshots/debugger_console.png)
 
 #### Variables
 
 When execution is suspended it is possible to evaluate expressions and look at variables on the stack and in
 the surrounding scope. These variables can be navigated by clicking through references.
 
-![Developer Variables](https://raw.githubusercontent.com/tern-lang/tern-site/master/www.tern-lang.org/img/screenshots/debugger_variables.png)
+![Developer Variables](https://raw.githubusercontent.com/tern-lang/tern-site/master/tern-lang.org/img/screenshots/debugger_variables.png)
 
 #### Threads
 
 At any time multiple threads may be suspended. A thread view is provided so that the developer can select the
 thread to debug and also to view the stack frames.
 
-![Developer Threads](https://raw.githubusercontent.com/tern-lang/tern-site/master/www.tern-lang.org/img/screenshots/debugger_threads.png)
+![Developer Threads](https://raw.githubusercontent.com/tern-lang/tern-site/master/tern-lang.org/img/screenshots/debugger_threads.png)
 
 #### Process View
 
 If there are multiple applications running from the development environment focus can only be given to one. It
 is possible to switch focus through the process view. Once focused an application can be debugged or terminated.
 
-![Developer Debug](https://raw.githubusercontent.com/tern-lang/tern-site/master/www.tern-lang.org/img/screenshots/debugger_agents.png)
+![Developer Debug](https://raw.githubusercontent.com/tern-lang/tern-site/master/tern-lang.org/img/screenshots/debugger_agents.png)
 
 #### Debug Perspective
 
 To capture as much relevant information on a single screen the debug perspectived can be used. This will allow
 the developer to see the threads and variables as well as the console.
 
-![Developer Debug Perspective](https://raw.githubusercontent.com/tern-lang/tern-site/master/www.tern-lang.org/img/screenshots/debugger_changelayout.png)
+![Developer Debug Perspective](https://raw.githubusercontent.com/tern-lang/tern-site/master/tern-lang.org/img/screenshots/debugger_changelayout.png)
 
 #### Full Screen
 
 When editing it can be useful to see the full screen. This perspective can be achieved by double clicking on
 the tab in focus.
 
-![Developer Full Screen](https://raw.githubusercontent.com/tern-lang/tern-site/master/www.tern-lang.org/img/screenshots/debugger_fullscreen.png)
+![Developer Full Screen](https://raw.githubusercontent.com/tern-lang/tern-site/master/tern-lang.org/img/screenshots/debugger_fullscreen.png)
 
 ### Debug Agent
 

@@ -1,18 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>tern</groupId>
+  <groupId>org.ternlang</groupId>
   <artifactId>tern-tree</artifactId>
   <packaging>jar</packaging>
   <version>1.4.6</version>
-  <url>http://www.snapscript.org</url>
+  <url>http://tern-lang.org</url>
   <dependencies>
     <dependency>
-      <groupId>tern</groupId>
+      <groupId>org.ternlang</groupId>
       <artifactId>tern-core</artifactId>
       <version>1.4.6</version>
     </dependency>
     <dependency>
-      <groupId>tern</groupId>
+      <groupId>org.ternlang</groupId>
       <artifactId>tern-parse</artifactId>
       <version>1.4.6</version>
     </dependency>

@@ -111,8 +111,8 @@ xml = javax.xml {}
 
 # snap imports
 
-core = tern.core { Context }
-resume = tern.core.resume { Yield, Promise, Task, Answer }
-compile = tern.compile {}
-common = tern.common {}
+core = org.ternlang.core { Context }
+resume = org.ternlang.core.resume { Yield, Promise, Task, Answer }
+compile = org.ternlang.compile {}
+common = org.ternlang.common {}
 

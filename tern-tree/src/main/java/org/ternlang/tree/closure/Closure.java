@@ -9,6 +9,7 @@ import org.ternlang.core.Compilation;
 import org.ternlang.core.Evaluation;
 import org.ternlang.core.Statement;
 import org.ternlang.core.constraint.Constraint;
+import org.ternlang.core.error.InternalStateException;
 import org.ternlang.core.function.Function;
 import org.ternlang.core.function.FunctionBody;
 import org.ternlang.core.function.Signature;
@@ -83,8 +84,12 @@ public class Closure implements Compilation {
       
       @Override
       public Constraint compile(Scope scope, Constraint left) throws Exception {
-         Type type = scope.getType();
          FunctionBody body = reference.get();
+
+         if(body == null) {
+            throw new InternalStateException("Closure was not compiled");
+         }
+         Type type = scope.getType();
          Function function = body.create(scope);   
          Scope combined = compiler.compile(scope, type, function);
          

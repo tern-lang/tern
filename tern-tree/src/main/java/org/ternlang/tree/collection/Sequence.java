@@ -1,5 +1,7 @@
 package org.ternlang.tree.collection;
 
+import static java.lang.Integer.MAX_VALUE;
+
 import java.util.Iterator;
 
 public class Sequence implements Iterable<Number> {
@@ -17,17 +19,19 @@ public class Sequence implements Iterable<Number> {
    @Override
    public Iterator<Number> iterator() {
       if(forward) {
-         return new ForwardIterator(first, last);
+         return new ForwardIterator(first, last, last <= MAX_VALUE);
       }
-      return new ReverseIterator(last, first);
+      return new ReverseIterator(last, first, last <= MAX_VALUE);
    }
 
    private static class ForwardIterator implements Iterator<Number> {
-      
+
+      private boolean integer;
       private long first;
       private long last;
       
-      public ForwardIterator(Long first, Long last) {
+      public ForwardIterator(long first, long last, boolean integer) {
+         this.integer = integer;
          this.first = first;
          this.last = last;
       }
@@ -40,7 +44,12 @@ public class Sequence implements Iterable<Number> {
       @Override
       public Number next() {
          if(first <= last) {
-            return first++;
+            long next = first++;
+
+            if(integer) {
+               return (int)next;
+            }
+            return next;
          }
          return null;
       }
@@ -53,10 +62,12 @@ public class Sequence implements Iterable<Number> {
 
    private static class ReverseIterator implements Iterator<Number> {
 
+      private boolean integer;
       private long first;
       private long last;
 
-      public ReverseIterator(long first, long last) {
+      public ReverseIterator(long first, long last, boolean integer) {
+         this.integer = integer;
          this.first = first;
          this.last = last;
       }
@@ -69,7 +80,12 @@ public class Sequence implements Iterable<Number> {
       @Override
       public Number next() {
          if(first >= last) {
-            return first--;
+            long next = first--;
+
+            if(integer) {
+               return (int)next;
+            }
+            return next;
          }
          return null;
       }

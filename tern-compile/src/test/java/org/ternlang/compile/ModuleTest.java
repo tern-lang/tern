@@ -52,8 +52,21 @@ public class ModuleTest extends ScriptTestCase {
    "}\n"+
    "System.err.println(Mod.foo(55));\n";
 
+   private static final String SOURCE_4 =
+   "module F {\n"+
+   "\n"+
+   "   @Target(values: [CLASS, PROPERTY, FUNCTION, PROPERTY_GETTER, PROPERTY_SETTER])\n"+
+   "   @Retention(value: AnnotationRetention.BINARY)\n"+
+   "   @MustBeDocumented\n"+
+   "   async call() {\n"+
+   "      return await 11;\n"+
+   "   }\n"+
+   "}\n"+
+   "F.call().success(this::println);\n";
+
+
    public void testModuleInnerClass() throws Exception {
-      assertScriptExecutes(SOURCE_2);
+      assertScriptExecutes(SOURCE_1);
    }
    
    public void testModuleOuterClass() throws Exception {
@@ -62,10 +75,24 @@ public class ModuleTest extends ScriptTestCase {
    
    public void testModuleWithAbstractMethod() throws Exception {
       assertScriptExecutes(SOURCE_3, new AssertionCallback() {
-         
+
          @Override
          public void onSuccess(Context context, Object result) {
             assertTrue("Should fail on abstract method", false);
+         }
+         @Override
+         public void onException(Context context, Exception result) {
+            result.printStackTrace();
+         }
+      });
+   }
+
+   public void testModuleWithBadFunctionAnnotations() throws Exception {
+      assertScriptExecutes(SOURCE_4, new AssertionCallback() {
+
+         @Override
+         public void onSuccess(Context context, Object result) {
+            assertTrue("Should fail on bad annotations", false);
          }
          @Override
          public void onException(Context context, Exception result) {

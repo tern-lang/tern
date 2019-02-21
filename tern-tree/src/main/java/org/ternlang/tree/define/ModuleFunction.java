@@ -11,6 +11,7 @@ import org.ternlang.core.NoExecution;
 import org.ternlang.core.Statement;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.constraint.DeclarationConstraint;
+import org.ternlang.core.error.InternalStateException;
 import org.ternlang.core.function.Function;
 import org.ternlang.core.function.FunctionBody;
 import org.ternlang.core.function.Signature;
@@ -85,26 +86,31 @@ public class ModuleFunction implements ModulePart {
          Constraint require = constraint.getConstraint(combined, modifiers);
          FunctionBody body = builder.create(signature, module, require, name, modifiers);
          Function function = body.create(combined);
-         
+
          validator.validate(module, function, modifiers);
          annotations.apply(combined, function);
          functions.add(function);
          body.define(combined); // count stack
          cache.set(body);
-         
+
          return false;
       }      
       
       @Override
       public Execution compile(Scope scope, Constraint returns) throws Exception {
          FunctionBody body = cache.get();
+         String name = identifier.getName(scope);
+
+         if(body == null) {
+            throw new InternalStateException("Function '" + name + "' was not compiled");
+         }
          Module module = scope.getModule();
          Type type = module.getType(); // ???
          Function function = body.create(scope);
          Scope outer = compiler.compile(scope, type, function);
 
          body.compile(outer);
-         
+
          return execution;
       }
    }

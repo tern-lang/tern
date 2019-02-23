@@ -1,5 +1,6 @@
 package org.ternlang.tree.collection;
 
+import static org.ternlang.core.constraint.Constraint.CHARACTER;
 import static org.ternlang.core.constraint.Constraint.NONE;
 import static org.ternlang.core.variable.Value.NULL;
 
@@ -16,6 +17,7 @@ import org.ternlang.core.scope.Scope;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.ListValue;
 import org.ternlang.core.variable.MapValue;
+import org.ternlang.core.variable.StringValue;
 import org.ternlang.core.variable.Value;
 import org.ternlang.tree.Argument;
 
@@ -41,10 +43,14 @@ public class CollectionIndex extends Evaluation {
       
       if(type != null) {
          Type entry = type.getEntry();
-         
+         Class real = type.getType();
+
          if(entry != null) { // is this a compile error?
             return Constraint.getConstraint(entry);
-         }         
+         }
+         if(real == String.class) {
+            return CHARACTER;
+         }
       }
       return NONE;
    }
@@ -81,6 +87,12 @@ public class CollectionIndex extends Evaluation {
          Map map = (Map)source;
          
          return new MapValue(wrapper, map, key);
+      }
+      if(String.class.isInstance(source)) {
+         int number = index.getInteger();
+         String text = (String)source;
+
+         return new StringValue(text, number);
       }
       if(Type.class.isInstance(type)) {
          throw new InternalArgumentException("Illegal index of type " + object);

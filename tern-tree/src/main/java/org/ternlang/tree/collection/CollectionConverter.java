@@ -28,6 +28,9 @@ public class CollectionConverter {
          if(Map.class.isAssignableFrom(type)) {
             return true;
          }
+         if(String.class.isAssignableFrom(type)) {
+            return true;
+         }
       }
       return false;
    }
@@ -43,6 +46,9 @@ public class CollectionConverter {
             return value;
          }
          if(Map.class.isAssignableFrom(type)) {
+            return value;
+         }
+         if(String.class.isAssignableFrom(type)) {
             return value;
          }
          if(Type.class.isAssignableFrom(type)) {

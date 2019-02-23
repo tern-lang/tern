@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 public class CoerceIntegerToDoubleTest extends TestCase {
    
    private static final String SOURCE_1 = 
-   "var x: Integer[] = [123,4,'44'];\n"+
+   "var x: Integer[] = [123,4,44];\n"+
    "assert x[2].class == Integer.class;\n"+
    "var y: Double[] = x;\n"+
    "assert y[2].class == Double.class;\n";

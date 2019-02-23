@@ -1,8 +1,5 @@
 package org.ternlang.compile;
 
-import org.ternlang.compile.Compiler;
-import org.ternlang.compile.Executable;
-
 import junit.framework.TestCase;
 
 public class FunctionConstraintTest extends TestCase {
@@ -35,28 +32,28 @@ public class FunctionConstraintTest extends TestCase {
    
    private static final String SOURCE_4=
    "function x(f: (a: String, b)) {\n"+
-   "   println(f(11,22));\n"+
+   "   println(f('11',22));\n"+
    "}\n"+
    "function x(f: (a)) {\n"+
    "   println(f(113));\n"+
    "}\n"+
-   "function x(f: (a: String)) {\n"+
+   "function x(f: (a: Double)) {\n"+
    "   return \"x:\" + f(113);\n"+
    "}\n"+   
    "function x(f: (a: Integer)) {\n"+
    "   throw 'illegal argument';\n"+
    "}\n"+     
-   "var res = x((a:String)->\"res=${a}\");\n"+
+   "var res = x((a:Double)->\"res=${a}\");\n"+
    "println(res);\n";
    
    private static final String SOURCE_5=
-   "function x(f: (a: String, b)) {\n"+
-   "   println('x(f: (a: String, b))->' + f(11,22));\n"+
+   "function x(f: (a: Number, b)) {\n"+
+   "   println('x(f: (a: Number, b))->' + f(11,22));\n"+
    "}\n"+
    "function x(f: (a, b)) {\n"+
    "   println('x(f: (a, b))->' + f(11,22));\n"+
    "}\n"+
-   "x((a:String, b:String)->a+'='+b);\n";
+   "x((a:Number, b:Number)->a+'='+b);\n";
    
    private static final String SOURCE_6 =
    "class Foo{\n"+

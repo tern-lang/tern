@@ -22,8 +22,8 @@ public class DoubleConverterTest extends TestCase {
       assertEquals(converter.score(new AtomicLong(234L)), Score.COMPATIBLE);
       assertEquals(converter.score(new AtomicInteger(222)), Score.COMPATIBLE);
       assertEquals(converter.score(new Integer(33211)), Score.COMPATIBLE);
-      assertEquals(converter.score("0.12"), Score.POSSIBLE);
-      assertEquals(converter.score("-.012e+12"), Score.POSSIBLE);
+      assertEquals(converter.score("0.12"), Score.INVALID);
+      assertEquals(converter.score("-.012e+12"), Score.INVALID);
       assertEquals(converter.score((Object)null), Score.POSSIBLE);
       
       assertEquals(converter.convert(11.2d), 11.2d);
@@ -31,8 +31,6 @@ public class DoubleConverterTest extends TestCase {
       assertEquals(converter.convert(new AtomicLong(234L)), 234.0d);
       assertEquals(converter.convert(new AtomicInteger(222)), 222.0d);
       assertEquals(converter.convert(new Integer(33211)), 33211.0d);
-      assertEquals(converter.convert("0.12"), 0.12d);
-      assertEquals(converter.convert("-.012e+12"), -.012e+12d);
       assertEquals(converter.convert((Object)null), null);
    }
    
@@ -43,8 +41,8 @@ public class DoubleConverterTest extends TestCase {
       assertEquals(converter.score(11.2d), Score.EXACT);
       assertEquals(converter.score(new BigDecimal("0.11")), Score.SIMILAR);
       assertEquals(converter.score(new AtomicLong(234L)), Score.COMPATIBLE);
-      assertEquals(converter.score("0.12"), Score.POSSIBLE);
-      assertEquals(converter.score("-.012e+12"), Score.POSSIBLE);
+      assertEquals(converter.score("0.12"), Score.INVALID);
+      assertEquals(converter.score("-.012e+12"), Score.INVALID);
       assertEquals(converter.score((Object)null), Score.INVALID);
    }
 

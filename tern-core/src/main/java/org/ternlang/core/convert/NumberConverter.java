@@ -72,9 +72,6 @@ public class NumberConverter extends ConstraintConverter {
             if(score != null) {
                return score;
             }
-            if(real == String.class) {
-               return POSSIBLE;
-            }
          }
          return INVALID;
       }
@@ -90,14 +87,6 @@ public class NumberConverter extends ConstraintConverter {
          Score score = mapper.map(actual);
          
          if(score == null) {
-            if(actual == String.class) {
-               String text = String.valueOf(value);
-               NumberType type = matcher.matchNumber(text);
-               
-               if(type.isDecimal()) {
-                  return POSSIBLE;
-               }
-            }
             return INVALID;
          }
          return score;
@@ -114,10 +103,6 @@ public class NumberConverter extends ConstraintConverter {
       
       if(value != null) {
          Class actual = value.getClass();
-         
-         if(actual == String.class) {
-            return convert(require, (String)value);
-         }
          Class parent = actual.getSuperclass();
          
          if(parent == Number.class) {

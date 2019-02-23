@@ -1,6 +1,7 @@
 package org.ternlang.core.convert;
 
 import static org.ternlang.core.convert.Score.EXACT;
+import static org.ternlang.core.convert.Score.INVALID;
 import static org.ternlang.core.convert.Score.POSSIBLE;
 
 import org.ternlang.core.type.Type;
@@ -19,6 +20,10 @@ public class StringConverter extends ConstraintConverter {
          if(real == String.class) {
             return EXACT;
          }
+         if(real == Character.class) {
+            return POSSIBLE;
+         }
+         return INVALID;
       }
       return POSSIBLE;
    }
@@ -31,6 +36,10 @@ public class StringConverter extends ConstraintConverter {
          if(type == String.class) {
             return EXACT;
          }
+         if(type == Character.class) {
+            return POSSIBLE;
+         }
+         return INVALID;
       }
       return POSSIBLE;
    }

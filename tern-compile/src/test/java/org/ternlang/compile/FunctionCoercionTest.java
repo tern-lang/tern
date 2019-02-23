@@ -18,7 +18,7 @@ public class FunctionCoercionTest extends TestCase {
    "}\n"+
    "\n"+
    "fun((a,b)->println(`${a},${b}`));\n"+
-   "fun((a:String,b:String)->println(`a=${a} b=${b}`));\n"+
+   "fun((a:Double,b:Long)->println(`a=${a} b=${b}`));\n"+
    "\n"+
    "function fun(x: (a,b)) {\n"+
    "   x(11,22);\n"+

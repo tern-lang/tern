@@ -16,19 +16,17 @@ public class BooleanConverterTest extends TestCase {
       assertEquals(converter.score(true), Score.EXACT);
       assertEquals(converter.score(Boolean.TRUE), Score.EXACT);
       assertEquals(converter.score(Boolean.FALSE), Score.EXACT);
-      assertEquals(converter.score("true"), Score.POSSIBLE);
-      assertEquals(converter.score("false"), Score.POSSIBLE);
-      assertEquals(converter.score("TRUE"), Score.POSSIBLE);
-      assertEquals(converter.score("FALSE"), Score.POSSIBLE);
+      assertEquals(converter.score("true"), Score.INVALID);
+      assertEquals(converter.score("false"), Score.INVALID);
+      assertEquals(converter.score("TRUE"), Score.INVALID);
+      assertEquals(converter.score("FALSE"), Score.INVALID);
       assertEquals(converter.score("yes"), Score.INVALID);
       assertEquals(converter.score((Object)null), Score.POSSIBLE);
       
       assertEquals(converter.convert(true), Boolean.TRUE);
       assertEquals(converter.convert(false), Boolean.FALSE);
-      assertEquals(converter.convert("true"), Boolean.TRUE);
-      assertEquals(converter.convert("false"), Boolean.FALSE);
-      assertEquals(converter.convert("TRUE"), Boolean.TRUE);
-      assertEquals(converter.convert("FALSE"), Boolean.FALSE);
+      assertEquals(converter.convert(Boolean.TRUE), Boolean.TRUE);
+      assertEquals(converter.convert(Boolean.FALSE), Boolean.FALSE);
       assertEquals(converter.convert((Object)null), null);
    }
    
@@ -39,10 +37,10 @@ public class BooleanConverterTest extends TestCase {
       assertEquals(converter.score(true), Score.EXACT);
       assertEquals(converter.score(Boolean.TRUE), Score.EXACT);
       assertEquals(converter.score(Boolean.FALSE), Score.EXACT);
-      assertEquals(converter.score("true"), Score.POSSIBLE);
-      assertEquals(converter.score("false"), Score.POSSIBLE);
-      assertEquals(converter.score("TRUE"), Score.POSSIBLE);
-      assertEquals(converter.score("FALSE"), Score.POSSIBLE);
+      assertEquals(converter.score("true"), Score.INVALID);
+      assertEquals(converter.score("false"), Score.INVALID);
+      assertEquals(converter.score("TRUE"), Score.INVALID);
+      assertEquals(converter.score("FALSE"), Score.INVALID);
       assertEquals(converter.score("yes"), Score.INVALID);
       assertEquals(converter.score((Object)null), Score.INVALID);
    }

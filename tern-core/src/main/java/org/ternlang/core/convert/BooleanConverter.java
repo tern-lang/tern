@@ -29,9 +29,6 @@ public class BooleanConverter extends ConstraintConverter {
             if(real == boolean.class) {
                return EXACT;
             }
-            if(real == String.class) {
-               return POSSIBLE;
-            }
          }
          return INVALID;
       }
@@ -48,13 +45,6 @@ public class BooleanConverter extends ConstraintConverter {
          if(actual == Boolean.class) {
             return EXACT;
          }
-         if(actual == String.class) {
-            String text = String.valueOf(value);
-            
-            if(matcher.matchBoolean(text)) {
-               return POSSIBLE;
-            }
-         }
          return INVALID;
       }
       if(require.isPrimitive()) {
@@ -69,10 +59,7 @@ public class BooleanConverter extends ConstraintConverter {
       
       if(value != null) {
          Class actual = value.getClass();
-         
-         if(actual == String.class) {
-            return convert(require, (String)value);
-         }
+
          if(actual == Boolean.class) {
             return value;
          }

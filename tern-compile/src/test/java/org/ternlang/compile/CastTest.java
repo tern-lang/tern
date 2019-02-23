@@ -20,7 +20,7 @@ public class CastTest extends TestCase {
    
    private static final String SOURCE_2 =
    "const x = 11 as Character;\n"+
-   "const y = '22.0' as Integer;\n"+
+   "const y = 22.0 as Integer;\n"+
    "\n"+
    "assert x.class == Character.class;\n"+
    "assert y.class == Integer.class;\n";

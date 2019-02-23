@@ -7,7 +7,7 @@ public class ArrayCoercionTest extends TestCase {
 
    private static final String SOURCE_1 =
    "var z : String[][] = [['a','b'],[]];\n"+
-   "var i : Integer[][] = [['1','2', 3.0d, 11L],[2]];\n"+
+   "var i : Integer[][] = [[1,2, 3.0d, 11L],[2]];\n"+
    "\n"+
    "fun(z);\n"+
    "fun(i);\n"+

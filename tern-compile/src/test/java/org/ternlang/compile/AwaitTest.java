@@ -198,7 +198,7 @@ public class AwaitTest extends ScriptTestCase {
 
    private static final String SUCCESS_11 =
    "class Typ {\n"+
-   "   async fun(n): Promise<Integer> {\n"+
+   "   async fun(n): Promise<String> {\n"+
    "      if(n > 0) {\n"+
    "         const f: String = await foo();\n"+
    "         println(f);\n"+

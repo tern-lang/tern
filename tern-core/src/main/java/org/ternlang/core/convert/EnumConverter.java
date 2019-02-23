@@ -3,7 +3,6 @@ package org.ternlang.core.convert;
 import static org.ternlang.core.convert.Score.EXACT;
 import static org.ternlang.core.convert.Score.INVALID;
 import static org.ternlang.core.convert.Score.POSSIBLE;
-import static org.ternlang.core.convert.Score.SIMILAR;
 
 import org.ternlang.core.type.Type;
 
@@ -25,9 +24,6 @@ public class EnumConverter extends ConstraintConverter {
             if(require.isAssignableFrom(real)) {
                return EXACT;
             }
-            if(real == String.class) {
-               return SIMILAR;
-            }
             return INVALID;
          }
          return EXACT;
@@ -44,9 +40,6 @@ public class EnumConverter extends ConstraintConverter {
          if(require.isAssignableFrom(real)) {
             return EXACT;
          }
-         if(real == String.class) {
-            return SIMILAR;
-         }
          return INVALID;
       }
       return POSSIBLE;
@@ -60,9 +53,6 @@ public class EnumConverter extends ConstraintConverter {
          if(require.isInstance(value)) {
             return value;
          }
-         String text = String.valueOf(value);
-         
-         return Enum.valueOf(require, text);
       }
       return null;
    }

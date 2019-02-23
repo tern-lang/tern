@@ -20,9 +20,9 @@ public class ListArrayConverterTest extends TestCase {
       Store store = new ClassPathStore();
       Context context = new StoreContext(store);
       List compatible1 = Arrays.asList(1, 2.2d, 11L, 22L);
-      List compatible2 = Arrays.asList("1", 2.2d, 11L, "22");
-      List incompatible1 = Arrays.asList("1", 2.2d, 11L, Arrays.asList("22"));
-      List incompatible2 = Arrays.asList("1", 2.2d, 11L, "foo");
+      List compatible2 = Arrays.asList(1, 2.2d, 11L, 22);
+      List incompatible1 = Arrays.asList(1, 2.2d, 11L, Arrays.asList("22"));
+      List incompatible2 = Arrays.asList(1, 2.2d, 11L, "foo");
       
       assertTrue(accept(context, byte[].class, compatible1));
       assertTrue(accept(context, byte[].class, compatible2));
@@ -47,14 +47,14 @@ public class ListArrayConverterTest extends TestCase {
       assertFalse(accept(context, Double[].class, incompatible2));
       assertTrue(accept(context, Double[][].class, Arrays.asList(compatible1, compatible2)));
       assertFalse(accept(context, Double[].class, Arrays.asList(compatible1, compatible2)));
-      
-      assertTrue(accept(context, String[].class, compatible1));
-      assertTrue(accept(context, String[].class, compatible2));
+
+      assertFalse(accept(context, String[].class, compatible1));
+      assertFalse(accept(context, String[].class, compatible2));
       assertFalse(accept(context, String[][].class, compatible2));
-      assertTrue(accept(context, String[].class, incompatible1));
-      assertTrue(accept(context, String[].class, incompatible2));
-      assertTrue(accept(context, String[][].class, Arrays.asList(compatible1, compatible2)));
-      assertTrue(accept(context, String[].class, Arrays.asList(compatible1, compatible2)));
+      assertFalse(accept(context, String[].class, incompatible1));
+      assertFalse(accept(context, String[].class, incompatible2));
+      assertFalse(accept(context, String[][].class, Arrays.asList(compatible1, compatible2)));
+      assertFalse(accept(context, String[].class, Arrays.asList(compatible1, compatible2)));
       
       System.err.println(Arrays.toString((int[])convert(context, int[].class, compatible1)));
       System.err.println(Arrays.toString((int[])convert(context, int[].class, compatible2)));
@@ -84,12 +84,12 @@ public class ListArrayConverterTest extends TestCase {
       assertFalse(accept(context, Double[][].class, compatible2));
       assertTrue(accept(context, Double[][].class, new float[][]{compatible1, compatible1}));
       assertFalse(accept(context, Double[].class, new float[][]{compatible1, compatible1}));
-      
-      assertTrue(accept(context, String[].class, compatible1));
-      assertTrue(accept(context, String[].class, compatible2));
+
+      assertFalse(accept(context, String[].class, compatible1));
+      assertFalse(accept(context, String[].class, compatible2));
       assertFalse(accept(context, String[][].class, compatible2));
-      assertTrue(accept(context, String[][].class, new float[][]{compatible1, compatible1}));
-      assertTrue(accept(context, String[].class, new float[][]{compatible1, compatible1}));
+      assertFalse(accept(context, String[][].class, new float[][]{compatible1, compatible1}));
+      assertFalse(accept(context, String[].class, new float[][]{compatible1, compatible1}));
       
       System.err.println(Arrays.toString((int[])convert(context, int[].class, compatible1)));
       System.err.println(Arrays.toString((int[])convert(context, int[].class, compatible2)));

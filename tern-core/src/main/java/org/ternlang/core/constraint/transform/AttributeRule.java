@@ -18,7 +18,8 @@ import org.ternlang.core.scope.index.ScopeTable;
 import org.ternlang.core.type.Type;
 
 public class AttributeRule extends ConstraintRule {
-   
+
+   private final AttributeTypeMapper mapper;
    private final InstanceOfChecker checker;
    private final Attribute attribute;
    private final ConstraintRule rule;
@@ -26,6 +27,7 @@ public class AttributeRule extends ConstraintRule {
    
    public AttributeRule(ConstraintRule rule, Attribute attribute) {
       this.start = new Address(LOCAL, null, 0);
+      this.mapper = new AttributeTypeMapper();
       this.checker = new InstanceOfChecker();
       this.attribute = attribute;
       this.rule = rule;
@@ -80,8 +82,8 @@ public class AttributeRule extends ConstraintRule {
                   throw new InternalStateException("Generic parameter '" + name +"' not specified");
                }
                if(existing != null) {
-                  Type require = constraint.getType(scope);
-                  Type current = existing.getType(scope);
+                  Type require = mapper.map(scope, constraint);
+                  Type current = mapper.map(scope, existing);
 
                   if (current != require) {
                      throw new InternalStateException("Generic parameter '" + name + "' has already been declared");

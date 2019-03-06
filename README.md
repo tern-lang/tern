@@ -1,4 +1,4 @@
-![Tern](https://raw.githubusercontent.com/tern-lang/tern-site/master/tern-lang.org/img/logo-small.png)
+![Tern](https://raw.githubusercontent.com/tern-lang/tern-site/master/tern-lang.org/img/logo.png)
   
 Tern is an optionally typed object oriented language with first class functions and coroutines.
 It borrows concepts and constructs from many sources including Swift, JavaScript, Java, and 

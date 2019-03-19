@@ -18,6 +18,12 @@ public class MapValue extends Value {
    
    @Override
    public Class getType() {
+      Object value = map.get(key);
+      Object object = wrapper.fromProxy(value);
+
+      if(object != null) {
+         return object.getClass();
+      }
       return Object.class;
    }
    

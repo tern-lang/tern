@@ -16,7 +16,7 @@ import org.ternlang.core.scope.Model;
 public class MathTest extends TestCase{
    
    private static final int ITERATIONS = 1000000;
-   private static final String SOURCE = 
+   private static final String SOURCE_1 =
    "var x = 11;\n"+
    "var y = 2.0d;\n"+
    "var z = 55;\n"+
@@ -29,6 +29,14 @@ public class MathTest extends TestCase{
    "function calc(x1, y1, z1){\n"+
    "   return ((x1 / y1) * z1) + 6;\n"+
    "}\n";
+
+   private static final String SOURCE_2 =
+   "let x = [1,2];\n"+
+   "let y = [2,3];\n"+
+   "let z = x[0] + y[1];\n"+
+   "\n"+
+   "assert `${z}` == `4`;\n"+
+   "assert z.class == Integer.class;\n";
          
    public void testMath() throws Exception {
       Store store = new ClassPathStore();
@@ -53,11 +61,19 @@ public class MathTest extends TestCase{
    
    public void testMathInLoop() throws Exception {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
-      Executable executable = compiler.compile(SOURCE);
+      Executable executable = compiler.compile(SOURCE_1);
       long start = System.nanoTime();
       executable.execute();
       long finish = System.nanoTime();
       System.err.println("testMathInLoop() iterations="+ITERATIONS+" time="+TimeUnit.NANOSECONDS.toMillis(finish-start));
+   }
+
+
+   public void testMathWithArray() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      System.err.println(SOURCE_2);
+      Executable executable = compiler.compile(SOURCE_2);
+      executable.execute();
    }
 
    public static void main(String[] list) throws Exception {

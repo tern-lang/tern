@@ -53,7 +53,7 @@ public class AsyncStatement extends Statement {
             Context context = module.getContext();
             TaskScheduler scheduler = context.getScheduler();
 
-            return new AsyncExecution(scheduler, execution);
+            return new AsyncExecution(scheduler, execution, module);
          }
          return execution;
       }

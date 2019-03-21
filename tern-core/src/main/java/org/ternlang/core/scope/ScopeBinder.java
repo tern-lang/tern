@@ -16,6 +16,6 @@ public class ScopeBinder {
             return value.getValue();
          }
       }
-      return scope;
+      return scope.getScope(); // use of a function as a closure
    }
 }

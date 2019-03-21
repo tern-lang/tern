@@ -1,22 +1,6 @@
 package org.ternlang.parse;
 
-public class TableGenerator {   
-   
-   short NONE = 0x0000;
-   short LETTER = 0x0001;
-   short DIGIT = 0x0002;
-   short HEXIDECIMAL = 0x0004;
-   short BINARY = 0x0008;
-   short IDENTIFIER = 0x0010;   
-   short QUOTE = 0x0020;
-   short TEMPLATE = 0x0040;
-   short PERIOD = 0x0080;
-   short SUFFIX = 0x0100;
-   short MINUS = 0x0200;    
-   short ESCAPE = 0x0400;
-   short SPECIAL = 0x0800;
-   short DOLLAR = 0x1000;
-   short CAPITAL = 0x2000;
+public class TableGenerator {
    
    public static void main(String[] list) {
       System.out.println("private static final short[] TYPES = {");
@@ -25,7 +9,7 @@ public class TableGenerator {
          char next = (char)i;
          //System.out.print("/*"+i+"*/");
          if(digit(next)) {
-            System.out.print("TextCategory.DIGIT | TextCategory.HEXIDECIMAL | TextCategory.IDENTIFIER"); 
+            System.out.print("TextCategory.DIGIT | TextCategory.HEXADECIMAL | TextCategory.IDENTIFIER");
             
             if(binary(next)) {
                System.out.println(" | TextCategory.BINARY,");
@@ -35,14 +19,14 @@ public class TableGenerator {
          } else if(letter(next)) {
             System.out.print("TextCategory.LETTER | TextCategory.IDENTIFIER"); 
             
-            if(hexidecimal(next)) {
-               System.out.print(" | TextCategory.HEXIDECIMAL");
-            } 
+            if(hexadecimal(next)) {
+               System.out.print(" | TextCategory.HEXADECIMAL");
+            }
+            if(exponent(next)) {
+               System.out.print(" | TextCategory.EXPONENT");
+            }
             if(suffix(next)) {
                System.out.print(" | TextCategory.SUFFIX");
-            }
-            if(Character.isUpperCase(next)) {
-               System.out.print(" | TextCategory.CAPITAL");
             }
             switch(next){
             case '\'': case '"':
@@ -67,8 +51,8 @@ public class TableGenerator {
             default:
                System.out.println(",");
             }            
-         } else if(next == '-') {
-            System.out.println("TextCategory.MINUS,"); 
+         } else if(sign(next)) {
+            System.out.println("TextCategory.SIGN,");
          } else {
             switch(next){
             case '\'': case '"':
@@ -101,7 +85,13 @@ public class TableGenerator {
    private static boolean binary(char value){
       return value =='1'||value=='0';
    }
-   
+   private static boolean exponent(char value){
+      return value =='e'|| value=='E';
+   }
+   private static boolean sign(char value){
+      return value =='-'|| value=='+';
+   }
+
    private static boolean space(char value) {
       switch(value) {
       case ' ': case '\t':
@@ -110,7 +100,7 @@ public class TableGenerator {
       }
       return false;
    }
-   private static boolean hexidecimal(char value) {
+   private static boolean hexadecimal(char value) {
       if(value >= 'a' && value <= 'f') {
          return true;
       }

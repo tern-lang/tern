@@ -10,7 +10,7 @@
 # '' represents a literal text value
 
 sign = {'-' | '+'};
-number = ?<sign>{[hexidecimal] | [binary] | [decimal]};
+number = ?<sign>{[hexadecimal] | [binary] | [decimal]};
 boolean = {'true' | 'false'};
 null = 'null';
 literal = {<null> | <boolean> | <number> | [template] | [text]};

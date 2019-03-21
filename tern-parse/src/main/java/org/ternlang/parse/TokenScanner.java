@@ -2,7 +2,7 @@ package org.ternlang.parse;
 
 import static org.ternlang.parse.TokenType.BINARY;
 import static org.ternlang.parse.TokenType.DECIMAL;
-import static org.ternlang.parse.TokenType.HEXIDECIMAL;
+import static org.ternlang.parse.TokenType.HEXADECIMAL;
 import static org.ternlang.parse.TokenType.IDENTIFIER;
 import static org.ternlang.parse.TokenType.LITERAL;
 import static org.ternlang.parse.TokenType.QUALIFIER;
@@ -139,12 +139,12 @@ public class TokenScanner implements TokenLexer {
    }
 
    @Override
-   public Token<Number> hexidecimal() {
+   public Token<Number> hexadecimal() {
       if (masks == null) {
          masks = indexer.index(tokens);
       }
       if (mark < masks.length) {
-         if ((masks[mark] & HEXIDECIMAL.mask) != 0) {
+         if ((masks[mark] & HEXADECIMAL.mask) != 0) {
             return tokens.get(mark++);
          }
       }

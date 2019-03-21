@@ -20,10 +20,10 @@ public class NumberMatcherTest extends TestCase {
       assertInteger("122", 122);
       assertInteger("0", 0);
       assertInteger("3341", 3341);
-      assertHexidecimal("0xffa1", 0xffa1);
-      assertHexidecimal("0xFF112", 0xFF112);
-      assertHexidecimal("0x1", 0x1);
-      assertHexidecimal("-0xaac1", -0xaac1);
+      assertHexadecimal("0xffa1", 0xffa1);
+      assertHexadecimal("0xFF112", 0xFF112);
+      assertHexadecimal("0x1", 0x1);
+      assertHexadecimal("-0xaac1", -0xaac1);
    }
    
    private static void assertDouble(String text, double number) {
@@ -40,10 +40,10 @@ public class NumberMatcherTest extends TestCase {
       assertEquals(Long.parseLong(text), number);
    }
    
-   private static void assertHexidecimal(String text, long number) {
+   private static void assertHexadecimal(String text, long number) {
       NumberMatcher matcher = new NumberMatcher();
       
-      assertEquals(matcher.matchNumber(text), NumberType.HEXIDECIMAL);
+      assertEquals(matcher.matchNumber(text), NumberType.HEXADECIMAL);
       assertEquals(Integer.decode(text), new Integer((int)number));
    }
 }

@@ -71,7 +71,7 @@ public class TextDecoder {
          char next = source[off + i];
          
          value <<= 4;
-         value |= hexidecimal(next);
+         value |= hexadecimal(next);
       }
       return (char)value;
    }
@@ -85,6 +85,16 @@ public class TextDecoder {
          return false;
       }
    }
+
+   public char capital(char value) {
+      if(value >= 'a' && value <= 'z') {
+         int offset = value - 'a';
+         int capital = 'A' + offset;
+
+         return (char)capital;
+      }
+      return value;
+   }
    
    public long binary(char value) {
       if(value == '0') {
@@ -96,7 +106,7 @@ public class TextDecoder {
       throw new IllegalArgumentException("Character '" + value + "' is not binary");
    }
    
-   public long hexidecimal(char value) {
+   public long hexadecimal(char value) {
       if(value >= '0' && value <= '9') {
          return value - '0'; 
       }
@@ -106,6 +116,6 @@ public class TextDecoder {
       if(value >= 'A' && value <= 'F') {
          return 10 + (value - 'A'); 
       }
-      throw new IllegalArgumentException("Character '" + value + "' is not hexidecimal");
+      throw new IllegalArgumentException("Character '" + value + "' is not hexadecimal");
    }
 }

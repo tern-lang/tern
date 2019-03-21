@@ -2,7 +2,7 @@ package org.ternlang.parse;
 
 import static org.ternlang.parse.TokenType.BINARY;
 import static org.ternlang.parse.TokenType.DECIMAL;
-import static org.ternlang.parse.TokenType.HEXIDECIMAL;
+import static org.ternlang.parse.TokenType.HEXADECIMAL;
 import static org.ternlang.parse.TokenType.IDENTIFIER;
 import static org.ternlang.parse.TokenType.LITERAL;
 import static org.ternlang.parse.TokenType.QUALIFIER;
@@ -78,7 +78,7 @@ public class TokenIndexer {
             token = binary(line);
          }
          if(token == null) {
-            token = hexidecimal(line);
+            token = hexadecimal(line);
          }
          if(token == null) {
             token = decimal(line);
@@ -148,12 +148,12 @@ public class TokenIndexer {
       return null;
    }
 
-   private Token hexidecimal(int number) {
+   private Token hexadecimal(int number) {
       Line line = extractor.extract(number);
-      Number token = reader.hexidecimal();
+      Number token = reader.hexadecimal();
       
       if (token != null) {
-         return new NumberToken(token, line, HEXIDECIMAL.mask | DECIMAL.mask);
+         return new NumberToken(token, line, HEXADECIMAL.mask | DECIMAL.mask);
       }
       return null;
    }

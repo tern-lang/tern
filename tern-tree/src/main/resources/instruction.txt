@@ -1,7 +1,7 @@
 # instructions used to assemble the execution tree
 
 decimal = org.ternlang.tree.literal.NumberLiteral
-hexidecimal = org.ternlang.tree.literal.NumberLiteral
+hexadecimal = org.ternlang.tree.literal.NumberLiteral
 binary = org.ternlang.tree.literal.NumberLiteral
 boolean = org.ternlang.tree.literal.BooleanLiteral
 identifier = org.ternlang.tree.literal.TextLiteral

@@ -1,5 +1,9 @@
 package org.ternlang.parse;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+
+import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
 public class TokenReaderTest extends TestCase  {
@@ -46,7 +50,7 @@ public class TokenReaderTest extends TestCase  {
    public void testComments() throws Exception {
       TextReader decoder = createReader("0xff;hello,12.0f/2.0f,\"some string with stuff\\\"blah\\\"d\"");
       
-      assertEquals(decoder.hexidecimal(), 255);
+      assertEquals(decoder.hexadecimal(), 255);
       assertEquals(decoder.next(),';');      
       assertEquals(decoder.identifier(), "hello");
       assertEquals(decoder.next(),',');  
@@ -60,7 +64,7 @@ public class TokenReaderTest extends TestCase  {
    public void testHex() throws Exception {
       TextReader decoder = createReader("0xff");
 
-      assertEquals(decoder.hexidecimal(), 255);              
+      assertEquals(decoder.hexadecimal(), 255);
  
    }
    
@@ -90,6 +94,31 @@ public class TokenReaderTest extends TestCase  {
       assertEquals(decoder2.decimal(), 124.0f);       
  
    }
+
+   public void testDecimals() throws Exception {
+      TextReader decoder1 = createReader("12.0e-10", "12.002", "12E+10", "0.01e4", "1E-2");
+
+      assertDecimalEquals(decoder1.decimal(), 12.0e-10);
+      assertEquals(decoder1.next(), (','));
+
+      assertDecimalEquals(decoder1.decimal(), 12.002);
+      assertEquals(decoder1.next(), (','));
+
+      assertDecimalEquals(decoder1.decimal(), 12E+10);
+      assertEquals(decoder1.next(), (','));
+
+      assertDecimalEquals(decoder1.decimal(), 0.01e4);
+      assertEquals(decoder1.next(), (','));
+
+      assertDecimalEquals(decoder1.decimal(), 1E-2);
+   }
+
+   private static void assertDecimalEquals(Number a, Number b) {
+      if(a.doubleValue() != b.doubleValue()) {
+         DecimalFormat f = new DecimalFormat("#.#####################################");
+         throw new AssertionFailedError("Decimals are not equal expected:<"+f.format(a)+"> but was:<"+f.format(b)+">");
+      }
+   }
    
    public void testDecoder() throws Exception {
       TextReader decoder = createReader("this,is,a,\"simple\",test,12");
@@ -114,9 +143,16 @@ public class TokenReaderTest extends TestCase  {
       System.err.println(decoder.text());
    }
    
-   private TextReader createReader(String text) {
+   private TextReader createReader(String text, String... extras) {
+      StringBuilder builder = new StringBuilder(text);
       SourceProcessor processor = new SourceProcessor(Short.MAX_VALUE);
-      SourceCode code = processor.process(text);
+      for(String extra : extras){
+         builder.append(",");
+         builder.append(extra);
+      }
+      SourceCode code = processor.process(builder.toString());
       return new TextReader(code.getSource(), code.getTypes());
    }
+
+
 }

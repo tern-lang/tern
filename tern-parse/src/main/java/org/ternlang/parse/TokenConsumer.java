@@ -47,8 +47,8 @@ public abstract class TokenConsumer implements TokenReader {
    }
 
    @Override
-   public boolean hexidecimal() {
-      Token token = lexer.hexidecimal();
+   public boolean hexadecimal() {
+      Token token = lexer.hexadecimal();
 
       if (token != null) {
          value = token;

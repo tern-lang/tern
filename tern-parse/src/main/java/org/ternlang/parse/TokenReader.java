@@ -4,7 +4,7 @@ public interface TokenReader {
    boolean literal(String value);   
    boolean decimal();
    boolean binary();
-   boolean hexidecimal();
+   boolean hexadecimal();
    boolean identifier();
    boolean qualifier();
    boolean template();

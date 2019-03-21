@@ -3,16 +3,16 @@ package org.ternlang.parse;
 import static org.ternlang.parse.NumberType.DOUBLE;
 import static org.ternlang.parse.NumberType.INTEGER;
 import static org.ternlang.parse.TextCategory.BINARY;
-import static org.ternlang.parse.TextCategory.CAPITAL;
 import static org.ternlang.parse.TextCategory.DIGIT;
 import static org.ternlang.parse.TextCategory.DOLLAR;
 import static org.ternlang.parse.TextCategory.ESCAPE;
-import static org.ternlang.parse.TextCategory.HEXIDECIMAL;
+import static org.ternlang.parse.TextCategory.EXPONENT;
+import static org.ternlang.parse.TextCategory.HEXADECIMAL;
 import static org.ternlang.parse.TextCategory.IDENTIFIER;
 import static org.ternlang.parse.TextCategory.LETTER;
-import static org.ternlang.parse.TextCategory.MINUS;
 import static org.ternlang.parse.TextCategory.PERIOD;
 import static org.ternlang.parse.TextCategory.QUOTE;
+import static org.ternlang.parse.TextCategory.SIGN;
 import static org.ternlang.parse.TextCategory.SPACE;
 import static org.ternlang.parse.TextCategory.SPECIAL;
 import static org.ternlang.parse.TextCategory.SUFFIX;
@@ -175,7 +175,7 @@ public class TextReader {
       return null;      
    } 
    
-   public Number hexidecimal() {  
+   public Number hexadecimal() {
       if(off + 3 < count) {
          char first = source[off];
          char second = source[off+1];
@@ -195,9 +195,9 @@ public class TextReader {
             short mask = types[pos];
             char next = source[pos];
             
-            if((mask & HEXIDECIMAL) == HEXIDECIMAL) {   
+            if((mask & HEXADECIMAL) == HEXADECIMAL) {
                value <<= 4;
-               value |= decoder.hexidecimal(next);
+               value |= decoder.hexadecimal(next);
             } else {
                if((mask & SUFFIX) == SUFFIX) {
                   type = matcher.match(next);
@@ -218,9 +218,10 @@ public class TextReader {
    public Number decimal() {
       NumberType type = INTEGER;
       double scale = 0;
-      long value = 0;
+      long exponent = 0;
+      long number = 0;
       int mark = off;
-      int sign = 1;
+      int sign = 0; // exponent sign
 
       while (off < count) {
          char next = source[off];
@@ -229,50 +230,61 @@ public class TextReader {
          if ((mask & DIGIT) == 0) {
             if (off > mark) {
                if((mask & PERIOD) == PERIOD && scale == 0) {
-                  if(off + 1 < count) {
+                  if (off + 1 < count) {
                      mask = types[off + 1];
-                     
-                     if((mask & DIGIT) == DIGIT) {
+
+                     if ((mask & DIGIT) == DIGIT) {
                         type = DOUBLE;
                         scale = 1.0d;
                         off++;
                         continue;
                      }
                   }
+               } else if((mask & EXPONENT) == EXPONENT && sign == 0) { // 12.32e-10
+                  if (off + 1 < count) {
+                     mask = types[off + 1];
+                     next = source[off + 1];
+                     type = DOUBLE;
+                     sign = 1;
+                     off++;
+
+                     if ((mask & SIGN) == SIGN) {
+                        sign = next == '-' ? -1 : 1;
+                        off++;
+                     }
+                     continue;
+                  }
                } else if((mask & SUFFIX) == SUFFIX) {
                   type = matcher.match(next);
                   off++; 
                }               
                break;
-            } else {
-               if((mask & MINUS) == MINUS){ 
-                  if(off + 1 < count) {
-                     mask = types[off + 1];
-                     
-                     if((mask & DIGIT) == DIGIT) {
-                        sign = -1;
-                        off++;
-                        continue;
-                     }
-                  }
-               }
-               return null;
             }
          } else {
-            value *= 10;
-            value += next;
-            value -= '0';
-            scale *= 10.0d;
+            if(sign == 0) {
+               number *= 10;
+               number += next;
+               number -= '0';
+               scale *= 10.0d;
+            } else {
+               exponent *= 10;
+               exponent += next;
+               exponent -= '0';
+            }
          }
          off++;
       }
       if (off > mark) {
-         double result = sign * value;
-         
+         double result = number;
+         double factor = 1.0d;
+
          if(scale > 0) {
             result /= scale;
-         }         
-         return type.convert(result);
+         }
+         if(exponent > 0) {
+            factor = Math.pow(10, sign * exponent);
+         }
+         return type.convert(result * factor);
       }
       return null;
    }   
@@ -374,9 +386,15 @@ public class TextReader {
       if(off < count) {
          short type = types[off];
          
-         if((type & CAPITAL) == CAPITAL) {
+         if((type & LETTER) == LETTER) {
+            char start = source[off];
+            char capital = decoder.capital(start);
+
+            if(capital != start) {
+               return null;
+            }
             int length = 0;
-            
+
             while(off < count) {
                type = types[off];
                

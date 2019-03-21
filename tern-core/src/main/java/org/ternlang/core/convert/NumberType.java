@@ -2,7 +2,7 @@ package org.ternlang.core.convert;
 
 public enum NumberType {
    DECIMAL,
-   HEXIDECIMAL,
+   HEXADECIMAL,
    CHARACTER,
    NONE;
    
@@ -14,7 +14,7 @@ public enum NumberType {
       return this == DECIMAL;
    }
    
-   public boolean isHexidecimal() {
-      return this == HEXIDECIMAL;
+   public boolean isHexadecimal() {
+      return this == HEXADECIMAL;
    }
 }

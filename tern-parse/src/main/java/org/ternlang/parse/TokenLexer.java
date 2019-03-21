@@ -7,7 +7,7 @@ public interface TokenLexer {
    Token<String> identifier();
    Token<String> qualifier();
    Token<String> literal(String text);
-   Token<Number> hexidecimal();
+   Token<Number> hexadecimal();
    Token<Number> binary();
    Token<Number> decimal();
    Token<Character> space();

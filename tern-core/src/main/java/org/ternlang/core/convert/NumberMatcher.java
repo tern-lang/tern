@@ -14,7 +14,7 @@ public class NumberMatcher {
                   char second = text.charAt(2);
                   
                   if(second == 'x') {
-                     return matchHexidecimal(text, 3, length);
+                     return matchHexadecimal(text, 3, length);
                   }
                }
                return matchDecimal(text, 1, length);
@@ -23,7 +23,7 @@ public class NumberMatcher {
                char second = text.charAt(1);
                
                if(second == 'x') {
-                  return matchHexidecimal(text, 2, length);
+                  return matchHexadecimal(text, 2, length);
                }
             }
             return matchDecimal(text, 0, length);
@@ -32,7 +32,7 @@ public class NumberMatcher {
       return NumberType.NONE;
    }
    
-   private NumberType matchHexidecimal(String text, int index, int length) {
+   private NumberType matchHexadecimal(String text, int index, int length) {
       while(index < length) {
          char value = text.charAt(index++);
          
@@ -44,7 +44,7 @@ public class NumberMatcher {
             }
          }
       }
-      return NumberType.HEXIDECIMAL;
+      return NumberType.HEXADECIMAL;
    }
    
    private NumberType matchDecimal(String text, int index, int length) {

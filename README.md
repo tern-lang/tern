@@ -303,11 +303,11 @@ The most basic type is the simple true or false value, which is called a 'boolea
 
 ```js
 let binary = 0b0111011; // binary literal
-let hex = 0xffe16; // hexidecimal literal
+let hex = 0xffe16; // hexadecimal literal
 let int = 11;
 let real = 2.13;
 let typed: Integer = 22; // integer value 22
-let coercion: Double = "1.234e2"; // coercion of string to double
+let exponent: Double = 1.234e-2; // double with exponent
 ```
 
 ##### Strings

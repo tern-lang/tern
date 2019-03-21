@@ -19,10 +19,10 @@ public enum Symbol {
          return reader.qualifier();
       }
    },   
-   HEXIDECIMAL(TokenType.HEXIDECIMAL, "hexidecimal") {
+   HEXADECIMAL(TokenType.HEXADECIMAL, "hexadecimal") {
       @Override
       public boolean read(TokenReader reader) {
-         return reader.hexidecimal();
+         return reader.hexadecimal();
       }
    },   
    BINARY(TokenType.BINARY, "binary") {

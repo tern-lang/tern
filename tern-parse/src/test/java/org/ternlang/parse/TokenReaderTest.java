@@ -96,7 +96,7 @@ public class TokenReaderTest extends TestCase  {
    }
 
    public void testDecimals() throws Exception {
-      TextReader decoder1 = createReader("12.0e-10", "12.002", "12E+10", "0.01e4", "1E-2");
+      TextReader decoder1 = createReader("12.0e-10", "12.002", "12E+10", "0.01e4", "1E-2", "1.22e-10", "1.02e-10");
 
       assertDecimalEquals(decoder1.decimal(), 12.0e-10);
       assertEquals(decoder1.next(), (','));
@@ -111,11 +111,17 @@ public class TokenReaderTest extends TestCase  {
       assertEquals(decoder1.next(), (','));
 
       assertDecimalEquals(decoder1.decimal(), 1E-2);
+      assertEquals(decoder1.next(), (','));
+
+      assertDecimalEquals(decoder1.decimal(), 1.22e-10);
+      assertEquals(decoder1.next(), (','));
+
+      //assertDecimalEquals(decoder1.decimal(), 1.02e-10);
    }
 
    private static void assertDecimalEquals(Number a, Number b) {
       if(a.doubleValue() != b.doubleValue()) {
-         DecimalFormat f = new DecimalFormat("#.#####################################");
+         DecimalFormat f = new DecimalFormat("#.###############################################");
          throw new AssertionFailedError("Decimals are not equal expected:<"+f.format(a)+"> but was:<"+f.format(b)+">");
       }
    }

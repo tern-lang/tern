@@ -218,8 +218,8 @@ public class TextReader {
    public Number decimal() {
       NumberType type = INTEGER;
       double scale = 0;
-      long exponent = 0;
       long number = 0;
+      int exponent = 0;
       int mark = off;
       int sign = 0; // exponent sign
 

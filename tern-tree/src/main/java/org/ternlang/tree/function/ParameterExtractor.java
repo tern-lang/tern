@@ -69,13 +69,13 @@ public class ParameterExtractor {
          ScopeTable table = inner.getTable();
          ScopeState state = inner.getState();
          
-         for(int i = 0; i < optional; i++) {
+         for(int i = optional - 1; i >= 0; i--) {
             Constraint constraint = generics.get(i);
             Address address = AddressCache.getAddress(i);
             
             table.addConstraint(address, constraint);
          }
-         for(int i = 0; i < required; i++) {
+         for(int i = required - 1; i >= 0; i--) {
             Parameter parameter = parameters.get(i);
             Address address = parameter.getAddress();
             String name = parameter.getName();
@@ -95,7 +95,7 @@ public class ParameterExtractor {
       List<Parameter> parameters = signature.getParameters();
       Parameter parameter = parameters.get(index);
       int length = parameters.size();
-      
+
       if(index >= length -1) {
          if(signature.isVariable()) {
             Constraint constraint = parameter.getConstraint();
@@ -118,7 +118,6 @@ public class ParameterExtractor {
 
    private Local create(Scope scope, Object value, Parameter parameter) throws Exception {
       Constraint constraint = parameter.getConstraint();
-      Type type = constraint.getType(scope);
       String name = parameter.getName();
       
       if(parameter.isConstant()) {

@@ -44,11 +44,10 @@ public class FibTest extends TestCase {
       System.err.println(SOURCE);
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       Executable executable = compiler.compile(SOURCE);
-      Timer.timeExecution("testFib", executable);
-      Timer.timeExecution("testFib", executable);
-      Timer.timeExecution("testFib", executable);
-      Timer.timeExecution("testFib", executable);
-      Timer.timeExecution("testFib", executable);
+
+      for(int i = 0; i < 10; i++) {
+         Timer.timeExecution("testFib", executable);
+      }
    }
    
    

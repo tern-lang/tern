@@ -1,8 +1,5 @@
 package org.ternlang.compile;
 
-import org.ternlang.compile.Compiler;
-import org.ternlang.compile.Executable;
-
 import junit.framework.TestCase;
 
 public class TemplateInConstructorTest extends TestCase {

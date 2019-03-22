@@ -94,12 +94,20 @@ public enum NumericConverter {
 
    public static NumericConverter resolveConverter(Value value) {
       Class type = value.getType();
-      return resolveConverter(type);
+
+      if(type != null) {
+         return resolveConverter(type);
+      }
+      return DOUBLE;
    }
 
    public static NumericConverter resolveConverter(Number number) {
       Class type = number.getClass();
-      return resolveConverter(type);
+
+      if(type != null) {
+         return resolveConverter(type);
+      }
+      return DOUBLE;
    }
 
    public static NumericConverter resolveConverter(Class type) {
@@ -137,7 +145,10 @@ public enum NumericConverter {
       NumericConverter primary = resolveConverter(left);
       NumericConverter secondary = resolveConverter(right);
 
-      return TABLE[TYPES.length * primary.index + secondary.index];
+      if(primary.index < TYPES.length && secondary.index < TYPES.length) {
+         return TABLE[TYPES.length * primary.index + secondary.index];
+      }
+      return DOUBLE;
    }
 
    private static final NumericConverter[] TYPES = {

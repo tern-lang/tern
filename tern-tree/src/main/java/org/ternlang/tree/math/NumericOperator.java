@@ -1,5 +1,7 @@
 package org.ternlang.tree.math;
 
+import static org.ternlang.tree.math.NumericConverter.DOUBLE;
+
 import org.ternlang.core.variable.Value;
 import org.ternlang.parse.StringToken;
 
@@ -103,7 +105,11 @@ public enum NumericOperator {
    
    public Value operate(Value left, Value right) {
       NumericConverter converter = NumericConverter.resolveConverter(left, right);
-      return operate(left, right, converter.calculator);
+
+      if(converter != null) {
+         return operate(left, right, converter.calculator);
+      }
+      return operate(left, right, DOUBLE.calculator);
    }
    
    public abstract Value operate(Value left, Value right, ValueCalculator calculator);

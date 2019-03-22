@@ -46,7 +46,9 @@ io = java.io {
    UncheckedIOException, UnsupportedEncodingException, WriteAbortedException, Writer, *
 }
    
-math = java.math {}
+math = java.math {
+    BigDecimal, BigInteger, *
+}
 
 net = java.net {
    Authenticator, BindException, CacheRequest, CacheResponse, ConnectException,

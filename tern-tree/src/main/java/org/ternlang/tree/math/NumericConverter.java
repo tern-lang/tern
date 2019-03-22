@@ -1,119 +1,108 @@
 package org.ternlang.tree.math;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
+import org.ternlang.core.convert.ConstraintAdapter;
 import org.ternlang.core.variable.Value;
 import org.ternlang.core.variable.ValueCache;
 
 public enum NumericConverter {
-   DOUBLE {
+   BIG_DECIMAL(ValueCalculator.BIG_DECIMAL, 0){
       @Override
       public Value convert(Number number) {
-         double value = number.doubleValue();
+         BigDecimal value = adapter.createBigDecimal(number);
+         return ValueCache.getBigDecimal(value);
+      }
+   },
+   BIG_INTEGER(ValueCalculator.BIG_INTEGER, 1){
+      @Override
+      public Value convert(Number number) {
+         BigInteger value = adapter.createBigInteger(number);
+         return ValueCache.getBigInteger(value);
+      }
+   },
+   DOUBLE(ValueCalculator.DOUBLE, 2){
+      @Override
+      public Value convert(Number number) {
+         Double value = adapter.createDouble(number);
          return ValueCache.getDouble(value);
       }
-      @Override
-      public Value increment(Number number) {
-         double value = number.doubleValue();
-         return ValueCache.getDouble(value + 1.0d);
-      }
-      @Override
-      public Value decrement(Number number) {
-         double value = number.doubleValue();
-         return ValueCache.getDouble(value - 1.0d);
-      }
    },
-   LONG {
+   LONG(ValueCalculator.LONG, 3){
       @Override
       public Value convert(Number number) {
-         long value = number.longValue();
+         Long value = adapter.createLong(number);
          return ValueCache.getLong(value);
       }
-      @Override
-      public Value increment(Number number) {
-         long value = number.longValue();
-         return ValueCache.getLong(value + 1L);
-      }
-      @Override
-      public Value decrement(Number number) {
-         long value = number.longValue();
-         return ValueCache.getLong(value - 1L);
-      }
    },
-   FLOAT {
+   FLOAT(ValueCalculator.FLOAT, 4){
       @Override
       public Value convert(Number number) {
-         float value = number.floatValue();
+         Float value = adapter.createFloat(number);
          return ValueCache.getFloat(value);
       }
-      @Override
-      public Value increment(Number number) {
-         float value = number.floatValue();
-         return ValueCache.getFloat(value + 1.0f);
-      }
-      @Override
-      public Value decrement(Number number) {
-         float value = number.floatValue();
-         return ValueCache.getFloat(value - 1.0f);
-      }
    },
-   INTEGER {
+   INTEGER(ValueCalculator.INTEGER, 5){
       @Override
       public Value convert(Number number) {
-         int value = number.intValue();
+         Integer value = adapter.createInteger(number);
          return ValueCache.getInteger(value);
       }
-      @Override
-      public Value increment(Number number) {
-         int value = number.intValue();
-         return ValueCache.getInteger(value + 1);
-      }
-      @Override
-      public Value decrement(Number number) {
-         int value = number.intValue();
-         return ValueCache.getInteger(value - 1);
-      }
    },
-   SHORT {
+   CHARACTER(ValueCalculator.INTEGER, 6){
       @Override
       public Value convert(Number number) {
-         short value = number.shortValue();
+         Integer value = adapter.createInteger(number);
+         return ValueCache.getInteger(value);
+      }
+   },
+   SHORT(ValueCalculator.SHORT, 7){
+      @Override
+      public Value convert(Number number) {
+         Short value = adapter.createShort(number);
          return ValueCache.getShort(value);
       }
-      @Override
-      public Value increment(Number number) {
-         short value = number.shortValue();
-         return ValueCache.getShort(value + 1);
-      }
-      @Override
-      public Value decrement(Number number) {
-         short value = number.shortValue();
-         return ValueCache.getShort(value - 1);
-      }
    },
-   BYTE {
+   BYTE(ValueCalculator.BYTE, 8){
       @Override
       public Value convert(Number number) {
-         byte value = number.byteValue();
+         Byte value = adapter.createByte(number);
          return ValueCache.getByte(value);
       }
-      @Override
-      public Value increment(Number number) {
-         byte value = number.byteValue();
-         return ValueCache.getByte(value + 1);
-      }
-      @Override
-      public Value decrement(Number number) {
-         byte value = number.byteValue();
-         return ValueCache.getByte(value - 1);
-      }
    };
-   
+
+   public final ValueCalculator calculator;
+   public final ConstraintAdapter adapter;
+   public final int index;
+
+   private NumericConverter(ValueCalculator calculator, int index) {
+      this.adapter = new ConstraintAdapter();
+      this.calculator = calculator;
+      this.index = index;
+   }
+
+   public Value increment(Number number) {
+      return calculator.add(number, 1);
+   }
+
+   public Value decrement(Number number) {
+      return calculator.subtract(number, 1);
+   }
+
    public abstract Value convert(Number number);
-   public abstract Value increment(Number number);
-   public abstract Value decrement(Number number);
-   
+
+   public static NumericConverter resolveConverter(Value value) {
+      Class type = value.getType();
+      return resolveConverter(type);
+   }
+
    public static NumericConverter resolveConverter(Number number) {
       Class type = number.getClass();
-      
+      return resolveConverter(type);
+   }
+
+   public static NumericConverter resolveConverter(Class type) {
       if (Double.class == type) {
          return DOUBLE;
       }
@@ -126,39 +115,20 @@ public enum NumericConverter {
       if (Integer.class == type) {
          return INTEGER;
       }
+      if (BigDecimal.class == type) {
+         return BIG_DECIMAL;
+      }
+      if (BigInteger.class == type) {
+         return BIG_INTEGER;
+      }
+      if (Character.class == type) {
+         return CHARACTER;
+      }
       if (Short.class == type) {
          return SHORT;
       }
       if (Byte.class == type) {
          return BYTE;
-      }
-      return DOUBLE;
-   }
-   
-   public static NumericConverter resolveConverter(Value left, Value right) {
-      Class primary = left.getType();
-      Class secondary = right.getType();
-
-      if (Double.class == primary || Double.class == secondary) {
-         return DOUBLE;
-      }
-      if (Long.class == primary || Long.class == secondary) {
-         return LONG;
-      }
-      if (Float.class == primary || Float.class == secondary) {
-         return FLOAT;
-      }
-      if (Integer.class == primary || Integer.class == secondary) {
-         return INTEGER;
-      }
-      if (Short.class == primary || Short.class == secondary) {
-         return SHORT;
-      }
-      if (Byte.class == primary || Byte.class == secondary) {
-         return BYTE;
-      }      
-      if (Character.class == primary || Character.class == secondary) {
-         return INTEGER;
       }
       return DOUBLE;
    }

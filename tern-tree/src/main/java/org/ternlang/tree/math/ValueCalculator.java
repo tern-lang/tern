@@ -3,14 +3,16 @@ package org.ternlang.tree.math;
 import org.ternlang.core.variable.Value;
 
 public abstract class ValueCalculator implements NumericCalculator {
-   
-   public static final ValueCalculator INTEGER = new IntegerCalculator();
+
+   public static final ValueCalculator BIG_DECIMAL = new BigDecimalCalculator();
+   public static final ValueCalculator BIG_INTEGER = new BigIntegerCalculator();
+   public static final ValueCalculator DOUBLE = new DoubleCalculator();
    public static final ValueCalculator LONG = new LongCalculator();
    public static final ValueCalculator FLOAT = new FloatCalculator();
-   public static final ValueCalculator DOUBLE = new DoubleCalculator();
+   public static final ValueCalculator INTEGER = new IntegerCalculator();
    public static final ValueCalculator SHORT = new ShortCalculator();
    public static final ValueCalculator BYTE = new ByteCalculator();
-   
+
    public Value replace(Value left, Value right) {
       return right;
    }

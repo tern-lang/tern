@@ -3,6 +3,8 @@ package org.ternlang.core.variable;
 import static org.ternlang.core.ModifierType.CONSTANT;
 import static org.ternlang.core.constraint.Constraint.NONE;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 import org.ternlang.core.constraint.ClassConstraint;
@@ -22,6 +24,8 @@ public class Constant extends Value {
    public static final Constraint STRING = new ClassConstraint(String.class, CONSTANT.mask);
    public static final Constraint BOOLEAN = new ClassConstraint(Boolean.class, CONSTANT.mask);
    public static final Constraint CHARACTER = new ClassConstraint(Character.class, CONSTANT.mask);
+   public static final Constraint BIG_INTEGER = new ClassConstraint(BigInteger.class, CONSTANT.mask);
+   public static final Constraint BIG_DECIMAL = new ClassConstraint(BigDecimal.class, CONSTANT.mask);
    public static final Constraint LIST = new ClassConstraint(List.class, CONSTANT.mask);
    public static final Constraint TYPE = new ClassConstraint(Type.class, CONSTANT.mask);
    

@@ -82,13 +82,19 @@ public class ConstraintAdapter {
    }
    
    public BigDecimal createBigDecimal(Number number) {
-      double value = number.doubleValue();
-      return BigDecimal.valueOf(value);
+      if(!BigDecimal.class.isInstance(number)) {
+         String value = number.toString();
+         return createBigDecimal(value);
+      }
+      return (BigDecimal)number;
    }
    
    public BigInteger createBigInteger(Number number) {
-      long value = number.longValue();
-      return BigInteger.valueOf(value);
+      if(!BigInteger.class.isInstance(number)) {
+         BigDecimal value = createBigDecimal(number);
+         return value.toBigInteger();
+      }
+      return (BigInteger)number;
    }
    
    public AtomicLong createAtomicLong(Number number) {

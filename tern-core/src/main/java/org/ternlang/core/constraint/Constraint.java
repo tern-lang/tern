@@ -2,6 +2,8 @@ package org.ternlang.core.constraint;
 
 import static java.util.Collections.EMPTY_LIST;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +26,8 @@ public abstract class Constraint {
    public static final Constraint STRING = new ClassConstraint(String.class);
    public static final Constraint BOOLEAN = new ClassConstraint(Boolean.class);
    public static final Constraint CHARACTER = new ClassConstraint(Character.class);
+   public static final Constraint BIG_INTEGER = new ClassConstraint(BigInteger.class);
+   public static final Constraint BIG_DECIMAL = new ClassConstraint(BigDecimal.class);
    public static final Constraint SET = new ClassConstraint(Set.class);
    public static final Constraint LIST = new ClassConstraint(List.class);
    public static final Constraint MAP = new ClassConstraint(Map.class);

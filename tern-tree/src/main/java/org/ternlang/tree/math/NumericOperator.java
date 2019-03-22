@@ -1,11 +1,14 @@
 package org.ternlang.tree.math;
 
-import static org.ternlang.tree.math.ValueCalculator.BYTE;
-import static org.ternlang.tree.math.ValueCalculator.DOUBLE;
-import static org.ternlang.tree.math.ValueCalculator.FLOAT;
-import static org.ternlang.tree.math.ValueCalculator.INTEGER;
-import static org.ternlang.tree.math.ValueCalculator.LONG;
-import static org.ternlang.tree.math.ValueCalculator.SHORT;
+import static org.ternlang.tree.math.NumericConverter.BIG_DECIMAL;
+import static org.ternlang.tree.math.NumericConverter.BIG_INTEGER;
+import static org.ternlang.tree.math.NumericConverter.BYTE;
+import static org.ternlang.tree.math.NumericConverter.CHARACTER;
+import static org.ternlang.tree.math.NumericConverter.DOUBLE;
+import static org.ternlang.tree.math.NumericConverter.FLOAT;
+import static org.ternlang.tree.math.NumericConverter.INTEGER;
+import static org.ternlang.tree.math.NumericConverter.LONG;
+import static org.ternlang.tree.math.NumericConverter.SHORT;
 
 import org.ternlang.core.variable.Value;
 import org.ternlang.parse.StringToken;
@@ -109,31 +112,11 @@ public enum NumericOperator {
    }   
    
    public Value operate(Value left, Value right) {
-      Class primary = left.getType();
-      Class secondary = right.getType();
-      
-      if(Double.class == primary || Double.class == secondary) {
-         return operate(left, right, DOUBLE);
-      }
-      if(Long.class == primary || Long.class == secondary) {
-         return operate(left, right, LONG);
-      }
-      if(Float.class == primary || Float.class == secondary) {
-         return operate(left, right, FLOAT);
-      }
-      if(Integer.class == primary || Integer.class == secondary) {
-         return operate(left, right, INTEGER);
-      }
-      if(Short.class == primary || Short.class == secondary) {
-         return operate(left, right, SHORT);
-      }
-      if(Byte.class == primary || Byte.class == secondary) {
-         return operate(left, right, BYTE);
-      }
-      if(Character.class == primary || Character.class == secondary) {
-         return operate(left, right, INTEGER);
-      }
-      return operate(left, right, DOUBLE);
+      NumericConverter primary = NumericConverter.resolveConverter(left);
+      NumericConverter secondary = NumericConverter.resolveConverter(right);
+      NumericConverter converter = TABLE[TYPES.length * primary.index + secondary.index]; // row + column
+
+      return operate(left, right, converter.calculator);
    }
    
    public abstract Value operate(Value left, Value right, ValueCalculator calculator);
@@ -149,7 +132,7 @@ public enum NumericOperator {
          }
       }
       return null;
-   }   
+   }
    
    private static final NumericOperator[] VALUES = {
       PLUS,
@@ -166,5 +149,101 @@ public enum NumericOperator {
       POWER,
       COALESCE,
       REPLACE
+   };
+
+   private static final NumericConverter[] TYPES = {
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      DOUBLE,
+      LONG,
+      FLOAT,
+      INTEGER,
+      CHARACTER,
+      SHORT,
+      BYTE
+   };
+
+   private static final NumericConverter[] TABLE = {
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      BIG_INTEGER,
+      BIG_INTEGER,
+      BIG_INTEGER,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      DOUBLE,
+      DOUBLE,
+      DOUBLE,
+      DOUBLE,
+      DOUBLE,
+      DOUBLE,
+      DOUBLE,
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      DOUBLE,
+      LONG,
+      DOUBLE,
+      LONG,
+      LONG,
+      LONG,
+      LONG,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      DOUBLE,
+      DOUBLE,
+      FLOAT,
+      FLOAT,
+      FLOAT,
+      FLOAT,
+      FLOAT,
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      DOUBLE,
+      LONG,
+      FLOAT,
+      INTEGER,
+      INTEGER,
+      INTEGER,
+      INTEGER,
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      DOUBLE,
+      LONG,
+      FLOAT,
+      INTEGER,
+      INTEGER,
+      INTEGER,
+      INTEGER,
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      DOUBLE,
+      LONG,
+      FLOAT,
+      INTEGER,
+      INTEGER,
+      SHORT,
+      SHORT,
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      DOUBLE,
+      LONG,
+      FLOAT,
+      INTEGER,
+      INTEGER,
+      SHORT,
+      BYTE
    };
 }

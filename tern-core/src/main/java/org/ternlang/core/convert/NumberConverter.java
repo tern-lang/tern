@@ -44,7 +44,6 @@ public class NumberConverter extends ConstraintConverter {
    };
 
    protected final AliasResolver resolver;
-   protected final NumberMatcher matcher;
    protected final ScoreMapper mapper;
    protected final Type type;
    
@@ -55,7 +54,6 @@ public class NumberConverter extends ConstraintConverter {
    public NumberConverter(Type type, Class[] types, Score[] scores) {
       this.mapper = new ScoreMapper(types, scores);
       this.resolver = new AliasResolver();
-      this.matcher = new NumberMatcher();
       this.type = type;
    }
    

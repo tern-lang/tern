@@ -1,5 +1,7 @@
 package org.ternlang.core.variable;
 
+import static org.ternlang.core.variable.Constant.BIG_DECIMAL;
+import static org.ternlang.core.variable.Constant.BIG_INTEGER;
 import static org.ternlang.core.variable.Constant.BYTE;
 import static org.ternlang.core.variable.Constant.CHARACTER;
 import static org.ternlang.core.variable.Constant.DOUBLE;
@@ -7,6 +9,9 @@ import static org.ternlang.core.variable.Constant.FLOAT;
 import static org.ternlang.core.variable.Constant.INTEGER;
 import static org.ternlang.core.variable.Constant.LONG;
 import static org.ternlang.core.variable.Constant.SHORT;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public class ValueCache {
 
@@ -80,5 +85,13 @@ public class ValueCache {
    
    public static Value getDouble(double value) {
       return Value.getTransient(value, DOUBLE);
+   }
+
+   public static Value getBigInteger(BigInteger value) {
+      return Value.getTransient(value, BIG_INTEGER);
+   }
+
+   public static Value getBigDecimal(BigDecimal value) {
+      return Value.getTransient(value, BIG_DECIMAL);
    }
 }

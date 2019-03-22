@@ -145,10 +145,7 @@ public enum NumericConverter {
       NumericConverter primary = resolveConverter(left);
       NumericConverter secondary = resolveConverter(right);
 
-      if(primary.index < TYPES.length && secondary.index < TYPES.length) {
-         return TABLE[TYPES.length * primary.index + secondary.index];
-      }
-      return DOUBLE;
+      return TABLE[TYPES.length * primary.index + secondary.index];
    }
 
    private static final NumericConverter[] TYPES = {

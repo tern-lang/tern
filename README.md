@@ -90,7 +90,7 @@ and development environment.
 
 ## Overview
 
-Tern is an optionally typed scripting language for the [JVM](https://en.wikipedia.org/wiki/Java_virtual_machine) 
+Tern is an optionally typed programming language for the [JVM](https://en.wikipedia.org/wiki/Java_virtual_machine) 
 and is compatible with all Android variants
 such as [Dalvik](https://en.wikipedia.org/wiki/Dalvik_(software)) and [ART](https://en.wikipedia.org/wiki/Android_Runtime). The learning curve is small for anyone with experience of Java, JavaScript, or a similar 
 imperative  language. It has excellent integration with the host platform and can 
@@ -98,7 +98,7 @@ leverage the vast ecosystem of the JVM without excessive boilerplate.
 
 The language is ideal for embedding in to an existing application, and is a fraction of the size 
 of similar languages for the JVM platform. In addition to embedding it can be run as a standalone 
-interpreter and has a development environment which allows scripts to be debugged and profiled.
+interpreter and has a development environment which allows programs to be debugged and profiled.
 
 ### Parallel Compilation
 
@@ -869,7 +869,7 @@ interactions with the type.
 
 The type system for Tern is independent to the type system native to the JVM. To integrate with the JVM type
 system ASM byte code generation and Dex code generation are leveraged to create bridges between native
-types and those constructed from the script execution flow.
+types and those constructed from the program execution flow.
 
 #### Class
 

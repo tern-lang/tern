@@ -103,6 +103,9 @@ public enum NumericConverter {
    }
 
    public static NumericConverter resolveConverter(Class type) {
+      if (Integer.class == type) {
+         return INTEGER;
+      }
       if (Double.class == type) {
          return DOUBLE;
       }
@@ -112,17 +115,14 @@ public enum NumericConverter {
       if (Float.class == type) {
          return FLOAT;
       }
-      if (Integer.class == type) {
-         return INTEGER;
+      if (Character.class == type) {
+         return CHARACTER;
       }
       if (BigDecimal.class == type) {
          return BIG_DECIMAL;
       }
       if (BigInteger.class == type) {
          return BIG_INTEGER;
-      }
-      if (Character.class == type) {
-         return CHARACTER;
       }
       if (Short.class == type) {
          return SHORT;
@@ -132,4 +132,107 @@ public enum NumericConverter {
       }
       return DOUBLE;
    }
+
+   public static NumericConverter resolveConverter(Value left, Value right) {
+      NumericConverter primary = resolveConverter(left);
+      NumericConverter secondary = resolveConverter(right);
+
+      return TABLE[TYPES.length * primary.index + secondary.index];
+   }
+
+   private static final NumericConverter[] TYPES = {
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      DOUBLE,
+      LONG,
+      FLOAT,
+      INTEGER,
+      CHARACTER,
+      SHORT,
+      BYTE
+   };
+
+   private static final NumericConverter[] TABLE = {
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      BIG_INTEGER,
+      BIG_INTEGER,
+      BIG_INTEGER,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      DOUBLE,
+      DOUBLE,
+      DOUBLE,
+      DOUBLE,
+      DOUBLE,
+      DOUBLE,
+      DOUBLE,
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      DOUBLE,
+      LONG,
+      DOUBLE,
+      LONG,
+      LONG,
+      LONG,
+      LONG,
+      BIG_DECIMAL,
+      BIG_DECIMAL,
+      DOUBLE,
+      DOUBLE,
+      FLOAT,
+      FLOAT,
+      FLOAT,
+      FLOAT,
+      FLOAT,
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      DOUBLE,
+      LONG,
+      FLOAT,
+      INTEGER,
+      INTEGER,
+      INTEGER,
+      INTEGER,
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      DOUBLE,
+      LONG,
+      FLOAT,
+      INTEGER,
+      INTEGER,
+      INTEGER,
+      INTEGER,
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      DOUBLE,
+      LONG,
+      FLOAT,
+      INTEGER,
+      INTEGER,
+      SHORT,
+      SHORT,
+      BIG_DECIMAL,
+      BIG_INTEGER,
+      DOUBLE,
+      LONG,
+      FLOAT,
+      INTEGER,
+      INTEGER,
+      SHORT,
+      BYTE
+   };
 }

@@ -1,15 +1,5 @@
 package org.ternlang.tree.math;
 
-import static org.ternlang.tree.math.NumericConverter.BIG_DECIMAL;
-import static org.ternlang.tree.math.NumericConverter.BIG_INTEGER;
-import static org.ternlang.tree.math.NumericConverter.BYTE;
-import static org.ternlang.tree.math.NumericConverter.CHARACTER;
-import static org.ternlang.tree.math.NumericConverter.DOUBLE;
-import static org.ternlang.tree.math.NumericConverter.FLOAT;
-import static org.ternlang.tree.math.NumericConverter.INTEGER;
-import static org.ternlang.tree.math.NumericConverter.LONG;
-import static org.ternlang.tree.math.NumericConverter.SHORT;
-
 import org.ternlang.core.variable.Value;
 import org.ternlang.parse.StringToken;
 
@@ -112,10 +102,7 @@ public enum NumericOperator {
    }   
    
    public Value operate(Value left, Value right) {
-      NumericConverter primary = NumericConverter.resolveConverter(left);
-      NumericConverter secondary = NumericConverter.resolveConverter(right);
-      NumericConverter converter = TABLE[TYPES.length * primary.index + secondary.index]; // row + column
-
+      NumericConverter converter = NumericConverter.resolveConverter(left, right);
       return operate(left, right, converter.calculator);
    }
    
@@ -149,101 +136,5 @@ public enum NumericOperator {
       POWER,
       COALESCE,
       REPLACE
-   };
-
-   private static final NumericConverter[] TYPES = {
-      BIG_DECIMAL,
-      BIG_INTEGER,
-      DOUBLE,
-      LONG,
-      FLOAT,
-      INTEGER,
-      CHARACTER,
-      SHORT,
-      BYTE
-   };
-
-   private static final NumericConverter[] TABLE = {
-      BIG_DECIMAL,
-      BIG_DECIMAL,
-      BIG_DECIMAL,
-      BIG_DECIMAL,
-      BIG_DECIMAL,
-      BIG_DECIMAL,
-      BIG_DECIMAL,
-      BIG_DECIMAL,
-      BIG_DECIMAL,
-      BIG_DECIMAL,
-      BIG_INTEGER,
-      BIG_DECIMAL,
-      BIG_INTEGER,
-      BIG_DECIMAL,
-      BIG_INTEGER,
-      BIG_INTEGER,
-      BIG_INTEGER,
-      BIG_INTEGER,
-      BIG_DECIMAL,
-      BIG_DECIMAL,
-      DOUBLE,
-      DOUBLE,
-      DOUBLE,
-      DOUBLE,
-      DOUBLE,
-      DOUBLE,
-      DOUBLE,
-      BIG_DECIMAL,
-      BIG_INTEGER,
-      DOUBLE,
-      LONG,
-      DOUBLE,
-      LONG,
-      LONG,
-      LONG,
-      LONG,
-      BIG_DECIMAL,
-      BIG_DECIMAL,
-      DOUBLE,
-      DOUBLE,
-      FLOAT,
-      FLOAT,
-      FLOAT,
-      FLOAT,
-      FLOAT,
-      BIG_DECIMAL,
-      BIG_INTEGER,
-      DOUBLE,
-      LONG,
-      FLOAT,
-      INTEGER,
-      INTEGER,
-      INTEGER,
-      INTEGER,
-      BIG_DECIMAL,
-      BIG_INTEGER,
-      DOUBLE,
-      LONG,
-      FLOAT,
-      INTEGER,
-      INTEGER,
-      INTEGER,
-      INTEGER,
-      BIG_DECIMAL,
-      BIG_INTEGER,
-      DOUBLE,
-      LONG,
-      FLOAT,
-      INTEGER,
-      INTEGER,
-      SHORT,
-      SHORT,
-      BIG_DECIMAL,
-      BIG_INTEGER,
-      DOUBLE,
-      LONG,
-      FLOAT,
-      INTEGER,
-      INTEGER,
-      SHORT,
-      BYTE
    };
 }

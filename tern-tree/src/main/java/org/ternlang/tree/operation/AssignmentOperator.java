@@ -11,27 +11,27 @@ import org.ternlang.core.scope.Scope;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.Value;
 import org.ternlang.parse.StringToken;
-import org.ternlang.tree.math.NumericOperator;
+import org.ternlang.tree.math.NumberOperator;
 
 public enum AssignmentOperator {
-   EQUAL(NumericOperator.REPLACE, "="), 
-   PLUS_EQUAL(NumericOperator.PLUS, "+="), 
-   MINUS_EQUAL(NumericOperator.MINUS, "-="), 
-   POWER_EQUAL(NumericOperator.POWER, "**="),    
-   MLTIPLY_EQUAL(NumericOperator.MULTIPLY, "*="), 
-   MODULUS_EQUAL(NumericOperator.MODULUS, "%="), 
-   DIVIDE_EQUAL(NumericOperator.DIVIDE,"/="),  
-   AND_EQUAL(NumericOperator.AND, "&="),    
-   OR_EQUAL(NumericOperator.OR, "|="),
-   XOR_EQUAL(NumericOperator.XOR, "^="),    
-   SHIFT_RIGHT_EQUAL(NumericOperator.SHIFT_RIGHT, ">>="),
-   SHIFT_LEFT_EQUAL(NumericOperator.SHIFT_LEFT, "<<="),
-   UNSIGNED_SHIFT_RIGHT_EQUAL(NumericOperator.UNSIGNED_SHIFT_RIGHT, ">>>=");
+   EQUAL(NumberOperator.REPLACE, "="),
+   PLUS_EQUAL(NumberOperator.PLUS, "+="),
+   MINUS_EQUAL(NumberOperator.MINUS, "-="),
+   POWER_EQUAL(NumberOperator.POWER, "**="),
+   MLTIPLY_EQUAL(NumberOperator.MULTIPLY, "*="),
+   MODULUS_EQUAL(NumberOperator.MODULUS, "%="),
+   DIVIDE_EQUAL(NumberOperator.DIVIDE,"/="),
+   AND_EQUAL(NumberOperator.AND, "&="),
+   OR_EQUAL(NumberOperator.OR, "|="),
+   XOR_EQUAL(NumberOperator.XOR, "^="),
+   SHIFT_RIGHT_EQUAL(NumberOperator.SHIFT_RIGHT, ">>="),
+   SHIFT_LEFT_EQUAL(NumberOperator.SHIFT_LEFT, "<<="),
+   UNSIGNED_SHIFT_RIGHT_EQUAL(NumberOperator.UNSIGNED_SHIFT_RIGHT, ">>>=");
    
-   private final NumericOperator operator;
+   private final NumberOperator operator;
    private final String symbol;
    
-   private AssignmentOperator(NumericOperator operator, String symbol) {
+   private AssignmentOperator(NumberOperator operator, String symbol) {
       this.operator = operator;
       this.symbol = symbol;
    }

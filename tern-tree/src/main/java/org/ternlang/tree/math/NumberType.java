@@ -3,68 +3,70 @@ package org.ternlang.tree.math;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.convert.ConstraintAdapter;
+import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.Value;
 import org.ternlang.core.variable.ValueCache;
 
-public enum NumericConverter {
-   BIG_DECIMAL(ValueCalculator.BIG_DECIMAL, 0){
+public enum NumberType {
+   BIG_DECIMAL(ValueCalculator.BIG_DECIMAL, Constraint.BIG_DECIMAL, 0){
       @Override
       public Value convert(Number number) {
          BigDecimal value = adapter.createBigDecimal(number);
          return ValueCache.getBigDecimal(value);
       }
    },
-   BIG_INTEGER(ValueCalculator.BIG_INTEGER, 1){
+   BIG_INTEGER(ValueCalculator.BIG_INTEGER, Constraint.BIG_INTEGER, 1){
       @Override
       public Value convert(Number number) {
          BigInteger value = adapter.createBigInteger(number);
          return ValueCache.getBigInteger(value);
       }
    },
-   DOUBLE(ValueCalculator.DOUBLE, 2){
+   DOUBLE(ValueCalculator.DOUBLE, Constraint.DOUBLE, 2){
       @Override
       public Value convert(Number number) {
          Double value = adapter.createDouble(number);
          return ValueCache.getDouble(value);
       }
    },
-   LONG(ValueCalculator.LONG, 3){
+   LONG(ValueCalculator.LONG, Constraint.LONG, 3){
       @Override
       public Value convert(Number number) {
          Long value = adapter.createLong(number);
          return ValueCache.getLong(value);
       }
    },
-   FLOAT(ValueCalculator.FLOAT, 4){
+   FLOAT(ValueCalculator.FLOAT, Constraint.FLOAT, 4){
       @Override
       public Value convert(Number number) {
          Float value = adapter.createFloat(number);
          return ValueCache.getFloat(value);
       }
    },
-   INTEGER(ValueCalculator.INTEGER, 5){
+   INTEGER(ValueCalculator.INTEGER, Constraint.INTEGER, 5){
       @Override
       public Value convert(Number number) {
          Integer value = adapter.createInteger(number);
          return ValueCache.getInteger(value);
       }
    },
-   CHARACTER(ValueCalculator.INTEGER, 6){
+   CHARACTER(ValueCalculator.INTEGER, Constraint.INTEGER, 6){
       @Override
       public Value convert(Number number) {
          Integer value = adapter.createInteger(number);
          return ValueCache.getInteger(value);
       }
    },
-   SHORT(ValueCalculator.SHORT, 7){
+   SHORT(ValueCalculator.SHORT, Constraint.SHORT, 7){
       @Override
       public Value convert(Number number) {
          Short value = adapter.createShort(number);
          return ValueCache.getShort(value);
       }
    },
-   BYTE(ValueCalculator.BYTE, 8){
+   BYTE(ValueCalculator.BYTE, Constraint.BYTE, 8){
       @Override
       public Value convert(Number number) {
          Byte value = adapter.createByte(number);
@@ -74,11 +76,13 @@ public enum NumericConverter {
 
    public final ValueCalculator calculator;
    public final ConstraintAdapter adapter;
+   public final Constraint constraint;
    public final int index;
 
-   private NumericConverter(ValueCalculator calculator, int index) {
+   private NumberType(ValueCalculator calculator, Constraint constraint, int index) {
       this.adapter = new ConstraintAdapter();
       this.calculator = calculator;
+      this.constraint = constraint;
       this.index = index;
    }
 
@@ -92,25 +96,31 @@ public enum NumericConverter {
 
    public abstract Value convert(Number number);
 
-   public static NumericConverter resolveConverter(Value value) {
-      Class type = value.getType();
-
+   public static NumberType resolveType(Type type) {
       if(type != null) {
-         return resolveConverter(type);
+         Class real = type.getType();
+         return resolveType(real);
       }
       return DOUBLE;
    }
 
-   public static NumericConverter resolveConverter(Number number) {
-      Class type = number.getClass();
-
-      if(type != null) {
-         return resolveConverter(type);
+   public static NumberType resolveType(Value value) {
+      if(value != null) {
+         Class type = value.getType();
+         return resolveType(type);
       }
       return DOUBLE;
    }
 
-   public static NumericConverter resolveConverter(Class type) {
+   public static NumberType resolveType(Number number) {
+      if(number != null) {
+         Class type = number.getClass();
+         return resolveType(type);
+      }
+      return DOUBLE;
+   }
+
+   public static NumberType resolveType(Class type) {
       if (Integer.class == type) {
          return INTEGER;
       }
@@ -141,14 +151,21 @@ public enum NumericConverter {
       return DOUBLE;
    }
 
-   public static NumericConverter resolveConverter(Value left, Value right) {
-      NumericConverter primary = resolveConverter(left);
-      NumericConverter secondary = resolveConverter(right);
+   public static NumberType resolveType(Type left, Type right) {
+      NumberType primary = resolveType(left);
+      NumberType secondary = resolveType(right);
 
       return TABLE[TYPES.length * primary.index + secondary.index];
    }
 
-   private static final NumericConverter[] TYPES = {
+   public static NumberType resolveType(Value left, Value right) {
+      NumberType primary = resolveType(left);
+      NumberType secondary = resolveType(right);
+
+      return TABLE[TYPES.length * primary.index + secondary.index];
+   }
+
+   private static final NumberType[] TYPES = {
       BIG_DECIMAL,
       BIG_INTEGER,
       DOUBLE,
@@ -160,7 +177,7 @@ public enum NumericConverter {
       BYTE
    };
 
-   private static final NumericConverter[] TABLE = {
+   private static final NumberType[] TABLE = {
       BIG_DECIMAL,
       BIG_DECIMAL,
       BIG_DECIMAL,

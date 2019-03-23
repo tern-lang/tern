@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.ternlang.core.Evaluation;
-import org.ternlang.tree.math.NumericOperator;
+import org.ternlang.tree.math.NumberOperator;
 
 public class Calculator {
    
@@ -27,7 +27,7 @@ public class Calculator {
          }
       }      
       for(CalculationPart part : order) {
-         NumericOperator operator = part.getOperator();
+         NumberOperator operator = part.getOperator();
    
          if(operator != null) {
             Evaluation right = variables.pop();
@@ -49,12 +49,12 @@ public class Calculator {
    }
    
    public void update(CalculationPart part) {
-      NumericOperator operator = part.getOperator();
+      NumberOperator operator = part.getOperator();
       
       if(operator != null) {
          while(!tokens.isEmpty()) {
             CalculationPart top = tokens.pop();
-            NumericOperator other = top.getOperator();
+            NumberOperator other = top.getOperator();
                                  
             if(other.priority < operator.priority) {
                tokens.push(top);

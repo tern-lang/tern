@@ -1,7 +1,7 @@
 package org.ternlang.parse;
 
-import static org.ternlang.parse.NumberType.DOUBLE;
-import static org.ternlang.parse.NumberType.INTEGER;
+import static org.ternlang.parse.NumberCategory.DOUBLE;
+import static org.ternlang.parse.NumberCategory.INTEGER;
 import static org.ternlang.parse.TextCategory.BINARY;
 import static org.ternlang.parse.TextCategory.DIGIT;
 import static org.ternlang.parse.TextCategory.DOLLAR;
@@ -20,7 +20,7 @@ import static org.ternlang.parse.TextCategory.TEMPLATE;
 
 public class TextReader {
 
-   private NumberTypeMatcher matcher;
+   private NumberCategoryMatcher matcher;
    private TextDecoder decoder;
    private short[] types;
    private char[] source;
@@ -33,7 +33,7 @@ public class TextReader {
    
    public TextReader(char[] source, short[] types, int off, int count) {
       this.decoder = new TextDecoder(source, off, count);
-      this.matcher = new NumberTypeMatcher();
+      this.matcher = new NumberCategoryMatcher();
       this.source = source;
       this.count = count;
       this.types = types;
@@ -146,7 +146,7 @@ public class TextReader {
          if(second != 'b' && second != 'B') {
             return null;
          }
-         NumberType type = INTEGER;
+         NumberCategory category = INTEGER;
          long value = 0;
          int pos = off + 2;
          int mark = off;
@@ -160,7 +160,7 @@ public class TextReader {
                value |= decoder.binary(next);
             } else {
                if((mask & SUFFIX) == SUFFIX) {
-                  type = matcher.match(next);
+                  category = matcher.match(next);
                   off++;
                } 
                break;
@@ -169,7 +169,7 @@ public class TextReader {
          }
          if(pos > mark + 2) {                  
             off = pos;
-            return type.convert(value);
+            return category.convert(value);
          }
       }
       return null;      
@@ -186,7 +186,7 @@ public class TextReader {
          if(second != 'x' && second != 'X') {
             return null;
          }
-         NumberType type = INTEGER;
+         NumberCategory category = INTEGER;
          long value = 0;
          int pos = off + 2;
          int mark = off;
@@ -200,7 +200,7 @@ public class TextReader {
                value |= decoder.hexadecimal(next);
             } else {
                if((mask & SUFFIX) == SUFFIX) {
-                  type = matcher.match(next);
+                  category = matcher.match(next);
                   off++;
                } 
                break;
@@ -209,14 +209,14 @@ public class TextReader {
          }
          if(pos > mark + 2) {                  
             off = pos;
-            return type.convert(value);
+            return category.convert(value);
          }
       }
       return null;      
    }    
    
    public Number decimal() {
-      NumberType type = INTEGER;
+      NumberCategory category = INTEGER;
       double scale = 0;
       long number = 0;
       int exponent = 0;
@@ -234,7 +234,7 @@ public class TextReader {
                      mask = types[off + 1];
 
                      if ((mask & DIGIT) == DIGIT) {
-                        type = DOUBLE;
+                        category = DOUBLE;
                         scale = 1.0d;
                         off++;
                         continue;
@@ -244,7 +244,7 @@ public class TextReader {
                   if (off + 1 < count) {
                      mask = types[off + 1];
                      next = source[off + 1];
-                     type = DOUBLE;
+                     category = DOUBLE;
                      sign = 1;
                      off++;
 
@@ -255,7 +255,7 @@ public class TextReader {
                      continue;
                   }
                } else if((mask & SUFFIX) == SUFFIX) {
-                  type = matcher.match(next);
+                  category = matcher.match(next);
                   off++; 
                }               
                break;
@@ -284,7 +284,7 @@ public class TextReader {
          if(exponent > 0) {
             factor = Math.pow(10, sign * exponent);
          }
-         return type.convert(result * factor);
+         return category.convert(result * factor);
       }
       return null;
    }   

@@ -6,7 +6,7 @@ import static org.ternlang.core.variable.BooleanValue.TRUE;
 import org.ternlang.core.variable.Value;
 import org.ternlang.parse.StringToken;
 import org.ternlang.tree.condition.BooleanChecker;
-import org.ternlang.tree.math.NumericConverter;
+import org.ternlang.tree.math.NumberType;
 
 public enum PrefixOperator {
    NOT("!"){
@@ -22,30 +22,30 @@ public enum PrefixOperator {
       @Override
       public Value operate(Value right) {
          Number value = right.getNumber(); 
-         NumericConverter converter = NumericConverter.resolveConverter(value);   
+         NumberType type = NumberType.resolveType(value);
          long number = value.longValue();
          
-         return converter.convert(~number);
+         return type.convert(~number);
       }      
    },
    PLUS("+"){
       @Override
       public Value operate(Value right) {
          Number value = right.getNumber(); 
-         NumericConverter converter = NumericConverter.resolveConverter(value);   
+         NumberType type = NumberType.resolveType(value);
          double number = value.doubleValue();
          
-         return converter.convert(+number);
+         return type.convert(+number);
       }      
    },
    MINUS("-"){
       @Override
       public Value operate(Value right) { 
          Number value = right.getNumber(); 
-         NumericConverter converter = NumericConverter.resolveConverter(value);   
+         NumberType type = NumberType.resolveType(value);
          double number = value.doubleValue();
          
-         return converter.convert(-number);
+         return type.convert(-number);
       }      
    };
    

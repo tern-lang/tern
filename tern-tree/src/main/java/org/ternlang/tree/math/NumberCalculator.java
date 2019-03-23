@@ -2,7 +2,7 @@ package org.ternlang.tree.math;
 
 import org.ternlang.core.variable.Value;
 
-public interface NumericCalculator {
+public interface NumberCalculator {
    Value power(Number left, Number right);
    Value add(Number left, Number right);
    Value subtract(Number left, Number right);

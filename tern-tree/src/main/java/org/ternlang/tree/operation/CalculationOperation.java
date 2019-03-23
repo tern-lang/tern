@@ -9,16 +9,17 @@ import org.ternlang.core.convert.StringBuilder;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.Value;
-import org.ternlang.tree.math.NumericChecker;
-import org.ternlang.tree.math.NumericOperator;
+import org.ternlang.tree.math.NumberChecker;
+import org.ternlang.tree.math.NumberType;
+import org.ternlang.tree.math.NumberOperator;
 
 public class CalculationOperation extends Evaluation {
 
-   private final NumericOperator operator;
+   private final NumberOperator operator;
    private final Evaluation left;
    private final Evaluation right;
    
-   public CalculationOperation(NumericOperator operator, Evaluation left, Evaluation right) {
+   public CalculationOperation(NumberOperator operator, Evaluation left, Evaluation right) {
       this.operator = operator;
       this.left = left;
       this.right = right;
@@ -34,18 +35,23 @@ public class CalculationOperation extends Evaluation {
    public Constraint compile(Scope scope, Constraint context) throws Exception {
       Constraint leftResult = left.compile(scope, null);
       Constraint rightResult = right.compile(scope, null);
+      Type leftType = leftResult.getType(scope);
+      Type rightType = rightResult.getType(scope);
+      NumberType type = NumberType.resolveType(leftType, rightType);
 
-      if(operator == NumericOperator.PLUS) {
-         Type leftType = leftResult.getType(scope);
-         Type rightType = rightResult.getType(scope);
-
-         if(leftType != null && rightType != null) {
-            if(!NumericChecker.isBothNumeric(leftType, rightType)) {
+      if(operator == NumberOperator.PLUS) {
+         if(leftType != null) {
+            if (!NumberChecker.isNumeric(leftType)) {
+               return STRING;
+            }
+         }
+         if(rightType != null) {
+            if (!NumberChecker.isNumeric(rightType)) {
                return STRING;
             }
          }
       }
-      return leftResult;
+      return type.constraint;
    }
    
    
@@ -54,11 +60,11 @@ public class CalculationOperation extends Evaluation {
       Value leftResult = left.evaluate(scope, NULL);
       Value rightResult = right.evaluate(scope, NULL);
       
-      if(operator == NumericOperator.PLUS) {
+      if(operator == NumberOperator.PLUS) {
          Object leftValue = leftResult.getValue();
          Object rightValue = rightResult.getValue();
          
-         if(!NumericChecker.isBothNumeric(leftValue, rightValue)) {
+         if(!NumberChecker.isBothNumeric(leftValue, rightValue)) {
             String leftText = StringBuilder.create(scope, leftValue);
             String rightText = StringBuilder.create(scope, rightValue);            
             String text = leftText.concat(rightText);

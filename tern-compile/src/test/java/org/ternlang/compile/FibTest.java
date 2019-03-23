@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import junit.framework.TestCase;
 
 import org.ternlang.core.variable.Value;
-import org.ternlang.tree.math.NumericOperator;
+import org.ternlang.tree.math.NumberOperator;
 
 public class FibTest extends TestCase {
 
@@ -56,7 +56,7 @@ public class FibTest extends TestCase {
          @Override
          public void run() {
             for(int i = 0; i < 2692537; i++) {
-               NumericOperator.MULTIPLY.operate(Value.getTransient(i), Value.getTransient(i));
+               NumberOperator.MULTIPLY.operate(Value.getTransient(i), Value.getTransient(i));
             }
          }
       });

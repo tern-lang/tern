@@ -1,18 +1,18 @@
 package org.ternlang.tree.operation;
 
-import static org.ternlang.tree.math.NumericOperator.COALESCE;
+import static org.ternlang.tree.math.NumberOperator.COALESCE;
 
 import org.ternlang.core.Evaluation;
 import org.ternlang.parse.StringToken;
 import org.ternlang.tree.condition.NullCoalesce;
-import org.ternlang.tree.math.NumericOperator;
+import org.ternlang.tree.math.NumberOperator;
 
 public class CalculationOperator implements CalculationPart {   
    
-   private final NumericOperator operator;
+   private final NumberOperator operator;
    
    public CalculationOperator(StringToken operator) {
-      this.operator = NumericOperator.resolveOperator(operator);
+      this.operator = NumberOperator.resolveOperator(operator);
    }
    
    @Override
@@ -24,7 +24,7 @@ public class CalculationOperator implements CalculationPart {
    }
    
    @Override
-   public NumericOperator getOperator(){
+   public NumberOperator getOperator(){
       return operator;
    }
 }

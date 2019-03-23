@@ -1,11 +1,11 @@
 package org.ternlang.tree.math;
 
-import static org.ternlang.tree.math.NumericConverter.DOUBLE;
+import static org.ternlang.tree.math.NumberType.DOUBLE;
 
 import org.ternlang.core.variable.Value;
 import org.ternlang.parse.StringToken;
 
-public enum NumericOperator {
+public enum NumberOperator {
    REPLACE("", 0) {
       @Override
       public Value operate(Value left, Value right) {
@@ -98,27 +98,27 @@ public enum NumericOperator {
    public final String operator;
    public final int priority;
    
-   private NumericOperator(String operator, int priority) {
+   private NumberOperator(String operator, int priority) {
       this.priority = -priority; // invert value to sort
       this.operator = operator;
    }   
    
    public Value operate(Value left, Value right) {
-      NumericConverter converter = NumericConverter.resolveConverter(left, right);
+      NumberType type = NumberType.resolveType(left, right);
 
-      if(converter != null) {
-         return operate(left, right, converter.calculator);
+      if(type != null) {
+         return operate(left, right, type.calculator);
       }
       return operate(left, right, DOUBLE.calculator);
    }
    
    public abstract Value operate(Value left, Value right, ValueCalculator calculator);
    
-   public static NumericOperator resolveOperator(StringToken token) {
+   public static NumberOperator resolveOperator(StringToken token) {
       if(token != null) {
          String value = token.getValue();
          
-         for(NumericOperator operator : VALUES) {
+         for(NumberOperator operator : VALUES) {
             if(operator.operator.equals(value)) {
                return operator;
             }
@@ -127,7 +127,7 @@ public enum NumericOperator {
       return null;
    }
    
-   private static final NumericOperator[] VALUES = {
+   private static final NumberOperator[] VALUES = {
       PLUS,
       MINUS,
       DIVIDE,

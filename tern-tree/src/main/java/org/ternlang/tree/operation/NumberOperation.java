@@ -7,15 +7,15 @@ import org.ternlang.core.type.Type;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.error.InternalStateException;
 import org.ternlang.parse.Token;
-import org.ternlang.tree.math.NumericChecker;
+import org.ternlang.tree.math.NumberChecker;
 
-public abstract class NumericOperation extends Evaluation {
+public abstract class NumberOperation extends Evaluation {
 
    protected final AliasResolver resolver;
    protected final Evaluation evaluation;
    protected final Token operator;
    
-   protected NumericOperation(Evaluation evaluation, Token operator) {
+   protected NumberOperation(Evaluation evaluation, Token operator) {
       this.resolver = new AliasResolver();
       this.evaluation = evaluation;
       this.operator = operator;
@@ -37,7 +37,7 @@ public abstract class NumericOperation extends Evaluation {
       if(type != null) {
          Type real = resolver.resolve(type);
 
-         if(!NumericChecker.isNumeric(real)) {
+         if(!NumberChecker.isNumeric(real)) {
             throw new InternalStateException("Illegal " + operator +" of type '" + type + "'");
          }
       }

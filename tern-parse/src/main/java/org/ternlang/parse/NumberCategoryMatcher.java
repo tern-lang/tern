@@ -1,13 +1,13 @@
 package org.ternlang.parse;
 
-import static org.ternlang.parse.NumberType.DOUBLE;
-import static org.ternlang.parse.NumberType.FLOAT;
-import static org.ternlang.parse.NumberType.INTEGER;
-import static org.ternlang.parse.NumberType.LONG;
+import static org.ternlang.parse.NumberCategory.DOUBLE;
+import static org.ternlang.parse.NumberCategory.FLOAT;
+import static org.ternlang.parse.NumberCategory.INTEGER;
+import static org.ternlang.parse.NumberCategory.LONG;
 
-public class NumberTypeMatcher {
+public class NumberCategoryMatcher {
    
-   private static final NumberType[] INDEX = {
+   private static final NumberCategory[] INDEX = {
    INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, 
    INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, 
    INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, 
@@ -41,7 +41,7 @@ public class NumberTypeMatcher {
    INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, 
    INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER};
 
-   public NumberType match(int suffix) {
+   public NumberCategory match(int suffix) {
       int length = INDEX.length;
       
       if(suffix > 0 && suffix < length) {

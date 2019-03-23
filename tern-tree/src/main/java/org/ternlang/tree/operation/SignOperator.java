@@ -2,34 +2,34 @@ package org.ternlang.tree.operation;
 
 import org.ternlang.core.variable.Value;
 import org.ternlang.parse.StringToken;
-import org.ternlang.tree.math.NumericConverter;
+import org.ternlang.tree.math.NumberType;
 
 public enum SignOperator {
    NONE(""){
       @Override
       public Value operate(Number value) {
-         NumericConverter converter = NumericConverter.resolveConverter(value);      
+         NumberType type = NumberType.resolveType(value);
          double decimal = value.doubleValue();
          
-         return converter.convert(decimal);
+         return type.convert(decimal);
       }      
    },
    PLUS("+"){
       @Override
       public Value operate(Number value) {
-         NumericConverter converter = NumericConverter.resolveConverter(value);      
+         NumberType type = NumberType.resolveType(value);
          double decimal = value.doubleValue();
          
-         return converter.convert(+decimal);
+         return type.convert(+decimal);
       }      
    },
    MINUS("-"){
       @Override
       public Value operate(Number value) { 
-         NumericConverter converter = NumericConverter.resolveConverter(value);      
+         NumberType type = NumberType.resolveType(value);
          double decimal = value.doubleValue();
          
-         return converter.convert(-decimal);
+         return type.convert(-decimal);
       }      
    };
    

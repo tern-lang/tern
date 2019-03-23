@@ -2,7 +2,7 @@ package org.ternlang.tree.math;
 
 import org.ternlang.core.variable.Value;
 
-public abstract class ValueCalculator implements NumericCalculator {
+public abstract class ValueCalculator implements NumberCalculator {
 
    public static final ValueCalculator BIG_DECIMAL = new BigDecimalCalculator();
    public static final ValueCalculator BIG_INTEGER = new BigIntegerCalculator();

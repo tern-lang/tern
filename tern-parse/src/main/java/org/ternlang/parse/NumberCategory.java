@@ -3,7 +3,7 @@ package org.ternlang.parse;
 import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Integer.MIN_VALUE;
 
-public enum NumberType {
+public enum NumberCategory {
    INTEGER {
       @Override
       public Number convert(Number number) {

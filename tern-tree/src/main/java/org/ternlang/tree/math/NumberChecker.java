@@ -2,7 +2,7 @@ package org.ternlang.tree.math;
 
 import org.ternlang.core.type.Type;
 
-public class NumericChecker {
+public class NumberChecker {
 
    public static boolean isNumeric(Type type){
       if(type != null) {

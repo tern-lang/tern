@@ -1,7 +1,7 @@
 package org.ternlang.tree.operation;
 
 import org.ternlang.core.Evaluation;
-import org.ternlang.tree.math.NumericOperator;
+import org.ternlang.tree.math.NumberOperator;
 
 public class CalculationOperand implements CalculationPart {   
    
@@ -17,7 +17,7 @@ public class CalculationOperand implements CalculationPart {
    }
 
    @Override
-   public NumericOperator getOperator() {
+   public NumberOperator getOperator() {
       return null;
    }
 }

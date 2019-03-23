@@ -2,6 +2,8 @@ package org.ternlang.tree.math;
 
 import static org.ternlang.tree.math.NumberType.DOUBLE;
 
+import org.ternlang.core.constraint.Constraint;
+import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.Value;
 import org.ternlang.parse.StringToken;
 
@@ -110,6 +112,15 @@ public enum NumberOperator {
          return operate(left, right, type.calculator);
       }
       return operate(left, right, DOUBLE.calculator);
+   }
+
+   public Constraint compile(Type left, Type right) {
+      NumberType type = NumberType.resolveType(left, right);
+
+      if(type != null) {
+         return type.constraint;
+      }
+      return DOUBLE.constraint;
    }
    
    public abstract Value operate(Value left, Value right, ValueCalculator calculator);

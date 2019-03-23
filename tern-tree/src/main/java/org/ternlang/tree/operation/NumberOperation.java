@@ -11,12 +11,14 @@ import org.ternlang.tree.math.NumberChecker;
 
 public abstract class NumberOperation extends Evaluation {
 
+   protected final NumberChecker checker;
    protected final AliasResolver resolver;
    protected final Evaluation evaluation;
    protected final Token operator;
    
    protected NumberOperation(Evaluation evaluation, Token operator) {
       this.resolver = new AliasResolver();
+      this.checker = new NumberChecker();
       this.evaluation = evaluation;
       this.operator = operator;
    }
@@ -37,7 +39,7 @@ public abstract class NumberOperation extends Evaluation {
       if(type != null) {
          Type real = resolver.resolve(type);
 
-         if(!NumberChecker.isNumeric(real)) {
+         if(!checker.isNumeric(real)) {
             throw new InternalStateException("Illegal " + operator +" of type '" + type + "'");
          }
       }

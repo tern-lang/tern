@@ -1,6 +1,5 @@
 package org.ternlang.core.convert;
 
-import static org.ternlang.core.Reserved.ANY_TYPE;
 import static org.ternlang.core.Reserved.TYPE_CONSTRUCTOR;
 
 import java.lang.reflect.Proxy;
@@ -21,17 +20,19 @@ public class TypeInspector {
    public TypeInspector() {
       this.any = new AnyConstraint();
    }
-   
+
+   public boolean isType(Type type) {
+      return type != null;
+   }
+
    public boolean isAny(Type type) {
-      String name = type.getName();
-      
-      if(name.equals(ANY_TYPE)) {
+      if(type != null) {
          Scope scope = type.getScope();
          Type base = any.getType(scope);
-         
+
          return type == base;
       }
-      return false; // null is valid
+      return false;
    }
 
    public boolean isClass(Type type) {
@@ -46,57 +47,69 @@ public class TypeInspector {
    }
 
    public boolean isProxy(Type type) {
-      Class real = type.getType();
-      
-      if(real != null) { 
-         return Proxy.class.isAssignableFrom(real);
+      if(type != null) {
+         Class real = type.getType();
+
+         if (real != null) {
+            return Proxy.class.isAssignableFrom(real);
+         }
       }
       return false; // null is valid
    }
 
    public boolean isArray(Type type) throws Exception {
-      int modifiers = type.getModifiers(); 
-      
-      if(ModifierType.isArray(modifiers)) {
-         return true;
+      if(type != null) {
+         int modifiers = type.getModifiers();
+
+         if (ModifierType.isArray(modifiers)) {
+            return true;
+         }
       }
       return false;
    }
    
    public boolean isFunction(Type type) throws Exception {
-      int modifiers = type.getModifiers(); 
-      
-      if(ModifierType.isFunction(modifiers)) {
-         return true;
+      if(type != null) {
+         int modifiers = type.getModifiers();
+
+         if (ModifierType.isFunction(modifiers)) {
+            return true;
+         }
       }
       return false;
    }   
 
    public boolean isSame(Type type, Class require) throws Exception {
-      Class actual = type.getType();
-      
-      if(actual == require) {
-         return true;
+      if(type != null) {
+         Class actual = type.getType();
+
+         if (actual == require) {
+            return true;
+         }
       }
       return false;
    }
    
    public boolean isConstructor(Type type, Function function) {
-      Type source = function.getSource();
-      String name = function.getName();
-      
-      if(name.equals(TYPE_CONSTRUCTOR)) {
-         return source == type;
+      if(function != null) {
+         Type source = function.getSource();
+         String name = function.getName();
+
+         if (name.equals(TYPE_CONSTRUCTOR)) {
+            return source == type;
+         }
       }
       return false;
    }
    
    public boolean isSuperConstructor(Type type, Function function) {
-      Type source = function.getSource();
-      String name = function.getName();
-      
-      if(name.equals(TYPE_CONSTRUCTOR)) {
-         return source != type;
+      if(function != null) {
+         Type source = function.getSource();
+         String name = function.getName();
+
+         if (name.equals(TYPE_CONSTRUCTOR)) {
+            return source != type;
+         }
       }
       return false;
    }

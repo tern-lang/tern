@@ -4,7 +4,11 @@ import org.ternlang.core.type.Type;
 
 public class NumberChecker {
 
-   public static boolean isNumeric(Type type){
+   public NumberChecker() {
+      super();
+   }
+
+   public boolean isNumeric(Type type){
       if(type != null) {
          Class real = type.getType();
 
@@ -18,7 +22,7 @@ public class NumberChecker {
       return false;
    }
    
-   public static boolean isNumeric(Class type){
+   public boolean isNumeric(Class type){
       if(type != null) {
          if (Number.class.isAssignableFrom(type)) {
             return true;
@@ -30,7 +34,7 @@ public class NumberChecker {
       return false;
    }
    
-   public static boolean isNumeric(Object value){
+   public boolean isNumeric(Object value){
       if(value != null) {
          if (Number.class.isInstance(value)) {
             return true;
@@ -42,21 +46,21 @@ public class NumberChecker {
       return false;
    }
 
-   public static boolean isBothNumeric(Type left, Type right){
+   public boolean isBothNumeric(Type left, Type right){
       if(left != null && right != null) {
          return isNumeric(left) && isNumeric(right);
       }
       return false;
    }
    
-   public static boolean isBothNumeric(Class left, Class right){
+   public boolean isBothNumeric(Class left, Class right){
       if(left != null && right != null) {
          return isNumeric(left) && isNumeric(right);
       }
       return false;
    }
    
-   public static boolean isBothNumeric(Object left, Object right){
+   public boolean isBothNumeric(Object left, Object right){
       if(left != null && right != null) {
          return isNumeric(left) && isNumeric(right);
       }

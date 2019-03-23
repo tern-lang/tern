@@ -39,11 +39,13 @@ public class CalculationOperation extends Evaluation {
          Type leftType = leftResult.getType(scope);
          Type rightType = rightResult.getType(scope);
 
-         if(!NumericChecker.isBothNumeric(leftType, rightType)) {
-            return STRING;
+         if(leftType != null && rightType != null) {
+            if(!NumericChecker.isBothNumeric(leftType, rightType)) {
+               return STRING;
+            }
          }
       }
-      return rightResult;
+      return leftResult;
    }
    
    

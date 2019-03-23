@@ -12,16 +12,13 @@ public class NumberChecker {
       if(type != null) {
          Class real = type.getType();
 
-         if(Number.class.isAssignableFrom(real)) {
-            return true;
-         }
-         if(Character.class.isAssignableFrom(real)) {
-            return true;
+         if(real != null) {
+            return isNumeric(real);
          }
       }
       return false;
    }
-   
+
    public boolean isNumeric(Class type){
       if(type != null) {
          if (Number.class.isAssignableFrom(type)) {

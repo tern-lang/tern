@@ -20,9 +20,29 @@ public class StringConcatTest extends ScriptTestCase {
    "let a = 10, b = 90;\n"+
    "assert Math.cos(a + Math.PI) != null;\n";
 
+   private static final String SOURCE_4 =
+   "class Blah{\n"+
+   "   class Bar{\n"+
+   "      const f;\n"+
+   "      new(f){\n"+
+   "         this.f=f;\n"+
+   "      }\n"+
+   "   }\n"+
+   "   const x,y;\n"+
+   "   new(x,y){\n"+
+   "      this.x=x;\n"+
+   "      this.y=y;\n"+
+   "   }\n"+
+   "   toString(){\n"+
+   "      \"${x},${y}\";\n"+
+   "   }\n"+
+   "}\n"+
+   "println(new Blah.Bar(\"X\")+\": \"+Thread.currentThread());";
+
    public void testConcat() throws Exception {
       assertScriptExecutes(SOURCE_1);
       assertScriptExecutes(SOURCE_2);
       assertScriptExecutes(SOURCE_3);
+      assertScriptExecutes(SOURCE_4);
    }
 }

@@ -16,8 +16,13 @@ public class StringConcatTest extends ScriptTestCase {
    "let a = 10, b = 90;\n"+
    "assert Math.sqrt(a + b) == 10;\n";
 
+   private static final String SOURCE_3 =
+   "let a = 10, b = 90;\n"+
+   "assert Math.cos(a + Math.PI) != null;\n";
+
    public void testConcat() throws Exception {
       assertScriptExecutes(SOURCE_1);
       assertScriptExecutes(SOURCE_2);
+      assertScriptExecutes(SOURCE_3);
    }
 }

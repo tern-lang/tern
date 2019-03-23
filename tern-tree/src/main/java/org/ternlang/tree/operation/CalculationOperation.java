@@ -41,7 +41,7 @@ public class CalculationOperation extends Evaluation {
 
       if(operator == NumberOperator.PLUS) {
          if(leftType != null) {
-            if (!NumberChecker.isNumeric(leftType)) {
+            if (!NumberChecker.isNumeric(leftType)) { // what about primitives ?
                return STRING;
             }
          }

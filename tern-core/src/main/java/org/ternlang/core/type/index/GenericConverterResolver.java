@@ -12,6 +12,7 @@ import java.util.List;
 import org.ternlang.core.constraint.ArrayConstraint;
 import org.ternlang.core.constraint.ClassParameterConstraint;
 import org.ternlang.core.constraint.Constraint;
+import org.ternlang.core.convert.PrimitivePromoter;
 
 public class GenericConverterResolver {
    
@@ -46,13 +47,20 @@ public class GenericConverterResolver {
    }
 
    private static class ClassConverter implements GenericConverter<Class>{
-      
+
+      private final PrimitivePromoter promoter;
+
       public ClassConverter(){
-         super();
+         this.promoter = new PrimitivePromoter();
       }
       
       @Override
       public Constraint convert(Class type, String name, int modifiers) {
+         Class real = promoter.promote(type);
+
+         if(real != null) {
+            return new ClassParameterConstraint(real, name, modifiers);
+         }
          return new ClassParameterConstraint(type, name, modifiers);
       }
    }

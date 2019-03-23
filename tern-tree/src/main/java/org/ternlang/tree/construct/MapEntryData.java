@@ -40,7 +40,7 @@ public class MapEntryData extends Evaluation{
    @Override
    public Value evaluate(Scope scope, Value left) throws Exception{
       Map map = new LinkedHashMap();
-      
+
       for(int i = 0; i < list.length; i++){
          Entry entry = list[i].create(scope);
          Module module = scope.getModule();

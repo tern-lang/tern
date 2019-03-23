@@ -11,7 +11,7 @@ import org.ternlang.core.Reserved;
 import org.ternlang.parse.SyntaxCompiler;
 import org.ternlang.parse.SyntaxNode;
 
-public class ClosureTest extends TestCase {
+public class ClosureTest extends ScriptTestCase {
 
    private static final String SOURCE_1=
    "var x = (a,b)->{ return a+b;};\n"+
@@ -59,6 +59,20 @@ public class ClosureTest extends TestCase {
    "x(1).success(y -> println(y)).join();\n"+
    "assert x(1).value instanceof Long;\n";
 
+   private static final String SOURCE_8 =
+   "let list = {'key-1': 'val-1', 'key-2': 'val-2', 'key-3': 'val-3'}.entrySet()\n" +
+   "   .stream()\n"+
+   "   .map(e -> {'entry.key': e.key, 'entry.value': e.value})\n"+
+   "   .iterator()\n"+
+   "   .gather();\n"+
+   "\n"+
+   "assert list[0]['entry.key'] == 'key-1';\n"+
+   "assert list[0]['entry.value'] == 'val-1';\n"+
+   "assert list[1]['entry.key'] == 'key-2';\n"+
+   "assert list[1]['entry.value'] == 'val-2';\n"+
+   "assert list[2]['entry.key'] == 'key-3';\n"+
+   "assert list[2]['entry.value'] == 'val-3';\n";
+   
    public void testClosure() throws Exception {
       DecimalFormat format = new DecimalFormat("###,###,###,###,###");
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
@@ -150,6 +164,15 @@ public class ClosureTest extends TestCase {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       Executable executable = compiler.compile(SOURCE_7);
       System.err.println(SOURCE_7);
+      executable.execute();
+   }
+
+   public void testIterateOverMapEntries() throws Exception {
+      SyntaxNode node = new SyntaxCompiler(Reserved.GRAMMAR_FILE).compile().parse("/path.tern", SOURCE_8, GRAMMAR_SCRIPT);
+      System.out.println(SyntaxPrinter.print(node));
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      Executable executable = compiler.compile(SOURCE_8);
+      System.err.println(SOURCE_8);
       executable.execute();
    }
 }

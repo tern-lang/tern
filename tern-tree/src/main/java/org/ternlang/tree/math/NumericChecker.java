@@ -5,27 +5,61 @@ import org.ternlang.core.type.Type;
 public class NumericChecker {
 
    public static boolean isNumeric(Type type){
-      Class real = type.getType();
-      return Number.class.isAssignableFrom(real) || Character.class.isAssignableFrom(real);
+      if(type != null) {
+         Class real = type.getType();
+
+         if(Number.class.isAssignableFrom(real)) {
+            return true;
+         }
+         if(Character.class.isAssignableFrom(real)) {
+            return true;
+         }
+      }
+      return false;
    }
    
    public static boolean isNumeric(Class type){
-      return Number.class.isAssignableFrom(type) || Character.class.isAssignableFrom(type);
+      if(type != null) {
+         if (Number.class.isAssignableFrom(type)) {
+            return true;
+         }
+         if (Character.class.isAssignableFrom(type)) {
+            return true;
+         }
+      }
+      return false;
    }
    
    public static boolean isNumeric(Object value){
-      return Number.class.isInstance(value) || Character.class.isInstance(value);
+      if(value != null) {
+         if (Number.class.isInstance(value)) {
+            return true;
+         }
+         if (Character.class.isInstance(value)) {
+            return true;
+         }
+      }
+      return false;
    }
 
    public static boolean isBothNumeric(Type left, Type right){
-      return isNumeric(left) && isNumeric(right);
+      if(left != null && right != null) {
+         return isNumeric(left) && isNumeric(right);
+      }
+      return false;
    }
    
    public static boolean isBothNumeric(Class left, Class right){
-      return isNumeric(left) && isNumeric(right);
+      if(left != null && right != null) {
+         return isNumeric(left) && isNumeric(right);
+      }
+      return false;
    }
    
    public static boolean isBothNumeric(Object left, Object right){
-      return isNumeric(left) && isNumeric(right);
+      if(left != null && right != null) {
+         return isNumeric(left) && isNumeric(right);
+      }
+      return false;
    }
 }

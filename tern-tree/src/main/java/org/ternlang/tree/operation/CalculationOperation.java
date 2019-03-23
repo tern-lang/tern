@@ -1,11 +1,13 @@
 package org.ternlang.tree.operation;
 
+import static org.ternlang.core.constraint.Constraint.STRING;
 import static org.ternlang.core.variable.Value.NULL;
 
 import org.ternlang.core.Evaluation;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.convert.StringBuilder;
 import org.ternlang.core.scope.Scope;
+import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.Value;
 import org.ternlang.tree.math.NumericChecker;
 import org.ternlang.tree.math.NumericOperator;
@@ -30,8 +32,18 @@ public class CalculationOperation extends Evaluation {
    
    @Override
    public Constraint compile(Scope scope, Constraint context) throws Exception {
-      left.compile(scope, null);
-      return right.compile(scope, null);
+      Constraint leftResult = left.compile(scope, null);
+      Constraint rightResult = right.compile(scope, null);
+
+      if(operator == NumericOperator.PLUS) {
+         Type leftType = leftResult.getType(scope);
+         Type rightType = rightResult.getType(scope);
+
+         if(!NumericChecker.isBothNumeric(leftType, rightType)) {
+            return STRING;
+         }
+      }
+      return rightResult;
    }
    
    

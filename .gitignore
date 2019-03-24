@@ -2,3 +2,13 @@
 .idea
 .project
 *.iml
+
+tern-common/\.classpath
+
+tern-compile/\.classpath
+
+tern-core/\.classpath
+
+tern-parse/\.classpath
+
+tern-tree/\.classpath

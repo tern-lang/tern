@@ -48,6 +48,14 @@ public class CastTest extends TestCase {
    "assert iterator.next() == `4`;\n"+
    "assert iterator.next() == 5;\n";
    
+   private static final String SOURCE_5 =
+   "let x = 'a'.charAt(0) as Integer;\n"+
+   "assert x == 97;\n"; 
+   
+   private static final String SOURCE_6 =
+   "let x = 'a' as Character;\n"+
+   "assert x == 'a';\n";    
+   
    public void testCharacterCast() throws Exception {;
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       Executable executable = compiler.compile(SOURCE_1);
@@ -70,6 +78,20 @@ public class CastTest extends TestCase {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       System.err.println(SOURCE_4);
       Executable executable = compiler.compile(SOURCE_4);
+      executable.execute();
+   } 
+   
+   public void testCharacterToInteger() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      System.err.println(SOURCE_5);
+      Executable executable = compiler.compile(SOURCE_5);
+      executable.execute();
+   } 
+   
+   public void testStringToCharacter() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      System.err.println(SOURCE_6);
+      Executable executable = compiler.compile(SOURCE_6);
       executable.execute();
    } 
 }

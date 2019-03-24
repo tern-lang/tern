@@ -44,4 +44,19 @@ public class IntegerConverter extends NumberConverter {
    public IntegerConverter(Type type) {
       super(type, INTEGER_TYPES, INTEGER_SCORES);
    }
+   
+   @Override
+   public Object convert(Object value) throws Exception {
+      if(value != null) {
+         Class actual = value.getClass();
+
+         if(actual == Character.class) {
+            Character code = (Character)value;
+            int number = code.charValue();
+            
+            return number;
+         }
+      }
+      return super.convert(value);
+   }
 }

@@ -64,7 +64,7 @@ public class MemberFieldAssembler {
       }
 
       @Override
-      public Constraint compile(Scope scope, Constraint left) throws Exception {
+      public Constraint compile(Scope scope, Constraint left) throws Exception {         
          Value value = allocator.compile(scope, name, modifiers);
          ScopeState state = scope.getState();
          
@@ -81,7 +81,7 @@ public class MemberFieldAssembler {
          Value value = allocator.allocate(scope, name, modifiers);
          ScopeState state = scope.getState();
          
-         try { 
+         try {        
             state.addValue(alias, value);
          }catch(Exception e) {
             throw new InternalStateException("Declaration of variable '" + name +"' failed", e);

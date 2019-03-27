@@ -23,7 +23,7 @@ public class StaticConstantCollector {
       this.indexer = new StaticConstantIndexer(TYPE_CLASS);
    }
    
-   public void collect(Type type) throws Exception {
+   public void compile(Type type) throws Exception { // supers only
       Module module = type.getModule();
       Context context = module.getContext();
       TypeExtractor extractor = context.getExtractor();

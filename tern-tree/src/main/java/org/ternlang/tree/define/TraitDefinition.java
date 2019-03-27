@@ -61,8 +61,8 @@ public class TraitDefinition implements Compilation {
       public CompileResult(AnnotationList annotations, TraitName name, TypeHierarchy hierarchy, TypePart[] parts) {
          this.builder = new ClassBuilder(annotations, name, hierarchy);
          this.generator = new FunctionPropertyGenerator(); 
-         this.constants = new StaticState();
          this.collector = new TypeStateCollector();
+         this.constants = new StaticState(collector);
          this.execution = new NoExecution(NORMAL);
          this.compile = new AtomicBoolean(true);
          this.define = new AtomicBoolean(true);

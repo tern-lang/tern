@@ -8,6 +8,7 @@ import static org.ternlang.core.type.Category.STATIC;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.ternlang.core.result.Result;
 import org.ternlang.core.scope.Scope;
@@ -22,6 +23,9 @@ public class TypeStateCollector extends TypeState implements TypeBody {
    private final List<TypeState> statics;
    private final List<TypeState> other;
    private final List<TypeState> list;
+   private final AtomicBoolean allocate;
+   private final AtomicBoolean compile;
+   private final AtomicBoolean define;   
    private final Category category;
 
    public TypeStateCollector(){
@@ -33,6 +37,9 @@ public class TypeStateCollector extends TypeState implements TypeBody {
       this.instances = new ArrayList<TypeState>();
       this.other = new ArrayList<TypeState>();
       this.list = new ArrayList<TypeState>();
+      this.allocate = new AtomicBoolean();
+      this.compile = new AtomicBoolean();
+      this.define = new AtomicBoolean();
       this.category = category;
    }
 
@@ -44,49 +51,56 @@ public class TypeStateCollector extends TypeState implements TypeBody {
    
    @Override
    public Category define(Scope scope, Type type) throws Exception {
-      for(TypeState state : list) {
-         Category category = state.define(scope, type);
-         
-         if(category.isStatic()) {         
-            statics.add(state);            
-         } else if(category.isInstance()) {
-            instances.add(state);
-         } else {
-            other.add(state);
+      if(define.compareAndSet(false, true)) {
+         for(TypeState state : list) {
+            Category category = state.define(scope, type);
+            
+            if(category.isStatic()) {         
+               statics.add(state);            
+            } else if(category.isInstance()) {
+               instances.add(state);
+            } else {
+               other.add(state);
+            }
+         }   
+         if(!statics.isEmpty()) {
+            return STATIC;
          }
-      }   
-      if(!statics.isEmpty()) {
-         return STATIC;
-      }
-      if(!instances.isEmpty()) {
-         return INSTANCE;
+         if(!instances.isEmpty()) {
+            return INSTANCE;
+         }
       }
       return category;
-   } 
+   }
+
    
    @Override
    public void compile(Scope scope, Type type) throws Exception {
-      for(TypeState state : statics) {
-         state.compile(scope, type);
+      if(compile.compareAndSet(false, true)) {
+         for(TypeState state : statics) {
+            state.compile(scope, type);
+         }
+         for(TypeState state : instances) {
+            state.compile(scope, type);
+         }
+         for(TypeState state : other) {
+            state.compile(scope, type);
+         }
       }
-      for(TypeState state : instances) {
-         state.compile(scope, type);
-      }
-      for(TypeState state : other) {
-         state.compile(scope, type);
-      }
-   } 
+   }
 
    @Override
    public void allocate(Scope scope, Type type) throws Exception {
-      for(TypeState state : statics) {
-         state.allocate(scope, type);
+      if(allocate.compareAndSet(false, true)) { 
+         for(TypeState state : statics) {
+            state.allocate(scope, type);
+         }      
+         for(TypeState state : other) {
+            state.allocate(scope, type);
+         }      
+         statics.clear();
       }
-      for(TypeState state : other) {
-         state.allocate(scope, type);
-      }
-      statics.clear();
-   } 
+   }
    
    @Override
    public Result execute(Scope scope, Type type) throws Exception {
@@ -99,5 +113,5 @@ public class TypeStateCollector extends TypeState implements TypeBody {
          last = state.execute(scope, type);
       }
       return last;
-   }              
+   }    
 }

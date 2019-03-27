@@ -64,11 +64,11 @@ public class ClassDefinition implements Compilation {
          this.generator = new FunctionPropertyGenerator(); 
          this.collector = new TypeStateCollector();
          this.constructor = new DefaultConstructor(collector);
+         this.constants = new StaticState(collector);         
          this.execution = new NoExecution(NORMAL);
          this.compile = new AtomicBoolean(true);
          this.define = new AtomicBoolean(true);
          this.create = new AtomicBoolean(true);
-         this.constants = new StaticState();
          this.parts = parts;
       }
       

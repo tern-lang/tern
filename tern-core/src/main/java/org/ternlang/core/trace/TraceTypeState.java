@@ -60,5 +60,4 @@ public class TraceTypeState extends TypeState {
       }
       return null;
    }
-
 }

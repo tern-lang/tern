@@ -7,7 +7,6 @@ import static org.ternlang.core.Reserved.METHOD_TO_STRING;
 import java.util.List;
 import java.util.Set;
 
-import org.ternlang.core.Bug;
 import org.ternlang.core.EntityCache;
 import org.ternlang.core.ModifierType;
 import org.ternlang.core.convert.FunctionComparator;
@@ -113,8 +112,8 @@ public class ClosureFunctionFinder {
             if(function != invalid) {
                Score score = comparator.compare(scope, match, function);
                
-               if(score.isExact()) {
-                  return null; // what is this about?
+               if(!score.isExact()) {
+                  return invalid; 
                }
             }
             function = match;

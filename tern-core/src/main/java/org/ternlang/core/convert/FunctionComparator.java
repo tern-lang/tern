@@ -65,7 +65,7 @@ public class FunctionComparator {
       int leftSize = left.size();
       
       if(leftSize > 0) {
-         Score total = INVALID;
+         int total = 0;
          
          for(int i = 0, j = 0; i < leftSize; i++) {
             Parameter leftParameter = left.get(i);
@@ -75,13 +75,12 @@ public class FunctionComparator {
             if(score.isInvalid()) { // must check for numbers
                return INVALID;
             }
-            total = Score.sum(total, score); // sum for better match
-            
             if(!leftParameter.isVariable()) { // if variable stick
                j++;
             }
+            total += score.getScore(); // sum for better match
          }
-         return total;
+         return new Score(total / leftSize);
       }
       return EXACT;
    }

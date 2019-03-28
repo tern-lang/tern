@@ -34,18 +34,6 @@ public class ClosureFunctionFinder {
       this.loader = loader;
    }
    
-   public Function findFunctional(Object actual) throws Exception {
-      if(actual != null) {
-         Class type = actual.getClass();
-         
-         if(type == Class.class) {
-            return findFunctional((Class)actual);
-         }
-         return findFunctional((Type)actual);
-      }
-      return null;
-   }
-   
    public Function findFunctional(Class actual) throws Exception {
       if(actual.isInterface()) { 
          Type type = loader.loadType(actual);
@@ -133,13 +121,13 @@ public class ClosureFunctionFinder {
          if(ModifierType.isAbstract(modifiers)) {
             if(isValid(function)) {
                match = function;
-               count++;
+               
+               if(count++ > 0) { // multiple abstract methods
+                  return invalid;
+               }
             }
          }
       }  
-      if(count > 1) {
-         return invalid;
-      }
       if(count == 1) {
          return match;
       }

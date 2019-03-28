@@ -22,9 +22,6 @@ import org.ternlang.core.type.TypeExtractor;
 
 public class TypeValidator {
    
-   private static final String[] PROPERTIES = { TYPE_CLASS };
-   private static final String[] TYPES = { ANY_TYPE };
-   
    private final PropertyValidator properties;
    private final FunctionValidator functions;
    private final TypeExtractor extractor;
@@ -61,43 +58,29 @@ public class TypeValidator {
    
    private void validateHierarchy(Type type) throws Exception {
       Set<Type> types = extractor.getTypes(type);
-      
-      for(int i = 0; i < TYPES.length; i++) {
-         String require = TYPES[i];
-         int matches = 0;
          
-         for(Type base : types) {
-            String name = base.getName();
-            
-            if(name.equals(require)) {
-               matches++;
-            }
-         }
-         if(matches == 0) {
-            throw new ValidateException("Type '" + type + "' has an invalid hierarchy");
+      for(Type base : types) {
+         String name = base.getName();
+         
+         if(name.equals(ANY_TYPE)) {
+            return;
          }
       }
+      throw new ValidateException("Type '" + type + "' has an invalid hierarchy");
    }
 
    private void validateProperties(Type type) throws Exception {
       List<Property> list = type.getProperties();
-      
-      for(int i = 0; i < PROPERTIES.length; i++) {
-         String require = PROPERTIES[i];
-         int matches = 0;
          
-         for(Property property : list) {
-            String name = property.getName();
-            
-            if(name.equals(require)) {
-               matches++;
-            }
-            properties.validate(property);
+      for(Property property : list) {
+         String name = property.getName();
+         
+         if(name.equals(TYPE_CLASS)) {
+            return;
          }
-         if(matches == 0) {
-            throw new ValidateException("Type '" + type + "' has no property '" + require + "'");
-         }
+         properties.validate(property);
       }
+      throw new ValidateException("Type '" + type + "' does not have required properties");
    }
 
    private void validateFunctions(Type type) throws Exception {

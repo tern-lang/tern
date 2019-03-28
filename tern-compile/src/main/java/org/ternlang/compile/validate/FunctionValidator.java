@@ -34,7 +34,7 @@ public class FunctionValidator {
       if(source == null) {
          throw new ValidateException("Function '" + function + "' does not have a declaring type");
       }
-      validateModifiers(function);
+      validateOverrides(function);
       validateDuplicates(function);
    }
    
@@ -76,7 +76,7 @@ public class FunctionValidator {
       }
    }
    
-   private void validateModifiers(Function function) throws Exception {
+   private void validateOverrides(Function function) throws Exception {
       Type source = function.getSource();
       Scope scope = source.getScope();
       int modifiers = function.getModifiers();
@@ -84,7 +84,6 @@ public class FunctionValidator {
       if(ModifierType.isOverride(modifiers)) {
          Set<Type> types = extractor.getTypes(source);
          String name = function.getName();
-         int matches = 0;
          
          for(Type type : types) {
             if(type != source) {
@@ -97,20 +96,18 @@ public class FunctionValidator {
                      Type[] parameters = matcher.matchTypes(scope, function, available);
                      
                      if(parameters != null) {
-                        validateModifiers(function, parameters);
-                        matches++;
+                        validateOverrides(function, parameters);
+                        return;
                      }
                   }
                }
             }
          }
-         if(matches == 0) {
-            throw new ValidateException("Function '" + function + "' is not an override");
-         }
+         throw new ValidateException("Function '" + function + "' is not an override");
       }
    }
    
-   private void validateModifiers(Function override, Type[] parameters) throws Exception {
+   private void validateOverrides(Function override, Type[] parameters) throws Exception {
       Signature signature = override.getSignature();
       Origin origin = signature.getOrigin();
       Type source = override.getSource();

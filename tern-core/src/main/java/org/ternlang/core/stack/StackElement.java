@@ -1,5 +1,7 @@
 package org.ternlang.core.stack;
 
+import static org.ternlang.core.Reserved.METHOD_MAIN;
+
 import org.ternlang.core.NameFormatter;
 import org.ternlang.core.function.Function;
 import org.ternlang.core.module.Module;
@@ -8,8 +10,6 @@ import org.ternlang.core.trace.Trace;
 import org.ternlang.core.type.Type;
 
 public class StackElement {
-   
-   private static final String MAIN_FUNCTION = "main";
    
    private final NameFormatter formatter;
    private final Function function;
@@ -51,6 +51,6 @@ public class StackElement {
          }
          return new StackTraceElement(module, name, resource, line);
       }
-      return new StackTraceElement(module, MAIN_FUNCTION, resource, line);
+      return new StackTraceElement(module, METHOD_MAIN, resource, line);
    }
 }

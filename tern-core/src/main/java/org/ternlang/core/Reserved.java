@@ -22,6 +22,7 @@ public interface Reserved {
    String METHOD_WAIT = "wait";
    String METHOD_NOTIFY = "notify";
    String METHOD_NOTIFY_ALL = "notifyAll";
+   String METHOD_MAIN = "main";   
    String IMPORT_JAVA = "java.";
    String IMPORT_TERN = "org.ternlang.";
    String SCRIPT_EXTENSION = ".tern";

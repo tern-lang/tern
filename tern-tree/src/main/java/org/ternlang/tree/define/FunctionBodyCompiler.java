@@ -23,9 +23,6 @@ public class FunctionBodyCompiler extends TypeState {
 
    @Override
    public Category define(Scope scope, Type type) throws Exception {
-      Scope outer = compiler.define(scope, type);
-
-      body.define(outer);
       return OTHER;
    }
 

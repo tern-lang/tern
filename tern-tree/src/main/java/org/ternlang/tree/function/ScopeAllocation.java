@@ -46,4 +46,9 @@ public class ScopeAllocation {
       }
       table.addValue(address, value);
    }
+   
+   @Override
+   public String toString() {
+      return String.valueOf(address);
+   }
 }

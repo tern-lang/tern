@@ -40,14 +40,14 @@ public class StackTrace implements Iterable  {
    }
    
    public void before(Function function) {
-      int size = depth.get();
+      int size = depth.incrementAndGet();
       
-      if(size + 1 > threshold) {
-         throw new StackOverflowException("Stack overflow for " + function);   
-      }
-      depth.getAndIncrement();
       functions.push(function);
       stack.push(function);
+      
+      if(size > threshold) {
+         throw new StackOverflowException("Stack overflow for " + function);   
+      }     
    }
    
    public void after(Trace trace) { // remove from stack
@@ -69,7 +69,7 @@ public class StackTrace implements Iterable  {
    public void after(Function function) { 
       while(!stack.isEmpty()) {
          Object next = stack.pop();
-         
+
          if(next == function) {
             functions.pop();
             depth.getAndDecrement();

@@ -48,8 +48,7 @@ public abstract class MemberConstructor extends TypePart {
       
       annotations.apply(composite, constructor);
       functions.add(constructor);
-      body.define(composite); // what if properties declared after constructors
       
-      return new FunctionBodyCompiler(identifier, body);
+      return new FunctionBodyCompiler(body, compiler);
    }
 }

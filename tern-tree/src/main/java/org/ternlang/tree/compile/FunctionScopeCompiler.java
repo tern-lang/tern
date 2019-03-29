@@ -45,7 +45,8 @@ public class FunctionScopeCompiler extends ScopeCompiler {
       int size = constraints.size();
 
       compileParameters(scope, function);
-
+      compileProperties(scope, type);   
+      
       for(int i = 0; i < size; i++) {
          Constraint constraint = constraints.get(i);
          String name = constraint.getName(scope);

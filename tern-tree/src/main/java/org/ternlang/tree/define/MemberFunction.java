@@ -74,8 +74,7 @@ public class MemberFunction extends TypePart {
       validator.validate(type, function, modifiers);
       annotations.apply(composite, function);
       functions.add(function);
-      body.define(composite); // what if properties declared after functions
       
-      return new FunctionBodyCompiler(identifier, body);
+      return new FunctionBodyCompiler(body, compiler);
    }
 }

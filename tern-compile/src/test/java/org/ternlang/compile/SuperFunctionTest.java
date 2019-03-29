@@ -47,6 +47,7 @@ public class SuperFunctionTest extends TestCase {
    "d.fun2();\n";
          
    public void testSuperFunction() throws Exception {
+      System.err.println(SOURCE);
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       Executable executable = compiler.compile(SOURCE);
       executable.execute();

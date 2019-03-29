@@ -8,21 +8,23 @@ import org.ternlang.core.scope.Scope;
 import org.ternlang.core.type.Category;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.type.TypeState;
-import org.ternlang.tree.compile.TypeScopeCompiler;
-import org.ternlang.tree.constraint.GenericList;
+import org.ternlang.tree.compile.ScopeCompiler;
 
 public class FunctionBodyCompiler extends TypeState {
 
-   private final TypeScopeCompiler compiler;
+   private final ScopeCompiler compiler;
    private final FunctionBody body;
    
-   public FunctionBodyCompiler(GenericList generics, FunctionBody body) {
-      this.compiler = new TypeScopeCompiler(generics);
+   public FunctionBodyCompiler(FunctionBody body, ScopeCompiler compiler) {
+      this.compiler = compiler;
       this.body = body;
    }
 
    @Override
    public Category define(Scope scope, Type type) throws Exception {
+      Scope outer = compiler.define(scope, type);
+
+      body.define(outer);
       return OTHER;
    }
 

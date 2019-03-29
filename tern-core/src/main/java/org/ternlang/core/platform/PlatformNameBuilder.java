@@ -1,6 +1,6 @@
 package org.ternlang.core.platform;
 
-import static org.ternlang.core.Reserved.IMPORT_SNAPSCRIPT;
+import static org.ternlang.core.Reserved.IMPORT_TERN;
 
 public class PlatformNameBuilder {
    
@@ -39,6 +39,6 @@ public class PlatformNameBuilder {
       String name = platform.name();
       String token = name.toLowerCase();
       
-      return IMPORT_SNAPSCRIPT + qualifier + "." + token;
+      return IMPORT_TERN + qualifier + "." + token;
    }
 }

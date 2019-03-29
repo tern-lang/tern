@@ -1,7 +1,7 @@
 package org.ternlang.core.stack;
 
 import static org.ternlang.core.Reserved.IMPORT_JAVA;
-import static org.ternlang.core.Reserved.IMPORT_SNAPSCRIPT;
+import static org.ternlang.core.Reserved.IMPORT_TERN;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class OriginTraceExtractor {
             StackTraceElement element = elements[i];
             String source = element.getClassName();
             
-            if(source.startsWith(IMPORT_SNAPSCRIPT)) { 
+            if(source.startsWith(IMPORT_TERN)) { 
                list.add(element);
             } else if(source.startsWith(IMPORT_JAVA)) {
                list.add(element);

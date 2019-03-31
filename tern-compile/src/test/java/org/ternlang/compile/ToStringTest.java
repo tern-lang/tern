@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 public class ToStringTest extends TestCase {
 
-   private static final String SOURCE = 
+   private static final String SOURCE_1 = 
    "class Point{\n"+
    "   var x,y;\n"+
    "   new(x,y){\n"+
@@ -26,10 +26,24 @@ public class ToStringTest extends TestCase {
    "\n"+
    "println(point);\n";
    
+   private static final String SOURCE_2 =
+   "let number = null;\n"+
+   "let text = String.valueOf(number);\n"+
+   "\n"+
+   "assert text == 'null';\n";
+         
+   
    public void testToString() throws Exception {
-      System.err.println(SOURCE);
+      System.err.println(SOURCE_1);
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
-      Executable executable = compiler.compile(SOURCE);
+      Executable executable = compiler.compile(SOURCE_1);
+      executable.execute();
+   }
+   
+   public void testToStringOfNull() throws Exception {
+      System.err.println(SOURCE_2);
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      Executable executable = compiler.compile(SOURCE_2);
       executable.execute();
    }
 }

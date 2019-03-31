@@ -41,8 +41,9 @@ public class ArrayConverter extends ConstraintConverter {
          if(require != real) {
             return checker.toArray(actual, type);
          }
+         return EXACT;
       }
-      return EXACT;
+      return POSSIBLE;
    }
    
    @Override
@@ -67,7 +68,7 @@ public class ArrayConverter extends ConstraintConverter {
          }
          return INVALID;
       }
-      return EXACT;
+      return POSSIBLE;
    }
    
    private Score score(Object list, Type type) throws Exception {

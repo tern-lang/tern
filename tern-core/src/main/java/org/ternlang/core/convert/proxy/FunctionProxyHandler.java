@@ -25,13 +25,13 @@ public class FunctionProxyHandler implements ProxyHandler {
    public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable {
       String name = method.getName();
       Object[] convert = extractor.extract(arguments);
-      Invocation call = resolver.resolve(proxy, name, convert);
+      Invocation match = resolver.resolve(proxy, name, convert);
       int width = convert.length;
       
-      if(call == null) {
+      if(match == null) {
          throw new InternalStateException("Closure not matched with " + width +" arguments");
       }
-      Object data = call.invoke(null, proxy, convert);
+      Object data = match.invoke(null, proxy, convert);
       
       if(data != null) {
          return wrapper.toProxy(data);

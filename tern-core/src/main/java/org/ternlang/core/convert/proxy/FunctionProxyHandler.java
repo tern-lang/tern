@@ -10,12 +10,12 @@ import org.ternlang.core.function.resolve.FunctionResolver;
 public class FunctionProxyHandler implements ProxyHandler { 
    
    private final ProxyArgumentExtractor extractor;
-   private final FunctionProxyResolver resolver;
+   private final ProxyFunctionResolver resolver;
    private final ProxyWrapper wrapper;
    private final Function function;
    
    public FunctionProxyHandler(ProxyWrapper wrapper, FunctionResolver resolver, Function function) {
-      this.resolver = new FunctionProxyResolver(resolver, function);
+      this.resolver = new ProxyFunctionResolver(resolver, function);
       this.extractor = new ProxyArgumentExtractor(wrapper);
       this.function = function;
       this.wrapper = wrapper;

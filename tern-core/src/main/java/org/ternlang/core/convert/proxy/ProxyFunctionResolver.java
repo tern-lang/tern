@@ -14,13 +14,13 @@ import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.Transient;
 import org.ternlang.core.variable.Value;
 
-public class FunctionProxyResolver {
+public class ProxyFunctionResolver {
    
    private final FunctionResolver resolver;
    private final Function function;
    private final Value value;
    
-   public FunctionProxyResolver(FunctionResolver resolver, Function function) {
+   public ProxyFunctionResolver(FunctionResolver resolver, Function function) {
       this.value = new Transient(function);
       this.resolver = resolver;
       this.function = function;

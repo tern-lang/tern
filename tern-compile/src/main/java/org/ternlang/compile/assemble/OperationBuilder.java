@@ -1,6 +1,6 @@
 package org.ternlang.compile.assemble;
 
-import static org.ternlang.core.Reserved.DEFAULT_PACKAGE;
+import static org.ternlang.core.Reserved.DEFAULT_MODULE;
 import static org.ternlang.core.Reserved.DEFAULT_RESOURCE;
 import static org.ternlang.core.Reserved.TYPE_CONSTRUCTOR;
 
@@ -25,7 +25,7 @@ public class OperationBuilder {
 
    public OperationBuilder(Context context, Executor executor) {
       this.path = new Path(DEFAULT_RESOURCE);
-      this.module = new ContextModule(context, executor, path, DEFAULT_PACKAGE, "", 0);
+      this.module = new ContextModule(context, executor, path, DEFAULT_MODULE, "", 0);
       this.processor = new OperationProcessor(context);
    }
    

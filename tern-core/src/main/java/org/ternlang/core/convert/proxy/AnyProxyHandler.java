@@ -11,12 +11,10 @@ import org.ternlang.core.scope.Scope;
 
 public class AnyProxyHandler implements Any {
 
-   private final ProxyArgumentExtractor extractor;
    private final FunctionResolver resolver;
    private final ProxyWrapper wrapper;
 
    public AnyProxyHandler(ProxyWrapper wrapper, FunctionResolver resolver) {
-      this.extractor = new ProxyArgumentExtractor(wrapper);
       this.resolver = resolver;
       this.wrapper = wrapper;
    }

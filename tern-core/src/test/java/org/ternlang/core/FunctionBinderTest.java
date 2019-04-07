@@ -43,7 +43,7 @@ public class FunctionBinderTest extends TestCase {
       Context context = new TestContext();
       Model model = new EmptyModel();
       Path path = new Path(Reserved.DEFAULT_RESOURCE);
-      Module module = new ContextModule(context, null, path, Reserved.DEFAULT_PACKAGE, "");
+      Module module = new ContextModule(context, null, path, Reserved.DEFAULT_MODULE, "");
       Scope scope = new ModelScope(model, module);
       
       context.getResolver().resolveInstance(scope, map, "put", "x", 11).invoke(scope, map, "x", 11);

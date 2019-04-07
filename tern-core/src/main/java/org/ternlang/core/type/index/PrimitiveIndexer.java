@@ -3,7 +3,7 @@ package org.ternlang.core.type.index;
 import static org.ternlang.core.ModifierType.ANY;
 import static org.ternlang.core.ModifierType.CLASS;
 import static org.ternlang.core.Reserved.ANY_TYPE;
-import static org.ternlang.core.Reserved.DEFAULT_PACKAGE;
+import static org.ternlang.core.Reserved.DEFAULT_MODULE;
 import static org.ternlang.core.Reserved.METHOD_EQUALS;
 import static org.ternlang.core.Reserved.METHOD_HASH_CODE;
 import static org.ternlang.core.Reserved.METHOD_NOTIFY;
@@ -45,7 +45,7 @@ public class PrimitiveIndexer{
       Type type  = reference.get();
       
       if(type == null) {
-         Type result = indexer.defineType(DEFAULT_PACKAGE, ANY_TYPE, CLASS.mask | ANY.mask);
+         Type result = indexer.defineType(DEFAULT_MODULE, ANY_TYPE, CLASS.mask | ANY.mask);
          Progress<Phase> progress = result.getProgress();
          List<Function> functions = result.getFunctions();
          Function constructor = generator.generate(result, NONE, TYPE_CONSTRUCTOR, NewInvocation.class, Object.class);

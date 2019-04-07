@@ -26,7 +26,7 @@ public interface Reserved {
    String IMPORT_JAVA = "java.";
    String IMPORT_TERN = "org.ternlang.";
    String SCRIPT_EXTENSION = ".tern";
-   String DEFAULT_PACKAGE = "default";
+   String DEFAULT_MODULE = "default";
    String DEFAULT_RESOURCE = "Unknown Source";
    String DEFAULT_PARAMETER = "a";
    String IMPORT_FILE = "import.txt";

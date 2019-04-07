@@ -12,31 +12,31 @@ import org.ternlang.core.scope.instance.Instance;
 
 public class ProxyWrapper {
 
-   private final ProxyFactory factory;
+   private final ProxyInstanceBuilder builder;
    private final ScopeBinder binder;
    
    public ProxyWrapper(Context context) {
-      this.factory = new ProxyFactory(this, context);
+      this.builder = new ProxyInstanceBuilder(this, context);
       this.binder = new ScopeBinder();
    }
    
    public Object asProxy(Instance instance) {
       if(instance != null) {
-         return factory.create(instance);
+         return builder.create(instance);
       }
       return null;
    }
    
    public Object asProxy(Function function) {
       if(function != null) {
-         return factory.create(function, null);
+         return builder.create(function, null);
       }
       return null;
    }
    
    public Object asProxy(Function function, Class require) {
       if(function != null) {
-         return factory.create(function, require);
+         return builder.create(function, require);
       }
       return null;
    }

@@ -50,7 +50,7 @@ public class ComparisonTest extends TestCase {
       IdentityEvaluation rightEval = new IdentityEvaluation(right);
       Comparison comparison = new Comparison(leftEval, new StringToken(operation), rightEval);
       Model model = new EmptyModel();
-      Module module = context.getRegistry().addModule(Reserved.DEFAULT_PACKAGE);
+      Module module = context.getRegistry().addModule(Reserved.DEFAULT_MODULE);
       ModelScope scope = new ModelScope(model, module);
 
       assertEquals(comparison.evaluate(scope, Value.NULL).getValue(), result ? Boolean.TRUE : Boolean.FALSE);

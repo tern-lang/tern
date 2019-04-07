@@ -1,6 +1,6 @@
 package org.ternlang.compile.staticanalysis;
 
-import static org.ternlang.core.Reserved.DEFAULT_PACKAGE;
+import static org.ternlang.core.Reserved.DEFAULT_MODULE;
 
 import java.util.List;
 import java.util.Map;
@@ -64,7 +64,7 @@ public class NamedGenericParamsTest extends TestCase {
       compiler.compile(SOURCE).execute(model, true);
       
       TypeLoader loader = context.getLoader();
-      Type type = loader.loadType(DEFAULT_PACKAGE, "SomeType");      
+      Type type = loader.loadType(DEFAULT_MODULE, "SomeType");      
       Type string = loader.loadType(String.class);
       
       assertNotNull(type);

@@ -13,14 +13,14 @@ import org.ternlang.core.function.resolve.FunctionResolver;
 import org.ternlang.core.scope.instance.Instance;
 import org.ternlang.core.trace.TraceInterceptor;
 
-public class ProxyFactory {
+public class ProxyInstanceBuilder {
 
    private final InterfaceCollector collector;
    private final ProxyWrapper wrapper;
    private final ClassLoader loader;
    private final Context context;
    
-   public ProxyFactory(ProxyWrapper wrapper, Context context) {
+   public ProxyInstanceBuilder(ProxyWrapper wrapper, Context context) {
       this.loader = new ContextClassLoader(Any.class);
       this.collector = new InterfaceCollector();
       this.wrapper = wrapper;

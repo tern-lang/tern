@@ -1,6 +1,6 @@
 package org.ternlang.compile;
 
-import static org.ternlang.core.Reserved.DEFAULT_PACKAGE;
+import static org.ternlang.core.Reserved.DEFAULT_MODULE;
 import static org.ternlang.core.Reserved.GRAMMAR_SCRIPT;
 
 import org.ternlang.compile.assemble.Application;
@@ -18,7 +18,7 @@ public class StringCompiler implements Compiler {
    private final String module;
    
    public StringCompiler(Context context) {
-      this(context, DEFAULT_PACKAGE);
+      this(context, DEFAULT_MODULE);
    }
    
    public StringCompiler(Context context, String module) {

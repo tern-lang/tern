@@ -66,7 +66,7 @@ public class FunctionOverloadCheckTest extends TestCase {
    }
 
    private FunctionPointer getFunction(Context context, String type, String method, Object... args) throws Exception {
-      Scope scope = context.getRegistry().addModule(Reserved.DEFAULT_PACKAGE).getScope();
+      Scope scope = context.getRegistry().addModule(Reserved.DEFAULT_MODULE).getScope();
       Object object = context.getEvaluator().evaluate(scope, type);
       FunctionCall call = context.getResolver().resolveInstance(scope, object, method, args);
       if(call == null && object instanceof Type) {

@@ -23,7 +23,7 @@ public class CalculationOperationTest extends TestCase {
 
    public void testOperation() throws Exception {
       Context context = new MockContext();
-      Module module = context.getRegistry().addModule(Reserved.DEFAULT_PACKAGE);
+      Module module = context.getRegistry().addModule(Reserved.DEFAULT_MODULE);
 
       assertPlusOperation(String.class, Date.class, String.class);
       assertPlusOperation(null, (Class)null, Double.class);
@@ -52,7 +52,7 @@ public class CalculationOperationTest extends TestCase {
       CalculationOperation op = new CalculationOperation(NumberOperator.PLUS, leftEval, rightEval);
       Model model = new EmptyModel();
       Context context = new MockContext();
-      Module module = context.getRegistry().addModule(Reserved.DEFAULT_PACKAGE);
+      Module module = context.getRegistry().addModule(Reserved.DEFAULT_MODULE);
       ModelScope scope = new ModelScope(model, module);
       Constraint result = op.compile(scope, Constraint.NONE);
 

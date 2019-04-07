@@ -41,7 +41,7 @@ public class ClassBoundsResolverTest extends TestCase {
       Method getIterator = GenericFunction.class.getDeclaredMethod("getIterator");
       ClassPathStore store = new ClassPathStore();
       Context context = new StoreContext(store);
-      Scope scope = context.getRegistry().addModule(Reserved.DEFAULT_PACKAGE).getScope(); 
+      Scope scope = context.getRegistry().addModule(Reserved.DEFAULT_MODULE).getScope(); 
 
       assertNotNull(getIterator);
       assertNull(resolver.resolve(getIterator.getGenericReturnType()).getName(scope));

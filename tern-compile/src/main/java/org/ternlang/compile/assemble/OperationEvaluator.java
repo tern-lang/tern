@@ -1,6 +1,6 @@
 package org.ternlang.compile.assemble;
 
-import static org.ternlang.core.Reserved.DEFAULT_PACKAGE;
+import static org.ternlang.core.Reserved.DEFAULT_MODULE;
 
 import java.util.concurrent.Executor;
 
@@ -36,7 +36,7 @@ public class OperationEvaluator implements ExpressionEvaluator {
    
    @Override
    public <T> T evaluate(Model model, String source) throws Exception{
-      return evaluate(model, source, DEFAULT_PACKAGE);
+      return evaluate(model, source, DEFAULT_MODULE);
    }
    
    @Override
@@ -47,7 +47,7 @@ public class OperationEvaluator implements ExpressionEvaluator {
    
    @Override
    public <T> T evaluate(Scope scope, String source) throws Exception{
-      return evaluate(scope, source, DEFAULT_PACKAGE);
+      return evaluate(scope, source, DEFAULT_MODULE);
    }
    
    @Override

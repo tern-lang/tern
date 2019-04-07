@@ -54,6 +54,6 @@ public class GenericConstructorCompileTest extends CompileTestCase {
       assertCompileError(FAILURE_4, "Generic parameter count for 'util.HashMap' is invalid in /default.tern at line 1");
       assertCompileError(FAILURE_5, "Generic parameter count for 'util.HashMap' is invalid in /default.tern at line 1");
       assertCompileError(FAILURE_6, "Generic parameter count for 'util.List' is invalid in /default.tern at line 1");
-      //assertCompileError(FAILURE_7, "Generic parameter count for 'util.List' is invalid in /default.tern at line 1");
+      //assertCompileError(FAILURE_7, "Generic parameter count for 'util.HashMap' is invalid in /default.tern at line 1");
    }
 }

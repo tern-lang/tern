@@ -1,7 +1,7 @@
 package org.ternlang.core.type.index;
 
 import static org.ternlang.core.Reserved.ANY_TYPE;
-import static org.ternlang.core.Reserved.DEFAULT_PACKAGE;
+import static org.ternlang.core.Reserved.DEFAULT_MODULE;
 
 import org.ternlang.core.NameFormatter;
 import org.ternlang.core.type.Type;
@@ -18,7 +18,7 @@ public class PrimitiveLoader {
    
    public Type loadType(String type) {      
       if(type.endsWith(ANY_TYPE)) {
-         String name = formatter.formatFullName(DEFAULT_PACKAGE, ANY_TYPE);
+         String name = formatter.formatFullName(DEFAULT_MODULE, ANY_TYPE);
          
          if(name.equals(type)) {
             return generator.indexAny();

@@ -3,13 +3,14 @@ package org.ternlang.compile.define;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.TestCase;
-
 import org.ternlang.compile.ClassPathCompilerBuilder;
 import org.ternlang.compile.Compiler;
+import org.ternlang.core.Bug;
 import org.ternlang.core.scope.MapModel;
 import org.ternlang.core.scope.Model;
 import org.ternlang.core.variable.Value;
+
+import junit.framework.TestCase;
 
 public class EnumTest extends TestCase{
    private static final String SOURCE_1=
@@ -60,6 +61,24 @@ public class EnumTest extends TestCase{
    "}\n"+
    "out.println('enum for OK='+Rubbish.OK.name);\n";
    
+   private static final String SOURCE_4 =
+   "enum Word{\n"+
+   "   A('a', 1),\n"+
+   "   B('b', 2),\n"+
+   "   C('d', 3);\n"+
+   "\n"+
+   "   var char;\n"+
+   "   var index;\n"+
+   "\n"+
+   "   new(char, index){\n"+
+   "      this.char = char;\n"+
+   "      this.index = index;\n"+
+   "   }\n"+
+   "   static const WORDS =[A,B,C];\n"+
+   "}\n"+
+   "\n"+
+   "assert Word.WORDS[0].char == 'a';\n";
+   
    public void testSimpleEnum() throws Exception {
       Map map = new HashMap<String,Value>();
       map.put("out",System.out);
@@ -102,6 +121,17 @@ public class EnumTest extends TestCase{
          failure = true;
       }
       assertTrue(failure);
+
+   }
+   
+   @Bug
+   public void testStaticListOfEnumValues() throws Exception {
+//      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+//      //compiler.compile(SOURCE_1).execute(s);
+//      System.err.println();
+//      System.err.println(SOURCE_4);
+//      compiler.compile(SOURCE_4).execute();
+//      System.err.println();      
 
    }
 }

@@ -1,6 +1,6 @@
 package org.ternlang.compile.staticanalysis;
 
-import static org.ternlang.core.Reserved.DEFAULT_PACKAGE;
+import static org.ternlang.core.Reserved.DEFAULT_MODULE;
 
 import java.util.List;
 import java.util.Map;
@@ -74,8 +74,8 @@ public class GenericTransformerTest extends TestCase {
       compiler.compile(SOURCE_3).execute(model, true);
       
       TypeLoader loader = context.getLoader();
-      Type fromType = loader.loadType(DEFAULT_PACKAGE, "Foo");      
-      Type toType = loader.loadType(DEFAULT_PACKAGE, "Duh");    
+      Type fromType = loader.loadType(DEFAULT_MODULE, "Foo");      
+      Type toType = loader.loadType(DEFAULT_MODULE, "Duh");    
       
       Scope scope = fromType.getScope();
       Constraint constraint = Constraint.getConstraint(fromType);
@@ -96,9 +96,9 @@ public class GenericTransformerTest extends TestCase {
       compiler.compile(SOURCE_1).execute(model, true);
       
       TypeLoader loader = context.getLoader();
-      Type type3 = loader.loadType(DEFAULT_PACKAGE, "Three");
-      Type type4 = loader.loadType(DEFAULT_PACKAGE, "Four");        
-      Type type1 = loader.loadType(DEFAULT_PACKAGE, "One");
+      Type type3 = loader.loadType(DEFAULT_MODULE, "Three");
+      Type type4 = loader.loadType(DEFAULT_MODULE, "Four");        
+      Type type1 = loader.loadType(DEFAULT_MODULE, "One");
       Type typeInteger = loader.loadType(Integer.class);
       Type typeBoolean = loader.loadType(Boolean.class);
 
@@ -130,8 +130,8 @@ public class GenericTransformerTest extends TestCase {
       compiler.compile(SOURCE_2).execute(model, true);
       
       TypeLoader loader = context.getLoader();
-      Type type3 = loader.loadType(DEFAULT_PACKAGE, "Three");      
-      Type type1 = loader.loadType(DEFAULT_PACKAGE, "One");
+      Type type3 = loader.loadType(DEFAULT_MODULE, "Three");      
+      Type type1 = loader.loadType(DEFAULT_MODULE, "One");
       Type typeList = loader.loadType(List.class);
       Type typeMap = loader.loadType(Map.class);      
       Type typeInteger = loader.loadType(Integer.class);

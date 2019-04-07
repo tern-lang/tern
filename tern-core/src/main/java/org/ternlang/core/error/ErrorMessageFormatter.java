@@ -1,7 +1,7 @@
 package org.ternlang.core.error;
 
 import static org.ternlang.core.Reserved.ANY_TYPE;
-import static org.ternlang.core.Reserved.DEFAULT_PACKAGE;
+import static org.ternlang.core.Reserved.DEFAULT_MODULE;
 import static org.ternlang.core.Reserved.TYPE_CONSTRUCTOR;
 
 import org.ternlang.core.convert.TypeInspector;
@@ -51,7 +51,7 @@ public class ErrorMessageFormatter {
          if(type != null) {
             builder.append(type);
          } else {
-            builder.append(DEFAULT_PACKAGE);
+            builder.append(DEFAULT_MODULE);
             builder.append(".");
             builder.append(ANY_TYPE);
          }
@@ -77,7 +77,7 @@ public class ErrorMessageFormatter {
          if(parameter != null) {
             builder.append(parameter);
          } else {
-            builder.append(DEFAULT_PACKAGE);
+            builder.append(DEFAULT_MODULE);
             builder.append(".");
             builder.append(ANY_TYPE);
          }

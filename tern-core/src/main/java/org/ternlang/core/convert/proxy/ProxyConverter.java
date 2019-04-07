@@ -6,13 +6,13 @@ import org.ternlang.core.scope.instance.Instance;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.function.Function;
 
-public class ProxyBuilder {
+public class ProxyConverter {
    
-   public ProxyBuilder() {
+   public ProxyConverter() {
       super();
    }
    
-   public Object create(Instance instance) {
+   public Object convert(Instance instance) {
       if(instance != null) {
          Module module = instance.getModule();
          Context context = module.getContext();
@@ -23,7 +23,7 @@ public class ProxyBuilder {
       return instance;
    }
    
-   public Object create(Function function) {
+   public Object convert(Function function) {
       Type source = function.getSource();
       
       if(source != null) {
@@ -36,7 +36,7 @@ public class ProxyBuilder {
       return function;
    }
    
-   public Object create(Function function, Class require) {
+   public Object convert(Function function, Class require) {
       Type source = function.getSource();
       
       if(source != null) {

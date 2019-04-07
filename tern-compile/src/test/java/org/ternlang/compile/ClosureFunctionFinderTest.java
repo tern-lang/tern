@@ -45,7 +45,7 @@ public class ClosureFunctionFinderTest extends TestCase {
    }
    
    public void testFunctionFinder() throws Exception {
-      Scope scope = createContext().getRegistry().addModule(Reserved.DEFAULT_PACKAGE).getScope();
+      Scope scope = createContext().getRegistry().addModule(Reserved.DEFAULT_MODULE).getScope();
       
       assertNotNull(findClosure(Comparator.class));
       assertFalse(findClosure(Comparator.class).getSignature().isVariable());

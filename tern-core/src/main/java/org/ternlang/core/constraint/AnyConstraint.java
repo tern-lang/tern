@@ -1,7 +1,7 @@
 package org.ternlang.core.constraint;
 
 import static org.ternlang.core.Reserved.ANY_TYPE;
-import static org.ternlang.core.Reserved.DEFAULT_PACKAGE;
+import static org.ternlang.core.Reserved.DEFAULT_MODULE;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -30,7 +30,7 @@ public class AnyConstraint extends Constraint {
          Module module = scope.getModule();
          Context context = module.getContext();
          TypeLoader loader = context.getLoader();
-         String name = formatter.formatFullName(DEFAULT_PACKAGE, ANY_TYPE);
+         String name = formatter.formatFullName(DEFAULT_MODULE, ANY_TYPE);
          Type base = loader.loadType(name);
          
          reference.set(base); // any is very last
@@ -42,6 +42,6 @@ public class AnyConstraint extends Constraint {
    
    @Override
    public String toString() {
-      return String.format("%s.%s",  DEFAULT_PACKAGE, ANY_TYPE);
+      return String.format("%s.%s",  DEFAULT_MODULE, ANY_TYPE);
    }
 }

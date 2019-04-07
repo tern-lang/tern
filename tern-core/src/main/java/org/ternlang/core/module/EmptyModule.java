@@ -130,6 +130,6 @@ public class EmptyModule implements Module {
    
    @Override
    public String toString() {
-      return Reserved.DEFAULT_PACKAGE;
+      return Reserved.DEFAULT_MODULE;
    }
 }

@@ -6,7 +6,7 @@ import static org.ternlang.core.ModifierType.CLASS;
 import static org.ternlang.core.ModifierType.ENUM;
 import static org.ternlang.core.ModifierType.PROXY;
 import static org.ternlang.core.ModifierType.TRAIT;
-import static org.ternlang.core.Reserved.DEFAULT_PACKAGE;
+import static org.ternlang.core.Reserved.DEFAULT_MODULE;
 
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
@@ -119,7 +119,7 @@ public class ClassIndexer {
             return registry.addModule(name);
          }
       }
-      return registry.addModule(DEFAULT_PACKAGE);
+      return registry.addModule(DEFAULT_MODULE);
    }
    
    public Type indexOuter(ClassType type) throws Exception {

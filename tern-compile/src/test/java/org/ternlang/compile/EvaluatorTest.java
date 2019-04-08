@@ -157,25 +157,31 @@ public class EvaluatorTest extends TestCase {
       ExpressionEvaluator evaluator = context.getEvaluator();
       Comparator forward = (Comparator)evaluator.evaluate(model, "make()", Reserved.DEFAULT_MODULE);
       Comparator reversed = forward.reversed();
-      List<Integer> numbers = new ArrayList<Integer>();
+      List<Integer> forwardNums = new ArrayList<Integer>();
+      List<Integer> reverseNums = new ArrayList<Integer>();
       SecureRandom random = new SecureRandom();
       
       for(int i = 0; i < ITERATIONS; i++) {
-         numbers.add(random.nextInt(ITERATIONS));
+         int num = random.nextInt(ITERATIONS);
+         
+         forwardNums.add(num);
+         reverseNums.add(num);
       }
       long time = System.currentTimeMillis();
       
-      Collections.sort(numbers, forward);
+      Collections.sort(forwardNums, forward);
+      Collections.sort(reverseNums, reversed);
       
       long finish = System.currentTimeMillis();
       long duration = finish - time;
       
-      int first = numbers.get(0);
-      int last = numbers.get(ITERATIONS-1);
-      
-      assertTrue(first < last);
-      
-      System.err.println((ITERATIONS/duration) +" per ms");
+      for(int i = 0; i < ITERATIONS; i++) {
+         int a = forwardNums.get(i);
+         int b = reverseNums.get((ITERATIONS - 1) - i);
+         
+         assertEquals(a, b);
+      }
+      System.err.println("Time to sort two lists of " + ITERATIONS + " was " + duration + " ms");
    }
 
    public void testEvaluator() throws Exception {

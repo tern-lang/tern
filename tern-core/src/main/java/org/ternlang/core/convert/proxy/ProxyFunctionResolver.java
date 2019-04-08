@@ -1,111 +1,45 @@
 package org.ternlang.core.convert.proxy;
 
-import static org.ternlang.core.Reserved.METHOD_EQUALS;
-import static org.ternlang.core.Reserved.METHOD_HASH_CODE;
-import static org.ternlang.core.Reserved.METHOD_TO_STRING;
+import java.lang.reflect.Method;
 
-import org.ternlang.core.error.InternalStateException;
 import org.ternlang.core.function.Function;
 import org.ternlang.core.function.Invocation;
 import org.ternlang.core.function.resolve.FunctionCall;
 import org.ternlang.core.function.resolve.FunctionResolver;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.type.Type;
-import org.ternlang.core.variable.Transient;
-import org.ternlang.core.variable.Value;
 
 public class ProxyFunctionResolver {
    
    private final FunctionResolver resolver;
+   private final MethodMatcher matcher;
    private final Function function;
-   private final Value value;
-   
-   public ProxyFunctionResolver(FunctionResolver resolver, Function function) {
-      this.value = new Transient(function);
-      this.resolver = resolver;
+
+   public ProxyFunctionResolver(FunctionResolver resolver, MethodMatcher matcher, Function function) {
       this.function = function;
-   }
-   
-   public Invocation resolve(Object proxy, String name, Object[] arguments) throws Throwable {
-      Type source = function.getSource();
-      
-      if(name.equals(METHOD_HASH_CODE)) {
-         return new HashCodeInvocation(function);
-      }
-      if(name.equals(METHOD_TO_STRING)) {
-         return new ToStringInvocation(function);
-      }
-      if(name.equals(METHOD_EQUALS)) {
-         return new EqualsInvocation(function);
-      }
-      if(source != null) {
-         Scope scope = source.getScope();
-         FunctionCall call = resolver.resolveInstance(scope, proxy, name, arguments); 
-         
-         if(call != null) {
-            return new DefaultInvocation(call, scope);
-         }
-      }
-      return resolver.resolveValue(value, arguments); // here arguments can be null!!!
+      this.resolver = resolver;
+      this.matcher = matcher;
    }
 
-   private static class HashCodeInvocation implements Invocation {
-
-      private final Function function;
+   public Invocation resolve(Object proxy, Method method, Object[] arguments) throws Throwable {
+      Invocation invocation = matcher.match(proxy, method, arguments);
       
-      public HashCodeInvocation(Function function) {
-         this.function = function;
-      }
-      
-      @Override
-      public Object invoke(Scope scope, Object object, Object... arguments) throws Exception {
-         int width = arguments.length;
+      if(invocation == null) {
+         Type source = function.getSource();
          
-         if(width != 0) {
-            throw new InternalStateException("Closure '" + METHOD_HASH_CODE + "' does not accept " + width + " arguments");
+         if(source != null) {
+            String name = method.getName();
+            Scope scope = source.getScope();
+            FunctionCall call = resolver.resolveInstance(scope, proxy, name, arguments); 
+            
+            if(call != null) {
+               return new DefaultInvocation(call, scope);
+            }
          }
-         return function.hashCode();
-      }      
-   }
-   
-   private static class ToStringInvocation implements Invocation {
-
-      private final Function function;
-      
-      public ToStringInvocation(Function function) {
-         this.function = function;
       }
-      
-      @Override
-      public Object invoke(Scope scope, Object object, Object... arguments) throws Exception {
-         int width = arguments.length;
-         
-         if(width != 0) {
-            throw new InternalStateException("Closure '" + METHOD_TO_STRING + "' does not accept " + width + " arguments");
-         }
-         return function.toString();
-      }      
+      return invocation;
    }
-   
-   private static class EqualsInvocation implements Invocation {
 
-      private final Function function;
-      
-      public EqualsInvocation(Function function) {
-         this.function = function;
-      }
-      
-      @Override
-      public Object invoke(Scope scope, Object object, Object... arguments) throws Exception {
-         int width = arguments.length;
-         
-         if(width != 1) {
-            throw new InternalStateException("Closure '" + METHOD_EQUALS + "' does not accept " + width + " arguments");
-         }
-         return function.equals(arguments[0]);
-      }      
-   }
-   
    private static class DefaultInvocation implements Invocation {
 
       private final FunctionCall call;

@@ -2,6 +2,7 @@ package org.ternlang.core.convert.proxy;
 
 import java.lang.reflect.Proxy;
 
+import org.ternlang.common.Predicate;
 import org.ternlang.core.Any;
 import org.ternlang.core.Context;
 import org.ternlang.core.ContextClassLoader;
@@ -15,12 +16,14 @@ import org.ternlang.core.trace.TraceInterceptor;
 
 public class ProxyInstanceBuilder {
 
+   private final ClosurePredicateBuilder builder;
    private final InterfaceCollector collector;
    private final ProxyWrapper wrapper;
    private final ClassLoader loader;
    private final Context context;
    
    public ProxyInstanceBuilder(ProxyWrapper wrapper, Context context) {
+      this.builder = new ClosurePredicateBuilder(context);
       this.loader = new ContextClassLoader(Any.class);
       this.collector = new InterfaceCollector();
       this.wrapper = wrapper;
@@ -48,11 +51,13 @@ public class ProxyInstanceBuilder {
    public Object create(Function function, Class require) {
       Class[] interfaces = collector.collect(Delegate.class, require);
       FunctionResolver resolver = context.getResolver();
+      Predicate predicate = builder.create(function, require);
 
       if(interfaces.length == 0) {
          throw new InternalStateException("No interfaces found for function");
       }
-      FunctionProxyHandler handler = new FunctionProxyHandler(wrapper, resolver, function);
+      MethodMatcher matcher = new ClosureMethodMatcher(resolver, function, predicate);
+      FunctionProxyHandler handler = new FunctionProxyHandler(wrapper, resolver, matcher, function);
 
       return Proxy.newProxyInstance(loader, interfaces, handler);
    }

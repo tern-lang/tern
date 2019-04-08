@@ -14,8 +14,8 @@ public class FunctionProxyHandler implements ProxyHandler {
    private final ProxyWrapper wrapper;
    private final Function function;
    
-   public FunctionProxyHandler(ProxyWrapper wrapper, FunctionResolver resolver, Function function) {
-      this.resolver = new ProxyFunctionResolver(resolver, function);
+   public FunctionProxyHandler(ProxyWrapper wrapper, FunctionResolver resolver, MethodMatcher matcher, Function function) {
+      this.resolver = new ProxyFunctionResolver(resolver, matcher, function);
       this.extractor = new ProxyArgumentExtractor(wrapper);
       this.function = function;
       this.wrapper = wrapper;
@@ -23,9 +23,8 @@ public class FunctionProxyHandler implements ProxyHandler {
    
    @Override
    public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable {
-      String name = method.getName();
       Object[] convert = extractor.extract(arguments);
-      Invocation match = resolver.resolve(proxy, name, convert);
+      Invocation match = resolver.resolve(proxy, method, convert);
       int width = convert.length;
       
       if(match == null) {

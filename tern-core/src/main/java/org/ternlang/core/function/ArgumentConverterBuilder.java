@@ -39,7 +39,7 @@ public class ArgumentConverterBuilder {
       Context context = module.getContext();
       ConstraintMatcher matcher = context.getMatcher();
       int size = parameters.size();
-      int blank = 0;
+      int none = 0;
       
       if(size > 0) {
          ConstraintConverter[] converters = new ConstraintConverter[size];
@@ -53,7 +53,7 @@ public class ArgumentConverterBuilder {
                converters[i] = matcher.match(type);
             } else {
                converters[i] = converter;
-               blank++;
+               none++;
             }
          }
          Parameter parameter = parameters.get(size - 1);
@@ -70,12 +70,12 @@ public class ArgumentConverterBuilder {
             }
          } else {
             converters[size - 1] = converter;
-            blank++;
+            none++;
          }
          if(variable) {
             return new VariableArgumentConverter(converters);
          }
-         if(size > blank) {
+         if(none < size) {
             return new FixedArgumentConverter(converters);
          }
       }

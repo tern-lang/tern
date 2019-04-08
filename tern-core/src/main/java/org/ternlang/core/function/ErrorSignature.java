@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.ternlang.core.constraint.Constraint;
-import org.ternlang.core.convert.NoArgumentConverter;
+import org.ternlang.core.convert.IdentityArgumentConverter;
 import org.ternlang.core.type.Type;
 
 public class ErrorSignature implements Signature {
@@ -15,7 +15,7 @@ public class ErrorSignature implements Signature {
    private final ArgumentConverter converter;
    
    public ErrorSignature() {
-      this.converter = new NoArgumentConverter();
+      this.converter = new IdentityArgumentConverter();
    }
    
    @Override

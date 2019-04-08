@@ -7,16 +7,19 @@ import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.convert.ConstraintConverter;
 import org.ternlang.core.convert.ConstraintMatcher;
 import org.ternlang.core.convert.FixedArgumentConverter;
-import org.ternlang.core.convert.NoArgumentConverter;
+import org.ternlang.core.convert.IdentityArgumentConverter;
+import org.ternlang.core.convert.NullConverter;
 import org.ternlang.core.convert.VariableArgumentConverter;
 import org.ternlang.core.module.Module;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.type.Type;
 
 public class ArgumentConverterBuilder {
+   
+   private final ConstraintConverter converter;
 
    public ArgumentConverterBuilder() {
-      super();
+      this.converter = new NullConverter();
    }
 
    public ArgumentConverter create(Scope scope, List<Parameter> parameters) throws Exception {
@@ -36,7 +39,8 @@ public class ArgumentConverterBuilder {
       Context context = module.getContext();
       ConstraintMatcher matcher = context.getMatcher();
       int size = parameters.size();
-
+      int blank = 0;
+      
       if(size > 0) {
          ConstraintConverter[] converters = new ConstraintConverter[size];
 
@@ -45,7 +49,12 @@ public class ArgumentConverterBuilder {
             Constraint constraint = parameter.getConstraint();
             Type type = constraint.getType(scope);
 
-            converters[i] = matcher.match(type);
+            if(type != null) {
+               converters[i] = matcher.match(type);
+            } else {
+               converters[i] = converter;
+               blank++;
+            }
          }
          Parameter parameter = parameters.get(size - 1);
          Constraint constraint = parameter.getConstraint();
@@ -60,13 +69,16 @@ public class ArgumentConverterBuilder {
                converters[size - 1] = matcher.match(type);
             }
          } else {
-            converters[size - 1] = matcher.match(type);
+            converters[size - 1] = converter;
+            blank++;
          }
          if(variable) {
             return new VariableArgumentConverter(converters);
          }
-         return new FixedArgumentConverter(converters);
+         if(size > blank) {
+            return new FixedArgumentConverter(converters);
+         }
       }
-      return new NoArgumentConverter();
+      return new IdentityArgumentConverter(size);
    }
 }

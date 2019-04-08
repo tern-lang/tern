@@ -6,11 +6,13 @@ import java.lang.management.ManagementFactory;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
-
-import junit.framework.TestCase;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.ternlang.core.Reserved;
-import org.ternlang.core.result.Result;
+import org.ternlang.core.scope.EmptyModel;
 import org.ternlang.core.scope.MapModel;
 import org.ternlang.core.scope.Model;
 import org.ternlang.parse.SourceCode;
@@ -19,6 +21,8 @@ import org.ternlang.parse.SyntaxCompiler;
 import org.ternlang.parse.SyntaxParser;
 
 import com.sun.management.ThreadMXBean;
+
+import junit.framework.TestCase;
 
 /*
 Time taken to parse /perf/perf4.tern was 506 size was 69220 compressed to 48660 and 2799 lines
@@ -84,14 +88,117 @@ public class CompilePerformanceTest extends TestCase {
    public void testCompilerPerformance() throws Exception {
       //compileScript("perf4.js");  
      // compileScript("/script/script13.tern");
+      
       compileScript("/perf/perf4.tern");
       compileScript("/perf/perf3.tern");
       compileScript("/perf/perf2.tern");
       compileScript("/perf/perf1.tern");
  /*     executeScript("perf2.js");    
       executeScript("perf3.js"); */   
+      
+      reuseCompileScript("/perf/perf5.tern");
    }
 
+   public static void reuseCompileScript(String source) throws Exception {
+      String script = ClassPathReader.load(source);
+      SourceProcessor processor = new SourceProcessor(100);
+      SourceCode code = processor.process(script);
+      int maxLine = code.getLines()[code.getLines().length -1];
+      Map<String, String> resources = new HashMap<String, String>();
+      ExecutorService executor = Executors.newFixedThreadPool(20);
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler(resources, executor);
+      
+      for(int j=0;j<ITERATIONS;j++){
+         String path = String.format("/script%s.tern", j);
+         
+         resources.put(path, script);
+         compileScriptWithExistingCompiler(compiler, path, maxLine);
+      }
+      Map<String, String> project = generateSource();
+      Set<Map.Entry<String, String>> entries = project.entrySet();
+      int totalCount = 0;
+      
+      for(Map.Entry<String, String> entry : entries) {
+         String text = entry.getValue();
+         
+         code = processor.process(text);
+         totalCount += code.getLines()[code.getLines().length -1];
+      }
+      resources.putAll(project);
+      compileScriptWithExistingCompiler(compiler, "/task/Task0.tern", totalCount);
+      executor.shutdown();
+   }
+   
+   public static Map<String, String> generateSource() {
+      Map<String, String> resources = new HashMap<String, String>();
+      int count = 100;
+      
+      for(int i = 0; i < count; i++) {
+         String name = String.format("Task%s", i);
+         String script = generateSimpleScript(name);
+         String file = String.format("/task/%s.tern", name);
+         
+         resources.put(file, script);
+      }
+      for(int i = 0; i < count; i++) {
+         StringBuilder builder = new StringBuilder();
+         
+         for(int j = 0; j < count; j++) {
+            if(j != i) {
+               builder.append("import task.Task");
+               builder.append(j);
+               builder.append(";\n");
+            }
+         }
+         String name = String.format("Task%s", i);
+         String file = String.format("/task/%s.tern", name);
+         String script = resources.get(file);
+         
+         builder.append(script);
+         script = builder.toString();
+         resources.put(file, script);
+      }
+      return resources;
+   }
+   
+   public static String generateSimpleScript(String name) {
+       StringBuilder builder = new StringBuilder();
+       
+       builder.append("\n");
+       builder.append("class ");
+       builder.append(name);
+       builder.append(" with Runnable {\n");
+       builder.append("\n");
+       builder.append("   public override run() {\n");
+       builder.append("      let a = 0;\n");
+       
+       for(int i = 0; i < 1000; i++) {
+          builder.append("      a = ");
+          builder.append(i);
+          builder.append(";\n");
+          builder.append("      println(a);\n");
+       }
+       builder.append("   }\n");
+       builder.append("}\n");
+
+       return builder.toString();
+   }
+   
+   private static void compileScriptWithExistingCompiler(Compiler compiler, String path, double lines) throws Exception {
+      Model model = new EmptyModel();
+      long start=System.nanoTime();
+      compiler.compile(path).execute(model, true);
+      long finish=System.nanoTime();
+      double duration=TimeUnit.NANOSECONDS.toMillis(finish-start);
+      double linesPerMillis = lines/duration;
+      // how much time for 1000000 lines
+      long linesPerSec = Math.round(linesPerMillis * 1000.0d);
+      System.err.println("Time taken to compile "+path+" was " + duration+" for "+Math.round(lines)+" lines, which is " + linesPerSec + " lines per second (including static analysis)");
+      start=System.currentTimeMillis();
+      finish=System.currentTimeMillis();
+      duration=finish-start;
+   }
+   
    public static void compileScript(String source) throws Exception {
       executeScript(source, false);
       

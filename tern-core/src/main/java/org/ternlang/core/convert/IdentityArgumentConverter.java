@@ -6,15 +6,21 @@ import static org.ternlang.core.convert.Score.INVALID;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.function.ArgumentConverter;
 
-public class NoArgumentConverter implements ArgumentConverter {
+public class IdentityArgumentConverter implements ArgumentConverter {
    
-   public NoArgumentConverter(){
-      super();
+   private final int count;
+   
+   public IdentityArgumentConverter(){
+      this(0);
+   }
+   
+   public IdentityArgumentConverter(int count){
+      this.count = count;
    }
    
    @Override
    public Score score(Type... list) throws Exception {
-      if(list.length == 0) {
+      if(list.length == count) {
          return EXACT;
       }
       return INVALID;
@@ -22,7 +28,7 @@ public class NoArgumentConverter implements ArgumentConverter {
 
    @Override
    public Score score(Object... list) throws Exception {
-      if(list.length == 0) {
+      if(list.length == count) {
          return EXACT;
       }
       return INVALID;

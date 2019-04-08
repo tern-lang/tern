@@ -24,13 +24,13 @@ public class ClosureMethodFinder {
    }
    
    public Method findClosure(Function function, Class type) throws Exception {
-      Function possible = finder.findFunctional(type);
+      Function match = finder.findFunctional(type);
       
-      if(possible != null) {
-         Signature signature = possible.getSignature();
+      if(match != null) {
+         Signature signature = match.getSignature();
          Type definition = signature.getDefinition();
          Scope scope = definition.getScope();
-         Score score = comparator.compare(scope, function, possible);
+         Score score = comparator.compare(scope, match, function);
          
          if(!score.isInvalid()) {
             return (Method)signature.getSource();

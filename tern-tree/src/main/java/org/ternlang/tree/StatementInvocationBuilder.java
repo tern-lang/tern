@@ -103,13 +103,14 @@ public class StatementInvocationBuilder implements InvocationBuilder {
          Object[] arguments = aligner.align(list);
          Scope inner = extractor.extract(scope, arguments);
          Scope stack = calculator.calculate(inner);
-         Type type = constraint.getType(scope);
-         ConstraintConverter converter = matcher.match(type);
          Result result = execution.execute(stack);
          Object value = result.getValue();
          
          if(value != null) {
-            value = converter.assign(value);
+            Type type = constraint.getType(scope);
+            ConstraintConverter converter = matcher.match(type);
+            
+            return converter.assign(value);
          }
          return value;
       }

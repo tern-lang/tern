@@ -110,12 +110,12 @@ public class EvaluatorTest extends TestCase {
       long time = System.currentTimeMillis();
       List<Integer> sorted = (List<Integer>)evaluator.evaluate(model, "sort(numbers)", Reserved.DEFAULT_MODULE);
       
-//      for(Integer num : sorted) {
-//         System.err.println(num);
-//      }
       long finish = System.currentTimeMillis();
       long duration = finish - time;
       
+      for(int i = 1; i < ITERATIONS; i++) {
+         assertTrue(sorted.get(i) <= sorted.get(i));
+      }
       System.err.println("function sort of " + ITERATIONS + " took " + duration + " ms");
    }
    
@@ -138,12 +138,12 @@ public class EvaluatorTest extends TestCase {
       long time = System.currentTimeMillis();
       List<Integer> sorted = (List<Integer>)consumer.consume(numbers);
       
-//      for(Integer num : sorted) {
-//         System.err.println(num);
-//      }
       long finish = System.currentTimeMillis();
       long duration = finish - time;
       
+      for(int i = 1; i < ITERATIONS; i++) {
+         assertTrue(sorted.get(i) <= sorted.get(i));
+      }
       System.err.println("object sort of " + ITERATIONS + " took " + duration + " ms");
    }
    

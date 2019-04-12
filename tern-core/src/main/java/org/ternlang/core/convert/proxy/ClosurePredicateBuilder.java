@@ -22,10 +22,13 @@ public class ClosurePredicateBuilder {
       if(type != null) {
          try {
             Method method = resolver.resolve(function, type);
-            Class[] types = method.getParameterTypes();
-            String name = method.getName();
             
-            return new MethodPredicate(name, types);
+            if(method != null) {
+               Class[] types = method.getParameterTypes();
+               String name = method.getName();
+               
+               return new MethodPredicate(name, types);
+            }
          } catch(Exception e) {
             throw new InternalStateException("Could not match '" + function + "' with " + type, e);
          }

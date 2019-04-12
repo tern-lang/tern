@@ -12,15 +12,13 @@ public class ProxyArgumentExtractor {
    
    public Object[] extract(Object[] arguments) {
       if(arguments != null && arguments.length > 0) {
-         Object[] convert = new Object[arguments.length];
-         
          for(int i = 0; i < arguments.length; i++) {
             Object argument = arguments[i];
             Object value = wrapper.fromProxy(argument);
             
-            convert[i] = value;
+            arguments[i] = value;
          }
-         return convert;
+         return arguments;
       }
       return empty;
    }

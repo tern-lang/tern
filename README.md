@@ -217,7 +217,7 @@ This is a clone of the [Mario](https://en.wikipedia.org/wiki/Mario_Bros.) game c
 been written twice, once with full static typing and one with dynamic typing. Below is a YouTube video of the 
 program being run and debugged with Tern Studio.
 
-[![Debug Desktop Game](http://img.youtube.com/vi/6vo2y83unG0/0.jpg)](https://www.youtube.com/watch?v=6vo2y83unG0)
+[![Debug Desktop Game](http://img.youtube.com/vi/yK4ZyIS3w9o/0.jpg)](https://www.youtube.com/watch?v=yK4ZyIS3w9o)
 
 ##### Statically Typed
 
@@ -244,7 +244,7 @@ actions to program behaviour. The Android game framework can be found on Github 
 This is a clone of the [Flappy Bird](https://en.wikipedia.org/wiki/Flappy_Bird) game and is targeted for Android. Below is a YouTube vide of the application
 being run and debugged remotely with Tern Studio.
 
-[![Debug Android Game](http://img.youtube.com/vi/w-baBQbZ5dI/0.jpg)](https://www.youtube.com/watch?v=w-baBQbZ5dI)
+[![Debug Android Game](http://img.youtube.com/vi/oJoTgxaNs8I/0.jpg)](https://www.youtube.com/watch?v=oJoTgxaNs8I)
 
 [Source Code](https://github.com/tern-lang/tern-studio/tree/master/tern-studio/work/android/flappybird/src/flappybird)
         

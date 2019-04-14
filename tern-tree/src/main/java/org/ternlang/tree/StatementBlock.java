@@ -116,14 +116,20 @@ public class StatementBlock extends Statement {
    private static class StatementExecutor extends SuspendStatement<Integer> {
       
       private final Execution[] executions;     
+      private final Integer start;
       
-      public StatementExecutor(Execution[] executions) {         
+      public StatementExecutor(Execution[] executions) {  
+         this(executions, 0);
+      }
+      
+      public StatementExecutor(Execution[] executions, int start) {  
          this.executions = executions;
+         this.start = start;
       }      
       
       @Override
       public Result execute(Scope scope) throws Exception {
-         return resume(scope, 0);
+         return resume(scope, start);
       }
       
       @Override

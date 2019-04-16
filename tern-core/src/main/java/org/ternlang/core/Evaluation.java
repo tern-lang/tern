@@ -10,7 +10,7 @@ import org.ternlang.core.variable.Value;
 public abstract class Evaluation{
    
    public void define(Scope scope) throws Exception {}
-   
+               
    public Constraint compile(Scope scope, Constraint left) throws Exception {
       return NONE;
    }

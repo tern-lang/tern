@@ -45,11 +45,20 @@ public class FunctionInvocationPerfTest extends TestCase {
 
    private static final String SOURCE_2 =
    "func fun() {\n"+
-   "}\n";   
+   "}\n";
+   
+   private static final String SOURCE_3 =
+   "func fun(n) {\n"+
+   "   return n;\n"+
+   "}\n"+         
+   "func fun(a, b, c) {\n"+
+   "   return a;\n"+
+   "}\n";
  
    public void testInvocationCache() throws Exception {
       resolve(SOURCE_1, "fun", "n").timeInvocation(ITERATIONS, 20);
       resolve(SOURCE_2, "fun").timeInvocation(ITERATIONS);
+      resolve(SOURCE_3, "fun", "a", "b", "c").timeInvocation(ITERATIONS, 20, "ok", 1233L);
    }
    
    private static InvocationContext resolve(String source, String function, String... args) throws Exception {

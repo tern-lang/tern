@@ -3,7 +3,6 @@ package org.ternlang.tree.function;
 import static org.ternlang.core.constraint.Constraint.NONE;
 import static org.ternlang.core.variable.Value.NULL;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.ternlang.core.Compilation;
@@ -22,8 +21,8 @@ import org.ternlang.core.module.Module;
 import org.ternlang.core.module.Path;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.scope.index.Address;
-import org.ternlang.core.scope.index.ScopeIndex;
 import org.ternlang.core.scope.index.LocalValueFinder;
+import org.ternlang.core.scope.index.ScopeIndex;
 import org.ternlang.core.trace.Trace;
 import org.ternlang.core.trace.TraceEvaluation;
 import org.ternlang.core.trace.TraceInterceptor;

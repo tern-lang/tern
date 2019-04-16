@@ -89,7 +89,6 @@ public class EvaluatorTest extends TestCase {
    "      quicksort(array, mid, right);\n"+
    "  }\n"+
    "}\n";
-  
 
    public void testSortFunction() throws Exception {
       Map<String, Object> map = new LinkedHashMap<String, Object>();

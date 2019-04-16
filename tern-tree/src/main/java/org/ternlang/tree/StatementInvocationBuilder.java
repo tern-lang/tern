@@ -101,7 +101,7 @@ public class StatementInvocationBuilder implements InvocationBuilder {
       @Override
       public Object invoke(Scope scope, Object object, Object... list) throws Exception {
          Object[] arguments = aligner.align(list);
-         Scope inner = extractor.extract(scope, arguments);
+         Scope inner = extractor.extract(scope, arguments); // expensive
          Scope stack = calculator.calculate(inner);
          Result result = execution.execute(stack);
          Object value = result.getValue();

@@ -69,6 +69,7 @@ and development environment.
           * [Enumeration](#enumeration)      
           * [Trait](#trait)     
           * [Module](#module)   
+          * [Generics](#generics)   
           * [Annotations](#annotations)           
           * [Type Alias](#type-alias)
           * [Uniform Access](#uniform-access)     
@@ -1031,6 +1032,58 @@ module ImageStore {
       cache.put(name, image);
    }
 } 
+```
+
+#### Generics
+
+All types and functions can accept generic parameters. Geenerics in are basically additional parameters than can be 
+applied to a function or type in order to improve static analysis. The static analyser will perform projections on any 
+generic entity to determine types when generics cascade. Below is an example of how generic parameters applied to 
+a hash map can enable the compiler to perform projections to determine the actual types from a stream of values.
+
+```js
+let map: Map<?, Number> = HashMap<?, Number>();
+
+map.get('x').iterator(); // compile error
+map.get('x').intValue(); // success
+
+map.values().stream().findFirst().get().toUpperCase(); // compile error
+map.values().stream().findFirst().get().doubleValue(); // success
+```
+
+Generic projections are also performed on type hierarchies such that it is possible to determine the actual types for
+all functions and properties. Below is an example of how static analysis can use a generic declaration to determine the 
+actual types for the functions invoked.
+
+```js
+trait Repository<A, B> {
+   findOne(key: A): B;
+   findAll(): Map<A, B>;
+}
+
+class Person {
+   const name: String;
+   const address: String;
+
+   new(name: String, address: String) {
+      this.name = name;
+      this.address = address;
+   }
+
+   getName() {
+      return name;
+   }
+}
+
+trait PersonRepository<A> with Repository<A, List<Person>> {
+   findPerson(key: A): List<Person>;
+}
+
+let repo: PersonRepository<String> = // ... 
+
+repo.findAll().values().stream().findFirst().get().getName(); // compile error
+repo.findAll().values().stream().findFirst().get().stream().findFirst().get().getName(); // success
+repo.findPerson("john").stream().findFirst().get().getName(); // success
 ```
 
 #### Annotations

@@ -1,4 +1,4 @@
-package org.ternlang.compile;
+package org.ternlang.compile.perf;
 
 import static org.ternlang.core.result.Result.NORMAL;
 
@@ -11,6 +11,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.ternlang.compile.ClassPathCompilerBuilder;
+import org.ternlang.compile.ClassPathReader;
+import org.ternlang.compile.Compiler;
+import org.ternlang.compile.Executable;
 import org.ternlang.core.Reserved;
 import org.ternlang.core.scope.EmptyModel;
 import org.ternlang.core.scope.MapModel;

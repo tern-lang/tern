@@ -1,9 +1,13 @@
-package org.ternlang.compile;
+package org.ternlang.compile.perf;
 
 import java.math.BigDecimal;
 
 import junit.framework.TestCase;
 
+import org.ternlang.compile.ClassPathCompilerBuilder;
+import org.ternlang.compile.Compiler;
+import org.ternlang.compile.Executable;
+import org.ternlang.compile.Timer;
 import org.ternlang.core.variable.Value;
 import org.ternlang.tree.math.NumberOperator;
 

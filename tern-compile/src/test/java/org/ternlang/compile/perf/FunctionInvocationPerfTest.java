@@ -134,6 +134,9 @@ public class FunctionInvocationPerfTest extends TestCase {
                
                table.addValue(address, value);
             }
+            evaluation.define(stack);
+            evaluation.compile(stack, Constraint.NONE);
+            
             long start = System.currentTimeMillis();
             
             for(int i = 0; i < count; i++) {

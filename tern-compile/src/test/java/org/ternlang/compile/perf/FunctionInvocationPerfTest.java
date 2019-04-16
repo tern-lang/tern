@@ -149,6 +149,7 @@ public class FunctionInvocationPerfTest extends TestCase {
             
             System.err.println(duration);
             System.err.println(format.format(perSecond) + " invocations per second -> " + Arrays.toString(arguments));
+            System.err.println();
          } catch(Exception e) {
             e.printStackTrace();
          }

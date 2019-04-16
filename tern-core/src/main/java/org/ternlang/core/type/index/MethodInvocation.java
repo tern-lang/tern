@@ -3,20 +3,20 @@ package org.ternlang.core.type.index;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 
-import org.ternlang.core.Context;
 import org.ternlang.core.convert.proxy.ProxyWrapper;
 import org.ternlang.core.error.InternalStateException;
 import org.ternlang.core.function.Invocation;
-import org.ternlang.core.module.Module;
 import org.ternlang.core.scope.Scope;
 
 public class MethodInvocation implements Invocation<Object>{
 
    private final MethodCallBinder binder;
+   private final ProxyWrapper wrapper;
    private final Method method;
    
-   public MethodInvocation(Invocation invocation, Method method) {
+   public MethodInvocation(ProxyWrapper wrapper, Invocation invocation, Method method) {
       this.binder = new MethodCallBinder(invocation, method);
+      this.wrapper = wrapper;
       this.method = method;
    }
    
@@ -52,9 +52,6 @@ public class MethodInvocation implements Invocation<Object>{
             list = copy;
          }
       }
-      Module module = scope.getModule();
-      Context context = module.getContext();
-      ProxyWrapper wrapper = context.getWrapper();
       MethodCall call = binder.bind(left);
       Object value = call.call(left, list);
       

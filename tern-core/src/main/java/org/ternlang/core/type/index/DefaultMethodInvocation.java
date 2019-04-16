@@ -3,11 +3,9 @@ package org.ternlang.core.type.index;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 
-import org.ternlang.core.Context;
 import org.ternlang.core.convert.proxy.ProxyWrapper;
 import org.ternlang.core.error.InternalStateException;
 import org.ternlang.core.function.Invocation;
-import org.ternlang.core.module.Module;
 import org.ternlang.core.scope.Scope;
 
 public class DefaultMethodInvocation implements Invocation<Object>{
@@ -15,8 +13,8 @@ public class DefaultMethodInvocation implements Invocation<Object>{
    private final DefaultMethodHandle handle;
    private final Method method;
    
-   public DefaultMethodInvocation(Method method) {
-      this.handle = new DefaultMethodHandle(method);
+   public DefaultMethodInvocation(ProxyWrapper wrapper, Method method) {
+      this.handle = new DefaultMethodHandle(wrapper, method);
       this.method = method;
    }
    
@@ -52,11 +50,6 @@ public class DefaultMethodInvocation implements Invocation<Object>{
             list = copy;
          }
       }
-      Module module = scope.getModule();
-      Context context = module.getContext();
-      ProxyWrapper wrapper = context.getWrapper();
-      Object value = handle.invoke(scope, left, list);
-      
-      return wrapper.fromProxy(value);
+      return handle.invoke(scope, left, list);
    }
 }

@@ -40,7 +40,9 @@ public class ScopeCalculatorPerfTest extends TestCase {
       resolve("fun", "a").timeCalculation(ITERATIONS, 20);
       resolve("fun", "a", "b").timeCalculation(ITERATIONS, 20, 1);
       resolve("fun", "a", "b", "c").timeCalculation(ITERATIONS, 20, 32, 3);
+      resolve("fun").timeCalculation(ITERATIONS);
       resolve("fun", "a", "b").timeCalculation(ITERATIONS, 20, 1);
+      resolve("fun", "a", "b", "c", "d", "e", "f", "g").timeCalculation(ITERATIONS, 1, 2, 3, 4, 5, 6, 7);
    }
 
    private static ScopeContext resolve(String function, String... args) throws Exception {
@@ -117,6 +119,7 @@ public class ScopeCalculatorPerfTest extends TestCase {
             
             System.err.println(duration);
             System.err.println(format.format(perSecond) + " calculations per second -> " + Arrays.toString(arguments));
+            System.err.println();
          } catch(Exception e) {
             e.printStackTrace();
          }

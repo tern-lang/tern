@@ -13,7 +13,7 @@ import org.ternlang.tree.math.NumberOperator;
 
 public class FibTest extends TestCase {
 
-   private static final String SOURCE=
+   private static final String SOURCE_1=
    "function fib(n) {\n"+
    "   if (n<2) {\n"+
    "      return n;\n"+
@@ -21,6 +21,17 @@ public class FibTest extends TestCase {
    "   return fib(n-1) + fib(n-2);\n"+
    "}\n"+
    "println(fib(30));\n";
+   
+   private static final String SOURCE_2=
+   "class Fibonacci {\n"+
+   "   calc(n) {\n"+
+   "      if (n<2) {\n"+
+   "         return n;\n"+
+   "      }\n"+
+   "      return calc(n-1) + calc(n-2);\n"+
+   "   }\n"+
+   "}\n"+
+   "println(Fibonacci().calc(30));\n";
 
    //time=1498 memory=1,933,564,016
    //time=1514 memory=1,933,196,408
@@ -45,12 +56,17 @@ public class FibTest extends TestCase {
    //time=608 memory=1,550,965,744 --> cache result of closure search
    //time=569 memory=925,192,344 --> Create new local scope only if needed
    public void testFib() throws Exception {
-      System.err.println(SOURCE);
+      runFib("script", SOURCE_1);
+      runFib("class", SOURCE_2);
+   }
+   
+   private static void runFib(String name, String source) throws Exception {
+      System.err.println(source);
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
-      Executable executable = compiler.compile(SOURCE);
+      Executable executable = compiler.compile(source);
 
       for(int i = 0; i < 10; i++) {
-         Timer.timeExecution("testFib", executable);
+         Timer.timeExecution(name, executable);
       }
    }
    

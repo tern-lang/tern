@@ -61,7 +61,7 @@ public class ParameterCollector {
                appenders.add(appender);
             }
          }
-         return Collections.unmodifiableList(appenders);
+         return appenders;
       }
       return Collections.emptyList();
    }

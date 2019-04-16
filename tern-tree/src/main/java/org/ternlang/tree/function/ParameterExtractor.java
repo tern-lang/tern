@@ -25,12 +25,12 @@ public class ParameterExtractor {
    
    public void define(Scope scope) throws Exception {
       List<Parameter> parameters = signature.getParameters();
-      int required = parameters.size();
+      int count = parameters.size();
 
-      if(required > 0) {     
+      if(count > 0) {     
          ScopeIndex index = scope.getIndex();
          
-         for(int i = 0; i < required; i++) {
+         for(int i = 0; i < count; i++) {
             Parameter parameter = parameters.get(i);
             Address address = parameter.getAddress();
             String name = parameter.getName();
@@ -51,9 +51,14 @@ public class ParameterExtractor {
    public Scope extract(Scope scope, Object[] arguments) throws Exception {
       List<ParameterAppender> parameters = collector.collect();
       Scope inner = scope.getStack();
+      int count = parameters.size();
 
-      for(ParameterAppender appender : parameters) {
-         appender.append(inner, arguments);
+      for(int i = 0; i < count; i++) {
+         ParameterAppender appender = parameters.get(i);
+         
+         if(appender != null) {
+            appender.append(inner, arguments);
+         }
       }
       return inner;
    }

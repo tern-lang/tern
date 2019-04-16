@@ -16,7 +16,7 @@ import org.ternlang.core.function.Signature;
 import org.ternlang.core.module.Module;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.type.Type;
-import org.ternlang.tree.StatementInvocationBuilder;
+import org.ternlang.tree.function.StatementInvocationBuilder;
 
 public class ClosureBuilder {
 
@@ -31,7 +31,7 @@ public class ClosureBuilder {
    public FunctionBody create(Signature signature, Scope scope, int modifiers) {
       Constraint constraint = new StaticConstraint(null);
       Type type = new FunctionType(signature, module, null);
-      InvocationBuilder builder = new StatementInvocationBuilder(signature, statement, constraint, type, modifiers | CLOSURE.mask);
+      InvocationBuilder builder = new StatementInvocationBuilder(signature, null, statement, constraint, type, modifiers | CLOSURE.mask);
       Invocation invocation = new ClosureInvocation(builder, scope);
       Function function = new InvocationFunction(signature, invocation, type, constraint, METHOD_CLOSURE, modifiers | CLOSURE.mask);
       

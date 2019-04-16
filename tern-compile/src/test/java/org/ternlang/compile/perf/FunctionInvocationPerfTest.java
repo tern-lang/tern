@@ -40,19 +40,20 @@ public class FunctionInvocationPerfTest extends TestCase {
    
    private static final String SOURCE_1 =
    "func fun(n) {\n"+
-   "   return n;\n"+
+   "   return 1;\n"+
    "}\n";
 
    private static final String SOURCE_2 =
    "func fun() {\n"+
+   "   return 1;\n"+
    "}\n";
    
    private static final String SOURCE_3 =
    "func fun(n) {\n"+
-   "   return n;\n"+
+   "   return 1;\n"+
    "}\n"+         
    "func fun(a, b, c) {\n"+
-   "   return a;\n"+
+   "   return 1;\n"+
    "}\n";
  
    public void testInvocationCache() throws Exception {

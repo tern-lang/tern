@@ -11,7 +11,6 @@ import org.ternlang.core.function.Invocation;
 import org.ternlang.core.function.InvocationBuilder;
 import org.ternlang.core.function.InvocationFunction;
 import org.ternlang.core.function.Signature;
-import org.ternlang.tree.StatementInvocationBuilder;
 
 public class FunctionBuilder {
 
@@ -23,7 +22,7 @@ public class FunctionBuilder {
 
    public FunctionBody create(Signature signature, Module module, Constraint constraint, String name, int modifiers) {
       Type type = new FunctionType(signature, module, null);
-      InvocationBuilder builder = new StatementInvocationBuilder(signature, statement, constraint, type, modifiers);
+      InvocationBuilder builder = new StatementInvocationBuilder(signature, null, statement, constraint, type, modifiers);
       Invocation invocation = new StatementInvocation(builder);
       Function function = new InvocationFunction(signature, invocation, type, constraint, name, modifiers);
       

@@ -15,8 +15,8 @@ import org.ternlang.core.function.Signature;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.type.TypeBody;
 import org.ternlang.core.type.TypeState;
-import org.ternlang.tree.StatementInvocationBuilder;
 import org.ternlang.tree.function.StatementInvocation;
+import org.ternlang.tree.function.StatementInvocationBuilder;
 
 public class ConstructorBuilder {
    
@@ -36,7 +36,7 @@ public class ConstructorBuilder {
    
    public FunctionBody create(TypeBody body, Type type, int modifiers, boolean compile) {
       Constraint none = new StaticConstraint(null);
-      InvocationBuilder external = new StatementInvocationBuilder(signature, statement, none, type, modifiers);
+      InvocationBuilder external = new StatementInvocationBuilder(signature, null, statement, none, type, modifiers);
       Invocation invocation = new StatementInvocation(external);
       TypeAllocator instance = new ThisAllocator(body, invocation, type);
       InvocationBuilder internal = new TypeInvocationBuilder(delegate, signature, type);

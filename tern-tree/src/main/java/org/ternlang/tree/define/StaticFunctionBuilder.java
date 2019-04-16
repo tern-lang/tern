@@ -2,8 +2,6 @@ package org.ternlang.tree.define;
 
 import org.ternlang.core.Execution;
 import org.ternlang.core.Statement;
-import org.ternlang.core.scope.Scope;
-import org.ternlang.core.type.Type;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.function.Function;
 import org.ternlang.core.function.FunctionBody;
@@ -11,8 +9,10 @@ import org.ternlang.core.function.Invocation;
 import org.ternlang.core.function.InvocationBuilder;
 import org.ternlang.core.function.InvocationFunction;
 import org.ternlang.core.function.Signature;
+import org.ternlang.core.scope.Scope;
+import org.ternlang.core.type.Type;
 import org.ternlang.core.type.TypeBody;
-import org.ternlang.tree.StaticInvocationBuilder;
+import org.ternlang.tree.function.StatementInvocationBuilder;
 
 public class StaticFunctionBuilder implements MemberFunctionBuilder {
    
@@ -33,7 +33,7 @@ public class StaticFunctionBuilder implements MemberFunctionBuilder {
    @Override
    public FunctionBody create(TypeBody body, Scope scope, Type type){
       Execution execution = new StaticBody(body, type); 
-      InvocationBuilder builder = new StaticInvocationBuilder(signature, execution, statement, constraint, modifiers);
+      InvocationBuilder builder = new StatementInvocationBuilder(signature, execution, statement, constraint, type, modifiers);
       Invocation invocation = new StaticInvocation(builder, scope);
       Function function = new InvocationFunction(signature, invocation, type, constraint, name, modifiers);
       

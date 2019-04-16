@@ -25,24 +25,21 @@ public class ParameterExtractor {
    
    public void define(Scope scope) throws Exception {
       List<Parameter> parameters = signature.getParameters();
+      ScopeIndex index = scope.getIndex();
       int count = parameters.size();
-
-      if(count > 0) {     
-         ScopeIndex index = scope.getIndex();
+ 
+      for(int i = 0; i < count; i++) {
+         Parameter parameter = parameters.get(i);
+         Address address = parameter.getAddress();
+         String name = parameter.getName();
          
-         for(int i = 0; i < count; i++) {
-            Parameter parameter = parameters.get(i);
-            Address address = parameter.getAddress();
-            String name = parameter.getName();
+         if(!index.contains(name)) {
+            Address created = index.index(name);
+            int actual = created.getOffset();
+            int require = address.getOffset();
             
-            if(!index.contains(name)) {
-               Address created = index.index(name);
-               int actual = created.getOffset();
-               int require = address.getOffset();
-               
-               if(actual != require) {
-                  throw new InternalStateException("Parameter '" + name + "' has an invalid address");
-               }
+            if(actual != require) {
+               throw new InternalStateException("Parameter '" + name + "' has an invalid address");
             }
          }
       }

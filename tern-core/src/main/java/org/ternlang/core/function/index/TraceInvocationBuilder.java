@@ -17,28 +17,25 @@ public class TraceInvocationBuilder {
    }
    
    public Invocation create(Function function) {
-      Invocation invocation = function.getInvocation();
       Signature signature = function.getSignature();
       Origin origin = signature.getOrigin();
       
       if(origin.isPlatform()) {
-         return new PlatformInvocation(function, signature, invocation, stack);
+         return new PlatformInvocation(function, signature, stack);
       }
       if(origin.isSystem()) {
-         return new SystemInvocation(function, signature, invocation);
+         return new SystemInvocation(function, signature);
       }
-      return new DefaultInvocation(function, signature, invocation, stack);
+      return new DefaultInvocation(function, signature, stack);
    }
    
    private static class DefaultInvocation implements Invocation {
       
-      private final Invocation invocation;
       private final Signature signature;
       private final ThreadStack stack;
       private final Function function;
       
-      public DefaultInvocation(Function function, Signature signature, Invocation invocation, ThreadStack stack) {
-         this.invocation = invocation;
+      public DefaultInvocation(Function function, Signature signature, ThreadStack stack) {
          this.signature = signature;
          this.function = function;
          this.stack = stack;
@@ -46,6 +43,7 @@ public class TraceInvocationBuilder {
       
       @Override
       public Object invoke(Scope scope, Object object, Object... arguments) throws Exception{
+         Invocation invocation = function.getInvocation();
          ArgumentConverter converter = signature.getConverter();
          Object[] list = converter.assign(arguments);
             
@@ -60,13 +58,11 @@ public class TraceInvocationBuilder {
    
    private static class PlatformInvocation implements Invocation {
       
-      private final Invocation invocation;
       private final Signature signature;
       private final ThreadStack stack;
       private final Function function;
       
-      public PlatformInvocation(Function function, Signature signature, Invocation invocation, ThreadStack stack) {
-         this.invocation = invocation;
+      public PlatformInvocation(Function function, Signature signature, ThreadStack stack) {
          this.signature = signature;
          this.function = function;
          this.stack = stack;
@@ -74,6 +70,7 @@ public class TraceInvocationBuilder {
       
       @Override
       public Object invoke(Scope scope, Object object, Object... arguments) throws Exception{
+         Invocation invocation = function.getInvocation();
          ArgumentConverter converter = signature.getConverter();
          Object[] list = converter.convert(arguments);
             
@@ -88,18 +85,17 @@ public class TraceInvocationBuilder {
    
    private static class SystemInvocation implements Invocation {
    
-      private final Invocation invocation;
       private final Signature signature;
       private final Function function;
       
-      public SystemInvocation(Function function, Signature signature, Invocation invocation) {
-         this.invocation = invocation;
+      public SystemInvocation(Function function, Signature signature) {
          this.signature = signature;
          this.function = function;
       }
       
       @Override
       public Object invoke(Scope scope, Object object, Object... arguments) throws Exception{
+         Invocation invocation = function.getInvocation();
          ArgumentConverter converter = signature.getConverter();
          Object[] list = converter.assign(arguments);
             

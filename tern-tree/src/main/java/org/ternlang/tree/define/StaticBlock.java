@@ -4,12 +4,10 @@ import static org.ternlang.core.type.Category.STATIC;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.ternlang.core.Context;
-import org.ternlang.core.module.Module;
 import org.ternlang.core.scope.Scope;
-import org.ternlang.core.type.TypeState;
 import org.ternlang.core.type.Category;
 import org.ternlang.core.type.Type;
+import org.ternlang.core.type.TypeState;
 
 public abstract class StaticBlock extends TypeState {
 
@@ -26,11 +24,8 @@ public abstract class StaticBlock extends TypeState {
    @Override
    public Category define(Scope scope, Type type) throws Exception { 
       if(!define.get()) {
-         Module module = type.getModule();
-         Context context = module.getContext();
-         
-         synchronized(context) { // static lock to force wait
-            if(define.compareAndSet(false, true)) { // only do it once
+         synchronized(type) { // global lock will not work here
+            if(define.compareAndSet(false, true)) { 
                define(scope);
             }
          }
@@ -41,11 +36,8 @@ public abstract class StaticBlock extends TypeState {
    @Override
    public void compile(Scope scope, Type type) throws Exception { 
       if(!compile.get()) {
-         Module module = type.getModule();
-         Context context = module.getContext();
-         
-         synchronized(context) { // static lock to force wait
-            if(compile.compareAndSet(false, true)) { // only do it once
+         synchronized(type) { 
+            if(compile.compareAndSet(false, true)) { 
                compile(scope);
             }
          }
@@ -55,12 +47,9 @@ public abstract class StaticBlock extends TypeState {
    @Override
    public void allocate(Scope scope, Type type) throws Exception { 
       if(!allocate.get()) {
-         Module module = type.getModule();
-         Context context = module.getContext();
-         Scope outer = type.getScope();
-         
-         synchronized(context) { // static lock to force wait
-            if(allocate.compareAndSet(false, true)) { // only do it once
+         synchronized(type) {
+            if(allocate.compareAndSet(false, true)) { 
+               Scope outer = type.getScope();
                allocate(outer);
             }
          }

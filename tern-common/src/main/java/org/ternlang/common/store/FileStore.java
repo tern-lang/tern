@@ -9,24 +9,22 @@ import java.io.OutputStream;
 public class FileStore implements Store {
 
    private final ClassPathStore store;
-   private final File[] roots;
+   private final FileFinder loader;
    
    public FileStore(File... roots) {
       this.store = new ClassPathStore();
-      this.roots = roots;
+      this.loader = new FileFinder(roots);
    }
    
    @Override
    public InputStream getInputStream(String path) {
-      for(File root : roots) {
-         File resource = new File(root, path);
-         
-         if(resource.exists()) {
-            try {
-               return new FileInputStream(resource);
-            } catch(Exception e) {
-               throw new StoreException("Could not read resource '" + path + "'", e);
-            }
+      File file = loader.findFile(path);
+      
+      if(file != null) {
+         try {
+            return new FileInputStream(file);
+         } catch(Exception e) {
+            throw new StoreException("Could not read resource '" + path + "'", e);
          }
       }
       return store.getInputStream(path);
@@ -34,17 +32,11 @@ public class FileStore implements Store {
 
    @Override
    public OutputStream getOutputStream(String path) {
-      for(File root : roots) {
-         File resource = new File(root, path);
-         
-         if(resource.exists()) {
-            resource.delete();
-         }
-         if(!root.exists()) {
-            root.mkdirs();
-         }
+      File file = loader.makeFile(path);
+      
+      if(file != null) {
          try {
-            return new FileOutputStream(resource);
+            return new FileOutputStream(file);
          } catch(Exception e) {
             throw new StoreException("Could not write resource '" + path + "'", e);
          }

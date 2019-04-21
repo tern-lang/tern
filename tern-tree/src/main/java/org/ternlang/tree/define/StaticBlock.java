@@ -2,8 +2,7 @@ package org.ternlang.tree.define;
 
 import static org.ternlang.core.type.Category.STATIC;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
+import org.ternlang.common.CheckLock;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.type.Category;
 import org.ternlang.core.type.Type;
@@ -11,23 +10,23 @@ import org.ternlang.core.type.TypeState;
 
 public abstract class StaticBlock extends TypeState {
 
-   private final AtomicBoolean allocate;
-   private final AtomicBoolean compile;
-   private final AtomicBoolean define;
+   private final CheckLock allocate;
+   private final CheckLock compile;
+   private final CheckLock define;
    
    protected StaticBlock() {
-      this.allocate = new AtomicBoolean();
-      this.compile = new AtomicBoolean();
-      this.define = new AtomicBoolean();
+      this.allocate = new CheckLock();
+      this.compile = new CheckLock();
+      this.define = new CheckLock();
    }
    
    @Override
    public Category define(Scope scope, Type type) throws Exception { 
-      if(!define.get()) {
-         synchronized(type) { // global lock will not work here
-            if(define.compareAndSet(false, true)) { 
-               define(scope);
-            }
+      if(define.require(type)) { // global lock would cause deadlock
+         try {
+            define(scope);
+         } finally {
+            define.done(type);
          }
       }
       return STATIC;
@@ -35,23 +34,23 @@ public abstract class StaticBlock extends TypeState {
    
    @Override
    public void compile(Scope scope, Type type) throws Exception { 
-      if(!compile.get()) {
-         synchronized(type) { 
-            if(compile.compareAndSet(false, true)) { 
-               compile(scope);
-            }
+      if(compile.require(type)) {
+         try {
+            compile(scope);
+         } finally {
+            compile.done(type);
          }
       }
    }
    
    @Override
    public void allocate(Scope scope, Type type) throws Exception { 
-      if(!allocate.get()) {
-         synchronized(type) {
-            if(allocate.compareAndSet(false, true)) { 
-               Scope outer = type.getScope();
-               allocate(outer);
-            }
+      if(allocate.require(type)) {
+         try {
+            Scope outer = type.getScope();
+            allocate(outer); 
+         } finally {
+            allocate.done(type);
          }
       }
    }

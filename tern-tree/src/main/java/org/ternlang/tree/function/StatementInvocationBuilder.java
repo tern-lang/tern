@@ -4,6 +4,7 @@ import static org.ternlang.core.type.Phase.COMPILE;
 
 import org.ternlang.common.Progress;
 import org.ternlang.core.Context;
+import org.ternlang.core.Entity;
 import org.ternlang.core.Execution;
 import org.ternlang.core.Statement;
 import org.ternlang.core.constraint.Constraint;
@@ -26,13 +27,13 @@ public class StatementInvocationBuilder implements InvocationBuilder {
    private Invocation invocation;
    private Statement statement;
    private Execution execution;
-   private Type type;
+   private Entity entity;
 
-   public StatementInvocationBuilder(Signature signature, Execution compile, Statement body, Constraint constraint, Type type, int modifiers) {
+   public StatementInvocationBuilder(Signature signature, Execution compile, Statement body, Constraint constraint, Entity entity, int modifiers) {
       this.statement = new AsyncStatement(body, modifiers);
       this.calculator = new ScopeCalculator(signature, compile, statement, modifiers);
       this.constraint = constraint;
-      this.type = type;
+      this.entity = entity;
    }
    
    @Override
@@ -59,7 +60,7 @@ public class StatementInvocationBuilder implements InvocationBuilder {
    @Override
    public Invocation create(Scope scope) throws Exception {
       if(invocation == null) {
-         Progress progress = type.getProgress();
+         Progress progress = entity.getProgress();
 
          if (progress.wait(COMPILE)) {
             if (execution == null) {

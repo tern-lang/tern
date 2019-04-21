@@ -17,17 +17,15 @@ import org.ternlang.core.type.Type;
 
 public class ModuleType implements Type {
    
-   private final Progress<Phase> progress;
    private final Module module;
    
    public ModuleType(Module module) {
-      this.progress = new CompleteProgress<Phase>();
       this.module = module;
    }
 
    @Override
    public Progress<Phase> getProgress() {
-      return progress;
+      return module.getProgress();
    }
 
    @Override

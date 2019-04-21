@@ -63,7 +63,7 @@ public class ModuleProperty {
       return value;
    }
    
-   public Value execute(ModuleBody body, Scope scope, int modifiers) throws Exception {
+   public Value execute(ModuleBody body, Scope scope, int modifiers) throws Exception {      
       String name = reference.getName(scope);
       Value value = allocator.allocate(scope, name, modifiers);
       ScopeState state = scope.getState();

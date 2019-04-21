@@ -7,6 +7,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.ternlang.common.CheckLock;
 import org.ternlang.core.Execution;
 import org.ternlang.core.Statement;
 import org.ternlang.core.constraint.Constraint;
@@ -130,30 +131,33 @@ public class ModuleBody extends Statement {
    private class ModuleExecution extends Execution {
 
       private final Execution[] executions;
-      private final AtomicBoolean execute;
+      private final CheckLock execute;
       private final Scope module;
 
       public ModuleExecution(Scope module, Execution[] executions) {
-         this.execute = new AtomicBoolean(true);
+         this.execute = new CheckLock();
          this.executions = executions;
          this.module = module;
       }
 
       @Override
       public Result execute(Scope scope) throws Exception {
+         Module parent = module.getModule();
+         Scope outer = parent.getScope();
          Result last = NORMAL;
-
-         if(execute.compareAndSet(true, false)) {
-            Module parent = module.getModule();
-            Scope root = parent.getScope();
-
-            for(int i = 0; i < executions.length; i++) {
-               Result result = executions[i].execute(root);
-
-               if(!result.isNormal()){
-                  return result;
+         
+         if(execute.require(parent)) {
+            try {
+               for(int i = 0; i < executions.length; i++) {
+                  Result result = executions[i].execute(outer);
+   
+                  if(!result.isNormal()){
+                     return result;
+                  }
+                  last = result;
                }
-               last = result;
+            } finally {
+               execute.done(parent);
             }
          }
          return last;

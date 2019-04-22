@@ -63,16 +63,16 @@ public class EnumDefinition implements Compilation {
          this.collector = new TypeStateCollector();
          this.constructor = new DefaultConstructor(collector, true);
          this.execution = new NoExecution(NORMAL);
-         this.compile = new AtomicBoolean(true);
-         this.define = new AtomicBoolean(true);
-         this.create = new AtomicBoolean(true);
+         this.compile = new AtomicBoolean();
+         this.define = new AtomicBoolean();
+         this.create = new AtomicBoolean();
          this.parts = parts;
          this.list = list;
       }
       
       @Override
       public void create(Scope outer) throws Exception {
-         if(!create.compareAndSet(false, true)) {
+         if(create.compareAndSet(false, true)) {
             Type type = builder.create(collector, outer);
             Progress<Phase> progress = type.getProgress();
          
@@ -82,7 +82,7 @@ public class EnumDefinition implements Compilation {
    
       @Override
       public boolean define(Scope outer) throws Exception {
-         if(!define.compareAndSet(false, true)) {
+         if(define.compareAndSet(false, true)) {
             Type type = builder.define(collector, outer);
             Scope scope = type.getScope();
             TypeState keys = list.define(collector, type, scope);
@@ -106,7 +106,7 @@ public class EnumDefinition implements Compilation {
       
       @Override
       public Execution compile(Scope outer, Constraint returns) throws Exception {
-         if(!compile.compareAndSet(false, true)) {
+         if(compile.compareAndSet(false, true)) {
             Type type = builder.compile(collector, outer);
             Progress<Phase> progress = type.getProgress();
             Scope scope = type.getScope();

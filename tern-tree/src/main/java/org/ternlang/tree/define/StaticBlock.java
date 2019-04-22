@@ -2,7 +2,8 @@ package org.ternlang.tree.define;
 
 import static org.ternlang.core.type.Category.STATIC;
 
-import org.ternlang.common.CheckLock;
+import org.ternlang.common.Guard;
+import org.ternlang.common.LockGuard;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.type.Category;
 import org.ternlang.core.type.Type;
@@ -10,14 +11,14 @@ import org.ternlang.core.type.TypeState;
 
 public abstract class StaticBlock extends TypeState {
 
-   private final CheckLock allocate;
-   private final CheckLock compile;
-   private final CheckLock define;
+   private final Guard<Type> allocate;
+   private final Guard<Type> compile;
+   private final Guard<Type> define;
    
    protected StaticBlock() {
-      this.allocate = new CheckLock();
-      this.compile = new CheckLock();
-      this.define = new CheckLock();
+      this.allocate = new LockGuard<Type>();
+      this.compile = new LockGuard<Type>();
+      this.define = new LockGuard<Type>();
    }
    
    @Override

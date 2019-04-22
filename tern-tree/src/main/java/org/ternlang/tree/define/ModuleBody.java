@@ -7,7 +7,8 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.ternlang.common.CheckLock;
+import org.ternlang.common.Guard;
+import org.ternlang.common.LockGuard;
 import org.ternlang.core.Execution;
 import org.ternlang.core.Statement;
 import org.ternlang.core.constraint.Constraint;
@@ -30,14 +31,14 @@ public class ModuleBody extends Statement {
       this.reference = new AtomicReference<Execution>();
       this.statements = new Statement[parts.length];
       this.executable = new Statement[parts.length];
-      this.define = new AtomicBoolean(true);
-      this.create = new AtomicBoolean(true);
+      this.define = new AtomicBoolean();
+      this.create = new AtomicBoolean();
       this.parts = parts;
    }
 
    @Override
    public void create(Scope scope) throws Exception {
-      if(create.compareAndSet(true, false)) {
+      if(create.compareAndSet(false, true)) {
          Module module = scope.getModule();
 
          for(int i = 0; i < parts.length; i++) {
@@ -53,7 +54,7 @@ public class ModuleBody extends Statement {
 
    @Override
    public boolean define(Scope scope) throws Exception {
-      if(define.compareAndSet(true, false)) {
+      if(define.compareAndSet(false, true)) {
          for(int i = 0; i < statements.length; i++) {
             Statement statement = statements[i];
 
@@ -131,11 +132,11 @@ public class ModuleBody extends Statement {
    private class ModuleExecution extends Execution {
 
       private final Execution[] executions;
-      private final CheckLock execute;
+      private final Guard<Module> execute;
       private final Scope module;
 
       public ModuleExecution(Scope module, Execution[] executions) {
-         this.execute = new CheckLock();
+         this.execute = new LockGuard<Module>();
          this.executions = executions;
          this.module = module;
       }

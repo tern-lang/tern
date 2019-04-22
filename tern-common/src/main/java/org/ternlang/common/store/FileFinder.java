@@ -9,21 +9,6 @@ public class FileFinder {
    public FileFinder(File... roots) {
       this.roots = roots;
    }
-
-   public File makeFile(String path) {
-      for(File root : roots) {
-         File resource = new File(root, path);
-
-         if(resource.exists()) {
-            resource.delete();
-         }
-         if(!root.exists()) {
-            root.mkdirs();
-         }
-         return resource;
-      }
-      return null;
-   }
    
    public File findFile(String path) {
       for(File root : roots) {
@@ -41,6 +26,21 @@ public class FileFinder {
                continue;
             }
          }
+      }
+      return null;
+   }
+   
+   public File makeFile(String path) {
+      for(File root : roots) {
+         File resource = new File(root, path);
+
+         if(resource.exists()) {
+            resource.delete();
+         }
+         if(!root.exists()) {
+            root.mkdirs();
+         }
+         return resource;
       }
       return null;
    }

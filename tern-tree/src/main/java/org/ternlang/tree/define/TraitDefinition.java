@@ -64,15 +64,15 @@ public class TraitDefinition implements Compilation {
          this.collector = new TypeStateCollector();
          this.constants = new StaticState(collector);
          this.execution = new NoExecution(NORMAL);
-         this.compile = new AtomicBoolean(true);
-         this.define = new AtomicBoolean(true);
-         this.create = new AtomicBoolean(true);
+         this.compile = new AtomicBoolean();
+         this.define = new AtomicBoolean();
+         this.create = new AtomicBoolean();
          this.parts = parts;
       }
       
       @Override
       public void create(Scope outer) throws Exception {
-         if(!create.compareAndSet(false, true)) {
+         if(create.compareAndSet(false, true)) {
             Type type = builder.create(collector, outer);
             Progress<Phase> progress = type.getProgress();
             Scope scope = type.getScope();
@@ -89,7 +89,7 @@ public class TraitDefinition implements Compilation {
    
       @Override
       public boolean define(Scope outer) throws Exception {
-         if(!define.compareAndSet(false, true)) {
+         if(define.compareAndSet(false, true)) {
             Type type = builder.define(collector, outer);
             Progress<Phase> progress = type.getProgress();
             Scope scope = type.getScope();
@@ -112,7 +112,7 @@ public class TraitDefinition implements Compilation {
       
       @Override
       public Execution compile(Scope outer, Constraint returns) throws Exception {
-         if(!compile.compareAndSet(false, true)) {
+         if(compile.compareAndSet(false, true)) {
             Type type = builder.compile(collector, outer);
             Progress<Phase> progress = type.getProgress();
             Scope scope = type.getScope();

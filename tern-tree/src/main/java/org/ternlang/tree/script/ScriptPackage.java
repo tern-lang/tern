@@ -24,14 +24,14 @@ public class ScriptPackage extends Statement {
    
    public ScriptPackage(Statement... statements) {
       this.reference = new AtomicReference<Execution>();
-      this.create = new AtomicBoolean(true);
-      this.define = new AtomicBoolean(true);
+      this.create = new AtomicBoolean();
+      this.define = new AtomicBoolean();
       this.statements = statements;
    }
    
    @Override
    public void create(Scope scope) throws Exception {
-      if(create.compareAndSet(true, false)) {
+      if(create.compareAndSet(false, true)) {
          for(Statement statement : statements) {
             statement.create(scope);
          }
@@ -40,7 +40,7 @@ public class ScriptPackage extends Statement {
    
    @Override
    public boolean define(Scope scope) throws Exception {
-      if(define.compareAndSet(true, false)) {
+      if(define.compareAndSet(false, true)) {
          for(Statement statement : statements) {
             statement.define(scope);
          }
@@ -99,7 +99,7 @@ public class ScriptPackage extends Statement {
       private final AtomicBoolean execute;
       
       public ScriptPackageExecution(Execution... statements) {
-         this.execute = new AtomicBoolean(true);
+         this.execute = new AtomicBoolean();
          this.statements = statements;
       }
       
@@ -108,7 +108,7 @@ public class ScriptPackage extends Statement {
       public Result execute(Scope scope) throws Exception {
          Result last = NORMAL;
          
-         if(execute.compareAndSet(true, false)) {
+         if(execute.compareAndSet(false, true)) {
             for(int i = 0; i < statements.length; i++) {
                Result result = statements[i].execute(scope);
                

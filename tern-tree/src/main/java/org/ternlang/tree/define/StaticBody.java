@@ -17,7 +17,7 @@ public class StaticBody extends Execution {
    private final Type type;
    
    public StaticBody(TypeBody body, Type type) {
-      this.execute = new AtomicBoolean(false);
+      this.execute = new AtomicBoolean();
       this.body = body;
       this.type = type;
    }

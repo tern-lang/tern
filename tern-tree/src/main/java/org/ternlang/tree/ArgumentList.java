@@ -1,19 +1,18 @@
 package org.ternlang.tree;
 
-import org.ternlang.core.scope.Scope;
-import org.ternlang.core.type.Type;
-import org.ternlang.core.variable.Value;
 import org.ternlang.core.constraint.Constraint;
+import org.ternlang.core.scope.Scope;
+import org.ternlang.core.variable.Value;
 
 public class ArgumentList {
    
+   private final Constraint[] none;
    private final Argument[] list;
    private final Object[] empty;
-   private final Type[] none;
    
    public ArgumentList(Argument... list) {
+      this.none = new Constraint[]{};
       this.empty = new Object[]{};
-      this.none = new Type[]{};
       this.list = list;
    }
    
@@ -24,47 +23,36 @@ public class ArgumentList {
       return list.length;
    }
    
-   public Type[] compile(Scope scope, Constraint left) throws Exception{
-      if(list.length > 0) {
-         return compile(scope, none);
+   public Constraint[] compile(Scope scope, Constraint... prefix) throws Exception{
+      if(list.length + prefix.length > 0) {
+         Constraint[] values = new Constraint[list.length + prefix.length];
+         
+         for(int i = 0; i < list.length; i++) {
+            values[i + prefix.length] = list[i].compile(scope, null);
+         }
+         for(int i = 0; i < prefix.length; i++) {
+            values[i] = prefix[i];
+         }
+         return values;
       }
       return none;
    }
-   
-   public Type[] compile(Scope scope, Type... prefix) throws Exception{
-      Type[] values = new Type[list.length + prefix.length];
-      
-      for(int i = 0; i < list.length; i++){
-         Constraint result = list[i].compile(scope, null);
-         Type type = result.getType(scope);
+
+   public Object[] create(Scope scope, Object... prefix) throws Exception{
+      if(list.length + prefix.length > 0) {
+         Object[] values = new Object[list.length + prefix.length];
          
-         values[i + prefix.length] = type;
-      }
-      for(int i = 0; i < prefix.length; i++) {
-         values[i] = prefix[i];
-      }
-      return values;
-   }
-   
-   public Object[] create(Scope scope) throws Exception{
-      if(list.length > 0) {
-         return create(scope, empty);
+         for(int i = 0; i < list.length; i++) {
+            Value reference = list[i].evaluate(scope, null);
+            Object result = reference.getValue();
+            
+            values[i + prefix.length] = result;
+         }
+         for(int i = 0; i < prefix.length; i++) {
+            values[i] = prefix[i];
+         }
+         return values;
       }
       return empty;
-   }
-   
-   public Object[] create(Scope scope, Object... prefix) throws Exception{
-      Object[] values = new Object[list.length + prefix.length];
-      
-      for(int i = 0; i < list.length; i++){
-         Value reference = list[i].evaluate(scope, null);
-         Object result = reference.getValue();
-         
-         values[i + prefix.length] = result;
-      }
-      for(int i = 0; i < prefix.length; i++) {
-         values[i] = prefix[i];
-      }
-      return values;
    }
 }

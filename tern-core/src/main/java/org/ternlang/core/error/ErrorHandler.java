@@ -1,5 +1,6 @@
 package org.ternlang.core.error;
 
+import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.module.Module;
 import org.ternlang.core.result.Result;
 import org.ternlang.core.scope.Scope;

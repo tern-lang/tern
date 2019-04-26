@@ -131,7 +131,7 @@ public class FunctionInvocation implements Compilation {
       }
       
       private Constraint compile(Scope scope, String name) throws Exception {
-         Type[] array = arguments.compile(scope); 
+         Constraint[] array = arguments.compile(scope); 
          Scope composite = extractor.extract(scope);
          FunctionDispatcher dispatcher = matcher.match(scope);
          Constraint result = dispatcher.compile(composite, NONE, array);
@@ -146,7 +146,7 @@ public class FunctionInvocation implements Compilation {
       }
       
       private Constraint compile(Scope scope, String name, Constraint local) throws Exception {
-         Type[] array = arguments.compile(scope); 
+         Constraint[] array = arguments.compile(scope); 
          Scope composite = extractor.extract(scope);
          FunctionDispatcher dispatcher = matcher.match(scope);
          Constraint result = dispatcher.compile(composite, local, array);

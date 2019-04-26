@@ -1,5 +1,6 @@
 package org.ternlang.core.function.resolve;
 
+import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.convert.proxy.Delegate;
 import org.ternlang.core.function.index.DelegateIndexer;
 import org.ternlang.core.function.index.FunctionIndexer;

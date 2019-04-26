@@ -9,7 +9,6 @@ import org.ternlang.core.function.index.FunctionPointer;
 import org.ternlang.core.function.index.Retention;
 import org.ternlang.core.function.index.ReturnType;
 import org.ternlang.core.scope.Scope;
-import org.ternlang.core.type.Type;
 
 public class FunctionCall implements Invocation {
    
@@ -28,7 +27,7 @@ public class FunctionCall implements Invocation {
       return false;
    }
 
-   public Constraint check(Scope scope, Constraint left, Type... types) throws Exception {
+   public Constraint check(Scope scope, Constraint left, Constraint... types) throws Exception {
       ReturnType type = pointer.getType(scope);
 
       if(type != null) {

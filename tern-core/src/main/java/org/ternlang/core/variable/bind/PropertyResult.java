@@ -13,20 +13,19 @@ import org.ternlang.core.property.Property;
 import org.ternlang.core.property.PropertyValue;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.scope.index.Address;
-import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.Value;
 
 public class PropertyResult implements VariableResult {
    
    private final AttributeResultBinder binder;
+   private final Constraint[] empty;
    private final Property property;  
    private final Entity entity;
    private final String name;
-   private final Type[] empty;
    
    public PropertyResult(Property property, Entity entity, String name){
       this.binder = new AttributeResultBinder(property);
-      this.empty = new Type[]{};
+      this.empty = new Constraint[]{};
       this.property = property;
       this.entity = entity;
       this.name = name;

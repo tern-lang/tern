@@ -5,6 +5,7 @@ import java.util.List;
 import org.ternlang.core.array.ArrayBuilder;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.error.ErrorHandler;
+import org.ternlang.core.function.ArgumentListCompiler;
 import org.ternlang.core.function.Connection;
 import org.ternlang.core.function.resolve.FunctionCall;
 import org.ternlang.core.function.resolve.FunctionResolver;
@@ -14,12 +15,14 @@ import org.ternlang.core.variable.Value;
 
 public class ArrayDispatcher implements FunctionDispatcher {
    
+   private final ArgumentListCompiler compiler;
    private final FunctionResolver resolver;
    private final ArrayBuilder builder;
    private final ErrorHandler handler;
    private final String name;
    
    public ArrayDispatcher(FunctionResolver resolver, ErrorHandler handler, String name) {
+      this.compiler = new ArgumentListCompiler();
       this.builder = new ArrayBuilder();
       this.resolver = resolver;
       this.handler = handler;
@@ -27,13 +30,14 @@ public class ArrayDispatcher implements FunctionDispatcher {
    }
    
    @Override
-   public Constraint compile(Scope scope, Constraint constraint, Type... arguments) throws Exception {
+   public Constraint compile(Scope scope, Constraint constraint, Constraint... arguments) throws Exception {
       Type actual = constraint.getType(scope);
       Type list = builder.convert(actual);
-      FunctionCall call = resolver.resolveInstance(scope, list, name, arguments);
+      Type[] types = compiler.compile(scope, arguments);
+      FunctionCall call = resolver.resolveInstance(scope, list, name, types);
       
       if(call == null) {
-         handler.failCompileInvocation(scope, actual, name, arguments);
+         handler.failCompileInvocation(scope, actual, name, types);
       }
       return call.check(scope, constraint, arguments);
    }

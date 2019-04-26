@@ -24,7 +24,7 @@ public class SuperDispatcher implements FunctionDispatcher {
    }
    
    @Override
-   public Constraint compile(Scope scope, Constraint object, Type... list) throws Exception {
+   public Constraint compile(Scope scope, Constraint object, Constraint... list) throws Exception {
       return Constraint.getConstraint(type, CONSTANT.mask);
    }
    

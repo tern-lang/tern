@@ -6,6 +6,7 @@ import org.ternlang.core.Evaluation;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.error.ErrorHandler;
 import org.ternlang.core.error.InternalStateException;
+import org.ternlang.core.function.ArgumentListCompiler;
 import org.ternlang.core.function.Invocation;
 import org.ternlang.core.function.InvocationCache;
 import org.ternlang.core.function.bind.FunctionBinder;
@@ -66,6 +67,7 @@ public class ReferenceInvocation implements Compilation {
    
       private final GenericParameterExtractor extractor;
       private final ModifierAccessVerifier verifier;
+      private final ArgumentListCompiler compiler;
       private final Evaluation[] evaluations; // func()[1][x]
       private final FunctionMatcher matcher;
       private final ArgumentList arguments;
@@ -76,6 +78,7 @@ public class ReferenceInvocation implements Compilation {
          this.extractor = new GenericParameterExtractor(generics);
          this.cache = new InvocationCache(matcher, extractor);
          this.verifier = new ModifierAccessVerifier();
+         this.compiler = new ArgumentListCompiler();
          this.evaluations = evaluations;
          this.arguments = arguments;
          this.matcher = matcher;
@@ -94,7 +97,7 @@ public class ReferenceInvocation implements Compilation {
       @Override
       public Constraint compile(Scope scope, Constraint left) throws Exception {
          Type type = left.getType(scope);         
-         Type[] array = arguments.compile(scope); 
+         Constraint[] array = arguments.compile(scope); 
          Scope composite = extractor.extract(scope);
          FunctionDispatcher dispatcher = matcher.match(composite, left);
          Constraint result = dispatcher.compile(composite, left, array);
@@ -103,9 +106,10 @@ public class ReferenceInvocation implements Compilation {
             Module module = scope.getModule();
             Context context = module.getContext();
             ErrorHandler handler = context.getHandler();
+            Type[] types = compiler.compile(scope, array);
             
             if(!verifier.isAccessible(composite, type)) {
-               handler.failCompileAccess(composite, type, name, array);
+               handler.failCompileAccess(composite, type, name, types);
             }
          }
          for(Evaluation evaluation : evaluations) {

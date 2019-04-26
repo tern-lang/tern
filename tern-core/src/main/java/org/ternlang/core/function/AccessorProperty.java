@@ -3,7 +3,6 @@ package org.ternlang.core.function;
 import static java.util.Collections.EMPTY_LIST;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.ternlang.core.annotation.Annotation;

@@ -11,6 +11,7 @@ import org.ternlang.core.convert.Score;
 import org.ternlang.core.error.ErrorHandler;
 import org.ternlang.core.function.ArgumentConverter;
 import org.ternlang.core.function.ArgumentConverterBuilder;
+import org.ternlang.core.function.ArgumentListCompiler;
 import org.ternlang.core.function.Function;
 import org.ternlang.core.function.Parameter;
 import org.ternlang.core.module.Module;
@@ -20,15 +21,17 @@ import org.ternlang.core.type.Type;
 public class GenericAttributeResult implements AttributeResult {
 
    private final ArgumentConverterBuilder builder;
+   private final ArgumentListCompiler compiler;
    private final Attribute attribute;
 
    public GenericAttributeResult(Attribute attribute) {
       this.builder = new ArgumentConverterBuilder();
+      this.compiler = new ArgumentListCompiler();
       this.attribute = attribute;      
    }
 
    @Override
-   public Constraint getConstraint(Scope scope, Constraint left, Type... types) throws Exception {
+   public Constraint getConstraint(Scope scope, Constraint left, Constraint... arguments) throws Exception {
       Module module = scope.getModule();
       Context context = module.getContext();  
       Type constraint = left.getType(scope);
@@ -41,6 +44,7 @@ public class GenericAttributeResult implements AttributeResult {
          Function function = (Function)attribute;
          List<Parameter> parameters = rule.getParameters(scope, function);
          ArgumentConverter converter = builder.create(scope, parameters);
+         Type[] types = compiler.compile(scope, arguments);
          ErrorHandler handler = context.getHandler();
          Score score = converter.score(types);
          String name = function.getName();

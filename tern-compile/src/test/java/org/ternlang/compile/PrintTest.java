@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 public class PrintTest extends TestCase {
 
    private static final String SOURCE =
-      "class Test{\n"+
+   "class Test{\n"+
    "   static const LIST = [1,2,3,4];\n"+
    "   static var count = 0;\n"+
    "   static inc(){\n"+
@@ -42,6 +42,7 @@ public class PrintTest extends TestCase {
    "}\n";
          
    public void testPrint() throws Exception{
+      System.err.println(SOURCE);
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       Executable executable = compiler.compile(SOURCE);
       long start = System.currentTimeMillis();

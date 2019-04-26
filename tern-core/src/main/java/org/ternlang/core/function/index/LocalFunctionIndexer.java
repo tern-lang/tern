@@ -1,8 +1,10 @@
 package org.ternlang.core.function.index;
 
+import static org.ternlang.core.Reserved.TYPE_CLASS;
 import static org.ternlang.core.Reserved.TYPE_CONSTRUCTOR;
 
 import org.ternlang.core.constraint.Constraint;
+import org.ternlang.core.constraint.TypeParameterConstraint;
 import org.ternlang.core.function.Function;
 import org.ternlang.core.function.Invocation;
 import org.ternlang.core.module.Module;
@@ -122,16 +124,16 @@ public class LocalFunctionIndexer {
    private static class ConstructorType implements ReturnType {
       
       private final ReturnType delegate;
-      private final Type type;
+      private final Constraint type;
       
       public ConstructorType(ReturnType delegate, Type type) {
+         this.type = new TypeParameterConstraint(type, TYPE_CLASS);
          this.delegate = delegate;
-         this.type = type;
       }
 
       @Override
-      public Constraint check(Constraint left, Type[] list) throws Exception {
-         Type[] array = new Type[list.length + 1];
+      public Constraint check(Constraint left, Constraint[] list) throws Exception {
+         Constraint[] array = new Constraint[list.length + 1];
          
          for(int i = 0; i < list.length; i++) {
             array[i + 1] = list[i];

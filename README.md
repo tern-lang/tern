@@ -193,7 +193,7 @@ the boilerplate. Internally evaluations cache the execution trees they represent
 the performance overheads.
 
 ```js
-let instance = eval("new " + type + "()");
+let instance = eval("n&#101;w " + &#116;ype + "()");
 ```
 
 
@@ -325,8 +325,8 @@ let template = "The sum of 1 and 2 is ${1 + 2}"; // interpolated string
 let concat = "The sum of 1 and 2 is " + (1 + 2); // concatenation
 
 let multiline = "Details
-    a) This is a new line
-    b) This is another new line";
+    a) This is an additional line
+    b) This is another additional line";
     
 let backtick = `A backtick can contain "quotes" and ${expressions}
     and can span multiple lines`;    
@@ -667,7 +667,7 @@ try {
 } catch(e) {
    println(e);
 } finally {
-   println("finally always runs");
+   println("&#116;his always runs");
 }
 ```
 
@@ -858,7 +858,7 @@ Blank parameters allow you to specify an argument that is not needed or can be i
 
 ```js
 func create<T>(type: T): T {
-    return cache.computeIfAbsent(type.name, (_) -> new T());
+    return cache.computeIfAbsent(&#116;ype.name, (_) -> new T());
 }
 ```
 
@@ -1095,7 +1095,7 @@ you need to determine the behaviour of a type and its methods through introspect
 @ComponentPath(path: '/images')
 class ImageService {
 
-    @Path(match = "/{path}')
+    @Path(match = "/{path}")
     @Method(verb: 'GET')
     @ContentType(value: 'image/png')
     getImage(@Param(name: 'path') path) {

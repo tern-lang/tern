@@ -1,6 +1,7 @@
 package org.ternlang.compile.staticanalysis;
 
 import static org.ternlang.core.Reserved.DEFAULT_MODULE;
+import static org.ternlang.core.constraint.Constraint.STRING;
 
 import java.util.List;
 import java.util.Map;
@@ -87,7 +88,7 @@ public class NamedGenericParamsTest extends TestCase {
       Constraint returnA = context.getBinder().bind("getReturnA").match(scope, Constraint.getConstraint(type)).compile(scope, Constraint.getConstraint(type));
       Constraint returnB = context.getBinder().bind("getReturnB").match(scope, Constraint.getConstraint(type)).compile(scope, Constraint.getConstraint(type));
       Constraint returnMap = context.getBinder().bind("getReturnMap").match(scope, Constraint.getConstraint(type)).compile(scope, Constraint.getConstraint(type));
-      Constraint doIt = context.getBinder().bind("doIt").match(scope, Constraint.getConstraint(type)).compile(scope, Constraint.getConstraint(type), string, string, string);
+      Constraint doIt = context.getBinder().bind("doIt").match(scope, Constraint.getConstraint(type)).compile(scope, Constraint.getConstraint(type), STRING, STRING, STRING);
       
       assertNotNull(returnA);
       assertNotNull(returnB);
@@ -143,7 +144,7 @@ public class NamedGenericParamsTest extends TestCase {
       Constraint returnA = context.getBinder().bind("getReturnA").match(scope, Constraint.getConstraint(type)).compile(scope, Constraint.getConstraint(type));
       Constraint returnB = context.getBinder().bind("getReturnB").match(scope, Constraint.getConstraint(type)).compile(scope, Constraint.getConstraint(type));
       Constraint returnMap = context.getBinder().bind("getReturnMap").match(scope, Constraint.getConstraint(type)).compile(scope, Constraint.getConstraint(type));
-      Constraint doIt = context.getBinder().bind("doIt").match(scope, Constraint.getConstraint(type)).compile(scope, Constraint.getConstraint(type), string, string, string);
+      Constraint doIt = context.getBinder().bind("doIt").match(scope, Constraint.getConstraint(type)).compile(scope, Constraint.getConstraint(type), STRING, STRING, STRING);
       
       assertNotNull(returnA);
       assertNotNull(returnB);

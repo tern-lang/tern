@@ -1,5 +1,6 @@
 package org.ternlang.core.function.index;
 
+import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.type.TypeExtractor;
 

@@ -10,6 +10,7 @@ import org.ternlang.core.constraint.CompileConstraint;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.convert.AliasResolver;
 import org.ternlang.core.error.ErrorHandler;
+import org.ternlang.core.function.ArgumentListCompiler;
 import org.ternlang.core.function.resolve.FunctionCall;
 import org.ternlang.core.function.resolve.FunctionResolver;
 import org.ternlang.core.link.ImplicitImportLoader;
@@ -25,6 +26,7 @@ public class CreateObject extends Evaluation {
    
    private final GenericParameterExtractor extractor;
    private final ConstructArgumentList arguments;
+   private final ArgumentListCompiler compiler;
    private final ImplicitImportLoader loader;
    private final FunctionResolver resolver;
    private final ErrorHandler handler;
@@ -38,6 +40,7 @@ public class CreateObject extends Evaluation {
       this.extractor = new GenericParameterExtractor(generics);
       this.arguments = new ConstructArgumentList(arguments);
       this.constraint = new CompileConstraint(constraint);
+      this.compiler = new ArgumentListCompiler();
       this.loader = new ImplicitImportLoader();
       this.alias = new AliasResolver();
       this.violation = violation;
@@ -60,8 +63,9 @@ public class CreateObject extends Evaluation {
    public Constraint compile(Scope scope, Constraint left) throws Exception {
       Type type = constraint.getType(scope);
       Type actual = alias.resolve(type);
-      Type[] list = arguments.compile(scope, actual);
-      FunctionCall call = resolver.resolveStatic(scope, actual, TYPE_CONSTRUCTOR, list);
+      Constraint[] list = arguments.compile(scope, actual);
+      Type[] types = compiler.compile(scope, list);
+      FunctionCall call = resolver.resolveStatic(scope, actual, TYPE_CONSTRUCTOR, types);
       Scope inner = extractor.extract(scope);
       int modifiers = actual.getModifiers();
 
@@ -69,7 +73,7 @@ public class CreateObject extends Evaluation {
          handler.failCompileConstruction(inner, actual);
       }
       if(call == null) {
-         handler.failCompileInvocation(inner, actual, TYPE_CONSTRUCTOR, list);
+         handler.failCompileInvocation(inner, actual, TYPE_CONSTRUCTOR, types);
       }
       return call.check(inner, constraint, list);
    }   

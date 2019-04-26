@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.ternlang.core.EntityCache;
 import org.ternlang.core.ModifierType;
+import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.convert.TypeInspector;
 import org.ternlang.core.function.Function;
 import org.ternlang.core.stack.ThreadStack;

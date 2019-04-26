@@ -1,5 +1,6 @@
 package org.ternlang.tree.construct;
 
+import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.type.Type;
 import org.ternlang.tree.ArgumentList;
@@ -7,12 +8,12 @@ import org.ternlang.tree.ArgumentList;
 public class ConstructArgumentList {
 
    private final ArgumentList list;
+   private final Constraint[] types;
    private final Object[] objects;
-   private final Type[] types;
    
    public ConstructArgumentList(ArgumentList list) {
+      this.types = new Constraint[]{};
       this.objects = new Object[]{};
-      this.types = new Type[]{};
       this.list = list;
    }
 
@@ -22,17 +23,18 @@ public class ConstructArgumentList {
       }
    }
    
-   public Type[] compile(Scope scope, Type type) throws Exception {
+   public Constraint[] compile(Scope scope, Type type) throws Exception {
+      Constraint prefix = Constraint.getConstraint(type);
       Class real = type.getType();
 
       if(list != null) {
          if(real == null) {
-            return list.compile(scope, type);
+            return list.compile(scope, prefix);
          }
          return list.compile(scope);
       }
       if(real == null) {
-         return new Type[]{type};
+         return new Constraint[]{prefix};
       }
       return types;
    }

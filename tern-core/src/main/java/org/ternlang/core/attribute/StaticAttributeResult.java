@@ -2,7 +2,6 @@ package org.ternlang.core.attribute;
 
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.scope.Scope;
-import org.ternlang.core.type.Type;
 
 public class StaticAttributeResult implements AttributeResult {
    
@@ -13,7 +12,7 @@ public class StaticAttributeResult implements AttributeResult {
    }
 
    @Override
-   public Constraint getConstraint(Scope scope, Constraint left, Type... types) throws Exception {
+   public Constraint getConstraint(Scope scope, Constraint left, Constraint... types) throws Exception {
       return attribute.getConstraint();
    }
 }

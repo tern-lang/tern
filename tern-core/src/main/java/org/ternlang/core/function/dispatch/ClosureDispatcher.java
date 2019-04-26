@@ -10,7 +10,6 @@ import org.ternlang.core.function.index.FunctionAdapter;
 import org.ternlang.core.function.resolve.FunctionCall;
 import org.ternlang.core.function.resolve.FunctionResolver;
 import org.ternlang.core.scope.Scope;
-import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.Value;
 
 public class ClosureDispatcher implements FunctionDispatcher {
@@ -26,7 +25,7 @@ public class ClosureDispatcher implements FunctionDispatcher {
    }
    
    @Override
-   public Constraint compile(Scope scope, Constraint constraint, Type... arguments) throws Exception { 
+   public Constraint compile(Scope scope, Constraint constraint, Constraint... arguments) throws Exception { 
       return NONE;
    }
 

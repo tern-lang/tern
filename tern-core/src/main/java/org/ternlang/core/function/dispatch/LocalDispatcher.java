@@ -2,6 +2,7 @@ package org.ternlang.core.function.dispatch;
 
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.error.ErrorHandler;
+import org.ternlang.core.function.ArgumentListCompiler;
 import org.ternlang.core.function.Connection;
 import org.ternlang.core.function.resolve.FunctionCall;
 import org.ternlang.core.function.resolve.FunctionConnection;
@@ -13,23 +14,26 @@ import org.ternlang.core.variable.Value;
 
 public class LocalDispatcher implements FunctionDispatcher {
    
+   private final ArgumentListCompiler compiler;
    private final FunctionResolver binder;
    private final ErrorHandler handler;
    private final String name;  
    
    public LocalDispatcher(FunctionResolver binder, ErrorHandler handler, String name) {
+      this.compiler = new ArgumentListCompiler();
       this.handler = handler;
       this.binder = binder;
       this.name = name;
    }
 
    @Override
-   public Constraint compile(Scope scope, Constraint constraint, Type... arguments) throws Exception {
+   public Constraint compile(Scope scope, Constraint constraint, Constraint... arguments) throws Exception {
       Type object = constraint.getType(scope);
-      FunctionCall call = bind(scope, object, arguments);
+      Type[] types = compiler.compile(scope, arguments);
+      FunctionCall call = bind(scope, object, types);
       
       if(call == null) {
-         handler.failCompileInvocation(scope, name, arguments);
+         handler.failCompileInvocation(scope, name, types);
       }
       return call.check(scope, constraint, arguments);
    }

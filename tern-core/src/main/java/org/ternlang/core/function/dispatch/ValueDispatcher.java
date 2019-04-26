@@ -8,7 +8,6 @@ import org.ternlang.core.function.Connection;
 import org.ternlang.core.function.resolve.FunctionCall;
 import org.ternlang.core.function.resolve.FunctionResolver;
 import org.ternlang.core.scope.Scope;
-import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.Value;
 
 public class ValueDispatcher implements FunctionDispatcher {
@@ -24,7 +23,7 @@ public class ValueDispatcher implements FunctionDispatcher {
    }
    
    @Override
-   public Constraint compile(Scope scope, Constraint value, Type... list) throws Exception {
+   public Constraint compile(Scope scope, Constraint value, Constraint... list) throws Exception {
       return NONE;
    }
 

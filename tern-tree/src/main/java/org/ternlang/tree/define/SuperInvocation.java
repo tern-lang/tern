@@ -38,7 +38,7 @@ public class SuperInvocation extends Evaluation {
       Scope outer = scope.getScope();
       FunctionDispatcher dispatcher = matcher.match(scope, constraint);  
       Scope compound = extractor.extract(scope, outer);
-      Type[] list = arguments.compile(compound, type); // arguments have no left hand side
+      Constraint[] list = arguments.compile(compound, type); // arguments have no left hand side
 
       return dispatcher.compile(scope, constraint, list);
    }

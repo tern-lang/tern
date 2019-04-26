@@ -5,7 +5,6 @@ import static org.ternlang.core.constraint.Constraint.NONE;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.function.Connection;
 import org.ternlang.core.scope.Scope;
-import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.Value;
 
 public class EmptyDispatcher implements FunctionDispatcher {
@@ -17,7 +16,7 @@ public class EmptyDispatcher implements FunctionDispatcher {
    }
 
    @Override
-   public Constraint compile(Scope scope, Constraint constraint, Type... arguments) throws Exception {
+   public Constraint compile(Scope scope, Constraint constraint, Constraint... arguments) throws Exception {
       return NONE;
    }
 

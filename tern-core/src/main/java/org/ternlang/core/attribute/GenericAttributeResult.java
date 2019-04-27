@@ -12,6 +12,7 @@ import org.ternlang.core.error.ErrorHandler;
 import org.ternlang.core.function.ArgumentConverter;
 import org.ternlang.core.function.ArgumentConverterBuilder;
 import org.ternlang.core.function.ArgumentListCompiler;
+import org.ternlang.core.function.ArgumentNameValidator;
 import org.ternlang.core.function.Function;
 import org.ternlang.core.function.Parameter;
 import org.ternlang.core.module.Module;
@@ -22,10 +23,12 @@ public class GenericAttributeResult implements AttributeResult {
 
    private final ArgumentConverterBuilder builder;
    private final ArgumentListCompiler compiler;
+   private final ArgumentNameValidator validator;
    private final Attribute attribute;
 
    public GenericAttributeResult(Attribute attribute) {
       this.builder = new ArgumentConverterBuilder();
+      this.validator = new ArgumentNameValidator();
       this.compiler = new ArgumentListCompiler();
       this.attribute = attribute;      
    }
@@ -51,6 +54,9 @@ public class GenericAttributeResult implements AttributeResult {
 
          if(score.isInvalid()) {
             handler.failCompileGenerics(scope, name, types);
+         }
+         if(!validator.isValid(scope, function, arguments)) {
+            handler.failCompileArguments(scope, name, types);
          }
       }
       return rule.getResult(scope, returns);

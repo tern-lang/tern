@@ -74,6 +74,22 @@ public class CompileErrorFormatter {
       
       return builder.toString();
    }
+   
+   public String formatArgumentError(String name, Type[] list) {
+      StringBuilder builder = new StringBuilder();
+
+      if(name.equals(TYPE_CONSTRUCTOR)) {
+         builder.append("Constructor '");
+      } else {
+         builder.append("Function '");
+      }
+      String signature = formatter.formatFunction(null, name, list);
+
+      builder.append(signature);
+      builder.append("' has an invalid argument name");
+
+      return builder.toString();
+   }
 
    public String formatGenericError(String name, Type[] list) {
       StringBuilder builder = new StringBuilder();

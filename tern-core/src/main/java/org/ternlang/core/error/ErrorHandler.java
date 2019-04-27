@@ -47,6 +47,10 @@ public class ErrorHandler {
       return compile.handleCastError(scope, require, actual); 
    }
 
+   public Result failCompileArguments(Scope scope, String name, Type[] list) {
+      return compile.handleArgumentError(scope, name, list);
+   }
+   
    public Result failCompileGenerics(Scope scope, String name, Type[] list) {
       return compile.handleGenericError(scope, name, list);
    }

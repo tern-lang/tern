@@ -23,4 +23,8 @@ public enum Origin{
    public boolean isSystem() {
       return this == SYSTEM;
    }
+   
+   public boolean isDefault() {
+      return this == DEFAULT;
+   }
 }

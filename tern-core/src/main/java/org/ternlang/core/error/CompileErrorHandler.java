@@ -35,6 +35,11 @@ public class CompileErrorHandler {
       throw builder.createInternalException(message);
    }
 
+   public Result handleArgumentError(Scope scope, String name, Type[] list) {
+      String message = formatter.formatArgumentError(name, list);
+      throw builder.createInternalException(message);
+   }
+   
    public Result handleGenericError(Scope scope, String name, Type[] list) {
       String message = formatter.formatGenericError(name, list);
       throw builder.createInternalException(message);

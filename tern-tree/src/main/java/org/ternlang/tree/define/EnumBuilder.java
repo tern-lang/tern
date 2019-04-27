@@ -1,12 +1,12 @@
 package org.ternlang.tree.define;
 
 import static org.ternlang.core.ModifierType.ENUM;
-import static org.ternlang.core.constraint.Constraint.NONE;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.module.Module;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.scope.ScopeState;
@@ -43,10 +43,11 @@ public class EnumBuilder {
          String name = type.getName();
          String prefix = enclosing.getName();
          String key = name.replace(prefix + '$', ""); // get the class name
-         Value value = Value.getConstant(type);
+         Constraint constraint = Constraint.getConstraint(type);
+         Value value = Value.getConstant(type, constraint);
          ScopeState state = outer.getState();
          
-         builder.createStaticProperty(body, key, enclosing, NONE);
+         builder.createStaticProperty(body, key, enclosing, constraint);
          state.addValue(key, value);
       }
       reference.set(type);

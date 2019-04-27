@@ -5,6 +5,7 @@ import static org.ternlang.core.Reserved.TYPE_CONSTRUCTOR;
 
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.constraint.TypeParameterConstraint;
+import org.ternlang.core.convert.proxy.ProxyWrapper;
 import org.ternlang.core.function.Function;
 import org.ternlang.core.function.Invocation;
 import org.ternlang.core.module.Module;
@@ -14,17 +15,25 @@ import org.ternlang.core.type.Type;
 public class LocalFunctionIndexer {
 
    private final FunctionIndexer indexer;
+   private final LocalTypeFinder finder;
    
-   public LocalFunctionIndexer(FunctionIndexer indexer) {
+   public LocalFunctionIndexer(ProxyWrapper wrapper, FunctionIndexer indexer) {
+      this.finder = new LocalTypeFinder(wrapper);
       this.indexer = indexer;
    }
    
    public FunctionPointer index(Scope scope, String name, Type... types) throws Exception { 
-      Module module = scope.getModule();   
-      Type type = module.getType(name);
+      Type type = finder.findType(scope, name);
       
       if(type != null) {
-         FunctionPointer pointer = resolve(type, name, types);
+         return index(scope, type, types);
+      }
+      return null;
+   }
+   
+   public FunctionPointer index(Scope scope, Type type, Type... types) throws Exception { 
+      if(type != null) {
+         FunctionPointer pointer = resolve(type, TYPE_CONSTRUCTOR, types);
          
          if(pointer != null) {
             return new ConstructorPointer(pointer, type);
@@ -46,15 +55,21 @@ public class LocalFunctionIndexer {
          array[0] = module.getType(Type.class);
          types = array;
       }
-      return indexer.index(type, TYPE_CONSTRUCTOR, types);      
+      return indexer.index(type, name, types);      
    }
    
    public FunctionPointer index(Scope scope, String name, Object... values) throws Exception {
-      Module module = scope.getModule();   
-      Type type = module.getType(name);
+      Type type = finder.findType(scope, name);
       
       if(type != null) {
-         FunctionPointer pointer = resolve(type, name, values);
+         return index(scope, type, values);
+      }
+      return null;
+   }
+   
+   public FunctionPointer index(Scope scope, Type type, Object... values) throws Exception { 
+      if(type != null) {
+         FunctionPointer pointer = resolve(type, TYPE_CONSTRUCTOR, values);
          
          if(pointer != null) {
             return new ConstructorPointer(pointer, type);

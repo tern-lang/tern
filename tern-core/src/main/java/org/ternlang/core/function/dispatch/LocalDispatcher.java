@@ -15,14 +15,14 @@ import org.ternlang.core.variable.Value;
 public class LocalDispatcher implements FunctionDispatcher {
    
    private final ArgumentListCompiler compiler;
-   private final FunctionResolver binder;
+   private final FunctionResolver resolver;
    private final ErrorHandler handler;
    private final String name;  
    
-   public LocalDispatcher(FunctionResolver binder, ErrorHandler handler, String name) {
+   public LocalDispatcher(FunctionResolver resolver, ErrorHandler handler, String name) {
       this.compiler = new ArgumentListCompiler();
+      this.resolver = resolver;
       this.handler = handler;
-      this.binder = binder;
       this.name = name;
    }
 
@@ -51,20 +51,20 @@ public class LocalDispatcher implements FunctionDispatcher {
    
    private FunctionCall bind(Scope scope, Object object, Object... arguments) throws Exception {
       Module module = scope.getModule();
-      FunctionCall local = binder.resolveModule(scope, module, name, arguments);
+      FunctionCall local = resolver.resolveModule(scope, module, name, arguments);
       
       if(local == null) {
-         return binder.resolveScope(scope, name, arguments); // function variable
+         return resolver.resolveScope(scope, name, arguments); // function variable
       }
       return local;  
    }
    
    private FunctionCall bind(Scope scope, Type object, Type... arguments) throws Exception {
       Module module = scope.getModule();
-      FunctionCall local = binder.resolveModule(scope, module, name, arguments);
+      FunctionCall local = resolver.resolveModule(scope, module, name, arguments);
       
       if(local == null) {
-         return binder.resolveScope(scope, name, arguments); // function variable
+         return resolver.resolveScope(scope, name, arguments); // function variable
       }
       return local;  
    }

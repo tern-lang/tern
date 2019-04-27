@@ -5,6 +5,7 @@ import java.util.List;
 import org.ternlang.core.ModifierType;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.convert.Score;
+import org.ternlang.core.convert.proxy.ProxyWrapper;
 import org.ternlang.core.function.ArgumentConverter;
 import org.ternlang.core.function.Function;
 import org.ternlang.core.function.Signature;
@@ -20,8 +21,8 @@ public class LocalIndexer {
    private final LocalScopeFinder finder;
    private final ThreadStack stack;
    
-   public LocalIndexer(ThreadStack stack, FunctionIndexer indexer) {
-      this.indexer = new LocalFunctionIndexer(indexer);
+   public LocalIndexer(ProxyWrapper wrapper, ThreadStack stack, FunctionIndexer indexer) {
+      this.indexer = new LocalFunctionIndexer(wrapper, indexer);
       this.finder = new LocalScopeFinder();
       this.stack = stack;
    }
@@ -47,6 +48,7 @@ public class LocalIndexer {
                   return new TracePointer(function, stack);
                }
             }
+            return indexer.index(scope, type, types);
          }
       }
       return indexer.index(scope, name, types);
@@ -57,8 +59,11 @@ public class LocalIndexer {
       
       if(value != null) {
          Object object = value.getValue();
-         
+
          if(object != null) {
+            Constraint constraint = value.getConstraint();
+            Type type = constraint.getType(scope);
+            
             if(Function.class.isInstance(object)) {
                Function function = (Function)object;
                Signature signature = function.getSignature();
@@ -69,6 +74,7 @@ public class LocalIndexer {
                   return new TracePointer(function, stack);
                }
             }
+            return indexer.index(scope, type, values);
          }
       }
       return indexer.index(scope, name, values);

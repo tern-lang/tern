@@ -57,7 +57,7 @@ public class MockContext implements Context {
       this.extractor = new TypeExtractor(loader);
       this.transformer = new ConstraintTransformer(extractor);
       this.indexer = new FunctionIndexer(extractor, stack);
-      this.resolver = new FunctionResolver(extractor, stack, indexer);
+      this.resolver = new FunctionResolver(extractor, wrapper, stack, indexer);
       this.matcher = new ConstraintMatcher(loader, wrapper);
       this.handler = new ErrorHandler(extractor, stack);
       this.table = new FunctionBinder(resolver, handler);

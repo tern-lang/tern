@@ -1,5 +1,8 @@
 package org.ternlang.core.function.dispatch;
 
+import static org.ternlang.core.Reserved.TYPE_CONSTRUCTOR;
+
+import org.ternlang.core.Reserved;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.error.ErrorHandler;
 import org.ternlang.core.function.ArgumentListCompiler;
@@ -32,7 +35,13 @@ public class TypeStaticDispatcher implements FunctionDispatcher {
       FunctionCall call = resolver.resolveStatic(scope, type, name, types);
 
       if(call == null) {
-         handler.failCompileInvocation(scope, type, name, types);
+         Scope outer = type.getScope();
+         FunctionCall child = resolver.resolveScope(outer, name, types);
+         
+         if(child == null) {
+            handler.failCompileInvocation(scope, type, name, types);
+         }
+         return child.check(scope, constraint, arguments);
       }
       return call.check(scope, constraint, arguments);
    } 
@@ -43,12 +52,16 @@ public class TypeStaticDispatcher implements FunctionDispatcher {
       FunctionCall call = resolver.resolveStatic(scope, type, name, arguments);
 
       if(call == null) {
-         FunctionCall instance = resolver.resolveInstance(scope, (Object)type, name, arguments); // find on the type
-      
-         if(instance == null) {
+         Scope outer = type.getScope();
+         FunctionCall child = resolver.resolveScope(outer, name, arguments);
+         
+         if(child == null) {
+            child = resolver.resolveInstance(scope, (Object)type, name, arguments); // find on the type
+         }
+         if(child == null) {
             handler.failRuntimeInvocation(scope, type, name, arguments);
          }
-         return new FunctionConnection(instance);   
+         return new FunctionConnection(child);   
       }
       return new TypeStaticConnection(call); 
    } 

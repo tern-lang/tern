@@ -30,15 +30,15 @@ public class Argument extends Evaluation{
    @Override
    public Constraint compile(Scope scope, Constraint left) throws Exception {
       Constraint constraint = evaluation.compile(scope, left);
+      Type type = constraint.getType(scope);
       
       if(identifier != null) {
          Value value = identifier.evaluate(scope, null);
-         Type type = constraint.getType(scope);
          String name = value.getValue();
          
          return new TypeParameterConstraint(type, name);
       }
-      return constraint;
+      return new TypeParameterConstraint(type, null);
    }
    
    @Override

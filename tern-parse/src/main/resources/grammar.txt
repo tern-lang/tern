@@ -46,15 +46,11 @@ constructor = 'new';
 function = {<constructor> | [identifier]};
 function-name = [identifier] <generic-parameter-list>;
 
-
-function-argument-name = [identifier];            
-function-argument = ?(<function-argument-name> ':') <argument-value>;    
-function-argument-list = ?<function-argument>*(','<function-argument>);
-function-invocation = [identifier] <generic-argument-list> ( '(' <function-argument-list> ')' ) *{ '(' <function-curry>')' | '['<collection-index>']' };
-function-curry = <function-argument-list>;
+function-invocation = [identifier] <generic-argument-list> ( '(' <argument-list> ')' ) *{ '(' <function-curry>')' | '['<collection-index>']' };
+function-curry = <argument-list>;
 function-handle = <function>;
 
-reference-invocation = [identifier] <generic-argument-list> ( '(' <function-argument-list> ')' ) *{ '(' <function-curry>')' | '['<collection-index>']' };
+reference-invocation = [identifier] <generic-argument-list> ( '(' <argument-list> ')' ) *{ '(' <function-curry>')' | '['<collection-index>']' };
 reference-property = { <class> | 
                  [identifier] *( '[' <collection-index> ']' ) ?('::' <function-handle>) |
                  [type] };
@@ -114,8 +110,10 @@ argument-value = { <literal> |
             <conditional> |
             <calculation> |
             <cast>;           
-            
-argument-list = <argument>*(','<argument>);
+
+argument-name = [identifier];            
+argument-entry = ?(<argument-name> ':') <argument-value>;    
+argument-list = ?<argument-entry>*(','<argument-entry>);
 
 assignment = <reference>?_<assignment-operator>?_<expression>;
 assignment-operand = '('<assignment>')';

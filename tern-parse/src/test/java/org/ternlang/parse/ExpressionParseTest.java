@@ -10,11 +10,15 @@ public class ExpressionParseTest extends TestCase {
       SyntaxParser tree = LexerBuilder.create(GRAMMAR_FILE);
 
       assertNotNull(tree);
-      analyze(tree, "price: null", "function-argument");
-      analyze(tree, "price: null, quantity: 100", "function-argument-list");
-      analyze(tree, "price: null, quantity: 100, 22.1", "function-argument-list");
-      analyze(tree, "null, 100, 22.1", "function-argument-list");
-      analyze(tree, "1 > 2 ? 1 : 2, 100, 22.1", "function-argument-list");
+      analyze(tree, "p", "argument-entry");
+      analyze(tree, "p: p", "argument-entry");
+      analyze(tree, "let p = Point(x: 1, y: 33);", "statement");
+      analyze(tree, "let p = new Point(x: 1, y: 33);", "statement");
+      analyze(tree, "price: null", "argument-entry");
+      analyze(tree, "price: null, quantity: 100", "argument-list");
+      analyze(tree, "price: null, quantity: 100, 22.1", "argument-list");
+      analyze(tree, "null, 100, 22.1", "argument-list");
+      analyze(tree, "1 > 2 ? 1 : 2, 100, 22.1", "argument-list");
       analyze(tree, "async (a) -> a.run()", "reference");
       analyze(tree, "async (a) -> a.run()", "assignment-expression");
       analyze(tree, "async (a) -> a.run()", "closure");

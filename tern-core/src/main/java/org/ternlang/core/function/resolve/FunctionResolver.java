@@ -1,7 +1,7 @@
 package org.ternlang.core.function.resolve;
 
-import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.convert.proxy.Delegate;
+import org.ternlang.core.convert.proxy.ProxyWrapper;
 import org.ternlang.core.function.index.DelegateIndexer;
 import org.ternlang.core.function.index.FunctionIndexer;
 import org.ternlang.core.function.index.FunctionPointer;
@@ -26,12 +26,12 @@ public class FunctionResolver {
    private final ValueIndexer values;
    private final LocalIndexer scopes;
    
-   public FunctionResolver(TypeExtractor extractor, ThreadStack stack, FunctionIndexer indexer) {
+   public FunctionResolver(TypeExtractor extractor, ProxyWrapper wrapper, ThreadStack stack, FunctionIndexer indexer) {
       this.instances = new TypeInstanceIndexer(extractor, indexer);
       this.statics = new TypeStaticIndexer(extractor, stack);
       this.delegates = new DelegateIndexer(extractor, stack);
       this.modules = new ModuleIndexer(extractor, stack);
-      this.scopes = new LocalIndexer(stack, indexer);
+      this.scopes = new LocalIndexer(wrapper, stack, indexer);
       this.values = new ValueIndexer(stack);
    }
 

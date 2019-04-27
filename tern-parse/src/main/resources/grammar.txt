@@ -45,7 +45,11 @@ constructor = 'new';
 
 function = {<constructor> | [identifier]};
 function-name = [identifier] <generic-parameter-list>;
-function-argument-list = ?<argument>*(','<argument>);
+
+
+function-argument-name = [identifier];            
+function-argument = ?(<function-argument-name> ':') <argument-value>;    
+function-argument-list = ?<function-argument>*(','<function-argument>);
 function-invocation = [identifier] <generic-argument-list> ( '(' <function-argument-list> ')' ) *{ '(' <function-curry>')' | '['<collection-index>']' };
 function-curry = <function-argument-list>;
 function-handle = <function>;
@@ -99,7 +103,8 @@ construct = { <construct-object> |
               <construct-set>
             };
 
-argument = { <literal> |
+argument = <argument-value>;
+argument-value = { <literal> |
              <annotation-declaration> |
              <increment-decrement-operand> |
              <prefix-operand> |
@@ -108,8 +113,8 @@ argument = { <literal> |
             <choice> |
             <conditional> |
             <calculation> |
-            <cast>;
-
+            <cast>;           
+            
 argument-list = <argument>*(','<argument>);
 
 assignment = <reference>?_<assignment-operator>?_<expression>;

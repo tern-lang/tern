@@ -20,6 +20,7 @@ range = org.ternlang.tree.collection.Range
 cast = org.ternlang.tree.Cast
 variable = org.ternlang.tree.variable.Variable
 variable-reference = org.ternlang.tree.variable.VariableReference
+function-argument = org.ternlang.tree.Argument
 function-argument-list = org.ternlang.tree.ArgumentList
 function-invocation = org.ternlang.tree.function.FunctionInvocation
 function-curry = org.ternlang.tree.function.FunctionCurry

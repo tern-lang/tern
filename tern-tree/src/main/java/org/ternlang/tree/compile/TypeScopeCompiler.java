@@ -21,7 +21,7 @@ public class TypeScopeCompiler extends ScopeCompiler{
    public Scope define(Scope scope, Type type) throws Exception{
       List<Constraint> constraints = generics.getGenerics(scope);
       Scope outer = type.getScope();
-      Scope inner = outer.getStack();
+      Scope inner = outer.getChild();
       ScopeState state = inner.getState();
       int size = constraints.size();
 
@@ -38,7 +38,7 @@ public class TypeScopeCompiler extends ScopeCompiler{
    public Scope compile(Scope scope, Type type, Function function) throws Exception {
       List<Constraint> constraints = generics.getGenerics(scope);
       Scope outer = type.getScope();
-      Scope inner = outer.getStack();
+      Scope inner = outer.getChild();
       ScopeState state = inner.getState();
       int size = constraints.size();
 

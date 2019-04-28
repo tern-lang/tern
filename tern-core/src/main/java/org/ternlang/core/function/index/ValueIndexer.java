@@ -4,15 +4,12 @@ import org.ternlang.core.convert.Score;
 import org.ternlang.core.function.ArgumentConverter;
 import org.ternlang.core.function.Function;
 import org.ternlang.core.function.Signature;
-import org.ternlang.core.stack.ThreadStack;
 import org.ternlang.core.variable.Value;
 
 public class ValueIndexer {
    
-   private final ThreadStack stack;
-   
-   public ValueIndexer(ThreadStack stack) {
-      this.stack = stack;
+   public ValueIndexer() {
+      super();
    }
    
    public FunctionPointer index(Value value, Object... values) throws Exception { // match function variable
@@ -25,7 +22,7 @@ public class ValueIndexer {
          Score score = match.score(values);
          
          if(score.isValid()) {
-            return new TracePointer(function, stack); 
+            return new TracePointer(function); 
          }
       }
       return null;

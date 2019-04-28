@@ -9,7 +9,6 @@ import org.ternlang.core.link.PackageLoader;
 import org.ternlang.core.link.PackageManager;
 import org.ternlang.core.module.ModuleRegistry;
 import org.ternlang.core.platform.PlatformProvider;
-import org.ternlang.core.stack.ThreadStack;
 import org.ternlang.core.type.extend.ClassExtender;
 import org.ternlang.core.type.index.TypeIndexer;
 
@@ -24,9 +23,9 @@ public class CacheTypeLoader implements TypeLoader {
    private final TypeIndexer indexer;
    private final TypeCache cache;
    
-   public CacheTypeLoader(PackageLinker linker, ModuleRegistry registry, ResourceManager manager, ProxyWrapper wrapper, ThreadStack stack){
+   public CacheTypeLoader(PackageLinker linker, ModuleRegistry registry, ResourceManager manager, ProxyWrapper wrapper){
       this.extractor = new TypeExtractor(this);
-      this.provider = new PlatformProvider(extractor, wrapper, stack);
+      this.provider = new PlatformProvider(extractor, wrapper);
       this.scanner = new ImportScanner(manager);
       this.extender = new ClassExtender(this);
       this.indexer = new TypeIndexer(registry, scanner, extender, provider);

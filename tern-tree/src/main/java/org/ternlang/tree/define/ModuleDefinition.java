@@ -85,7 +85,7 @@ public class ModuleDefinition implements Compilation {
          Module module = reference.get();
          Progress<Phase> progress = module.getProgress();
          Scope inner = module.getScope();
-         Scope local = inner.getStack();
+         Scope local = inner.getChild();
          
          try {
             return body.compile(local, null); // must be module scope

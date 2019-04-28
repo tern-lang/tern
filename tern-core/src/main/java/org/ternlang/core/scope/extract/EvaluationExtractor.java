@@ -11,6 +11,7 @@ import org.ternlang.core.module.Module;
 import org.ternlang.core.property.Property;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.scope.ScopeState;
+import org.ternlang.core.stack.StackTrace;
 import org.ternlang.core.stack.ThreadStack;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.Value;
@@ -28,7 +29,8 @@ public class EvaluationExtractor implements ScopeExtractor{
       Module module = original.getModule();
       Context context = module.getContext();
       ThreadStack stack = context.getStack();
-      Function function = stack.current(); // we can determine the function type    
+      StackTrace trace = stack.trace();
+      Function function = trace.current(); // we can determine the function type    
       
       return extract(original, function);
    }

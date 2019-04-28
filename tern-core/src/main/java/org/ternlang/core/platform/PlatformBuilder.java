@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.ternlang.core.convert.proxy.ProxyWrapper;
 import org.ternlang.core.function.index.FunctionIndexer;
-import org.ternlang.core.stack.ThreadStack;
 import org.ternlang.core.type.TypeExtractor;
 
 public class PlatformBuilder {
@@ -16,8 +15,8 @@ public class PlatformBuilder {
    private final ProxyWrapper wrapper;
    private final Platform partial;
    
-   public PlatformBuilder(TypeExtractor extractor, ProxyWrapper wrapper, ThreadStack stack) {
-      this.resolver = new FunctionIndexer(extractor, stack);
+   public PlatformBuilder(TypeExtractor extractor, ProxyWrapper wrapper) {
+      this.resolver = new FunctionIndexer(extractor);
       this.loader = new PlatformClassLoader();
       this.partial = new PartialPlatform();
       this.reference = new AtomicReference<Platform>();

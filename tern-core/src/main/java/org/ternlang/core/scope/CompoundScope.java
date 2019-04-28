@@ -6,17 +6,21 @@ import org.ternlang.core.scope.index.ArrayTable;
 import org.ternlang.core.scope.index.ScopeIndex;
 import org.ternlang.core.scope.index.ScopeTable;
 import org.ternlang.core.scope.index.StackIndex;
+import org.ternlang.core.stack.StackFrame;
+import org.ternlang.core.stack.StackTrace;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.Value;
 
 public class CompoundScope implements Scope {
    
+   private final StackFrame frame;
    private final ScopeIndex index;
    private final ScopeTable table;
    private final ScopeState state;
    private final Scope outer;
    
    public CompoundScope(Scope inner, Scope outer) {
+      this.frame = new StackFrame(outer, true);
       this.index = new StackIndex(inner);
       this.state = new MapState(inner);
       this.table = new ArrayTable();
@@ -24,12 +28,12 @@ public class CompoundScope implements Scope {
    } 
   
    @Override
-   public Scope getStack() {
+   public Scope getChild() {
       throw new InternalStateException("Stack already created");
    }  
    
    @Override
-   public Scope getScope() {
+   public Scope getParent() {
       return outer;
    }
    
@@ -52,6 +56,11 @@ public class CompoundScope implements Scope {
    public Module getModule() {
       return outer.getModule();
    } 
+   
+   @Override
+   public StackTrace getStack() {
+      return frame.getTrace();
+   }
    
    @Override
    public ScopeIndex getIndex(){

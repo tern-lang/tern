@@ -19,7 +19,7 @@ public class ScopePolicyExtractor implements ScopeExtractor {
 
    @Override
    public Scope extract(Scope scope) {
-      Scope outer = scope.getScope();
+      Scope outer = scope.getParent();
       
       if(policy.isExtension()) {
          return extract(scope, outer); // can see callers scope

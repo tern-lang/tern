@@ -4,6 +4,7 @@ import org.ternlang.core.module.Module;
 import org.ternlang.core.platform.Bridge;
 import org.ternlang.core.scope.MapState;
 import org.ternlang.core.scope.Scope;
+import org.ternlang.core.scope.ScopeStack;
 import org.ternlang.core.scope.ScopeState;
 import org.ternlang.core.scope.index.ArrayTable;
 import org.ternlang.core.scope.index.ScopeIndex;
@@ -19,6 +20,7 @@ public class PrimitiveInstance implements Instance {
    private final ScopeTable table;
    private final ScopeState state;
    private final Module module;
+   private final Scope scope;
    private final Value self;
    private final Type real;
    private final Type type;
@@ -29,17 +31,18 @@ public class PrimitiveInstance implements Instance {
       this.self = new Reference(this);
       this.table = new ArrayTable();
       this.module = module;
+      this.scope = scope;
       this.type = type;
       this.real = real;
    }
    
    @Override
-   public Instance getStack() {
+   public Instance getChild() {
       return new CompoundInstance(module, this, this, real);
    } 
    
    @Override
-   public Instance getScope() {
+   public Instance getParent() {
       return this;
    } 
    
@@ -61,6 +64,11 @@ public class PrimitiveInstance implements Instance {
    @Override
    public Object getProxy() {
       return null;
+   }
+   
+   @Override
+   public ScopeStack getStack() {
+      return scope.getStack();
    }
    
    @Override

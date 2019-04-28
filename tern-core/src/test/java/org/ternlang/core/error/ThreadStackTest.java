@@ -41,7 +41,7 @@ public class ThreadStackTest extends TestCase {
          @Override
          public void run(){
             for(int i = 0; i < ITERATIONS; i++){
-               stack.current();
+               stack.trace().current();
             }
          }
       }, "ThreadStack.current");

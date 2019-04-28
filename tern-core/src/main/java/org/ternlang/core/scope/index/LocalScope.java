@@ -3,6 +3,7 @@ package org.ternlang.core.scope.index;
 import org.ternlang.core.module.Module;
 import org.ternlang.core.scope.CompoundScope;
 import org.ternlang.core.scope.Scope;
+import org.ternlang.core.scope.ScopeStack;
 import org.ternlang.core.scope.ScopeState;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.Value;
@@ -24,12 +25,12 @@ public class LocalScope implements Scope {
    }
 
    @Override
-   public Scope getStack() {
+   public Scope getChild() {
       return new CompoundScope(this, outer);
    }
    
    @Override
-   public Scope getScope() {
+   public Scope getParent() {
       return outer;
    }
    
@@ -51,6 +52,11 @@ public class LocalScope implements Scope {
    @Override
    public Module getModule() {
       return inner.getModule();
+   }
+   
+   @Override
+   public ScopeStack getStack() {
+      return outer.getStack();
    }
    
    @Override

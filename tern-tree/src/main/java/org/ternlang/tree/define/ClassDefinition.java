@@ -119,7 +119,7 @@ public class ClassDefinition implements Compilation {
             Type type = builder.compile(collector, outer);
             Progress<Phase> progress = type.getProgress();
             Scope scope = type.getScope();
-            Scope local = scope.getStack(); // make it temporary
+            Scope local = scope.getChild(); // make it temporary
             
             try {
                collector.compile(local, type);

@@ -5,12 +5,15 @@ import org.ternlang.core.scope.index.ArrayTable;
 import org.ternlang.core.scope.index.ScopeIndex;
 import org.ternlang.core.scope.index.ScopeTable;
 import org.ternlang.core.scope.index.StackIndex;
+import org.ternlang.core.stack.StackFrame;
+import org.ternlang.core.stack.StackTrace;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.Transient;
 import org.ternlang.core.variable.Value;
 
 public class ModelScope implements Scope {
    
+   private final StackFrame frame;
    private final ScopeIndex index;
    private final ScopeTable table;
    private final ScopeState state;
@@ -22,13 +25,14 @@ public class ModelScope implements Scope {
    
    public ModelScope(Model model, Module module, Scope scope) {
       this.state = new ModelState(model, scope);
+      this.frame = new StackFrame(this, true);
       this.index = new StackIndex(scope);
       this.table = new ArrayTable();
       this.module = module;
    }
    
    @Override
-   public Scope getStack() {
+   public Scope getChild() {
       return new CompoundScope(this, this);
    } 
    
@@ -38,9 +42,14 @@ public class ModelScope implements Scope {
    }
    
    @Override
-   public Scope getScope() {
+   public Scope getParent() {
       return this;
    } 
+   
+   @Override
+   public StackTrace getStack() {
+      return frame.getTrace();
+   }
    
    @Override
    public ScopeIndex getIndex(){

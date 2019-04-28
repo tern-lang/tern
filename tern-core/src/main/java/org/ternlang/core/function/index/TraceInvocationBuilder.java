@@ -6,14 +6,12 @@ import org.ternlang.core.function.Invocation;
 import org.ternlang.core.function.Origin;
 import org.ternlang.core.function.Signature;
 import org.ternlang.core.scope.Scope;
-import org.ternlang.core.stack.ThreadStack;
+import org.ternlang.core.scope.ScopeStack;
 
 public class TraceInvocationBuilder {
    
-   private final ThreadStack stack;
-   
-   public TraceInvocationBuilder(ThreadStack stack) {
-      this.stack = stack;
+   public TraceInvocationBuilder() {
+      super();
    }
    
    public Invocation create(Function function) {
@@ -21,28 +19,27 @@ public class TraceInvocationBuilder {
       Origin origin = signature.getOrigin();
       
       if(origin.isPlatform()) {
-         return new PlatformInvocation(function, signature, stack);
+         return new PlatformInvocation(function, signature);
       }
       if(origin.isSystem()) {
          return new SystemInvocation(function, signature);
       }
-      return new DefaultInvocation(function, signature, stack);
+      return new DefaultInvocation(function, signature);
    }
    
    private static class DefaultInvocation implements Invocation {
       
       private final Signature signature;
-      private final ThreadStack stack;
       private final Function function;
       
-      public DefaultInvocation(Function function, Signature signature, ThreadStack stack) {
+      public DefaultInvocation(Function function, Signature signature) {
          this.signature = signature;
          this.function = function;
-         this.stack = stack;
       }
       
       @Override
       public Object invoke(Scope scope, Object object, Object... arguments) throws Exception{
+         ScopeStack stack = scope.getStack();
          Invocation invocation = function.getInvocation();
          ArgumentConverter converter = signature.getConverter();
          Object[] list = converter.assign(arguments);
@@ -59,17 +56,16 @@ public class TraceInvocationBuilder {
    private static class PlatformInvocation implements Invocation {
       
       private final Signature signature;
-      private final ThreadStack stack;
       private final Function function;
       
-      public PlatformInvocation(Function function, Signature signature, ThreadStack stack) {
+      public PlatformInvocation(Function function, Signature signature) {
          this.signature = signature;
          this.function = function;
-         this.stack = stack;
       }
       
       @Override
       public Object invoke(Scope scope, Object object, Object... arguments) throws Exception{
+         ScopeStack stack = scope.getStack();
          Invocation invocation = function.getInvocation();
          ArgumentConverter converter = signature.getConverter();
          Object[] list = converter.convert(arguments);

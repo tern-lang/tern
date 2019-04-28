@@ -4,10 +4,9 @@ import java.util.List;
 
 import org.ternlang.core.EntityCache;
 import org.ternlang.core.ModifierType;
-import org.ternlang.core.type.Type;
 import org.ternlang.core.convert.TypeInspector;
 import org.ternlang.core.function.Function;
-import org.ternlang.core.stack.ThreadStack;
+import org.ternlang.core.type.Type;
 import org.ternlang.core.type.TypeExtractor;
 
 public class TypeStaticIndexer {
@@ -18,10 +17,10 @@ public class TypeStaticIndexer {
    private final FunctionPathFinder finder;
    private final TypeInspector inspector;
    
-   public TypeStaticIndexer(TypeExtractor extractor, ThreadStack stack) {
-      this.builder = new FunctionIndexBuilder(extractor, stack);
+   public TypeStaticIndexer(TypeExtractor extractor) {
+      this.builder = new FunctionIndexBuilder(extractor);
       this.indexes = new EntityCache<FunctionIndex>();
-      this.converter = new FunctionPointerConverter(stack);
+      this.converter = new FunctionPointerConverter();
       this.finder = new FunctionPathFinder();
       this.inspector = new TypeInspector();
    }

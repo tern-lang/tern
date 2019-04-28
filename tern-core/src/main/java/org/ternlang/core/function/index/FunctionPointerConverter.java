@@ -1,18 +1,15 @@
 package org.ternlang.core.function.index;
 
 import org.ternlang.core.function.Function;
-import org.ternlang.core.stack.ThreadStack;
 
 public class FunctionPointerConverter {
    
-   private final ThreadStack stack;
-   
-   public FunctionPointerConverter(ThreadStack stack) {
-      this.stack = stack;
+   public FunctionPointerConverter() {
+      super();
    }
    
    public FunctionPointer convert(Function function) {
-      return new TracePointer(function, stack);
+      return new TracePointer(function);
    }
 
    public Function convert(FunctionPointer pointer) {

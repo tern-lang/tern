@@ -18,7 +18,7 @@ public class SuperInstanceBuilder {
    public Scope create(Scope scope, Value left) throws Exception {
       Type real = left.getValue();
       Instance instance = (Instance)scope;
-      Instance outer = instance.getScope();
+      Instance outer = instance.getParent();
       Module module = type.getModule();
 
       return new SuperInstance(module, outer, real, type);

@@ -8,14 +8,13 @@ import org.ternlang.core.convert.Score;
 import org.ternlang.core.function.ArgumentConverter;
 import org.ternlang.core.function.Function;
 import org.ternlang.core.function.Signature;
-import org.ternlang.core.stack.ThreadStack;
 import org.ternlang.core.type.Type;
 
 public class FunctionReducer {
    
    private final FunctionPointer invalid;
    
-   public FunctionReducer(ThreadStack stack) {
+   public FunctionReducer() {
       this.invalid = new ErrorPointer();
    }
 

@@ -6,6 +6,7 @@ import java.util.concurrent.Executor;
 
 import org.ternlang.core.Context;
 import org.ternlang.core.module.Path;
+import org.ternlang.core.stack.StackTrace;
 import org.ternlang.core.stack.ThreadStack;
 import org.ternlang.parse.SyntaxNode;
 import org.ternlang.tree.InstructionResolver;
@@ -32,11 +33,12 @@ public class OperationAssembler implements Assembler {
    @Override
    public <T> T assemble(SyntaxNode token, Path path) throws Exception {
       ThreadStack stack = context.getStack();
+      StackTrace trace = stack.trace();
       
       try {
          return (T)traverser.create(token, path);
       } finally {
-         stack.clear();
+         trace.clear();
       }
    }
 }

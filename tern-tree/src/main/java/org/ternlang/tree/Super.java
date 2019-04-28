@@ -2,16 +2,14 @@ package org.ternlang.tree;
 
 import static org.ternlang.core.ModifierType.CONSTANT;
 
-import org.ternlang.core.Context;
 import org.ternlang.core.Evaluation;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.error.InternalStateException;
 import org.ternlang.core.function.Function;
-import org.ternlang.core.module.Module;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.scope.ScopeBinder;
+import org.ternlang.core.scope.ScopeStack;
 import org.ternlang.core.scope.instance.Instance;
-import org.ternlang.core.stack.ThreadStack;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.Value;
 import org.ternlang.parse.StringToken;
@@ -34,9 +32,7 @@ public class Super extends Evaluation {
    
    @Override
    public Value evaluate(Scope scope, Value left) throws Exception {
-      Module module = scope.getModule();
-      Context context = module.getContext();
-      ThreadStack stack = context.getStack();
+      ScopeStack stack = scope.getStack();
       Function function = stack.current(); // we can determine the function type
       
       if(function == null) {

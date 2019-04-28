@@ -51,7 +51,7 @@ public class ConstraintProjectionTest extends TestCase {
 
       Constraint left = createConstraint(null, Map.class, GenericPair.of("X", String.class), GenericPair.of("Y", Integer.class));
       // public <F> Map<F, Integer> thisMethod()
-      Scope scopeMap_FasString_String = context.getRegistry().addModule(Reserved.DEFAULT_MODULE).getScope().getStack();
+      Scope scopeMap_FasString_String = context.getRegistry().addModule(Reserved.DEFAULT_MODULE).getScope().getChild();
       //Scope scope, GenericPair[] typeParams, GenericPair[] functionParams, Map<String, GenericPair> params
       Map<String, GenericPair> params=new HashMap<String, GenericPair>();
       params.put("a", GenericPair.of("A", Object.class));
@@ -83,7 +83,7 @@ public class ConstraintProjectionTest extends TestCase {
 
       
       // public Map<F, T> thisMethod()
-      Scope scopeMap_F_T = context.getRegistry().addModule(Reserved.DEFAULT_MODULE).getScope().getStack();
+      Scope scopeMap_F_T = context.getRegistry().addModule(Reserved.DEFAULT_MODULE).getScope().getChild();
       Attribute returnsMap_F_T = createAttribute(scopeMap_F_T, GenericFuncBase.class, null, Map.class, new GenericPair[]{GenericPair.of("F", Object.class), GenericPair.of("T", Object.class)});
       ConstraintTransform transformMap_F_T = createTransform(GenericRoot.class, returnsMap_F_T);
       Constraint resultMap_F_T = transformMap_F_T.apply(left).getResult(scopeMap_F_T, returnsMap_F_T.getConstraint());      
@@ -96,7 +96,7 @@ public class ConstraintProjectionTest extends TestCase {
       
       
       // public Map<F, String> thisMethod()
-      Scope scopeMap_F_String = context.getRegistry().addModule(Reserved.DEFAULT_MODULE).getScope().getStack();
+      Scope scopeMap_F_String = context.getRegistry().addModule(Reserved.DEFAULT_MODULE).getScope().getChild();
       Attribute returnsMap_F_String = createAttribute(scopeMap_F_String, GenericFuncBase.class, null, Map.class, new GenericPair[]{GenericPair.of("F", Object.class), GenericPair.of(null, String.class)});
       ConstraintTransform transformMap_F_String = createTransform(GenericRoot.class, returnsMap_F_String);
       Constraint resultMap_F_String = transformMap_F_String.apply(left).getResult(scopeMap_F_String, returnsMap_F_String.getConstraint());      
@@ -108,7 +108,7 @@ public class ConstraintProjectionTest extends TestCase {
 
       
       // public <F> Map<F, Integer> thisMethod()
-      Scope scopeMap_FasString_String = context.getRegistry().addModule(Reserved.DEFAULT_MODULE).getScope().getStack();
+      Scope scopeMap_FasString_String = context.getRegistry().addModule(Reserved.DEFAULT_MODULE).getScope().getChild();
       Attribute returnsMap_FasString_String = createAttribute(scopeMap_FasString_String, GenericFuncBase.class, null, Map.class, new GenericPair[]{GenericPair.of("F", Object.class), GenericPair.of(null, Integer.class)}, GenericPair.of("F", String.class));
       ConstraintTransform transformMap_FasString_String = createTransform(GenericRoot.class, returnsMap_FasString_String);
       Constraint resultMap_FasString_String = transformMap_FasString_String.apply(left).getResult(scopeMap_FasString_String, returnsMap_FasString_String.getConstraint());      
@@ -128,7 +128,7 @@ public class ConstraintProjectionTest extends TestCase {
       Constraint left = createConstraint(null, Map.class, new GenericPair[]{GenericPair.of("K", String.class), GenericPair.of("V", Integer.class)});
 
       // public List<V> getMap()
-      Scope scopeV = context.getRegistry().addModule(Reserved.DEFAULT_MODULE).getScope().getStack();
+      Scope scopeV = context.getRegistry().addModule(Reserved.DEFAULT_MODULE).getScope().getChild();
       Attribute returnsV = createAttribute(scopeV, Map.class, null, List.class,  new GenericPair[]{GenericPair.of("V", Object.class)});
       ConstraintTransform transformV = createTransform(HashMap.class, returnsV);
       ConstraintRule ruleV = transformV.apply(left);      
@@ -140,7 +140,7 @@ public class ConstraintProjectionTest extends TestCase {
       
       
       // public List<K> getMap()
-      Scope scopeK = context.getRegistry().addModule(Reserved.DEFAULT_MODULE).getScope().getStack();
+      Scope scopeK = context.getRegistry().addModule(Reserved.DEFAULT_MODULE).getScope().getChild();
       Attribute returnsK = createAttribute(scopeK, Map.class, null, List.class,  new GenericPair[]{GenericPair.of("K", Object.class)});
       ConstraintTransform transformK = createTransform(HashMap.class, returnsK);
       ConstraintRule ruleK = transformK.apply(left); 

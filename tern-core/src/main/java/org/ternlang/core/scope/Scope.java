@@ -10,10 +10,11 @@ import org.ternlang.core.variable.Value;
 public interface Scope extends Handle {
    Type getType();
    Value getThis();
-   Scope getStack(); // extend on current scope
-   Scope getScope(); // get callers scope  
+   Scope getChild(); // extend on current scope
+   Scope getParent(); // get callers scope  
    ScopeIndex getIndex();
    ScopeTable getTable(); 
-   ScopeState getState();   
+   ScopeState getState();  
+   ScopeStack getStack();
    Module getModule();
 }

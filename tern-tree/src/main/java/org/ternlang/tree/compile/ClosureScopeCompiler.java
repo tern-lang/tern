@@ -21,7 +21,7 @@ public class ClosureScopeCompiler extends FunctionScopeCompiler{
    public Scope compile(Scope closure, Type type, Function function) throws Exception {
       List<Constraint> constraints = generics.getGenerics(closure);
       Scope scope = extractor.extract(closure);
-      Scope stack = scope.getStack();
+      Scope stack = scope.getChild();
       ScopeState state = stack.getState();
       int size = constraints.size();
 

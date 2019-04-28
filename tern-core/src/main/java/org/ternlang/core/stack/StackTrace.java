@@ -6,9 +6,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.ternlang.common.ArrayStack;
 import org.ternlang.common.Stack;
 import org.ternlang.core.function.Function;
+import org.ternlang.core.scope.ScopeStack;
 import org.ternlang.core.trace.Trace;
 
-public class StackTrace implements Iterable  {
+public class StackTrace implements ScopeStack  {
    
    private final Stack<Function> functions;
    private final Stack<Object> stack;
@@ -26,6 +27,7 @@ public class StackTrace implements Iterable  {
       this.threshold = threshold;
    }
    
+   @Override
    public Function current() {
       return functions.peek();
    }
@@ -35,10 +37,12 @@ public class StackTrace implements Iterable  {
       return stack.iterator();
    }
    
+   @Override
    public void before(Trace trace) {
       stack.push(trace);
    }
    
+   @Override
    public void before(Function function) {
       int size = depth.incrementAndGet();
       
@@ -50,6 +54,7 @@ public class StackTrace implements Iterable  {
       }     
    }
    
+   @Override
    public void after(Trace trace) { // remove from stack
       while(!stack.isEmpty()) {
          Object next = stack.pop();
@@ -66,6 +71,7 @@ public class StackTrace implements Iterable  {
       }
    }
    
+   @Override
    public void after(Function function) { 
       while(!stack.isEmpty()) {
          Object next = stack.pop();
@@ -84,6 +90,7 @@ public class StackTrace implements Iterable  {
       }
    }
    
+   @Override
    public void clear() {
       stack.clear();
    }

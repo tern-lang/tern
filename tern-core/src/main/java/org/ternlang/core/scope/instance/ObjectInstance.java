@@ -3,6 +3,7 @@ package org.ternlang.core.scope.instance;
 import org.ternlang.core.convert.proxy.ScopeProxy;
 import org.ternlang.core.module.Module;
 import org.ternlang.core.platform.Bridge;
+import org.ternlang.core.scope.ScopeStack;
 import org.ternlang.core.scope.ScopeState;
 import org.ternlang.core.scope.index.ScopeIndex;
 import org.ternlang.core.scope.index.ScopeTable;
@@ -30,7 +31,7 @@ public class ObjectInstance implements Instance {
    }
    
    @Override
-   public Instance getStack() {
+   public Instance getChild() {
       return new CompoundInstance(module, this, this, type);
    } 
    
@@ -40,7 +41,7 @@ public class ObjectInstance implements Instance {
    }
    
    @Override
-   public Instance getScope() {
+   public Instance getParent() {
       return this; 
    } 
    
@@ -57,6 +58,11 @@ public class ObjectInstance implements Instance {
    @Override
    public Value getThis() {
       return self;
+   }
+   
+   @Override
+   public ScopeStack getStack() {
+      return base.getStack();
    }
    
    @Override

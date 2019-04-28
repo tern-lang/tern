@@ -71,7 +71,7 @@ public class FunctionInvocationPerfTest extends TestCase {
       compiler.compile(source).execute(model);
       Module module = context.getRegistry().addModule(Reserved.DEFAULT_MODULE);
       Scope scope = module.getScope();
-      Scope stack = scope.getStack();
+      Scope stack = scope.getChild();
       
       GenericList list = new GenericList() {
 
@@ -125,7 +125,7 @@ public class FunctionInvocationPerfTest extends TestCase {
             if(arguments.length != names.length) {
                throw new IllegalArgumentException("Arguments don't match signature");
             }
-            Scope stack = scope.getScope();
+            Scope stack = scope.getParent();
             ScopeTable table = stack.getTable();
             
             for(int i = 0; i < names.length; i++) {

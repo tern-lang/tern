@@ -1,7 +1,6 @@
 package org.ternlang.core.function.index;
 
 import org.ternlang.core.module.Module;
-import org.ternlang.core.stack.ThreadStack;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.type.TypeExtractor;
 
@@ -11,13 +10,13 @@ public class FunctionIndexBuilder {
    private final FunctionReducer reducer;
    private final int limit; 
    
-   public FunctionIndexBuilder(TypeExtractor extractor, ThreadStack stack) {
-      this(extractor, stack, 20);
+   public FunctionIndexBuilder(TypeExtractor extractor) {
+      this(extractor, 20);
    }
    
-   public FunctionIndexBuilder(TypeExtractor extractor, ThreadStack stack, int limit) {
+   public FunctionIndexBuilder(TypeExtractor extractor, int limit) {
       this.builder = new FunctionKeyBuilder(extractor);
-      this.reducer = new FunctionReducer(stack);
+      this.reducer = new FunctionReducer();
       this.limit = limit;
    }
    

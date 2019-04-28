@@ -9,7 +9,7 @@ public class PrimitiveState extends TypeState {
 
    @Override
    public Result execute(Scope scope, Type type) throws Exception {  
-      Scope outer = scope.getScope();
+      Scope outer = scope.getParent();
       return Result.getNormal(outer);
    }
 

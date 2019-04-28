@@ -35,7 +35,7 @@ public class SuperInvocation extends Evaluation {
 
    @Override
    public Constraint compile(Scope scope, Constraint left) throws Exception {
-      Scope outer = scope.getScope();
+      Scope outer = scope.getParent();
       FunctionDispatcher dispatcher = matcher.match(scope, constraint);  
       Scope compound = extractor.extract(scope, outer);
       Constraint[] list = arguments.compile(compound, type); // arguments have no left hand side

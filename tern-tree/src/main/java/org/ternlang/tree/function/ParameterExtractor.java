@@ -47,7 +47,7 @@ public class ParameterExtractor {
 
    public Scope extract(Scope scope, Object[] arguments) throws Exception {
       List<ParameterAppender> parameters = collector.collect();
-      Scope inner = scope.getStack();
+      Scope inner = scope.getChild();
       int count = parameters.size();
 
       for(int i = 0; i < count; i++) {

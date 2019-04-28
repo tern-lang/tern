@@ -3,8 +3,6 @@ package org.ternlang.core;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.TestCase;
-
 import org.ternlang.common.store.ClassPathStore;
 import org.ternlang.common.store.Store;
 import org.ternlang.core.constraint.transform.ConstraintTransformer;
@@ -33,6 +31,8 @@ import org.ternlang.core.trace.TraceInterceptor;
 import org.ternlang.core.type.CacheTypeLoader;
 import org.ternlang.core.type.TypeExtractor;
 import org.ternlang.core.type.TypeLoader;
+
+import junit.framework.TestCase;
 
 public class FunctionBinderTest extends TestCase {
    
@@ -158,11 +158,11 @@ public class FunctionBinderTest extends TestCase {
          this.wrapper = new ProxyWrapper(this);
          this.manager = new StoreManager(store);
          this.registry = new ModuleRegistry(this, null);
-         this.loader = new CacheTypeLoader(linker, registry, manager, wrapper, stack);
+         this.loader = new CacheTypeLoader(linker, registry, manager, wrapper);
          this.extractor = new TypeExtractor(loader);
          this.transformer = new ConstraintTransformer(extractor);
-         this.indexer = new FunctionIndexer(extractor, stack);
-         this.resolver = new FunctionResolver(extractor, wrapper, stack, indexer);
+         this.indexer = new FunctionIndexer(extractor);
+         this.resolver = new FunctionResolver(extractor, wrapper, indexer);
          this.matcher = new ConstraintMatcher(loader, wrapper);
          this.handler = new ErrorHandler(extractor, stack);
          this.table = new FunctionBinder(resolver, handler);

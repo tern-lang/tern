@@ -6,6 +6,8 @@ import org.ternlang.core.error.InternalStateException;
 import org.ternlang.core.function.Function;
 import org.ternlang.core.function.Invocation;
 import org.ternlang.core.function.resolve.FunctionResolver;
+import org.ternlang.core.module.Module;
+import org.ternlang.core.scope.Scope;
 
 public class FunctionProxyHandler implements ProxyHandler { 
    
@@ -13,12 +15,14 @@ public class FunctionProxyHandler implements ProxyHandler {
    private final ProxyFunctionResolver resolver;
    private final ProxyWrapper wrapper;
    private final Function function;
+   private final Module module;
    
-   public FunctionProxyHandler(ProxyWrapper wrapper, FunctionResolver resolver, MethodMatcher matcher, Function function) {
+   public FunctionProxyHandler(ProxyWrapper wrapper, FunctionResolver resolver, MethodMatcher matcher, Function function, Module module) {
       this.resolver = new ProxyFunctionResolver(resolver, matcher, function);
       this.extractor = new ProxyArgumentExtractor(wrapper);
       this.function = function;
       this.wrapper = wrapper;
+      this.module = module;
    }
    
    @Override
@@ -30,7 +34,8 @@ public class FunctionProxyHandler implements ProxyHandler {
       if(invocation == null) {
          throw new InternalStateException("Closure not matched with " + width +" arguments");
       }
-      Object data = invocation.invoke(null, proxy, convert);
+      Scope scope = module.getScope();
+      Object data = invocation.invoke(scope, proxy, convert);
       
       if(data != null) {
          return wrapper.toProxy(data);

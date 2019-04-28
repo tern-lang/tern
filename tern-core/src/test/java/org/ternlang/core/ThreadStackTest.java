@@ -51,7 +51,7 @@ public class ThreadStackTest extends TestCase {
    
    public static void createTrace(ThreadStack stack, String resource, int line){
       FilePathConverter converter = new FilePathConverter();
-      stack.before(new Trace(TraceType.NORMAL, new ContextModule(null, null, converter.createPath(resource), converter.createModule(resource),"", -1), converter.createPath(resource), line));
+      stack.trace().before(new Trace(TraceType.NORMAL, new ContextModule(null, null, converter.createPath(resource), converter.createModule(resource),"", -1), converter.createPath(resource), line));
    }
    
    public static void createTypeFunction(ThreadStack stack, String functionName, String typeName, String moduleName){
@@ -61,7 +61,7 @@ public class ThreadStackTest extends TestCase {
       List<Parameter> parameters = new ArrayList<Parameter>();
       Signature signature = new FunctionSignature(parameters, EMPTY_LIST, module, null, DEFAULT, true);
       
-      stack.before(new InvocationFunction(signature, null, type, null, functionName, 11));
+      stack.trace().before(new InvocationFunction(signature, null, type, null, functionName, 11));
    }
    
    public static void createModuleFunction(ThreadStack stack, String functionName, String moduleName){
@@ -71,6 +71,6 @@ public class ThreadStackTest extends TestCase {
       Signature signature = new FunctionSignature(parameters, EMPTY_LIST, module, null, DEFAULT, true);
       FunctionType type = new FunctionType(signature, module, null);
       
-      stack.before(new InvocationFunction(signature, null, type, null, functionName, 11));
+      stack.trace().before(new InvocationFunction(signature, null, type, null, functionName, 11));
    }
 }

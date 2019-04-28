@@ -71,7 +71,7 @@ public class InvocationCachePerfTest extends TestCase {
       InvocationCache cache = new InvocationCache(matcher, extractor);
       Module module = context.getRegistry().addModule(Reserved.DEFAULT_MODULE);
       Scope scope = module.getScope();
-      Scope stack = scope.getStack();
+      Scope stack = scope.getChild();
       
       return new InvocationContext(cache, context, stack);
    }

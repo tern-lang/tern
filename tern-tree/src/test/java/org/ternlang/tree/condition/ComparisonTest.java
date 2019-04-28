@@ -1,6 +1,5 @@
 package org.ternlang.tree.condition;
 
-import junit.framework.TestCase;
 import org.ternlang.core.Context;
 import org.ternlang.core.IdentityEvaluation;
 import org.ternlang.core.Reserved;
@@ -12,6 +11,8 @@ import org.ternlang.core.type.TypeLoader;
 import org.ternlang.core.variable.Value;
 import org.ternlang.parse.StringToken;
 import org.ternlang.tree.MockContext;
+
+import junit.framework.TestCase;
 
 public class ComparisonTest extends TestCase {
 

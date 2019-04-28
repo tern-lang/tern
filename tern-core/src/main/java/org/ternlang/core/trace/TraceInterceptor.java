@@ -17,7 +17,9 @@ public class TraceInterceptor implements TraceListener {
    public void traceBefore(Scope scope, Trace trace) {
       ScopeStack stack = scope.getStack();
       
-      stack.before(trace);
+      if(stack != null) {
+         stack.before(trace);
+      }
       distributor.traceBefore(scope, trace);
    }
    
@@ -25,7 +27,9 @@ public class TraceInterceptor implements TraceListener {
    public void traceAfter(Scope scope, Trace trace) {
       ScopeStack stack = scope.getStack();
       
-      stack.after(trace);
+      if(stack != null) {
+         stack.after(trace);
+      }
       distributor.traceAfter(scope, trace);
    }
    

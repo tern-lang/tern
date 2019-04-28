@@ -8,14 +8,8 @@ public class StackFrame {
    
    private StackTrace trace;
    private Scope scope;
-   private boolean cache;
    
    public StackFrame(Scope scope) {
-      this(scope, false);
-   }
-   
-   public StackFrame(Scope scope, boolean cache) {
-      this.cache = cache;
       this.scope = scope;
    }
    
@@ -25,10 +19,7 @@ public class StackFrame {
          Context context = module.getContext();
          ThreadStack stack = context.getStack();
          
-         if(cache) {
-            return trace = stack.trace();
-         }
-         return stack.trace();
+         return trace = stack.trace();
       }
       return trace;
    }

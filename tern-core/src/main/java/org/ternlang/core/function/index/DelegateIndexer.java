@@ -6,6 +6,7 @@ import org.ternlang.core.EntityCache;
 import org.ternlang.core.convert.TypeInspector;
 import org.ternlang.core.convert.proxy.Delegate;
 import org.ternlang.core.function.Function;
+import org.ternlang.core.stack.ThreadStack;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.type.TypeExtractor;
 
@@ -18,9 +19,9 @@ public class DelegateIndexer {
    private final TypeInspector inspector;
    private final TypeExtractor extractor;
    
-   public DelegateIndexer(TypeExtractor extractor) {
+   public DelegateIndexer(TypeExtractor extractor, ThreadStack stack) {
       this.builder = new FunctionIndexBuilder(extractor);
-      this.converter = new FunctionPointerConverter();
+      this.converter = new FunctionPointerConverter(stack);
       this.indexes = new EntityCache<FunctionIndex>();
       this.finder = new FunctionPathFinder();
       this.inspector = new TypeInspector();

@@ -20,7 +20,6 @@ public class PrimitiveInstance implements Instance {
    private final ScopeTable table;
    private final ScopeState state;
    private final Module module;
-   private final Scope scope;
    private final Value self;
    private final Type real;
    private final Type type;
@@ -31,7 +30,6 @@ public class PrimitiveInstance implements Instance {
       this.self = new Reference(this);
       this.table = new ArrayTable();
       this.module = module;
-      this.scope = scope;
       this.type = type;
       this.real = real;
    }
@@ -68,7 +66,7 @@ public class PrimitiveInstance implements Instance {
    
    @Override
    public ScopeStack getStack() {
-      return scope.getStack();
+      return null;
    }
    
    @Override

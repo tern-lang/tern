@@ -6,6 +6,7 @@ import org.ternlang.core.EntityCache;
 import org.ternlang.core.ModifierType;
 import org.ternlang.core.convert.TypeInspector;
 import org.ternlang.core.function.Function;
+import org.ternlang.core.stack.ThreadStack;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.type.TypeExtractor;
 
@@ -17,9 +18,9 @@ public class FunctionIndexer {
    private final FunctionPathFinder finder;
    private final TypeInspector inspector;
    
-   public FunctionIndexer(TypeExtractor extractor) {
+   public FunctionIndexer(TypeExtractor extractor, ThreadStack stack) {
       this.builder = new FunctionIndexBuilder(extractor);
-      this.converter = new FunctionPointerConverter();
+      this.converter = new FunctionPointerConverter(stack);
       this.indexes = new EntityCache<TypeIndex>();
       this.finder = new FunctionPathFinder();
       this.inspector = new TypeInspector();

@@ -12,6 +12,7 @@ import org.ternlang.core.function.index.TypeStaticIndexer;
 import org.ternlang.core.function.index.ValueIndexer;
 import org.ternlang.core.module.Module;
 import org.ternlang.core.scope.Scope;
+import org.ternlang.core.stack.ThreadStack;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.type.TypeExtractor;
 import org.ternlang.core.variable.Value;
@@ -25,13 +26,13 @@ public class FunctionResolver {
    private final ValueIndexer values;
    private final LocalIndexer scopes;
    
-   public FunctionResolver(TypeExtractor extractor, ProxyWrapper wrapper, FunctionIndexer indexer) {
+   public FunctionResolver(TypeExtractor extractor, ProxyWrapper wrapper, FunctionIndexer indexer, ThreadStack stack) {
       this.instances = new TypeInstanceIndexer(extractor, indexer);
-      this.statics = new TypeStaticIndexer(extractor);
-      this.delegates = new DelegateIndexer(extractor);
-      this.modules = new ModuleIndexer(extractor);
-      this.scopes = new LocalIndexer(wrapper, indexer);
-      this.values = new ValueIndexer();
+      this.statics = new TypeStaticIndexer(extractor, stack);
+      this.delegates = new DelegateIndexer(extractor, stack);
+      this.modules = new ModuleIndexer(extractor, stack);
+      this.scopes = new LocalIndexer(wrapper, indexer, stack);
+      this.values = new ValueIndexer(stack);
    }
 
    public FunctionCall resolveInstance(Scope scope, Type source, String name, Type... list) throws Exception {

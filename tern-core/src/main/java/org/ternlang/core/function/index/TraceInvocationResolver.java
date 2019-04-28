@@ -2,6 +2,7 @@ package org.ternlang.core.function.index;
 
 import org.ternlang.core.function.Function;
 import org.ternlang.core.function.Invocation;
+import org.ternlang.core.stack.ThreadStack;
 
 public class TraceInvocationResolver {
    
@@ -9,8 +10,8 @@ public class TraceInvocationResolver {
    private Invocation invocation;
    private Function function;
    
-   public TraceInvocationResolver(Function function) {
-      this.builder = new TraceInvocationBuilder();
+   public TraceInvocationResolver(ThreadStack stack, Function function) {
+      this.builder = new TraceInvocationBuilder(stack);
       this.function = function;
    }
    

@@ -11,10 +11,8 @@ import org.ternlang.core.error.ErrorHandler;
 import org.ternlang.core.error.InternalStateException;
 import org.ternlang.core.function.Function;
 import org.ternlang.core.function.resolve.FunctionResolver;
-import org.ternlang.core.module.Module;
 import org.ternlang.core.scope.instance.Instance;
 import org.ternlang.core.trace.TraceInterceptor;
-import org.ternlang.core.type.Type;
 
 public class ProxyInstanceBuilder {
 
@@ -54,14 +52,12 @@ public class ProxyInstanceBuilder {
       Class[] interfaces = collector.collect(Delegate.class, require);
       FunctionResolver resolver = context.getResolver();
       Predicate predicate = builder.create(function, require);
-      Type type = function.getSource();
-      Module module = type.getModule();
       
       if(interfaces.length == 0) {
          throw new InternalStateException("No interfaces found for function");
       }
       MethodMatcher matcher = new ClosureMethodMatcher(resolver, function, predicate);
-      FunctionProxyHandler handler = new FunctionProxyHandler(wrapper, resolver, matcher, function, module);
+      FunctionProxyHandler handler = new FunctionProxyHandler(wrapper, resolver, matcher, function);
 
       return Proxy.newProxyInstance(loader, interfaces, handler);
    }

@@ -11,7 +11,6 @@ import org.ternlang.core.scope.index.ArrayTable;
 import org.ternlang.core.scope.index.ScopeIndex;
 import org.ternlang.core.scope.index.ScopeTable;
 import org.ternlang.core.scope.index.StackIndex;
-import org.ternlang.core.stack.StackFrame;
 import org.ternlang.core.stack.StackTrace;
 import org.ternlang.core.variable.Constant;
 import org.ternlang.core.variable.Value;
@@ -19,7 +18,6 @@ import org.ternlang.core.variable.Value;
 public class StaticScope implements Scope {
    
    private final Constraint constraint;
-   private final StackFrame frame;
    private final ScopeIndex index;
    private final ScopeTable table;
    private final ScopeState state;
@@ -29,7 +27,6 @@ public class StaticScope implements Scope {
    public StaticScope(Type type) {
       this.constraint = new TypeConstraint(type);
       this.self = new Constant(this, constraint);
-      this.frame = new StackFrame(this);
       this.index = new StackIndex(this);
       this.table = new ArrayTable();
       this.state = new MapState();
@@ -58,7 +55,7 @@ public class StaticScope implements Scope {
    
    @Override
    public StackTrace getStack() {
-      return frame.getTrace();
+      return null;
    }
    
    @Override

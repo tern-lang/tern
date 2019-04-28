@@ -64,16 +64,16 @@ public class StoreContext implements Context {
       this.manager = new StoreManager(store);
       this.registry = new ModuleRegistry(this, executor);
       this.linker = new ExecutorLinker(this, executor);      
-      this.loader = new CacheTypeLoader(linker, registry, manager, wrapper);
+      this.loader = new CacheTypeLoader(linker, registry, manager, wrapper, stack);
       this.matcher = new ConstraintMatcher(loader, wrapper);
       this.extractor = new TypeExtractor(loader);
       this.transformer = new ConstraintTransformer(extractor);
       this.handler = new ErrorHandler(extractor, stack);
-      this.indexer = new FunctionIndexer(extractor);
+      this.indexer = new FunctionIndexer(extractor, stack);
       this.validator = new ExecutableValidator(matcher, transformer, extractor, indexer, verifier);
-      this.resolver = new FunctionResolver(extractor, wrapper, indexer);
+      this.resolver = new FunctionResolver(extractor, wrapper, indexer, stack);
       this.evaluator = new OperationEvaluator(this, verifier, executor);
-      this.provider = new PlatformProvider(extractor, wrapper);
+      this.provider = new PlatformProvider(extractor, wrapper, stack);
       this.binder = new FunctionBinder(resolver, handler);
       this.scheduler = new ExecutorScheduler(handler, executor);
    }

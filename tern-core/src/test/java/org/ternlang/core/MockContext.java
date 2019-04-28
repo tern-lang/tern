@@ -48,11 +48,11 @@ public class MockContext implements Context {
       this.wrapper = new ProxyWrapper(this);
       this.manager = new StoreManager(store);
       this.registry = new ModuleRegistry(this, null);
-      this.loader = new CacheTypeLoader(linker, registry, manager, wrapper);
+      this.loader = new CacheTypeLoader(linker, registry, manager, wrapper, stack);
       this.extractor = new TypeExtractor(loader);
       this.transformer = new ConstraintTransformer(extractor);
-      this.indexer = new FunctionIndexer(extractor);
-      this.resolver = new FunctionResolver(extractor, wrapper, indexer);
+      this.indexer = new FunctionIndexer(extractor, stack);
+      this.resolver = new FunctionResolver(extractor, wrapper, indexer, stack);
       this.matcher = new ConstraintMatcher(loader, wrapper);
       this.handler = new ErrorHandler(extractor, stack);
       this.table = new FunctionBinder(resolver, handler);

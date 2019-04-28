@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.Locale;
 
-import junit.framework.TestCase;
 import org.ternlang.core.Context;
 import org.ternlang.core.IdentityEvaluation;
 import org.ternlang.core.Reserved;
@@ -18,6 +17,8 @@ import org.ternlang.core.scope.ModelScope;
 import org.ternlang.tree.MockContext;
 import org.ternlang.tree.MockType;
 import org.ternlang.tree.math.NumberOperator;
+
+import junit.framework.TestCase;
 
 public class CalculationOperationTest extends TestCase {
 

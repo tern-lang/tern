@@ -6,12 +6,15 @@ import org.ternlang.core.function.Invocation;
 import org.ternlang.core.function.Origin;
 import org.ternlang.core.function.Signature;
 import org.ternlang.core.scope.Scope;
-import org.ternlang.core.scope.ScopeStack;
+import org.ternlang.core.stack.StackTrace;
+import org.ternlang.core.stack.ThreadStack;
 
 public class TraceInvocationBuilder {
    
-   public TraceInvocationBuilder() {
-      super();
+   private final ThreadStack stack;
+   
+   public TraceInvocationBuilder(ThreadStack stack) {
+      this.stack = stack;
    }
    
    public Invocation create(Function function) {
@@ -27,7 +30,7 @@ public class TraceInvocationBuilder {
       return new DefaultInvocation(function, signature);
    }
    
-   private static class DefaultInvocation implements Invocation {
+   private class DefaultInvocation implements Invocation {
       
       private final Signature signature;
       private final Function function;
@@ -39,21 +42,21 @@ public class TraceInvocationBuilder {
       
       @Override
       public Object invoke(Scope scope, Object object, Object... arguments) throws Exception{
-         ScopeStack stack = scope.getStack();
          Invocation invocation = function.getInvocation();
          ArgumentConverter converter = signature.getConverter();
          Object[] list = converter.assign(arguments);
-            
+         StackTrace trace = stack.trace();
+         
          try {
-            stack.before(function);
+            trace.before(function);
             return invocation.invoke(scope, object, list);
          } finally {
-            stack.after(function);
+            trace.after(function);
          }
       }
    }
    
-   private static class PlatformInvocation implements Invocation {
+   private class PlatformInvocation implements Invocation {
       
       private final Signature signature;
       private final Function function;
@@ -65,16 +68,16 @@ public class TraceInvocationBuilder {
       
       @Override
       public Object invoke(Scope scope, Object object, Object... arguments) throws Exception{
-         ScopeStack stack = scope.getStack();
          Invocation invocation = function.getInvocation();
          ArgumentConverter converter = signature.getConverter();
          Object[] list = converter.convert(arguments);
-            
+         StackTrace trace = stack.trace();            
+         
          try {
-            stack.before(function);
+            trace.before(function);
             return invocation.invoke(scope, object, list);
          } finally {
-            stack.after(function);
+            trace.after(function);
          }
       }
    }

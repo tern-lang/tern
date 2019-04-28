@@ -8,6 +8,7 @@ import org.ternlang.core.error.InternalStateException;
 import org.ternlang.core.function.Function;
 import org.ternlang.core.function.Invocation;
 import org.ternlang.core.scope.Scope;
+import org.ternlang.core.stack.ThreadStack;
 
 public class TracePointer implements FunctionPointer {
    
@@ -15,8 +16,8 @@ public class TracePointer implements FunctionPointer {
    private final AttributeResultBinder binder;
    private final Function function;
    
-   public TracePointer(Function function) {
-      this.resolver = new TraceInvocationResolver(function);
+   public TracePointer(ThreadStack stack, Function function) {
+      this.resolver = new TraceInvocationResolver(stack, function);
       this.binder = new AttributeResultBinder(function);
       this.function = function;
    }

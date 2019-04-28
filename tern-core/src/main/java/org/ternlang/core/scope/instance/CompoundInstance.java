@@ -5,13 +5,13 @@ import org.ternlang.core.module.Module;
 import org.ternlang.core.platform.Bridge;
 import org.ternlang.core.scope.MapState;
 import org.ternlang.core.scope.Scope;
+import org.ternlang.core.scope.ScopeStack;
 import org.ternlang.core.scope.ScopeState;
 import org.ternlang.core.scope.index.ArrayTable;
 import org.ternlang.core.scope.index.ScopeIndex;
 import org.ternlang.core.scope.index.ScopeTable;
 import org.ternlang.core.scope.index.StackIndex;
 import org.ternlang.core.stack.StackFrame;
-import org.ternlang.core.stack.StackTrace;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.Value;
 
@@ -27,7 +27,7 @@ public class CompoundInstance implements Instance {
    private final Type type;
    
    public CompoundInstance(Module module, Instance instance, Scope outer, Type type) {
-      this.frame = new StackFrame(outer, true);
+      this.frame = new StackFrame(outer);
       this.index = new StackIndex(outer);
       this.state = new MapState(outer);
       this.table = new ArrayTable();
@@ -68,7 +68,7 @@ public class CompoundInstance implements Instance {
    }
 
    @Override
-   public StackTrace getStack() {
+   public ScopeStack getStack() {
       return frame.getTrace();
    }
    

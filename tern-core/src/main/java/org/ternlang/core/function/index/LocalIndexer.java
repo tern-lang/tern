@@ -11,6 +11,7 @@ import org.ternlang.core.function.Function;
 import org.ternlang.core.function.Signature;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.scope.index.LocalScopeFinder;
+import org.ternlang.core.stack.ThreadStack;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.variable.Value;
 
@@ -18,10 +19,12 @@ public class LocalIndexer {
    
    private final LocalFunctionIndexer indexer;
    private final LocalScopeFinder finder;
+   private final ThreadStack stack;
    
-   public LocalIndexer(ProxyWrapper wrapper, FunctionIndexer indexer) {
+   public LocalIndexer(ProxyWrapper wrapper, FunctionIndexer indexer, ThreadStack stack) {
       this.indexer = new LocalFunctionIndexer(wrapper, indexer);
       this.finder = new LocalScopeFinder();
+      this.stack = stack;
    }
    
    public FunctionPointer index(Scope scope, String name, Type... types) throws Exception { // match function variable    
@@ -42,7 +45,7 @@ public class LocalIndexer {
                Score score = match.score(types);
                
                if(score.isValid()) {
-                  return new TracePointer(function);
+                  return new TracePointer(stack, function);
                }
             }
             return indexer.index(scope, type, types);
@@ -68,7 +71,7 @@ public class LocalIndexer {
                Score score = match.score(values);
                
                if(score.isValid()) {
-                  return new TracePointer(function);
+                  return new TracePointer(stack, function);
                }
             }
             return indexer.index(scope, type, values);

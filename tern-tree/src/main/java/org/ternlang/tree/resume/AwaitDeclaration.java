@@ -39,11 +39,13 @@ public class AwaitDeclaration extends Evaluation {
 
    @Override
    public void define(Scope scope) throws Exception {
+      int modifiers = list.getModifiers();
       String name = reference.getName(scope);
       ScopeIndex index = scope.getIndex();
       Address address = index.index(name);
 
       location.set(address);
+      allocator.define(scope, name, modifiers);
    }
 
    @Override

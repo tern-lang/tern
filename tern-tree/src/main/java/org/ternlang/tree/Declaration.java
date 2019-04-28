@@ -16,6 +16,7 @@ import org.ternlang.tree.literal.TextLiteral;
 public class Declaration {
 
    private final AtomicReference<Address> location;
+   
    private final DeclarationAllocator allocator;
    private final NameReference reference;
    private final Evaluation value;
@@ -49,6 +50,8 @@ public class Declaration {
       Address address = index.index(name);
       
       location.set(address);
+      allocator.define(scope, name, modifiers);
+      
       return address;
    }
    

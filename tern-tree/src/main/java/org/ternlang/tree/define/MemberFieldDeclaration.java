@@ -4,6 +4,7 @@ import static org.ternlang.core.ModifierType.CONSTANT;
 import static org.ternlang.core.ModifierType.PUBLIC;
 
 import org.ternlang.core.Evaluation;
+import org.ternlang.core.IdentityEvaluation;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.constraint.DeclarationConstraint;
 import org.ternlang.core.scope.Scope;

@@ -2,7 +2,6 @@ package org.ternlang.tree.define;
 
 import org.ternlang.core.Evaluation;
 import org.ternlang.core.constraint.Constraint;
-import org.ternlang.core.constraint.DeclarationConstraint;
 import org.ternlang.core.error.InternalStateException;
 import org.ternlang.core.function.Accessor;
 import org.ternlang.core.function.AccessorProperty;
@@ -19,7 +18,6 @@ import org.ternlang.tree.literal.TextLiteral;
 public class ModuleProperty {
    
    private final DeclarationAllocator allocator;
-   private final DeclarationConstraint constraint;
    private final NameReference reference;
    private final Evaluation value;
    
@@ -37,7 +35,6 @@ public class ModuleProperty {
    
    public ModuleProperty(TextLiteral identifier, Constraint constraint, Evaluation value) {
       this.allocator = new ModulePropertyAllocator(constraint, value);
-      this.constraint = new DeclarationConstraint(constraint);
       this.reference = new NameReference(identifier);
       this.value = value;
    }  
@@ -45,7 +42,7 @@ public class ModuleProperty {
    public Property define(ModuleBody body, Scope scope, int modifiers) throws Exception {
       String name = reference.getName(scope);
       Accessor accessor = define(body, scope);
-      Constraint require = constraint.getConstraint(scope, modifiers);
+      Constraint require = allocator.define(scope, name, modifiers);
       
       return new AccessorProperty(name, name, null, require, accessor, modifiers);
    }

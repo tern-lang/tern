@@ -61,6 +61,7 @@ public class MemberFieldAssembler {
          if(declare != null) {
             declare.define(scope);
          }
+         allocator.define(scope, name, modifiers);
       }
 
       @Override

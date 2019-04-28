@@ -11,15 +11,19 @@ import org.ternlang.core.variable.Value;
 
 public class DeclarationAllocator {
 
-   private final DeclarationConstraint constraint;
-   private final DeclarationConverter converter;
-   private final Evaluation expression;
+   private DeclarationConstraint constraint;
+   private DeclarationConverter converter;
+   private Evaluation expression;
    
    public DeclarationAllocator(Constraint constraint, Evaluation expression) {      
       this.constraint = new DeclarationConstraint(constraint);
       this.converter = new DeclarationConverter();
       this.expression = expression;
    }   
+   
+   public Constraint define(Scope scope, String name, int modifiers) throws Exception {
+      return constraint = constraint.getConstraint(scope, modifiers);
+   }
    
    public <T extends Value> T compile(Scope scope, String name, int modifiers) throws Exception {
       Type type = constraint.getType(scope);

@@ -27,7 +27,7 @@ public class TraceTypeState extends TypeState {
    public Category define(Scope scope, Type type) throws Exception {
       try {
          return state.define(scope, type);
-      }catch(Exception cause) {
+      } catch(Exception cause) {
          interceptor.traceCompileError(scope, trace, cause);
       }
       return OTHER;
@@ -37,7 +37,7 @@ public class TraceTypeState extends TypeState {
    public void compile(Scope scope, Type type) throws Exception {
       try {
          state.compile(scope, type);
-      }catch(Exception cause) {
+      } catch(Exception cause) {
          interceptor.traceCompileError(scope, trace, cause);
       }
    }
@@ -46,7 +46,7 @@ public class TraceTypeState extends TypeState {
    public void allocate(Scope scope, Type type) throws Exception {
       try {
          state.allocate(scope, type);
-      }catch(Exception cause) {
+      } catch(Exception cause) {
          handler.failInternalError(scope, cause, trace);
       }
    }
@@ -55,9 +55,9 @@ public class TraceTypeState extends TypeState {
    public Result execute(Scope scope, Type type) throws Exception { 
       try {
          return state.execute(scope, type);
-      }catch(Exception cause) {
+      } catch(Exception cause) {
          handler.failInternalError(scope, cause, trace);
-      }
+      } 
       return null;
    }
 }

@@ -5,11 +5,11 @@ import static org.ternlang.core.Reserved.GRAMMAR_SCRIPT;
 import java.lang.management.ManagementFactory;
 import java.text.DecimalFormat;
 
-import com.sun.management.ThreadMXBean;
-import junit.framework.TestCase;
 import org.ternlang.core.Reserved;
 import org.ternlang.parse.SyntaxCompiler;
 import org.ternlang.parse.SyntaxNode;
+
+import com.sun.management.ThreadMXBean;
 
 public class ClosureTest extends ScriptTestCase {
 
@@ -72,6 +72,24 @@ public class ClosureTest extends ScriptTestCase {
    "assert list[1]['entry.value'] == 'val-2';\n"+
    "assert list[2]['entry.key'] == 'key-3';\n"+
    "assert list[2]['entry.value'] == 'val-3';\n";
+   
+   private static final String SOURCE_9 =
+   "function time(name, func){\n"+
+   "   let thread = Thread(-> {\n"+
+   "      println(Thread.currentThread().name);\n"+
+   "      var s = System.currentTimeMillis();\n"+
+   "      func();\n"+
+   "      var f = System.currentTimeMillis();\n"+
+   "      println(name +': '+(f-s));\n"+
+   "   });\n"+
+   "   thread.start();\n"+
+   "   thread.join();\n"+
+   "}\n"+
+   "time('foo', -> {\n"+
+   "   for(i in 0 to 10) {\n"+
+   "      println(i);\n"+
+   "   }\n"+
+   "});\n";
    
    public void testClosure() throws Exception {
       DecimalFormat format = new DecimalFormat("###,###,###,###,###");
@@ -173,6 +191,15 @@ public class ClosureTest extends ScriptTestCase {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       Executable executable = compiler.compile(SOURCE_8);
       System.err.println(SOURCE_8);
+      executable.execute();
+   }
+   
+   public void testClosureInThread() throws Exception {
+      SyntaxNode node = new SyntaxCompiler(Reserved.GRAMMAR_FILE).compile().parse("/path.tern", SOURCE_8, GRAMMAR_SCRIPT);
+      System.out.println(SyntaxPrinter.print(node));
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      Executable executable = compiler.compile(SOURCE_9);
+      System.err.println(SOURCE_9);
       executable.execute();
    }
 }

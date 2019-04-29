@@ -1,7 +1,9 @@
-package org.ternlang.compile;
+package org.ternlang.compile.perf;
 
 import junit.framework.TestCase;
 
+import org.ternlang.compile.ClassPathCompilerBuilder;
+import org.ternlang.compile.Compiler;
 import org.ternlang.core.Bug;
 
 public class LinkedListIteratorTest extends TestCase {

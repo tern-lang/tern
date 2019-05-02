@@ -23,7 +23,7 @@ public class LocalValueFinder {
 
    public Value findValue(Scope scope, Address address) {
       boolean ignore = failure.get();
-
+      
       if(!ignore) {
          Value value = checker.findValue(scope, name, address);
 

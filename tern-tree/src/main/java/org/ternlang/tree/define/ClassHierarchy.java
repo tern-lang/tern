@@ -31,14 +31,28 @@ public class ClassHierarchy implements TypeHierarchy {
       this.traits = traits;
       this.base = base;
    }
+   
+   @Override
+   public void create(Scope scope, Type type) throws Exception {
+      List<Constraint> types = type.getTypes();
+      int modifiers = type.getModifiers();
+      
+      if(base == null) {
+         if(!ModifierType.isAlias(modifiers)) {
+            types.add(any);
+         }
+      } else {
+         if(ModifierType.isEnum(modifiers)) {
+            throw new InternalStateException("Invalid super class for enum '" + type + "'");
+         }
+      }
+   }
 
    @Override
    public void define(Scope scope, Type type) throws Exception {
       List<Constraint> types = type.getTypes();
       
-      if(base == null) {
-         types.add(any);
-      } else {
+      if(base != null) {
          Type match = base.getType(scope);
          
          if(match == null) {

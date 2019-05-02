@@ -1,8 +1,9 @@
 package org.ternlang.core.type;
 
 public enum Phase {
-   CREATE,
-   DEFINE,
-   COMPILE,
-   EXECUTE
+   CREATE, // Create types and functions
+   DEFINE, // Define methods and properties
+   RESOLVE, // Resolve types and properties
+   COMPILE, // Perform static analysis
+   EXECUTE // Execute the program
 }

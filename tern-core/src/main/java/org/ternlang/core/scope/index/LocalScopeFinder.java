@@ -20,7 +20,7 @@ public class LocalScopeFinder {
       if(address == null){
          ScopeState state = scope.getState();
          Value value = state.getValue(name);
-
+            
          if(checker.isValid(value)) { 
             return value;
          }

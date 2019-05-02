@@ -49,6 +49,7 @@ public class ClassBuilder {
          builder.createStaticProperty(body, key, enclosing, constraint);
          state.addValue(key, value);
       } 
+      hierarchy.create(outer, type); 
       reference.set(type);
       
       return type;

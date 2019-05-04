@@ -31,7 +31,7 @@ public class SuperConstructor extends TypePart {
    
    public SuperConstructor(StringToken token, ArgumentList arguments) {
       this.assembler = new SuperConstructorAssembler(arguments);
-      this.constructor = new AnyConstructor();
+      this.constructor = new AnyConstructor(arguments);
       this.extractor = new SuperExtractor();
    }
 

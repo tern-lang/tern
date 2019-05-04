@@ -193,7 +193,7 @@ the boilerplate. Internally evaluations cache the execution trees they represent
 the performance overheads.
 
 ```js
-let instance = eval("n&#101;w " + &#116;ype + "()");
+let instance = eval("new " + name + "()");
 ```
 
 
@@ -734,6 +734,28 @@ func sum(offset, numbers...){ // variable arguments
    }
    return sum;
 }
+```
+
+#### Named Arguments
+
+When the number of arguments increases for a function it can be difficult to determine which values map to
+the parameters they represent. Naming arguments offers a means for the static analyzer to ensure that
+your arguments are mapped to the correct parameters.
+
+```js
+
+func purchaseProduct(product, price, quantity, customer, date) {
+	basket.add(product, quantity);
+	account.deduct(quantity * price);
+}
+
+purchaseProduct(
+	product: 'TV',
+	price: 100.0,
+	quantity: 2,
+	customer: 'Bob',
+	date: '2019-01-01')
+
 ```
 
 #### Closures

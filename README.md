@@ -791,11 +791,12 @@ func sumMax(x) {
 }
 
 func mathOps(x){
-	return {
+   return {
       	'+': (y) -> x + y,
       	'-': (y) -> x - y,
       	'*': (y) -> x * y,
-      	'/': (y) -> x / y;
+      	'/': (y) -> x / y
+   };
 }
 
 assert sumMax(1)(3, 4) == 5;

@@ -58,6 +58,7 @@ and development environment.
           * [Declaration](#declaration)
           * [Type Constraints](#type-constraints)      
           * [Variable Arguments](#variable-arguments)
+          * [Named Arguments](#named-arguments)
           * [Closures](#closures)
           * [Function Handles](#function-handles)      
           * [Generic Functions](#generic-functions)

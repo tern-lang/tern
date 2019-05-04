@@ -803,9 +803,9 @@ assert sumMax(1)(3, 4) == 5;
 assert mathOps(10)['+'](2) == 12
 assert mathOps(10)['-'](2) == 8;
 
-const sumMax = sumMax(10);
+const sumMaxTen = sumMax(10);
 
-assert sumMax(2, 3) == 13;
+assert sumMaxTen(2, 3) == 13;
 ```
 
 #### Function Handles

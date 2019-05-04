@@ -701,20 +701,20 @@ let x: Double = 11.2;
 let y: Integer = 11;
 let z: String = "11";
 
-f(x); // prints double 11.2
-f(y); // prints integer 11
-f(z); // prints string 11
-f(true); // type coercion to string, prints string true
+dump(x); // prints double 11.2
+dump(y); // prints integer 11
+dump(z); // prints string 11
+dump(true); // type coercion to string, prints string true
 
-func f(x: Integer) {
+func dump(x: Integer) {
    println("integer ${x}");
 }
 
-func f(x: Double) {
+func dump(x: Double) {
    println("double ${x}");
 }
 
-func f(x: String) {
+func dump(x: String) {
    println("string ${x}");
 }
 ```

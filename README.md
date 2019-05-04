@@ -59,6 +59,7 @@ and development environment.
           * [Type Constraints](#type-constraints)      
           * [Variable Arguments](#variable-arguments)
           * [Named Arguments](#named-arguments)
+          * [Currying](#currying)
           * [Closures](#closures)
           * [Function Handles](#function-handles)      
           * [Generic Functions](#generic-functions)
@@ -757,6 +758,34 @@ purchaseProduct(
 	customer: 'Bob',
 	date: '2019-01-01')
 
+```
+
+#### Currying
+
+Currying is a technique that allows you to cascade calls across functions and closures. This can
+be expressed in an idiomatic way as functions are first class citizens. Below is an example of
+how to curry with functions and closures.
+
+```js
+func sumMax(x) {
+ 	return (a, b) -> x + Math.max(a,b);
+}
+
+func mathOps(x){
+	return {
+      	'+': (y) -> x + y,
+      	'-': (y) -> x - y,
+      	'*': (y) -> x * y,
+      	'/': (y) -> x / y;
+}
+
+assert sumMax(1)(3, 4) == 5;
+assert mathOps(10)['+'](2) == 12
+assert mathOps(10)['-'](2) == 8;
+
+const sumMax = sumMax(10);
+
+assert sumMax(2, 3) == 13;
 ```
 
 #### Closures

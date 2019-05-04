@@ -760,6 +760,25 @@ purchaseProduct(
 
 ```
 
+#### Closures
+
+A closure is an anonymous function that captures the current scope and can be assigned to a variable. This variable can then act as a function and can be called in the same manner.
+
+```js
+const square = (x) -> x * x;
+const cube = (x) -> square(x) * x;
+
+cube(2); // result is 8
+
+const printAll = (values...) -> {
+   for(var e in values) {
+      println(e);
+   }
+}
+
+printAll(1, 2, 3, 4); // print all values
+```
+
 #### Currying
 
 Currying is a technique that allows you to cascade calls across functions and closures. This can
@@ -786,25 +805,6 @@ assert mathOps(10)['-'](2) == 8;
 const sumMax = sumMax(10);
 
 assert sumMax(2, 3) == 13;
-```
-
-#### Closures
-
-A closure is an anonymous function that captures the current scope and can be assigned to a variable. This variable can then act as a function and can be called in the same manner.
-
-```js
-const square = (x) -> x * x;
-const cube = (x) -> square(x) * x;
-
-cube(2); // result is 8
-
-const printAll = (values...) -> {
-   for(var e in values) {
-      println(e);
-   }
-}
-
-printAll(1, 2, 3, 4); // print all values
 ```
 
 #### Function Handles

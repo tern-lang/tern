@@ -1324,7 +1324,7 @@ code can be done by setting break points.
 | ------------- | ------------- | ------ |
 | Windows x64      | This build uses Chrome Embedded Framework compatible with 64-bit Windows  | [Download](http://tern-lang.org/download/ternd-windows.zip)   |
 | Linux x64      | This build uses Chrome Embedded Framework compatible with 64-bit Linux  | [Download](http://tern-lang.org/download/ternd-linux.tar.gz)   |
-| Mac OS X x64      | This build uses Chrome Embedded Framework compatible with 64-bit Mac OS X  | [Download](http://tern-lang.org/download/ternd-mac.tar.gz)   |
+| Mac x64      | This build uses Chrome Embedded Framework compatible with 64-bit Mac  | [Download](http://tern-lang.org/download/ternd-mac.tar.gz)   |
 
 Download - [http://tern-lang.org/ternd.zip](http://tern-lang.org/ternd.zip)
 

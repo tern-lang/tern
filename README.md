@@ -1326,8 +1326,6 @@ code can be done by setting break points.
 | Linux x64      | This build uses Chrome Embedded Framework compatible with 64-bit Linux  | [Download](http://tern-lang.org/download/ternd-linux.tar.gz)   |
 | Mac x64      | This build uses Chrome Embedded Framework compatible with 64-bit Mac  | [Download](http://tern-lang.org/download/ternd-mac.tar.gz)   |
 
-Download - [http://tern-lang.org/ternd.zip](http://tern-lang.org/ternd.zip)
-
 #### Breakpoints
 
 A breakpoint forces the debugger to suspend at a particular line when execution flow arrives at that line. Once

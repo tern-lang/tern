@@ -1322,9 +1322,9 @@ code can be done by setting break points.
 
 | Platform      | Description   | Download   |
 | ------------- | ------------- | ------ |
-| Windows x64      | This build uses Chrome Embedded Framework compatible with 64-bit Windows  | [Download](http://tern-lang.org/download/ternd-windows.zip)   |
-| Linux x64      | This build uses Chrome Embedded Framework compatible with 64-bit Linux  | [Download](http://tern-lang.org/download/ternd-linux.tar.gz)   |
-| Mac x64      | This build uses Chrome Embedded Framework compatible with 64-bit Mac  | [Download](http://tern-lang.org/download/ternd-mac.tar.gz)   |
+| Windows      | This build uses Chrome Embedded Framework compatible with 64-bit Windows  | [Download](http://tern-lang.org/download/ternd-windows.zip)   |
+| Linux      | This build uses Chrome Embedded Framework compatible with 64-bit Linux  | [Download](http://tern-lang.org/download/ternd-linux.tar.gz)   |
+| Mac      | This build uses Chrome Embedded Framework compatible with 64-bit Mac  | [Download](http://tern-lang.org/download/ternd-mac.tar.gz)   |
 
 #### Breakpoints
 

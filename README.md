@@ -1320,6 +1320,11 @@ play button. This will initiate a bootstrapping process where the interpreter is
 this bootstrapping process has completed the source program is downloaded and executed. Stepping through the
 code can be done by setting break points.
 
+| Platform      | Description   | Download   |
+| ------------- | ------------- | ------ |
+| Windows x64      | This build uses Chrome Embedded Framework compatible with 64-bit Windows builds  | [Download](http://tern-lang.org/download/ternd-windows.zip)   |
+| Linux x64      | This build uses Chrome Embedded Framework compatible with 64-bit Linux builds  | [Download](http://tern-lang.org/download/ternd-linux.tar.gz)   |
+
 Download - [http://tern-lang.org/ternd.zip](http://tern-lang.org/ternd.zip)
 
 #### Breakpoints

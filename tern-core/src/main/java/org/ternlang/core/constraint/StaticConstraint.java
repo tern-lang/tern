@@ -1,5 +1,9 @@
 package org.ternlang.core.constraint;
 
+import static java.util.Collections.EMPTY_LIST;
+
+import java.util.List;
+
 import org.ternlang.core.ModifierType;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.type.Type;
@@ -21,10 +25,15 @@ public class StaticConstraint extends Constraint {
    }
 
    @Override
+   public List<Constraint> getGenerics(Scope scope) {
+      return type.getGenerics();
+   } 
+   
+   @Override
    public Type getType(Scope scope) {
       return type;
    }
-
+   
    @Override
    public boolean isVariable(){
       return !ModifierType.isConstant(modifiers);

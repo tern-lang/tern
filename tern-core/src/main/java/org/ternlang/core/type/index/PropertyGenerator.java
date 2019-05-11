@@ -24,9 +24,9 @@ public class PropertyGenerator {
       super();
    }
    
-   public Property generate(Type type, Constraint constraint, String name, int modifiers) {
+   public Property generate(Type type, Constraint constraint, Object value, String name, int modifiers) {
       try {
-         return new ConstantProperty(name, type, constraint, type, modifiers); 
+         return new ConstantProperty(name, type, constraint, value, modifiers); 
       } catch(Exception e) {
          throw new InternalStateException("Could not create property from " + type);
       }

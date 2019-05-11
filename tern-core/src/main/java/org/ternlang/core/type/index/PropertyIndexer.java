@@ -113,7 +113,7 @@ public class PropertyIndexer {
             String name = entry.getSimpleName();
             Type element = indexer.loadType(entry);
             Constraint constraint = Constraint.getConstraint(element, CLASS.mask);
-            Property property = generator.generate(element, constraint, name, modifiers | CONSTANT.mask); 
+            Property property = generator.generate(type, constraint, element, name, modifiers | CONSTANT.mask); 
             List<Annotation> extracted = extractor.extract(entry);
             List<Annotation> actual = property.getAnnotations();
             

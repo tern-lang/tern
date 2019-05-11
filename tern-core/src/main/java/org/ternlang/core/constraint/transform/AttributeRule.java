@@ -51,46 +51,59 @@ public class AttributeRule extends ConstraintRule {
 
       if(count > 0) {
          ScopeTable table = scope.getTable();
-         ScopeState state = scope.getState();
-         Constraint first = table.getConstraint(start);
+         Address address = AddressCache.getAddress(count);
+         Constraint parameter = table.getConstraint(address);
+         
+         if(parameter != null) {
+            throw new InternalStateException("Generic parameter count for '" + attribute + "' is invalid");
+         }
+         return getScope(scope, count);
+      }
+      return scope;
+   }
+   
+   private Scope getScope(Scope scope, int count) {
+      List<Constraint> defaults = attribute.getGenerics();
+      ScopeTable table = scope.getTable();
+      ScopeState state = scope.getState();
+      Constraint first = table.getConstraint(start);
 
-         for(int i = 0; i < count; i++) {
-            Address address = AddressCache.getAddress(i);
-            Constraint parameter = table.getConstraint(address);
-            Constraint constraint = defaults.get(i);
-            String name = constraint.getName(scope);
-            Constraint existing = state.getConstraint(name);
+      for(int i = 0; i < count; i++) {
+         Address address = AddressCache.getAddress(i);
+         Constraint parameter = table.getConstraint(address);
+         Constraint constraint = defaults.get(i);
+         String name = constraint.getName(scope);
+         Constraint existing = state.getConstraint(name);
 
-            if(parameter != null) {
-               Type require = constraint.getType(scope);
-               Type actual = parameter.getType(scope);
+         if(parameter != null) {
+            Type require = constraint.getType(scope);
+            Type actual = parameter.getType(scope);
 
-               if(!checker.isInstanceOf(scope, actual, require)) {
-                  throw new InternalStateException("Generic parameter '" + name +"' does not match '" + constraint + "'");
-               }
-               if(existing != null) {
-                  Type current = existing.getType(scope);
+            if(!checker.isInstanceOf(scope, actual, require)) {
+               throw new InternalStateException("Generic parameter '" + name +"' does not match '" + constraint + "'");
+            }
+            if(existing != null) {
+               Type current = existing.getType(scope);
 
-                  if(current != actual) {
-                     throw new InternalStateException("Generic parameter '" + name +"' has already been declared");
-                  }
-               } else {
-                  state.addConstraint(name, parameter);
+               if(current != actual) {
+                  throw new InternalStateException("Generic parameter '" + name +"' has already been declared");
                }
             } else {
-               if(first != null) {
-                  throw new InternalStateException("Generic parameter '" + name +"' not specified");
-               }
-               if(existing != null) {
-                  Type require = mapper.map(scope, constraint);
-                  Type current = mapper.map(scope, existing);
+               state.addConstraint(name, parameter);
+            }
+         } else {
+            if(first != null) {
+               throw new InternalStateException("Generic parameter '" + name +"' not specified");
+            }
+            if(existing != null) {
+               Type require = mapper.map(scope, constraint);
+               Type current = mapper.map(scope, existing);
 
-                  if (current != require) {
-                     throw new InternalStateException("Generic parameter '" + name + "' has already been declared");
-                  }
-               } else {
-                  state.addConstraint(name, constraint);
+               if (current != require) {
+                  throw new InternalStateException("Generic parameter '" + name + "' has already been declared");
                }
+            } else {
+               state.addConstraint(name, constraint);
             }
          }
       }

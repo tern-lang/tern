@@ -64,6 +64,27 @@ public class ModuleTest extends ScriptTestCase {
    "}\n"+
    "F.call().success(this::println);\n";
 
+   private static final String SOURCE_5 = 
+   "import util.concurrent.atomic.AtomicInteger;\n"+      
+   "module TimeParser {\n"+
+   "   const DAYS = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];\n"+
+   "\n"+
+   "   parseTime(time){\n"+
+   "      let count = 0;\n"+
+   "\n"+
+   "      for(day in DAYS){\n"+
+   "         count++;\n"+
+   "      }\n"+
+   "      return 0;\n"+
+   "   }\n"+
+   "}\n"+
+   "\n"+
+   "let x = TimeParser.parseTime('');\n"+
+   "let c = AtomicInteger();\n"+
+   "println(c.getAndIncrement());\n"+
+   "assert c.get() == 1;\n"+
+   "Thread.sleep(1000);\n";
+
 
    public void testModuleInnerClass() throws Exception {
       assertScriptExecutes(SOURCE_1);
@@ -99,5 +120,9 @@ public class ModuleTest extends ScriptTestCase {
             result.printStackTrace();
          }
       });
+   }
+   
+   public void testModuleHasOnlyOneThread() throws Exception {
+      assertScriptExecutes(SOURCE_5);
    }
 }

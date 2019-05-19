@@ -302,7 +302,11 @@ let e = Boolean.FALSE; // like Object e = Boolean.FALSE
 
 ##### Numbers
 
-The most basic type is the simple true or false value, which is called a 'boolean' value.
+There are a number of different ways to represent numbers. The most common representation
+is in decimal format, which is a simple sequence of digits. In addition to the simple decimal 
+notation it can be useful
+to represent numbers in their binary or hexadecimal format. Below there are examples of some of the 
+numeric literals available to the developer.
 
 ```js
 let binary = 0b0111011; // binary literal

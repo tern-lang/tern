@@ -2,6 +2,7 @@ package org.ternlang.compile;
 
 import junit.framework.TestCase;
 
+import org.ternlang.core.Context;
 import org.ternlang.core.scope.EmptyModel;
 
 public class CurryTest extends ScriptTestCase {
@@ -59,11 +60,32 @@ public class CurryTest extends ScriptTestCase {
    "   return (a, b) -> println(a);\n"+
    "}\n"+
    "main(\"xx\");\n";
+   
+   private static final String SOURCE_5 =
+   "func main(const x) {\n"+
+   "   make()(x, 1);\n"+
+   "}\n"+
+   "func make() {\n"+
+   "   return (a, b) -> println(x);\n"+
+   "}\n"+
+   "main(\"xx\");\n";   
 
    public void testCurry() throws Exception {
       assertScriptExecutes(SOURCE_1);
       assertScriptExecutes(SOURCE_2);
       assertScriptExecutes(SOURCE_3);
       assertScriptExecutes(SOURCE_4);
+      assertScriptExecutes(SOURCE_5, new AssertionCallback() {
+         
+         @Override
+         public void onSuccess(Context context, Object result) throws Exception{
+            assertTrue("The variable 'x' should not be accessible", false);
+         }
+         
+         @Override
+         public void onException(Context context, Exception cause) throws Exception{
+            cause.printStackTrace();
+         }
+      });
    }
 }

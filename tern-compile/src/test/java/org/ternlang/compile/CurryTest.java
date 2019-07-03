@@ -1,9 +1,6 @@
 package org.ternlang.compile;
 
-import junit.framework.TestCase;
-
 import org.ternlang.core.Context;
-import org.ternlang.core.scope.EmptyModel;
 
 public class CurryTest extends ScriptTestCase {
 

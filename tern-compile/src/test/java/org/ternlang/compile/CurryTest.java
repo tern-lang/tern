@@ -41,9 +41,29 @@ public class CurryTest extends ScriptTestCase {
    "   return (a, b) -> println(a);\n"+
    "}\n"+
    "main();\n";
+   
+   private static final String SOURCE_3 =
+   "func main(t) {\n"+
+   "   make()(t, 1);\n"+
+   "}\n"+
+   "func make() {\n"+
+   "   return (a, b) -> println(a);\n"+
+   "}\n"+
+   "main(\"xx\");\n";
+   
+   private static final String SOURCE_4 =
+   "func main(const x) {\n"+
+   "   make()(x, 1);\n"+
+   "}\n"+
+   "func make() {\n"+
+   "   return (a, b) -> println(a);\n"+
+   "}\n"+
+   "main(\"xx\");\n";
 
    public void testCurry() throws Exception {
       assertScriptExecutes(SOURCE_1);
       assertScriptExecutes(SOURCE_2);
+      assertScriptExecutes(SOURCE_3);
+      assertScriptExecutes(SOURCE_4);
    }
 }

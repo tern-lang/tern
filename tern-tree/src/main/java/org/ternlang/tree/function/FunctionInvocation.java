@@ -140,7 +140,7 @@ public class FunctionInvocation implements Compilation {
             if(result == null) {
                throw new InternalStateException("Result of '" + name + "' is null"); 
             }
-            result = evaluation.compile(composite, result);
+            result = evaluation.compile(scope, result);
          }
          return result; 
       }
@@ -155,7 +155,7 @@ public class FunctionInvocation implements Compilation {
             if(result == null) {
                throw new InternalStateException("Result of '" + name + "' is null"); 
             }
-            result = evaluation.compile(composite, result);
+            result = evaluation.compile(scope, result);
          }
          return result; 
       }

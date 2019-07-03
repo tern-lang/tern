@@ -4,9 +4,9 @@ import junit.framework.TestCase;
 
 import org.ternlang.core.scope.EmptyModel;
 
-public class CurryTest extends TestCase {
+public class CurryTest extends ScriptTestCase {
 
-   private static final String SOURCE =
+   private static final String SOURCE_1 =
    "module Curry {\n"+
    "   class Foo{\n"+
    "      var x;\n"+
@@ -31,11 +31,19 @@ public class CurryTest extends TestCase {
    "assert l[0](3) == 4;\n"+
    "assert Curry.func(1)(2) == 3;\n"+
    "assert Curry.func2(1)[0](2) == 3;\n";
-
    
+   private static final String SOURCE_2 =
+   "func main() {\n"+
+   "   const t = \"xx\";\n"+
+   "   make()(t, 1);\n"+
+   "}\n"+
+   "func make() {\n"+
+   "   return (a, b) -> println(a);\n"+
+   "}\n"+
+   "main();\n";
+
    public void testCurry() throws Exception {
-      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
-      System.err.println(SOURCE);
-      compiler.compile(SOURCE).execute(new EmptyModel());
+      assertScriptExecutes(SOURCE_1);
+      assertScriptExecutes(SOURCE_2);
    }
 }

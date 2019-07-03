@@ -43,6 +43,11 @@ public class FunctionCurry implements Compilation {
       }
       
       @Override
+      public void define(Scope scope) throws Exception {
+         arguments.define(scope);
+      }
+      
+      @Override
       public Constraint compile(Scope scope, Constraint left) throws Exception {         
          arguments.compile(scope);
          return NONE;

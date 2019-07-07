@@ -50,20 +50,20 @@ public class ScopeAllocationBuilder {
       String name = address.getName();
 
       if(type == INSTANCE) {
-         return new StateMatcher(handler, wrapper, name);
+         return new InstanceMatcher(handler, wrapper, name);
       }
       if(type == STATIC) {
          return new StateMatcher(handler, wrapper, name);
       }
       if(type == TYPE) {
-         return new StaticMatcher(handler, wrapper, name);
+         return new ConstantMatcher(handler, wrapper, name);
       }
       if(type == MODULE) {
-         return new StaticMatcher(handler, wrapper, name);
+         return new ConstantMatcher(handler, wrapper, name);
       }
       return null;
    }
-
+   
    private static class StateMatcher implements ScopeMatcher {
       
       private final VariableBinder binder;   
@@ -85,12 +85,32 @@ public class ScopeAllocationBuilder {
          return binder.bind(scope);
       }
    }
+   
+   private static class InstanceMatcher implements ScopeMatcher {
+      
+      private final ScopeMatcher matcher;   
+      
+      public InstanceMatcher(ErrorHandler handler, ProxyWrapper wrapper, String name) {
+         this.matcher = new StateMatcher(handler, wrapper, name);
+      }
+      
+      @Override
+      public Value compile(Scope scope) throws Exception {
+         return matcher.compile(scope);
+      }
+      
+      @Override
+      public Value execute(Scope scope) throws Exception {
+         Scope outer = scope.getParent();
+         return matcher.execute(outer);
+      }
+   }
 
-   private static class StaticMatcher implements ScopeMatcher {
+   private static class ConstantMatcher implements ScopeMatcher {
       
       private final VariableBinder binder;   
       
-      public StaticMatcher(ErrorHandler handler, ProxyWrapper wrapper, String name) {
+      public ConstantMatcher(ErrorHandler handler, ProxyWrapper wrapper, String name) {
          this.binder = new VariableBinder(handler, wrapper, name);         
       }
       
@@ -102,7 +122,6 @@ public class ScopeAllocationBuilder {
       @Override
       public Value execute(Scope scope) throws Exception {
          return binder.bind(scope);
-
       }
    }
 }

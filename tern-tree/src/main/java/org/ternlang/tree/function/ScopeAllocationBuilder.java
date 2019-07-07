@@ -88,21 +88,24 @@ public class ScopeAllocationBuilder {
    
    private static class InstanceMatcher implements ScopeMatcher {
       
-      private final ScopeMatcher matcher;   
+      private final VariableBinder binder;   
+      private final String name;
       
       public InstanceMatcher(ErrorHandler handler, ProxyWrapper wrapper, String name) {
-         this.matcher = new StateMatcher(handler, wrapper, name);
+         this.binder = new VariableBinder(handler, wrapper, name);
+         this.name = name;
       }
       
       @Override
       public Value compile(Scope scope) throws Exception {
-         return matcher.compile(scope);
+         ScopeState state = scope.getState();         
+         return state.getValue(name);
       }
       
       @Override
       public Value execute(Scope scope) throws Exception {
-         Scope outer = scope.getParent();
-         return matcher.execute(outer);
+         Scope parent = scope.getParent();
+         return binder.bind(parent);
       }
    }
 

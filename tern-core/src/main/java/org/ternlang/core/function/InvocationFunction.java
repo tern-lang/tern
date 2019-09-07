@@ -14,6 +14,7 @@ public class InvocationFunction implements Function {
 
    private final FunctionDescription description;
    private final List<Annotation> annotations;
+   private final FunctionAdapter adapter;
    private final Invocation invocation;
    private final Constraint constraint;
    private final FunctionProxy proxy;
@@ -33,6 +34,7 @@ public class InvocationFunction implements Function {
    public InvocationFunction(Signature signature, Invocation invocation, Type source, Constraint constraint, String name, int modifiers, int start){
       this.description = new FunctionDescription(signature, source, name, start);
       this.annotations = new ArrayList<Annotation>();
+      this.adapter = new FunctionAdapter(this);
       this.proxy = new FunctionProxy(this);
       this.constraint = constraint;
       this.invocation = invocation;
@@ -70,6 +72,11 @@ public class InvocationFunction implements Function {
    @Override
    public Constraint getConstraint() {
       return constraint;
+   }
+   
+   @Override
+   public Object getAdapter() {
+      return adapter;
    }
    
    @Override

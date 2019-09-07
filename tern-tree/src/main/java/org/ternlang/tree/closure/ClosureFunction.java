@@ -71,6 +71,11 @@ public class ClosureFunction implements Function {
    public String getDescription() {
       return template.getDescription();
    }
+   
+   @Override
+   public Object getAdapter() {
+      return template.getAdapter();
+   }
 
    @Override
    public Object getProxy(Class type) {

@@ -1,24 +1,17 @@
-package org.ternlang.core.function.index;
+package org.ternlang.core.function;
 
 import java.util.List;
 
 import org.ternlang.core.Any;
 import org.ternlang.core.annotation.Annotation;
 import org.ternlang.core.constraint.Constraint;
-import org.ternlang.core.function.Function;
-import org.ternlang.core.function.Invocation;
-import org.ternlang.core.function.Signature;
 import org.ternlang.core.type.Type;
 
 public class FunctionAdapter implements Any {
    
-   public static FunctionAdapter wrap(Object object) {
-      return new FunctionAdapter(object);
-   }
-   
    private final Function function;
    
-   public FunctionAdapter(Object function) {
+   public FunctionAdapter(Function function) {
       this.function = (Function)function;
    }
    

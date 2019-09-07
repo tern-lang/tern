@@ -6,7 +6,7 @@ import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.error.ErrorHandler;
 import org.ternlang.core.function.Connection;
 import org.ternlang.core.function.Function;
-import org.ternlang.core.function.index.FunctionAdapter;
+import org.ternlang.core.function.FunctionAdapter;
 import org.ternlang.core.function.resolve.FunctionCall;
 import org.ternlang.core.function.resolve.FunctionResolver;
 import org.ternlang.core.scope.Scope;
@@ -44,7 +44,7 @@ public class ClosureDispatcher implements FunctionDispatcher {
       FunctionCall call = resolver.resolveInstance(scope, function, name, arguments); // this is not used often
       
       if(call == null) {
-         Object adapter = FunctionAdapter.wrap(function);
+         Object adapter = function.getAdapter();
          FunctionCall instance = resolver.resolveInstance(scope, adapter, name, arguments);
          
          if(instance != null) {
@@ -75,7 +75,7 @@ public class ClosureDispatcher implements FunctionDispatcher {
          Function function = value.getValue();
 
          if(wrap) {
-            FunctionAdapter adapter = FunctionAdapter.wrap(function);
+            Object adapter = function.getAdapter();
             return call.invoke(scope, adapter, arguments);
          }
          return call.invoke(scope, function, arguments);

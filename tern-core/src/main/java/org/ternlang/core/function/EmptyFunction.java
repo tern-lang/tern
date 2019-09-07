@@ -16,6 +16,7 @@ import org.ternlang.core.type.Type;
 public class EmptyFunction implements Function {
 
    private final List<Annotation> annotations;
+   private final FunctionAdapter adapter;
    private final Signature signature;
    private final String name;
    private final int modifiers;
@@ -30,6 +31,7 @@ public class EmptyFunction implements Function {
 
    public EmptyFunction(Signature signature, String name, int modifiers){
       this.annotations = new ArrayList<Annotation>();
+      this.adapter = new FunctionAdapter(this);
       this.signature = signature;
       this.modifiers = modifiers;
       this.name = name;
@@ -63,6 +65,11 @@ public class EmptyFunction implements Function {
    @Override
    public Object getProxy(Class require) {
       return null;
+   }
+   
+   @Override
+   public Object getAdapter() {
+      return adapter;
    }
    
    @Override

@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Future;
 
 import org.ternlang.common.Cache;
 import org.ternlang.common.CopyOnWriteCache;

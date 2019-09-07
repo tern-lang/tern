@@ -5,7 +5,6 @@ import static org.ternlang.core.ModifierType.MODULE;
 import java.util.Collections;
 import java.util.List;
 
-import org.ternlang.common.CompleteProgress;
 import org.ternlang.common.Progress;
 import org.ternlang.core.annotation.Annotation;
 import org.ternlang.core.constraint.Constraint;

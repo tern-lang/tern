@@ -1,7 +1,5 @@
 package org.ternlang.compile;
 
-
-
 public class ThisAndSuperCallTest {
 
    private static final String SOURCE =

@@ -25,7 +25,7 @@ public interface Reserved {
    String METHOD_MAIN = "main";   
    String IMPORT_JAVA = "java.";
    String IMPORT_JAVA_REFLECT = "java.reflect.";
-   String IMPORT_SUN_REFLECT = "sun.reflect.";
+   String IMPORT_SUN_INTERNAL = "sun.";
    String IMPORT_JDK_INTERNAL = "jdk.internal.";
    String SCRIPT_EXTENSION = ".tern";
    String DEFAULT_MODULE = "default";

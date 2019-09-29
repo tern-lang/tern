@@ -2,7 +2,7 @@ package org.ternlang.core.error;
 
 import static org.ternlang.core.Reserved.IMPORT_JAVA_REFLECT;
 import static org.ternlang.core.Reserved.IMPORT_JDK_INTERNAL;
-import static org.ternlang.core.Reserved.IMPORT_SUN_REFLECT;
+import static org.ternlang.core.Reserved.IMPORT_SUN_INTERNAL;
 import static org.ternlang.core.Reserved.IMPORT_TERN;
 
 import org.ternlang.core.stack.ThreadStack;
@@ -24,7 +24,7 @@ public class InternalErrorBuilder {
    }
    
    public InternalError createInternalError(Object value, Throwable original) {
-      InternalError error = filter.filter(value, original, IMPORT_TERN, IMPORT_JAVA_REFLECT, IMPORT_JDK_INTERNAL, IMPORT_SUN_REFLECT);
+      InternalError error = filter.filter(value, original, IMPORT_TERN, IMPORT_JAVA_REFLECT, IMPORT_JDK_INTERNAL, IMPORT_SUN_INTERNAL);
       
       if(replace) {
          if(Throwable.class.isInstance(value)) {

@@ -1,17 +1,19 @@
 package org.ternlang.core.stack;
 
+import static org.ternlang.core.Reserved.IMPORT_JAVA;
 import static org.ternlang.core.Reserved.IMPORT_TERN;
+import static org.ternlang.core.stack.OriginTraceType.INCLUDE_FIRST;
 
 import java.util.List;
 
 public class StackTraceBuilder {
-   
-   private final OriginTraceExtractor extractor;
+
    private final StackElementConverter builder;
+   private final OriginTraceFilter filter;
    private final StackTraceElement[] empty;
    
    public StackTraceBuilder() {
-      this.extractor = new OriginTraceExtractor();
+      this.filter = new OriginTraceFilter(INCLUDE_FIRST);
       this.builder = new StackElementConverter();
       this.empty = new StackTraceElement[]{};
    }
@@ -22,7 +24,7 @@ public class StackTraceBuilder {
    
    public StackTraceElement[] create(StackTrace stack, Throwable origin) {
       Thread thread = Thread.currentThread();
-      List<StackTraceElement> list = extractor.extract(origin); // debug cause
+      List<StackTraceElement> list = filter.filter(origin, IMPORT_TERN, IMPORT_JAVA); // debug cause
       List<StackTraceElement> context = builder.create(stack); // script stack
       StackTraceElement[] actual = thread.getStackTrace(); // native stack
       

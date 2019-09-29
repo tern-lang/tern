@@ -6,11 +6,33 @@ public class ErrorCauseExtractor {
       super();
    }
 
-   public Object extract(Object cause) {
+   public Object extractValue(Object cause) {
       if(InternalError.class.isInstance(cause)) {
          InternalError error = (InternalError)cause;
          return error.getValue();
       }
       return cause;
+   }
+   
+   public Throwable extractCause(Object cause) {
+      if(Throwable.class.isInstance(cause)) {
+         if(InternalError.class.isInstance(cause)) {
+            InternalError error = (InternalError)cause;
+            Throwable origin = error.getCause();
+            
+            if(cause != null) {
+               return extractCause(origin);
+            }
+         } else if(ReflectiveOperationException.class.isInstance(cause)) {
+            Throwable error = (Throwable)cause;
+            Throwable origin = error.getCause();
+            
+            if(cause != null) {
+               return extractCause(origin);
+            }
+         }
+         return (Throwable)cause;
+      }
+      return null;
    }
 }

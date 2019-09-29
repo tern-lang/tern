@@ -7,7 +7,6 @@ import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.constraint.DeclarationConstraint;
 import org.ternlang.core.function.Signature;
 import org.ternlang.core.scope.Scope;
-import org.ternlang.core.type.Type;
 import org.ternlang.tree.ModifierChecker;
 import org.ternlang.tree.ModifierList;
 import org.ternlang.tree.constraint.FunctionName;

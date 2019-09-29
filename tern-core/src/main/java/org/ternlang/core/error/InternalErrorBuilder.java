@@ -1,9 +1,15 @@
 package org.ternlang.core.error;
 
+import static org.ternlang.core.Reserved.IMPORT_JAVA_REFLECT;
+import static org.ternlang.core.Reserved.IMPORT_JDK_INTERNAL;
+import static org.ternlang.core.Reserved.IMPORT_SUN_REFLECT;
+import static org.ternlang.core.Reserved.IMPORT_TERN;
+
 import org.ternlang.core.stack.ThreadStack;
 
 public class InternalErrorBuilder {
-
+         
+   private final InternalErrorFilter filter;
    private final ThreadStack stack;
    private final boolean replace;
    
@@ -12,12 +18,13 @@ public class InternalErrorBuilder {
    }
    
    public InternalErrorBuilder(ThreadStack stack, boolean replace) {
+      this.filter = new InternalErrorFilter(replace);
       this.replace = replace;
       this.stack = stack;
    }
    
    public InternalError createInternalError(Object value, Throwable original) {
-      InternalError error = new InternalError(value, original);
+      InternalError error = filter.filter(value, original, IMPORT_TERN, IMPORT_JAVA_REFLECT, IMPORT_JDK_INTERNAL, IMPORT_SUN_REFLECT);
       
       if(replace) {
          if(Throwable.class.isInstance(value)) {

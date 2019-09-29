@@ -289,7 +289,7 @@ public class ExecutorScheduler implements TaskScheduler {
 
       @Override
       public void failure(Throwable cause) {
-         Object value = extractor.extract(cause);
+         Object value = extractor.extractValue(cause);
 
          try {
             future.failure(value);

@@ -8,6 +8,13 @@ import static org.ternlang.core.Reserved.IMPORT_TERN;
 import org.ternlang.core.stack.ThreadStack;
 
 public class InternalErrorBuilder {
+   
+   private static final String[] EXCLUDE = {
+      IMPORT_TERN, 
+      IMPORT_JAVA_REFLECT, 
+      IMPORT_JDK_INTERNAL, 
+      IMPORT_SUN_INTERNAL   
+   };
          
    private final InternalErrorFilter filter;
    private final ThreadStack stack;
@@ -24,7 +31,7 @@ public class InternalErrorBuilder {
    }
    
    public InternalError createInternalError(Object value, Throwable original) {
-      InternalError error = filter.filter(value, original, IMPORT_TERN, IMPORT_JAVA_REFLECT, IMPORT_JDK_INTERNAL, IMPORT_SUN_INTERNAL);
+      InternalError error = filter.filter(value, original, EXCLUDE);
       
       if(replace) {
          if(Throwable.class.isInstance(value)) {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLConnection;
 import java.util.Collections;
 import java.util.List;
@@ -133,6 +134,7 @@ public class URLConnectionExtension {
 
    private URLConnection execute(URLConnection connection, byte[] data, String method) throws IOException {
       HttpURLConnection request = (HttpURLConnection)connection;
+      URL target = request.getURL();
       
       if(data.length > 0) {
          request.setDoOutput(true);
@@ -144,7 +146,7 @@ public class URLConnectionExtension {
             stream.write(data);
             stream.close();
          } catch(Exception e) {
-            throw new IOException("Could not execute '" + method + "' for '" + connection + "'", e);
+            throw new IOException("Could not execute '" + method + "' for '" + target + "'", e);
          }
       }
       request.getResponseCode(); // force write
@@ -153,6 +155,7 @@ public class URLConnectionExtension {
    
    private URLConnection execute(URLConnection connection, String source, String method) throws IOException {
       HttpURLConnection request = (HttpURLConnection)connection;
+      URL target = request.getURL();
       byte[] data = source.getBytes();
       
       if(data.length > 0) {
@@ -165,7 +168,7 @@ public class URLConnectionExtension {
             stream.write(data);
             stream.close();
          } catch(Exception e) {
-            throw new IOException("Could not execute '" + method + "' for '" + connection + "'", e);
+            throw new IOException("Could not execute '" + method + "' for '" + target + "'", e);
          }
       }
       request.getResponseCode(); // force write
@@ -174,6 +177,7 @@ public class URLConnectionExtension {
    
    private URLConnection execute(URLConnection connection, InputStream source, String method) throws IOException {
       HttpURLConnection request = (HttpURLConnection)connection;
+      URL target = request.getURL();
       
       request.setDoOutput(true);
       request.setRequestMethod(method);
@@ -184,7 +188,7 @@ public class URLConnectionExtension {
          extension.copyTo(source, stream);
          stream.close();
       } catch(Exception e) {
-         throw new IOException("Could not execute '" + method + "' for '" + connection + "'", e);
+         throw new IOException("Could not execute '" + method + "' for '" + target + "'", e);
       }
       request.getResponseCode(); // force write
       return connection;

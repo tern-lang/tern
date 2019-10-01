@@ -3,19 +3,19 @@ package org.ternlang.core.stack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OriginTraceFilter {
+public class StackTraceFilter {
    
    public static final int DEFAULT_DEPTH = 0;
    public static final int DEBUG_DEPTH = 2; 
 
-   private final OriginTraceType type;
+   private final StackTraceType type;
    private final int depth;
    
-   public OriginTraceFilter(OriginTraceType type) {
+   public StackTraceFilter(StackTraceType type) {
       this(type, DEFAULT_DEPTH);
    }
    
-   public OriginTraceFilter(OriginTraceType type, int depth) {
+   public StackTraceFilter(StackTraceType type, int depth) {
       this.depth = depth;
       this.type = type;
    }

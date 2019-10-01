@@ -1,6 +1,6 @@
 package org.ternlang.core.stack;
 
-public enum OriginTraceType {
+public enum StackTraceType {
    INCLUDE_FIRST,
    INCLUDE_ALL,
    EXCLUDE_FIRST,

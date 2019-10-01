@@ -1,25 +1,24 @@
 package org.ternlang.core.error;
 
-import static org.ternlang.core.stack.OriginTraceType.EXCLUDE_ALL;
+import static org.ternlang.core.Reserved.PROPERTY_CAUSE;
+import static org.ternlang.core.stack.StackTraceType.EXCLUDE_ALL;
 
 import java.util.List;
 
-import org.ternlang.core.stack.OriginTraceFilter;
+import org.ternlang.core.stack.StackTraceFilter;
 import org.ternlang.core.type.index.FieldUpdater;
 
 public class InternalErrorFilter {
-   
-   private static final String CAUSE_FIELD = "cause";  
  
    private final ErrorCauseExtractor extractor;
    private final FieldUpdater updater;
-   private final OriginTraceFilter filter;
+   private final StackTraceFilter filter;
    private final StackTraceElement[] empty;
    private final boolean replace;
    
    public InternalErrorFilter(boolean replace) {
-      this.filter = new OriginTraceFilter(EXCLUDE_ALL, 1024);
-      this.updater = new FieldUpdater(CAUSE_FIELD);
+      this.updater = new FieldUpdater(Throwable.class, PROPERTY_CAUSE);
+      this.filter = new StackTraceFilter(EXCLUDE_ALL, 1024);
       this.extractor = new ErrorCauseExtractor();
       this.empty = new StackTraceElement[]{};
       this.replace = replace;

@@ -14,6 +14,7 @@ public interface Reserved {
    String PROPERTY_GET = "get";
    String PROPERTY_SET = "set";
    String PROPERTY_IS = "is";
+   String PROPERTY_CAUSE = "cause";
    String METHOD_CLOSURE = "anonymous";
    String METHOD_HASH_CODE = "hashCode";
    String METHOD_EQUALS = "equals";

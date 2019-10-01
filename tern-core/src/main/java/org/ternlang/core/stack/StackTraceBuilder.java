@@ -6,7 +6,7 @@ import static org.ternlang.core.Reserved.IMPORT_JDK_INTERNAL;
 import static org.ternlang.core.Reserved.IMPORT_SUN_INTERNAL;
 import static org.ternlang.core.Reserved.IMPORT_SUN_PROXY;
 import static org.ternlang.core.Reserved.IMPORT_TERN;
-import static org.ternlang.core.stack.OriginTraceType.INCLUDE_FIRST;
+import static org.ternlang.core.stack.StackTraceType.INCLUDE_FIRST;
 
 import java.util.List;
 
@@ -26,11 +26,11 @@ public class StackTraceBuilder {
    };
 
    private final StackElementConverter builder;
-   private final OriginTraceFilter filter;
+   private final StackTraceFilter filter;
    private final StackTraceElement[] empty;
    
    public StackTraceBuilder() {
-      this.filter = new OriginTraceFilter(INCLUDE_FIRST);
+      this.filter = new StackTraceFilter(INCLUDE_FIRST);
       this.builder = new StackElementConverter();
       this.empty = new StackTraceElement[]{};
    }

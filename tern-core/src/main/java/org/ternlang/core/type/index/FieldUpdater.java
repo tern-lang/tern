@@ -4,17 +4,19 @@ import java.lang.reflect.Field;
 
 public class FieldUpdater {
    
-   private volatile Field field;
-   private volatile String name;
+   private Field field;
+   private String name;
+   private Class type;
    
-   public FieldUpdater(String name) {
+   public FieldUpdater(Class type, String name) {
       this.name = name;
+      this.type = type;
    }
    
    public boolean update(Object object, Object value) {
       try {
          if(field == null) {
-            field = Throwable.class.getDeclaredField(name);
+            field = type.getDeclaredField(name);
          }
          field.setAccessible(true);
          field.set(object, value);

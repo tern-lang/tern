@@ -3,6 +3,7 @@ package org.ternlang.core.error;
 import static org.ternlang.core.Reserved.IMPORT_JAVA_REFLECT;
 import static org.ternlang.core.Reserved.IMPORT_JDK_INTERNAL;
 import static org.ternlang.core.Reserved.IMPORT_SUN_INTERNAL;
+import static org.ternlang.core.Reserved.IMPORT_SUN_PROXY;
 import static org.ternlang.core.Reserved.IMPORT_TERN;
 
 import org.ternlang.core.stack.ThreadStack;
@@ -13,7 +14,8 @@ public class InternalErrorBuilder {
       IMPORT_TERN, 
       IMPORT_JAVA_REFLECT, 
       IMPORT_JDK_INTERNAL, 
-      IMPORT_SUN_INTERNAL   
+      IMPORT_SUN_INTERNAL,
+      IMPORT_SUN_PROXY
    };
          
    private final InternalErrorFilter filter;

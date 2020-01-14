@@ -1,6 +1,7 @@
 package org.ternlang.common;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,7 +20,7 @@ public class CopyOnWriteCache<K, V> implements Cache<K, V> {
    
    public CopyOnWriteCache(int size, float density) {
       this.updater = new MapUpdater(size, density);
-      this.cache = new HashMap<K, V>();
+      this.cache = new LinkedHashMap<K, V>();
    }
 
    @Override
@@ -83,7 +84,7 @@ public class CopyOnWriteCache<K, V> implements Cache<K, V> {
          V existing = cache.get(key);
          
          if(existing != value) { // reduce churn
-            Map<K, V> copy = new HashMap<K, V>(size, density);
+            Map<K, V> copy = new LinkedHashMap<K, V>(size, density);
             
             copy.putAll(cache);
             copy.put(key, value);
@@ -96,7 +97,7 @@ public class CopyOnWriteCache<K, V> implements Cache<K, V> {
          V existing = cache.get(key);
          
          if(existing != null) {
-            Map<K, V> copy = new HashMap<K, V>(size, density);
+            Map<K, V> copy = new LinkedHashMap<K, V>(size, density);
             
             copy.putAll(cache);
             copy.remove(key);

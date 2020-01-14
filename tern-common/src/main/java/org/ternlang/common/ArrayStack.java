@@ -64,7 +64,7 @@ public class ArrayStack<T> implements Stack<T>{
    @Override
    public T pop() {
       if(count > 0) {
-         int index = count-- -1;
+         int index = --count;
          Object value = stack[index];
          
          if(value != null) {

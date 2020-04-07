@@ -2,14 +2,15 @@ package org.ternlang.tree.annotation;
 
 import java.util.List;
 
-import org.ternlang.core.scope.Scope;
-import org.ternlang.core.type.Type;
-import org.ternlang.core.variable.Value;
+import org.ternlang.core.annotation.Annotated;
 import org.ternlang.core.annotation.Annotation;
 import org.ternlang.core.function.Function;
 import org.ternlang.core.function.Parameter;
 import org.ternlang.core.module.Module;
 import org.ternlang.core.property.Property;
+import org.ternlang.core.scope.Scope;
+import org.ternlang.core.type.Type;
+import org.ternlang.core.variable.Value;
 
 public class AnnotationList {
    
@@ -65,6 +66,17 @@ public class AnnotationList {
    
    public void apply(Scope scope, Parameter parameter) throws Exception {
       List<Annotation> annotations = parameter.getAnnotations();
+      
+      for(AnnotationDeclaration entry : list) {
+         Value value = entry.evaluate(scope, null);
+         Annotation annotation = value.getValue();
+         
+         annotations.add(annotation);
+      }
+   }
+   
+   public void apply(Scope scope, Annotated annotated) throws Exception {
+      List<Annotation> annotations = annotated.getAnnotations();
       
       for(AnnotationDeclaration entry : list) {
          Value value = entry.evaluate(scope, null);

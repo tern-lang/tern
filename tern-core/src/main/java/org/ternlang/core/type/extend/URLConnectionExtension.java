@@ -41,6 +41,10 @@ public class URLConnectionExtension {
       return execute(connection, empty, DELETE);
    }
    
+   public URLConnection post(URLConnection connection) throws IOException {
+      return execute(connection, empty, POST);
+   } 
+   
    public URLConnection post(URLConnection connection, byte[] data) throws IOException {
       return execute(connection, data, POST);
    }
@@ -136,9 +140,10 @@ public class URLConnectionExtension {
       HttpURLConnection request = (HttpURLConnection)connection;
       URL target = request.getURL();
       
+      request.setRequestMethod(method);
+      
       if(data.length > 0) {
          request.setDoOutput(true);
-         request.setRequestMethod(method);
          
          try {
             OutputStream stream = request.getOutputStream();
@@ -158,9 +163,10 @@ public class URLConnectionExtension {
       URL target = request.getURL();
       byte[] data = source.getBytes();
       
+      request.setRequestMethod(method);
+      
       if(data.length > 0) {
          request.setDoOutput(true);
-         request.setRequestMethod(method);
          
          try {
             OutputStream stream = request.getOutputStream();
@@ -179,16 +185,19 @@ public class URLConnectionExtension {
       HttpURLConnection request = (HttpURLConnection)connection;
       URL target = request.getURL();
       
-      request.setDoOutput(true);
       request.setRequestMethod(method);
       
-      try {
-         OutputStream stream = request.getOutputStream();
+      if(source != null) {
+         request.setDoOutput(true);
          
-         extension.copyTo(source, stream);
-         stream.close();
-      } catch(Exception e) {
-         throw new IOException("Could not execute '" + method + "' for '" + target + "'", e);
+         try {
+            OutputStream stream = request.getOutputStream();
+            
+            extension.copyTo(source, stream);
+            stream.close();
+         } catch(Exception e) {
+            throw new IOException("Could not execute '" + method + "' for '" + target + "'", e);
+         }
       }
       request.getResponseCode(); // force write
       return connection;

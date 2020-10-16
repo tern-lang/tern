@@ -6,8 +6,8 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<maven.compiler.source>1.6</maven.compiler.source>
-		<maven.compiler.target>1.6</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 	</properties>
 
@@ -20,7 +20,7 @@
 					<version>2.3.1</version>
 					<configuration>
 						<encoding>ISO-8859-1</encoding>
-						<compilerVersion>1.6</compilerVersion>
+						<compilerVersion>1.8</compilerVersion>
 					</configuration>
 				</plugin>
 			</plugins>

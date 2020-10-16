@@ -13,7 +13,6 @@ import org.ternlang.core.module.Module;
 import org.ternlang.core.scope.Model;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.scope.extract.EvaluationExtractor;
-import org.ternlang.core.scope.extract.ScopePolicyExtractor;
 import org.ternlang.core.variable.Value;
 
 public class OperationEvaluator implements ExpressionEvaluator {

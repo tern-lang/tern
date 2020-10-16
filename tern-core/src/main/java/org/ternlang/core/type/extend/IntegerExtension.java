@@ -30,4 +30,20 @@ public class IntegerExtension implements NumberExtension<Integer> {
    public Integer round(Integer number, int places) {
       return number;
    }
+
+   public String toBinaryString(Integer number) {
+      return Integer.toBinaryString(number);
+   }
+
+   public String toHexString(Integer number) {
+      return Integer.toHexString(number);
+   }
+
+   public String toOctalString(Integer number) {
+      return Integer.toOctalString(number);
+   }
+
+   public String toString(Integer number, int radix) {
+      return Integer.toString(number, radix);
+   }
 }

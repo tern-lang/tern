@@ -1,7 +1,7 @@
 package org.ternlang.compile.assemble;
 
-import static org.ternlang.core.Reserved.GRAMMAR_FILE;
 import static org.ternlang.core.Reserved.GRAMMAR_EXPRESSION;
+import static org.ternlang.core.Reserved.GRAMMAR_FILE;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
@@ -11,7 +11,6 @@ import org.ternlang.common.Cache;
 import org.ternlang.common.LeastRecentlyUsedCache;
 import org.ternlang.compile.verify.Verifier;
 import org.ternlang.core.Evaluation;
-import org.ternlang.core.Reserved;
 import org.ternlang.core.module.FilePathConverter;
 import org.ternlang.core.module.Path;
 import org.ternlang.core.module.PathConverter;

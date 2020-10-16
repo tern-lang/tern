@@ -53,6 +53,11 @@ public class Console implements Iterable<String> {
          }
          return line;
       }
+
+      @Override
+      public void remove() {
+         throw new UnsupportedOperationException("Illegal modification");
+      }
    }
 
 }

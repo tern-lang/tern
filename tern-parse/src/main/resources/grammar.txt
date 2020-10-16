@@ -62,10 +62,10 @@ reference-part = { <reference-invocation> |
 reference-navigation = <reference-part>*(<reference-operator><reference-navigation>);
 reference-variable = { <array-reference> |
                   <closure> |
+                  <literal> |
                   <function-invocation> |
                   <construct> |
                   <variable-reference> |
-                  <literal> |
                   '(' <cast> ')' };
 
 reference = <reference-variable>*(<reference-operator><reference-navigation>);
@@ -134,7 +134,7 @@ increment-decrement-operand = <increment-decrement> | '('<increment-decrement>')
 
 reference-operand = <reference> | '('<reference>')';
 
-value-operand = <increment-decrement-operand> | <literal> | <prefix-operand> | <reference-operand>;
+value-operand = <increment-decrement-operand> | <literal> | <reference-operand> | <prefix-operand>;
 
 comparison-operand = <value-operand> | <calculation> | <assignment-operand> | <conditional-result> | '('<comparison-operand>')';
 comparison = <comparison-operand>?_<comparison-operator>?_<comparison-operand>;

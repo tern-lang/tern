@@ -30,4 +30,20 @@ public class LongExtension implements NumberExtension<Long> {
    public Long round(Long number, int places) {
       return number;
    }
+
+   public String toBinaryString(Long number) {
+      return Long.toBinaryString(number);
+   }
+
+   public String toHexString(Long number) {
+      return Long.toHexString(number);
+   }
+
+   public String toOctalString(Long number) {
+      return Long.toOctalString(number);
+   }
+
+   public String toString(Long number, int radix) {
+      return Long.toString(number, radix);
+   }
 }

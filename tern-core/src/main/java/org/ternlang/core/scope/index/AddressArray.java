@@ -89,5 +89,10 @@ public class AddressArray<T> implements Iterable<T> {
          }
          return (T)next;
       }
+
+      @Override
+      public void remove() {
+         throw new UnsupportedOperationException("Illegal modification");
+      }
    }
 }

@@ -10,6 +10,8 @@ public class ExpressionParseTest extends TestCase {
       SyntaxParser tree = LexerBuilder.create(GRAMMAR_FILE);
 
       assertNotNull(tree);
+      analyze(tree, "-1", "value-operand");
+      analyze(tree, "-1", "number");
       analyze(tree, "p", "argument-entry");
       analyze(tree, "p: p", "argument-entry");
       analyze(tree, "let p = Point(x: 1, y: 33);", "statement");

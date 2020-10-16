@@ -30,4 +30,20 @@ public class ShortExtension implements NumberExtension<Short> {
    public Short round(Short number, int places) {
       return number;
    }
+
+   public String toBinaryString(Short number) {
+      return Integer.toBinaryString(number);
+   }
+
+   public String toHexString(Short number) {
+      return Integer.toHexString(number);
+   }
+
+   public String toOctalString(Short number) {
+      return Integer.toOctalString(number);
+   }
+
+   public String toString(Short number, int radix) {
+      return Integer.toString(number, radix);
+   }
 }

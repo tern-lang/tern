@@ -17,7 +17,7 @@ public class FunctionIndex {
    private int limit; 
    
    public FunctionIndex(FunctionReducer reducer, FunctionKeyBuilder builder) {
-      this(reducer, builder, 32);
+      this(reducer, builder, 64);
    }
    
    public FunctionIndex(FunctionReducer reducer, FunctionKeyBuilder builder, int limit) {

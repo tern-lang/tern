@@ -11,7 +11,7 @@ public class FunctionIndexBuilder {
    private final int limit; 
    
    public FunctionIndexBuilder(TypeExtractor extractor) {
-      this(extractor, 32);
+      this(extractor, 64);
    }
    
    public FunctionIndexBuilder(TypeExtractor extractor, int limit) {

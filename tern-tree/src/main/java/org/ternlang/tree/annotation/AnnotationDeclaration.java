@@ -49,8 +49,8 @@ public class AnnotationDeclaration extends Evaluation {
          Set<Object> keys = map.keySet();
          
          for(Object key : keys) {
+            Object attribute = map.get(key);
             String name = String.valueOf(key);
-            Object attribute = map.get(name);
             
             attributes.put(name, attribute);
          }

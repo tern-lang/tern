@@ -22,7 +22,7 @@ import junit.framework.TestCase;
 
 public class EvaluatorTest extends TestCase {
    
-   private static final int ITERATIONS = 1000000;
+   private static final int ITERATIONS = 1000;
    
    private static final String SOURCE_1 =
    "import common.Consumer;\n"+

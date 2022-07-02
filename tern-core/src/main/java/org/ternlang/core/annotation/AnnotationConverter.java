@@ -1,5 +1,7 @@
 package org.ternlang.core.annotation;
 
+import org.ternlang.core.error.InternalArgumentException;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
@@ -7,8 +9,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.ternlang.core.error.InternalArgumentException;
 
 public class AnnotationConverter {
    
@@ -62,11 +62,15 @@ public class AnnotationConverter {
       MapAnnotation annotation = new MapAnnotation(name, map);
       
       for(Method method : methods) {
-         String key = method.getName();
-         Object value = method.invoke(object);
-         Object conversion = convert(value);
-         
-         map.put(key, conversion);
+         try {
+            String key = method.getName();
+            Object value = method.invoke(object);
+            Object conversion = convert(value);
+
+            map.put(key, conversion);
+         } catch(Throwable cause) {
+            return annotation; // internal JVM annotation
+         }
       }
       return annotation;
    }

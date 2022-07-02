@@ -45,13 +45,17 @@ public class MethodHandleBuilder {
       Lookup lookup = MethodHandles.lookup();
       Lookup actual = lookup.in(target);
       Class access = lookup.getClass();
-      Field modes = access.getDeclaredField(ALLOWED_MODES);
-      
-      if(!modes.isAccessible()) {
-         modes.setAccessible(true);
+
+      try {
+         Field modes = access.getDeclaredField(ALLOWED_MODES);
+
+         if (!modes.isAccessible()) {
+            modes.setAccessible(true);
+         }
+         modes.set(actual, Modifier.PRIVATE);
+      } catch(Exception e) {
+
       }
-      modes.set(actual, Modifier.PRIVATE);
-      
       return lookup.unreflectSpecial(method, target);
    }
 }

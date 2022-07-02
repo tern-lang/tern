@@ -1,7 +1,5 @@
 package org.ternlang.core.type.index;
 
-import java.lang.reflect.Method;
-
 import org.ternlang.core.Context;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.convert.proxy.ProxyWrapper;
@@ -15,16 +13,25 @@ import org.ternlang.core.platform.Platform;
 import org.ternlang.core.platform.PlatformProvider;
 import org.ternlang.core.type.Type;
 
+import java.lang.reflect.Method;
+
 public class FunctionGenerator {
-   
+
+   private static final String[] IGNORE = {
+        "java.lang.Object::finalize",
+        "java.lang.Object::clone"
+   };
+
    private final GenericConstraintExtractor extractor;
    private final SignatureGenerator generator;
+   private final MethodAccessFilter filter;
    private final DefaultMethodChecker checker;
    private final PlatformProvider provider;
-   
+
    public FunctionGenerator(PlatformProvider provider) {
-      this.extractor = new GenericConstraintExtractor(); 
-      this.generator = new SignatureGenerator();     
+      this.filter = new MethodAccessFilter(IGNORE);
+      this.extractor = new GenericConstraintExtractor();
+      this.generator = new SignatureGenerator();
       this.checker = new DefaultMethodChecker();
       this.provider = provider;
    }
@@ -38,20 +45,21 @@ public class FunctionGenerator {
          Platform platform = provider.create();
          Invocation invocation = platform.createMethod(type, method);
          ProxyWrapper wrapper = context.getWrapper();
-         
-         if(checker.check(method)) {
+
+         if (checker.check(method)) {
             invocation = new DefaultMethodInvocation(wrapper, method);
          } else {
             invocation = new MethodInvocation(wrapper, invocation, method);
          }
          Constraint constraint = extractor.extractReturn(method, modifiers);
-         
-         if(!method.isAccessible()) {
+
+         if (filter.accept(method)) {
             method.setAccessible(true);
          }
          return new InvocationFunction(signature, invocation, type, constraint, name, modifiers);
-      } catch(Exception e) {
+      } catch (Exception e) {
          throw new InternalStateException("Could not create function for " + method, e);
       }
    }
+
 }

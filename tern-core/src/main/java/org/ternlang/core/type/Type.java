@@ -14,9 +14,9 @@ public interface Type extends Entity {
    List<Annotation> getAnnotations();
    List<Property> getProperties();
    List<Function> getFunctions();
-   List<Constraint> getTypes();
+   List<Constraint> getTypes(); // hierarchy
    Module getModule();
    Class getType();
-   Type getOuter();
-   Type getEntry();
+   Type getOuter(); // enclosing type
+   Type getEntry(); // array entry
 }

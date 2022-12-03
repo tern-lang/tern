@@ -184,8 +184,12 @@ public class SegmentProcessor {
       while (off < count) {
          char next = original[off];
 
-         if ((!space(next))) {
+         if (!space(next)) {
             return segments.add(lines > 0 ? RETURN : SPACE, mark, off);
+         }
+         if(next == '\n') {
+            lines++;
+            line++;
          }
          off++;
       }

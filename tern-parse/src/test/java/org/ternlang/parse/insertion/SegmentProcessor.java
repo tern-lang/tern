@@ -1,14 +1,18 @@
 package org.ternlang.parse.insertion;
 
+import org.ternlang.parse.SourceException;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.ternlang.parse.insertion.SegmentType.CLOSE;
 import static org.ternlang.parse.insertion.SegmentType.COMMENT;
 import static org.ternlang.parse.insertion.SegmentType.DIRECTIVE;
+import static org.ternlang.parse.insertion.SegmentType.OPEN;
 import static org.ternlang.parse.insertion.SegmentType.OPERATOR;
 import static org.ternlang.parse.insertion.SegmentType.RETURN;
-import static org.ternlang.parse.insertion.SegmentType.*;
+import static org.ternlang.parse.insertion.SegmentType.SPACE;
 import static org.ternlang.parse.insertion.SegmentType.SYMBOL;
 import static org.ternlang.parse.insertion.SegmentType.TEXT;
 
@@ -17,12 +21,14 @@ public class SegmentProcessor {
    private SegmentList segments;
    private char[] original;
    private int count;
+   private int line;
    private int off;
 
    public SegmentProcessor(char[] original) {
       this.segments = new SegmentList(original);
       this.count = original.length;
       this.original = original;
+      this.line = 1;
    }
 
    public Iterator<Segment> process() {
@@ -34,27 +40,27 @@ public class SegmentProcessor {
 
          if (comment(next)) {
             if(!comment() && !operator()) {
-               throw new IllegalStateException("Invalid comment");
+               throw new SourceException("Invalid comment at line " + line);
             }
          } else if (quote(next)) {
             if(!string()) {
-               throw new IllegalStateException("Invalid string");
+               throw new SourceException("Invalid string at line " + line);
             }
          } else if (space(next)) {
             if(!space()) {
-               throw new IllegalStateException("Invalid space");
+               throw new SourceException("Invalid space at line " + line);
             }
          } else if (identifier(next)) {
             if(!symbol()) {
-               throw new IllegalStateException("Invalid symbol");
+               throw new SourceException("Invalid symbol at line " + line);
             }
          } else if (open(next) || close(next)) {
             if(!brace()) {
-               throw new IllegalStateException("Invalid open brace");
+               throw new SourceException("Invalid brace at line " + line);
             }
          } else {
             if (!operator()) {
-               throw new IllegalStateException("Illegal source (" + next + ") " + new String(original, off, count - off));
+               throw new SourceException("Invalid source at line " + line);
             }
          }
       }
@@ -74,6 +80,7 @@ public class SegmentProcessor {
                   char terminal = original[off];
 
                   if (terminal == '\n') {
+                     line++;
                      off++;
                      return segments.add(DIRECTIVE, mark, off);
                   }
@@ -97,6 +104,7 @@ public class SegmentProcessor {
                char terminal = original[off];
 
                if (terminal == '\n') {
+                  line++;
                   off++;
                   return segments.add(COMMENT, mark, off);
                }
@@ -111,6 +119,9 @@ public class SegmentProcessor {
                if (terminal == '/' && off > 0) {
                   char prev = original[off - 1];
 
+                  if(terminal == '\n') {
+                     line++;
+                  }
                   if (prev == '*') {
                      off++;
                      return segments.add(COMMENT, mark, off);
@@ -118,7 +129,7 @@ public class SegmentProcessor {
                }
                off++;
             }
-            return segments.add(COMMENT, mark, off);
+            throw new SourceException("Comment not closed at line " + line);
          }
       }
       return false;
@@ -157,10 +168,13 @@ public class SegmentProcessor {
                }
             }
          }
+         if(next == '\n') {
+            line++;
+         }
          off++;
          size++;
       }
-      return segments.add(TEXT, mark, off);
+      throw new SourceException("String literal not closed at line " + line);
    }
 
    private boolean space() {

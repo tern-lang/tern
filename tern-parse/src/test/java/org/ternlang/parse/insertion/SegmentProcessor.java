@@ -26,35 +26,35 @@ public class SegmentProcessor {
    }
 
    public Iterator<Segment> process() {
-      if(off < count) {
+      if (off < count) {
          directive(); // read interpreter directive
       }
-      while(off < count) {
+      while (off < count) {
          char next = original[off];
 
-         if(comment(next)) {
-            if(!comment()) {
-               off++;
+         if (comment(next)) {
+            if(!comment() && !operator()) {
+               throw new IllegalStateException("Invalid comment");
             }
-         } else if(quote(next)) {
+         } else if (quote(next)) {
             if(!string()) {
-               off++;
+               throw new IllegalStateException("Invalid string");
             }
-         } else if(space(next)) {
+         } else if (space(next)) {
             if(!space()) {
-               off++;
+               throw new IllegalStateException("Invalid space");
             }
-         } else if(identifier(next)) {
-            if (!symbol()) {
-               off++;
+         } else if (identifier(next)) {
+            if(!symbol()) {
+               throw new IllegalStateException("Invalid symbol");
             }
-         } else if(open(next) || close(next)) {
+         } else if (open(next) || close(next)) {
             if(!brace()) {
-               off++;
+               throw new IllegalStateException("Invalid open brace");
             }
          } else {
-            if(!operator()) {
-               throw new IllegalStateException("Illegal source ("+next+") " + new String(original, off, count - off));
+            if (!operator()) {
+               throw new IllegalStateException("Illegal source (" + next + ") " + new String(original, off, count - off));
             }
          }
       }
@@ -65,15 +65,15 @@ public class SegmentProcessor {
       char start = original[off];
       int mark = off;
 
-      if(directive(start)){
-         if(off + 1 < count) {
+      if (directive(start)) {
+         if (off + 1 < count) {
             char next = original[off + 1];
 
-            if(next == '!') {
-               while(off < count) {
+            if (next == '!') {
+               while (off < count) {
                   char terminal = original[off];
 
-                  if(terminal == '\n') {
+                  if (terminal == '\n') {
                      off++;
                      return segments.add(DIRECTIVE, mark, off);
                   }
@@ -87,41 +87,38 @@ public class SegmentProcessor {
    }
 
    private boolean comment() {
-      char start = original[off];
       int mark = off;
 
-      if(comment(start)){
-         if(off + 1 < count) {
-            char next = original[off + 1];
+      if (off + 1 < count) {
+         char next = original[off + 1];
 
-            if(next == '/') {
-               while(off < count) {
-                  char terminal = original[off];
+         if (next == '/') {
+            while (off < count) {
+               char terminal = original[off];
 
-                  if(terminal == '\n') {
+               if (terminal == '\n') {
+                  off++;
+                  return segments.add(COMMENT, mark, off);
+               }
+               off++;
+            }
+            return segments.add(COMMENT, mark, off); // end of source
+         }
+         if (next == '*') {
+            while (off < count) {
+               char terminal = original[off];
+
+               if (terminal == '/' && off > 0) {
+                  char prev = original[off - 1];
+
+                  if (prev == '*') {
                      off++;
                      return segments.add(COMMENT, mark, off);
                   }
-                  off++;
                }
-               return segments.add(COMMENT, mark, off); // end of source
+               off++;
             }
-            if(next == '*') {
-               while(off < count) {
-                  char terminal = original[off];
-
-                  if(terminal == '/' && off > 0) {
-                     char prev = original[off - 1];
-
-                     if(prev == '*') {
-                        off++;
-                        return segments.add(COMMENT, mark, off);
-                     }
-                  }
-                  off++;
-               }
-               return segments.add(COMMENT, mark, off);
-            }
+            return segments.add(COMMENT, mark, off);
          }
       }
       return false;
@@ -130,107 +127,91 @@ public class SegmentProcessor {
    private boolean string() {
       char start = original[off];
       int mark = off;
+      int size = 0;
 
-      if(quote(start)) {
-         int size = 0;
+      while (off < count) {
+         char next = original[off];
 
-         while(off < count) {
-            char next = original[off];
+         if (next == start) {
+            if (size == 1) { // "" or ''
+               off++;
+               return segments.add(TEXT, mark, off);
+            }
+            if (off > 0 && size > 0) {
+               char prev = original[off - 1];
 
-            if(next == start) {
-               if(size == 1) { // "" or ''
+               if (!escape(prev)) {
                   off++;
                   return segments.add(TEXT, mark, off);
                }
-               if(off > 0 && size > 0) {
-                  char prev = original[off - 1];
+               for (int i = 1; i <= size; i++) {
+                  char value = original[off - i];
 
-                  if(!escape(prev)) {
-                     off++;
-                     return segments.add(TEXT, mark, off);
-                  }
-                  for(int i = 1; i <= size; i++) {
-                     char value = original[off - i];
-
-                     if(!escape(value)) {
-                        if(i % 2 == 1) {
-                           off++;
-                           return segments.add(TEXT, mark, off);
-                        }
-                        break;
+                  if (!escape(value)) {
+                     if (i % 2 == 1) {
+                        off++;
+                        return segments.add(TEXT, mark, off);
                      }
+                     break;
                   }
                }
             }
-            off++;
-            size++;
          }
-         return segments.add(TEXT, mark, off);
+         off++;
+         size++;
       }
-      return false;
+      return segments.add(TEXT, mark, off);
    }
 
    private boolean space() {
-      char start = original[off];
       int mark = off;
       int lines = 0;
 
-      if(space(start)) {
-         while(off < count) {
-            char next = original[off];
+      while (off < count) {
+         char next = original[off];
 
-            if((!space(next))) {
-               return segments.add(lines > 0 ? RETURN : SPACE, mark, off);
-            }
-            off++;
+         if ((!space(next))) {
+            return segments.add(lines > 0 ? RETURN : SPACE, mark, off);
          }
-         return segments.add(lines > 0 ? RETURN : SPACE, mark, off);
+         off++;
       }
-      return false;
+      return segments.add(lines > 0 ? RETURN : SPACE, mark, off);
    }
 
    private boolean symbol() {
-      char start = original[off];
       int mark = off;
 
-      if(identifier(start)) {
-         while(off < count) {
-            char next = original[off];
+      while (off < count) {
+         char next = original[off];
 
-            if(!identifier(next)) {
-               return segments.add(SYMBOL, mark, off);
-            }
-            off++;
+         if (!identifier(next)) {
+            return segments.add(SYMBOL, mark, off);
          }
-         return segments.add(SYMBOL, mark, off);
+         off++;
       }
-      return false;
+      return segments.add(SYMBOL, mark, off);
    }
 
    private boolean operator() {
-      char start = original[off];
       int mark = off;
 
-      if(!space(start)) {
-         while(off < count) {
-            char next = original[off++];
+      while (off < count) {
+         char next = original[off++];
 
-            if(!space(next) || !identifier(next) || !comment(next) || !quote(next)) {
-               return segments.add(OPERATOR, mark, off);
-            }
+         if (!space(next) || !identifier(next) || !comment(next) || !quote(next)) {
+            return segments.add(OPERATOR, mark, off);
          }
-         return segments.add(OPERATOR, mark, off);
       }
-      return false;
+      return segments.add(OPERATOR, mark, off);
    }
 
    private boolean brace() {
       char start = original[off];
 
-      if(open(start)) {
+      if (open(start)) {
          return segments.add(OPEN, off++, off);
       }
-      if(close(start)) {
+      if (close(start)) {
          return segments.add(CLOSE, off++, off);
       }
       return false;
@@ -249,8 +230,9 @@ public class SegmentProcessor {
    }
 
    private boolean quote(char value) {
-      switch(value){
-         case '"': case '\'':
+      switch (value) {
+         case '"':
+         case '\'':
          case '`':
             return true;
          default:
@@ -259,9 +241,11 @@ public class SegmentProcessor {
    }
 
    private boolean space(char value) {
-      switch(value){
-         case ' ': case '\t':
-         case '\n': case '\r':
+      switch (value) {
+         case ' ':
+         case '\t':
+         case '\n':
+         case '\r':
             return true;
          default:
             return false;
@@ -269,13 +253,13 @@ public class SegmentProcessor {
    }
 
    private boolean identifier(char value) {
-      if(value >= 'a' && value <= 'z') {
+      if (value >= 'a' && value <= 'z') {
          return true;
       }
-      if(value >= 'A' && value <= 'Z') {
+      if (value >= 'A' && value <= 'Z') {
          return true;
       }
-      if(value >= '0' && value <= '9') {
+      if (value >= '0' && value <= '9') {
          return true;
       }
       return value == '_';

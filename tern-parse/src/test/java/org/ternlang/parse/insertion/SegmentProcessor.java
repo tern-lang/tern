@@ -6,17 +6,32 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static org.ternlang.parse.insertion.SegmentType.CLOSE;
+import static org.ternlang.parse.insertion.SegmentType.BRANCH_CONDITION;
+import static org.ternlang.parse.insertion.SegmentType.BRANCH_NO_CONDITION;
+import static org.ternlang.parse.insertion.SegmentType.CLOSE_ARRAY;
+import static org.ternlang.parse.insertion.SegmentType.CLOSE_BLOCK;
+import static org.ternlang.parse.insertion.SegmentType.CLOSE_EXPRESSION;
 import static org.ternlang.parse.insertion.SegmentType.COMMENT;
 import static org.ternlang.parse.insertion.SegmentType.DIRECTIVE;
-import static org.ternlang.parse.insertion.SegmentType.OPEN;
+import static org.ternlang.parse.insertion.SegmentType.FLOATING;
+import static org.ternlang.parse.insertion.SegmentType.FLOW_CONTROL;
+import static org.ternlang.parse.insertion.SegmentType.OPEN_ARRAY;
+import static org.ternlang.parse.insertion.SegmentType.OPEN_BLOCK;
+import static org.ternlang.parse.insertion.SegmentType.OPEN_EXPRESSION;
 import static org.ternlang.parse.insertion.SegmentType.OPERATOR;
 import static org.ternlang.parse.insertion.SegmentType.RETURN;
+import static org.ternlang.parse.insertion.SegmentType.SEMICOLON;
 import static org.ternlang.parse.insertion.SegmentType.SPACE;
 import static org.ternlang.parse.insertion.SegmentType.SYMBOL;
 import static org.ternlang.parse.insertion.SegmentType.TEXT;
+import static org.ternlang.parse.insertion.SegmentType.TYPE;
 
 public class SegmentProcessor {
+
+   private static final String[] TYPES = {"class", "trait", "enum"};
+   private static final String[] FLOW_CONTROLS = {"return", "throw", "new", "assert", "await", "break", "continue", "yield", "debug"};
+   private static final String[] BRANCH_CONDITIONS = {"if", "for", "while", "until", "catch"};
+   private static final String[] BRANCH_NO_CONDITIONS = {"else", "loop", "try"};
 
    private SegmentList segments;
    private char[] original;
@@ -203,7 +218,29 @@ public class SegmentProcessor {
          char next = original[off];
 
          if (!identifier(next)) {
-            return segments.add(SYMBOL, mark, off);
+            Range range = new Range(original, mark, off);
+
+            for (String value : FLOW_CONTROLS) {
+               if (value.contentEquals(range)) {
+                  return segments.add(FLOW_CONTROL, value);
+               }
+            }
+            for (String value : TYPES) {
+               if (value.contentEquals(range)) {
+                  return segments.add(TYPE, value);
+               }
+            }
+            for (String value : BRANCH_CONDITIONS) {
+               if (value.contentEquals(range)) {
+                  return segments.add(BRANCH_CONDITION, value);
+               }
+            }
+            for (String value : BRANCH_NO_CONDITIONS) {
+               if (value.contentEquals(range)) {
+                  return segments.add(BRANCH_NO_CONDITION, value);
+               }
+            }
+            return segments.add(SYMBOL, range);
          }
          off++;
       }
@@ -217,6 +254,20 @@ public class SegmentProcessor {
          char next = original[off++];
 
          if (!space(next) || !identifier(next) || !comment(next) || !quote(next)) {
+            if(mark + 1 == off) {
+               switch(next) {
+                  case ';':
+                     return segments.add(SEMICOLON, mark, off);
+                  case '-': case '+':
+                  case '%': case '/':
+                  case '*': case '.':
+                  case '?': case ':':
+                  case '&': case '|':
+                  case '>': case '<':
+                  case '^': case '=':
+                     return segments.add(FLOATING, mark, off);
+               }
+            }
             return segments.add(OPERATOR, mark, off);
          }
       }
@@ -227,10 +278,26 @@ public class SegmentProcessor {
       char start = original[off];
 
       if (open(start)) {
-         return segments.add(OPEN, off++, off);
+         switch(start) {
+            case '{':
+               return segments.add(OPEN_BLOCK, off++, off);
+            case '(' :
+               return segments.add(OPEN_EXPRESSION, off++, off);
+            case '[' :
+               return segments.add(OPEN_ARRAY, off++, off);
+         }
+         throw new SourceException("Invalid brace " + start + " at line " + line);
       }
       if (close(start)) {
-         return segments.add(CLOSE, off++, off);
+         switch(start) {
+            case '}':
+               return segments.add(CLOSE_BLOCK, off++, off);
+            case ')' :
+               return segments.add(CLOSE_EXPRESSION, off++, off);
+            case ']' :
+               return segments.add(CLOSE_ARRAY, off++, off);
+         }
+         throw new SourceException("Invalid brace " + start + " at line " + line);
       }
       return false;
    }
@@ -306,7 +373,7 @@ public class SegmentProcessor {
          return segments.iterator();
       }
 
-      public boolean add(SegmentType type, String text) {
+      public boolean add(SegmentType type, CharSequence text) {
          Segment segment = new LiteralSegment(type, text);
          return segments.add(segment);
       }
@@ -323,10 +390,10 @@ public class SegmentProcessor {
 
       private static class LiteralSegment implements Segment {
 
+         private final CharSequence token;
          private final SegmentType type;
-         private final String token;
 
-         public LiteralSegment(SegmentType type, String token) {
+         public LiteralSegment(SegmentType type, CharSequence token) {
             this.token = token;
             this.type = type;
          }
@@ -343,7 +410,7 @@ public class SegmentProcessor {
 
          @Override
          public String toString() {
-            return token;
+            return token.toString();
          }
       }
 
@@ -371,41 +438,39 @@ public class SegmentProcessor {
          public String toString() {
             return range.toString();
          }
+      }
+   }
 
-         private static class Range implements CharSequence {
+   private static class Range implements CharSequence {
 
-            private final char[] source;
-            private final int length;
-            private final int off;
+      private final char[] source;
+      private final int length;
+      private final int off;
 
-            public Range(char[] source, int from, int to) {
-               this.length = to - from;
-               this.source = source;
-               this.off = from;
-            }
-
-            @Override
-            public int length() {
-               return length;
-            }
-
-            @Override
-            public char charAt(int index) {
-               return source[off + index];
-            }
-
-            @Override
-            public CharSequence subSequence(int start, int end) {
-               return new Range(source, off + start, off + end);
-            }
-
-            @Override
-            public String toString() {
-               return new String(source, off, length);
-            }
-         }
+      public Range(char[] source, int from, int to) {
+         this.length = to - from;
+         this.source = source;
+         this.off = from;
       }
 
+      @Override
+      public int length() {
+         return length;
+      }
 
+      @Override
+      public char charAt(int index) {
+         return source[off + index];
+      }
+
+      @Override
+      public CharSequence subSequence(int start, int end) {
+         return new Range(source, off + start, off + end);
+      }
+
+      @Override
+      public String toString() {
+         return new String(source, off, length);
+      }
    }
 }

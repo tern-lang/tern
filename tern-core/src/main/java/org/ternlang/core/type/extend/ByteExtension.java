@@ -31,6 +31,10 @@ public class ByteExtension implements NumberExtension<Byte> {
       return number;
    }
 
+   public Character toCharacter(Integer number) {
+      return (char)number.byteValue();
+   }
+
    public String toBinaryString(Byte number) {
       return Integer.toBinaryString(number);
    }

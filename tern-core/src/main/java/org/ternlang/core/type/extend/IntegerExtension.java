@@ -31,6 +31,10 @@ public class IntegerExtension implements NumberExtension<Integer> {
       return number;
    }
 
+   public Character toCharacter(Integer number) {
+      return (char)number.intValue();
+   }
+
    public String toBinaryString(Integer number) {
       return Integer.toBinaryString(number);
    }

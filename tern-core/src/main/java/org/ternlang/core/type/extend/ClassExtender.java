@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -41,6 +42,8 @@ public class ClassExtender {
          registry.register(URLConnection.class, URLConnectionExtension.class);
          registry.register(URL.class, URLExtension.class);
          registry.register(Iterator.class, IteratorExtension.class);
+         registry.register(List.class, ListExtension.class);
+         registry.register(Collection.class, CollectionExtension.class);
          registry.register(Number.class, NumberExtension.class);
          registry.register(BigDecimal.class, BigDecimalExtension.class);
          registry.register(BigInteger.class, BigIntegerExtension.class);
@@ -52,6 +55,8 @@ public class ClassExtender {
          registry.register(Float.class, FloatExtension.class);
          registry.register(Byte.class, ByteExtension.class);
          registry.register(Short.class, ShortExtension.class);
+         registry.register(String.class, StringExtension.class);
+         registry.register(Character.class, CharacterExtension.class);
          registry.register(Scope.class, ScopeExtension.class);
          done.set(true);
       }

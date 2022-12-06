@@ -31,6 +31,10 @@ public class LongExtension implements NumberExtension<Long> {
       return number;
    }
 
+   public Character toCharacter(Integer number) {
+      return (char)number.longValue();
+   }
+
    public String toBinaryString(Long number) {
       return Long.toBinaryString(number);
    }

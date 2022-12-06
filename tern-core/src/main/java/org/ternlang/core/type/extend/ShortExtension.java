@@ -31,6 +31,10 @@ public class ShortExtension implements NumberExtension<Short> {
       return number;
    }
 
+   public Character toCharacter(Integer number) {
+      return (char)number.shortValue();
+   }
+
    public String toBinaryString(Short number) {
       return Integer.toBinaryString(number);
    }

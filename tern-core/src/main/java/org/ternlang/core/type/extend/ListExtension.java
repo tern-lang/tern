@@ -81,6 +81,15 @@ public class ListExtension {
       return Collections.emptySet();
    }
 
+   public <T> T head(List<T> list) {
+      int length = list.size();
+
+      if(length > 0) {
+         return list.get(0);
+      }
+      return null;
+   }
+
    public <T> List<T> head(List<T> list, int count) {
       int length = list.size();
 
@@ -88,6 +97,15 @@ public class ListExtension {
          return list.subList(0, count);
       }
       return list;
+   }
+
+   public <T> T tail(List<T> list) {
+      int length = list.size();
+
+      if(length > 0) {
+         return list.get(length - 1);
+      }
+      return null;
    }
 
    public <T> List<T> tail(List<T> list, int count) {

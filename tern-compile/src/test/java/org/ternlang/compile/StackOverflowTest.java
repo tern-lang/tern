@@ -2,10 +2,8 @@ package org.ternlang.compile;
 
 import junit.framework.TestCase;
 
-import org.ternlang.core.stack.StackOverflowException;
-
 public class StackOverflowTest extends TestCase {
-   
+
    private static final String SOURCE_1 =
    "class Obj {\n"+
    "   func(a: Integer){\n"+

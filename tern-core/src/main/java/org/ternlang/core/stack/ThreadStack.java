@@ -1,11 +1,13 @@
 package org.ternlang.core.stack;
 
 public class ThreadStack {
-   
+
+   private final StackTraceElement[] elements; // needed to initialize caches
    private final StackTraceBuilder builder;
    private final ThreadLocalStack local;
    
    public ThreadStack() {
+      this.elements = new StackOverflowError().getStackTrace();
       this.builder = new StackTraceBuilder();
       this.local = new ThreadLocalStack();
    }

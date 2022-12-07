@@ -6,6 +6,7 @@ import org.ternlang.core.function.Invocation;
 import org.ternlang.core.function.Origin;
 import org.ternlang.core.function.Signature;
 import org.ternlang.core.scope.Scope;
+import org.ternlang.core.stack.StackOverflowException;
 import org.ternlang.core.stack.StackTrace;
 import org.ternlang.core.stack.ThreadStack;
 
@@ -50,6 +51,8 @@ public class TraceInvocationBuilder {
          try {
             trace.before(function);
             return invocation.invoke(scope, object, list);
+         } catch(StackOverflowError error) {
+            throw new StackOverflowException("Stack overflow for " + function);
          } finally {
             trace.after(function);
          }
@@ -76,6 +79,8 @@ public class TraceInvocationBuilder {
          try {
             trace.before(function);
             return invocation.invoke(scope, object, list);
+         } catch(StackOverflowError error) {
+            throw new StackOverflowException("Stack overflow for " + function);
          } finally {
             trace.after(function);
          }

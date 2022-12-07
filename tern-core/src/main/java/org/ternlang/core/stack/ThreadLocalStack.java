@@ -4,7 +4,7 @@ import org.ternlang.core.platform.PlatformType;
 
 public class ThreadLocalStack extends ThreadLocal<StackTrace> {
    
-   private static final int LARGE_STACK = 200;
+   private static final int LARGE_STACK = 1000;
    private static final int SMALL_STACK = 40;
    
    private final PlatformType platform;

@@ -55,6 +55,11 @@ public class ListExtensionTest extends TestCase {
    "[1 .. 5].zip().forEach(e -> {\n"+
    "   println(e);\n"+
    "   assert e.value == e.source[e.index];\n"+
+   "});\n"+
+   "[1 .. 5].zip([3, 7, 23]).forEach(e -> {\n"+
+   "   println(e);\n"+
+   "   assert e.value(0) == e.source(0)[e.index];\n"+
+   "   assert e.value(1) == e.source(1)[e.index];\n"+
    "});\n";
 
    private static final String SOURCE_11 =
@@ -129,11 +134,11 @@ public class ListExtensionTest extends TestCase {
       Timer.timeExecution("testMap", executable);
    }
 
-   public void testEach() throws Exception {
+   public void testZip() throws Exception {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       System.err.println(SOURCE_10);
       Executable executable = compiler.compile(SOURCE_10);
-      Timer.timeExecution("testEach", executable);
+      Timer.timeExecution("testZip", executable);
    }
 
    public void testSlidingWindow() throws Exception {

@@ -4,7 +4,6 @@ import org.ternlang.common.functional.FoldLeft;
 import org.ternlang.common.functional.FoldRight;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
@@ -200,13 +199,21 @@ public class ListExtension {
    }
 
    public <A, B> List<ZipMany> zip(List<A> left, List<B> right) {
-      int count = Math.max(left.size(), right.size());
+      int count = Math.min(left.size(), right.size());
 
       if (count > 0) {
          List<ZipMany> result = new ArrayList<>();
+         List<List> sources = new ArrayList<>();
+
+         sources.add(left);
+         sources.add(right);
 
          for (int i = 0; i < count; i++) {
-            ZipMany value = new ZipMany(Arrays.asList(left, right), i);
+            List<Object> values = new ArrayList<>();
+            ZipMany value = new ZipMany(sources, values, i);
+
+            values.add(left.get(i));
+            values.add(right.get(i));
             result.add(value);
          }
          return result;
@@ -343,8 +350,8 @@ public class ListExtension {
       private final int index;
 
       public ZipOne(List<T> source, int index) {
+         this.source = Collections.unmodifiableList(source);
          this.value = source.get(index);
-         this.source = source;
          this.index = index;
       }
 
@@ -359,15 +366,22 @@ public class ListExtension {
       public List<T> source() {
          return source;
       }
+
+      @Override
+      public String toString() {
+         return String.format("%s at %s", value, index);
+      }
    }
 
    public static class ZipMany {
 
       private final List<List> sources;
+      private final List<Object> values;
       private final int index;
 
-      public ZipMany(List<List> sources, int index) {
-         this.sources = sources;
+      public ZipMany(List<List> sources, List<Object> values, int index) {
+         this.sources = Collections.unmodifiableList(sources);
+         this.values = Collections.unmodifiableList(values);
          this.index = index;
       }
 
@@ -376,11 +390,24 @@ public class ListExtension {
       }
 
       public Object value(int i) {
-         return sources.get(i).get(index);
+         return values.get(i);
+      }
+
+      public List<Object> values(int i) {
+         return values;
       }
 
       public List source(int i) {
          return sources.get(i);
+      }
+
+      public List<List> sources() {
+         return sources;
+      }
+
+      @Override
+      public String toString() {
+         return String.format("%s at %s", values, index);
       }
    }
 }

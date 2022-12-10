@@ -6,6 +6,8 @@ import java.util.function.Predicate;
 
 public interface Option<A> extends Iterable<A> {
    A get();
+   boolean isDefined();
+   boolean isEmpty();
    boolean exists(A value);
    Option<A> filter(Predicate<A> filter);
    Iterator<A> iterator();

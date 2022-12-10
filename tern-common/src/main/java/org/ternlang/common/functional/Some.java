@@ -19,6 +19,16 @@ public class Some<A> implements Option<A> {
    }
 
    @Override
+   public boolean isDefined() {
+      return true;
+   }
+
+   @Override
+   public boolean isEmpty() {
+      return false;
+   }
+
+   @Override
    public boolean exists(A other) {
       return value.equals(other);
    }

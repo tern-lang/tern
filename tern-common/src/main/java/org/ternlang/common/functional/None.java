@@ -14,6 +14,16 @@ public class None<A> implements Option<A> {
    }
 
    @Override
+   public boolean isDefined() {
+      return false;
+   }
+
+   @Override
+   public boolean isEmpty() {
+      return true;
+   }
+
+   @Override
    public boolean exists(A value) {
       return false;
    }

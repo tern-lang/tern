@@ -17,9 +17,9 @@ public class LocalScope implements Scope {
    private final Scope outer;
    
    public LocalScope(Scope inner, Scope outer) {
+      this.table = new LocalTable(outer); // edge case for curry
       this.state = new LocalState(inner);
       this.index = new StackIndex(inner);
-      this.table = new ArrayTable();
       this.inner = inner;
       this.outer = outer;
    }
@@ -77,5 +77,24 @@ public class LocalScope implements Scope {
    @Override
    public String toString() {
       return String.valueOf(state);
+   }
+
+   private static class LocalTable extends ArrayTable {
+
+      private final ScopeTable outer;
+
+      public LocalTable(Scope outer) {
+         this.outer = outer.getTable();
+      }
+
+      @Override
+      public Value getValue(Address address) {
+         Value value = super.getValue(address);
+
+         if(value == null) {
+            return outer.getValue(address);
+         }
+         return value;
+      }
    }
 }

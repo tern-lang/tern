@@ -1,6 +1,7 @@
 package org.ternlang.core.type.extend;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
@@ -10,6 +11,7 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public class ListExtension {
 
@@ -139,6 +141,25 @@ public class ListExtension {
       return list;
    }
 
+   public <A, B> List<List> zip(List<A> left, List<B> right) {
+      int leftSize = left.size();
+      int rightSize = right.size();
+
+      if(leftSize > 0 && rightSize > 0) {
+         List<List> result = new ArrayList<>();
+
+         for (int i = 0; i < leftSize && i < rightSize; i++) {
+            A leftValue = left.get(i);
+            B rightValue = right.get(i);
+            List pair = Arrays.asList(leftValue, rightValue);
+
+            result.add(pair);
+         }
+         return result;
+      }
+      return Collections.emptyList();
+   }
+
    public <T> List<Element<T>> elements(List<T> list) {
       int count = list.size();
 
@@ -154,6 +175,11 @@ public class ListExtension {
       return Collections.emptyList();
    }
 
+
+   public <T> Accumulator<T> fold(List<T> list, T value) {
+      return new FoldAccumulator(list, value);
+   }
+
    public <T> List<List<T>> sliding(List<T> list, int size) {
       int count = list.size();
 
@@ -167,6 +193,35 @@ public class ListExtension {
          return elements;
       }
       return Collections.emptyList();
+   }
+
+   @FunctionalInterface
+   public static interface Accumulator<T> {
+
+      T apply(BiFunction<T, T, T> operator);
+   }
+
+   public static class FoldAccumulator<T> implements Accumulator<T> {
+
+      private final List<T> list;
+      private final T value;
+
+      public FoldAccumulator(List<T> list, T value) {
+         this.value = value;
+         this.list = list;
+      }
+
+      @Override
+      public T apply(BiFunction<T, T, T> operator) {
+         int count = list.size();
+         T result = value;
+
+         for(int i = 0; i < count; i++) {
+            T next = list.get(i);
+            result = operator.apply(result, next);
+         }
+         return result;
+      }
    }
 
    public static class Element<T> {

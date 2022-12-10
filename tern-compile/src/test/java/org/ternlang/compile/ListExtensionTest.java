@@ -61,81 +61,100 @@ public class ListExtensionTest extends TestCase {
    private static final String SOURCE_11 =
    "assert [0 .. 5].sliding(2) == [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5]];\n"+
    "assert [0 .. 5].sliding(3) == [[0, 1, 2], [1, 2, 3], [2, 3, 4], [3, 4, 5]];\n";
-//
-//   public void testListFill() throws Exception {
-//      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
-//      System.err.println(SOURCE_1);
-//      Executable executable = compiler.compile(SOURCE_1);
-//      Timer.timeExecution("testListFill", executable);
-//   }
-//
-//   public void testListReverse() throws Exception {
-//      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
-//      System.err.println(SOURCE_2);
-//      Executable executable = compiler.compile(SOURCE_2);
-//      Timer.timeExecution("testListReverse", executable);
-//   }
-//
-//   public void testListMax() throws Exception {
-//      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
-//      System.err.println(SOURCE_3);
-//      Executable executable = compiler.compile(SOURCE_3);
-//      Timer.timeExecution("testListMax", executable);
-//   }
-//
-//   public void testListClone() throws Exception {
-//      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
-//      System.err.println(SOURCE_4);
-//      Executable executable = compiler.compile(SOURCE_4);
-//      Timer.timeExecution("testListClone", executable);
-//   }
-//
-//   public void testDisjoint() throws Exception {
-//      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
-//      System.err.println(SOURCE_5);
-//      Executable executable = compiler.compile(SOURCE_5);
-//      Timer.timeExecution("testDisjoint", executable);
-//   }
-//
-//   public void testFillFromTo() throws Exception {
-//      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
-//      System.err.println(SOURCE_6);
-//      Executable executable = compiler.compile(SOURCE_6);
-//      Timer.timeExecution("testFillFromTo", executable);
-//   }
-//
-//   public void testMinMaxShuffle() throws Exception {
-//      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
-//      System.err.println(SOURCE_7);
-//      Executable executable = compiler.compile(SOURCE_7);
-//      Timer.timeExecution("testMinMaxShuffle", executable);
-//   }
-//
-//   public void testHeadAndTail() throws Exception {
-//      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
-//      System.err.println(SOURCE_8);
-//      Executable executable = compiler.compile(SOURCE_8);
-//      Timer.timeExecution("testHeadAndTail", executable);
-//   }
-//
-//   public void testMap() throws Exception {
-//      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
-//      System.err.println(SOURCE_9);
-//      Executable executable = compiler.compile(SOURCE_9);
-//      Timer.timeExecution("testMap", executable);
-//   }
-//
-//   public void testEach() throws Exception {
-//      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
-//      System.err.println(SOURCE_10);
-//      Executable executable = compiler.compile(SOURCE_10);
-//      Timer.timeExecution("testEach", executable);
-//   }
+
+   private static final String SOURCE_12 =
+   "class Adder {\n"+
+   "   add(a, b) {\n"+
+   "      return a + b;\n"+
+   "   }\n"+
+   "}\n"+
+   "const adder = Adder();\n"+
+   "assert [2, 3, 4].fold(1)((a, b) -> a + b) == 10;\n"+
+   "assert [1 .. 5].fold(1)((a, b) -> a + b) == 16;\n"+
+   "assert [0 .. 5].fold(1)((a, b) -> a + b) == 16;\n"+
+   "assert [0 .. 5].fold(0)(adder::add) == 15;\n";
+
+   public void testListFill() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      System.err.println(SOURCE_1);
+      Executable executable = compiler.compile(SOURCE_1);
+      Timer.timeExecution("testListFill", executable);
+   }
+
+   public void testListReverse() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      System.err.println(SOURCE_2);
+      Executable executable = compiler.compile(SOURCE_2);
+      Timer.timeExecution("testListReverse", executable);
+   }
+
+   public void testListMax() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      System.err.println(SOURCE_3);
+      Executable executable = compiler.compile(SOURCE_3);
+      Timer.timeExecution("testListMax", executable);
+   }
+
+   public void testListClone() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      System.err.println(SOURCE_4);
+      Executable executable = compiler.compile(SOURCE_4);
+      Timer.timeExecution("testListClone", executable);
+   }
+
+   public void testDisjoint() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      System.err.println(SOURCE_5);
+      Executable executable = compiler.compile(SOURCE_5);
+      Timer.timeExecution("testDisjoint", executable);
+   }
+
+   public void testFillFromTo() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      System.err.println(SOURCE_6);
+      Executable executable = compiler.compile(SOURCE_6);
+      Timer.timeExecution("testFillFromTo", executable);
+   }
+
+   public void testMinMaxShuffle() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      System.err.println(SOURCE_7);
+      Executable executable = compiler.compile(SOURCE_7);
+      Timer.timeExecution("testMinMaxShuffle", executable);
+   }
+
+   public void testHeadAndTail() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      System.err.println(SOURCE_8);
+      Executable executable = compiler.compile(SOURCE_8);
+      Timer.timeExecution("testHeadAndTail", executable);
+   }
+
+   public void testMap() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      System.err.println(SOURCE_9);
+      Executable executable = compiler.compile(SOURCE_9);
+      Timer.timeExecution("testMap", executable);
+   }
+
+   public void testEach() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      System.err.println(SOURCE_10);
+      Executable executable = compiler.compile(SOURCE_10);
+      Timer.timeExecution("testEach", executable);
+   }
 
    public void testSlidingWindow() throws Exception {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       System.err.println(SOURCE_11);
       Executable executable = compiler.compile(SOURCE_11);
       Timer.timeExecution("testSlidingWindow", executable);
+   }
+
+   public void testFold() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      System.err.println(SOURCE_12);
+      Executable executable = compiler.compile(SOURCE_12);
+      Timer.timeExecution("testFold", executable);
    }
 }

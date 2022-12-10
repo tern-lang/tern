@@ -1,7 +1,5 @@
 package org.ternlang.core.convert.proxy;
 
-import java.lang.reflect.Proxy;
-
 import org.ternlang.common.Predicate;
 import org.ternlang.core.Any;
 import org.ternlang.core.Context;
@@ -13,6 +11,8 @@ import org.ternlang.core.function.Function;
 import org.ternlang.core.function.resolve.FunctionResolver;
 import org.ternlang.core.scope.instance.Instance;
 import org.ternlang.core.trace.TraceInterceptor;
+
+import java.lang.reflect.Proxy;
 
 public class ProxyInstanceBuilder {
 

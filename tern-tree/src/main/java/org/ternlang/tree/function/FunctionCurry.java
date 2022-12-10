@@ -1,8 +1,5 @@
 package org.ternlang.tree.function;
 
-import static org.ternlang.core.constraint.Constraint.NONE;
-import static org.ternlang.core.variable.Value.NULL;
-
 import org.ternlang.core.Compilation;
 import org.ternlang.core.Context;
 import org.ternlang.core.Evaluation;
@@ -15,6 +12,9 @@ import org.ternlang.core.module.Path;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.variable.Value;
 import org.ternlang.tree.ArgumentList;
+
+import static org.ternlang.core.constraint.Constraint.NONE;
+import static org.ternlang.core.variable.Value.NULL;
 
 public class FunctionCurry implements Compilation {
    
@@ -33,7 +33,7 @@ public class FunctionCurry implements Compilation {
    }
 
    private static class CompileResult extends Evaluation {
-   
+
       private final FunctionResolver resolver;
       private final ArgumentList arguments;
       
@@ -48,7 +48,7 @@ public class FunctionCurry implements Compilation {
       }
       
       @Override
-      public Constraint compile(Scope scope, Constraint left) throws Exception {         
+      public Constraint compile(Scope scope, Constraint left) throws Exception {
          arguments.compile(scope);
          return NONE;
       }

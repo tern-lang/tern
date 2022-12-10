@@ -78,6 +78,9 @@ public class ListExtensionTest extends TestCase {
    "assert [0 .. 5].fold(1)((a, b) -> a + b) == 16;\n"+
    "assert [0 .. 5].fold(0)(adder::add) == 15;\n";
 
+   private static final String SOURCE_13 =
+   "assert [0 .. 12].filter(i -> i % 2 == 0) == [0, 2, 4, 6, 8, 10, 12];\n";
+
    public void testListReverse() throws Exception {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       System.err.println(SOURCE_2);
@@ -153,5 +156,12 @@ public class ListExtensionTest extends TestCase {
       System.err.println(SOURCE_12);
       Executable executable = compiler.compile(SOURCE_12);
       Timer.timeExecution("testFold", executable);
+   }
+
+   public void testFilter() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      System.err.println(SOURCE_13);
+      Executable executable = compiler.compile(SOURCE_13);
+      Timer.timeExecution("testFilter", executable);
    }
 }

@@ -172,6 +172,17 @@ public class ListExtension {
       return null;
    }
 
+   public <A> List<A> filter(List<A> list, Predicate<A> filter) {
+      int length = list.size();
+
+      if (length > 0) {
+         return list.stream()
+              .filter(filter)
+              .collect(Collectors.toList());
+      }
+      return Collections.emptyList();
+   }
+
    public <A, B> List<B> map(List<A> list, Function<A, B> function) {
       int length = list.size();
 

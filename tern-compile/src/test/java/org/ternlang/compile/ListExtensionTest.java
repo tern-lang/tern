@@ -4,11 +4,6 @@ import junit.framework.TestCase;
 
 public class ListExtensionTest extends TestCase {
 
-   private static final String SOURCE_1 =
-   "let l = [0 .. 256].fill(2);\n" +
-   "println(l);\n"+
-   "assert l[44] == 2;\n";
-
    private static final String SOURCE_2 =
    "let l = [0 .. 5].reverse();\n" +
    "println(l);\n"+
@@ -26,8 +21,9 @@ public class ListExtensionTest extends TestCase {
    "assert [0 .. 5].disjoint([6 .. 10]);\n";
 
    private static final String SOURCE_6 =
-   "assert [].fill(44, 0, 6) == [44, 44, 44, 44, 44, 44];\n"+
-   "assert [].fill(11, 3) == [11, 11, 11];\n";
+   "assert [].fill(0, 6)(44) == [44, 44, 44, 44, 44, 44];\n"+
+   "assert [].fill(3)(11) == [11, 11, 11];\n"+
+   "assert [].fill(3)(11).distinct() == {11};\n";
 
    private static final String SOURCE_7 =
    "let l = [1 .. 5].shuffle();\n"+
@@ -35,25 +31,28 @@ public class ListExtensionTest extends TestCase {
    "assert l.min() == 1;\n";
 
    private static final String SOURCE_8 =
-   "let h = [1 .. 5].head(3);\n"+
-   "let h2 = [1 .. 5].head(10);\n"+
-   "let t = [0 .. 50].tail(7);\n"+
-   "let t2 = [0 .. 5].tail(77).reverse();\n"+
-   "assert h.length == 3;\n" +
-   "assert h == [1, 2, 3];\n"+
-   "assert t.length == 7;\n" +
-   "assert t == [44, 45, 46, 47, 48, 49, 50];\n"+
-   "assert h2 == [1, 2, 3, 4, 5];\n"+
-   "assert t2 == [5, 4, 3, 2, 1, 0];\n";
+   "let take3 = [1 .. 5].take(3);\n"+
+   "let take10 = [1 .. 5].take(10);\n"+
+   "let drop44 = [0 .. 50].drop(44);\n"+
+   "let dropRight44 = [0 .. 50].dropRight(44);\n"+
+   "let take77reverse = [0 .. 5].take(77).reverse();\n"+
+   "assert take3.length == 3;\n" +
+   "assert take3 == [1, 2, 3];\n"+
+   "assert take10 == [1, 2, 3, 4, 5];\n"+
+   "assert drop44.length == 7;\n" +
+   "assert drop44 == [44, 45, 46, 47, 48, 49, 50];\n"+
+   "assert dropRight44.length == 7;\n" +
+   "assert dropRight44 == [0, 1, 2, 3, 4, 5, 6];\n"+
+   "assert take77reverse == [5, 4, 3, 2, 1, 0];\n";
 
    private static final String SOURCE_9 =
-   "let l = [1 .. 5].map(i -> i.value + 1);\n"+
-   "let l2 = [1 .. 5].map(i -> 'a'.toCharacter() + i.value);\n"+
+   "let l = [1 .. 5].map(i -> i + 1);\n"+
+   "let l2 = [1 .. 5].map(i -> 'a'.toCharacter() + i);\n"+
    "assert l == [2, 3, 4, 5, 6];\n" +
    "assert l2 == [98, 99, 100, 101, 102];\n";
 
    private static final String SOURCE_10 =
-   "[1 .. 5].each(e -> {\n"+
+   "[1 .. 5].zip().forEach(e -> {\n"+
    "   println(e);\n"+
    "   assert e.value == e.source[e.index];\n"+
    "});\n";
@@ -73,13 +72,6 @@ public class ListExtensionTest extends TestCase {
    "assert [1 .. 5].fold(1)((a, b) -> a + b) == 16;\n"+
    "assert [0 .. 5].fold(1)((a, b) -> a + b) == 16;\n"+
    "assert [0 .. 5].fold(0)(adder::add) == 15;\n";
-
-   public void testListFill() throws Exception {
-      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
-      System.err.println(SOURCE_1);
-      Executable executable = compiler.compile(SOURCE_1);
-      Timer.timeExecution("testListFill", executable);
-   }
 
    public void testListReverse() throws Exception {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
@@ -123,11 +115,11 @@ public class ListExtensionTest extends TestCase {
       Timer.timeExecution("testMinMaxShuffle", executable);
    }
 
-   public void testHeadAndTail() throws Exception {
+   public void testTakeAndDrop() throws Exception {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       System.err.println(SOURCE_8);
       Executable executable = compiler.compile(SOURCE_8);
-      Timer.timeExecution("testHeadAndTail", executable);
+      Timer.timeExecution("testTakeAndDrop", executable);
    }
 
    public void testMap() throws Exception {

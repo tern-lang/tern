@@ -60,6 +60,5 @@ public class MapEntry {
       public Object setValue(Object value) {
          throw new InternalStateException("Modification of constant entry '" + key + "'");
       }
-      
    }
 }

@@ -1,5 +1,9 @@
 package org.ternlang.tree;
 
+import static org.ternlang.core.Expansion.CLOSURE;
+import static org.ternlang.core.Expansion.NORMAL;
+
+import org.ternlang.core.Expansion;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.variable.Value;
@@ -21,6 +25,16 @@ public class ArgumentList {
          list[i].define(scope);
       }
       return list.length;
+   }
+
+
+   public Expansion expansion(Scope scope) throws Exception {
+      for(int i = 0; i < list.length; i++){
+         if(list[i].expansion(scope).isClosure()) {
+            return CLOSURE;
+         }
+      }
+      return NORMAL;
    }
    
    public Constraint[] compile(Scope scope, Constraint... prefix) throws Exception{

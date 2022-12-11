@@ -43,6 +43,8 @@ range = <argument>?_<range-operator>?_<argument>;
  
 constructor = 'new';
 
+place-holder = '_';
+
 function = {<constructor> | [identifier]};
 function-name = [identifier] <generic-parameter-list>;
 
@@ -66,7 +68,8 @@ reference-variable = { <array-reference> |
                   <function-invocation> |
                   <construct> |
                   <variable-reference> |
-                  '(' <cast> ')' };
+                  '(' <cast> ')' |
+                  <place-holder> };
 
 reference = <reference-variable>*(<reference-operator><reference-navigation>);
 

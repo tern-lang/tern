@@ -2,12 +2,13 @@ package org.ternlang.tree.function;
 
 import static org.ternlang.core.constraint.Constraint.NONE;
 import static org.ternlang.core.variable.Value.NULL;
-
-import java.util.concurrent.atomic.AtomicReference;
+import static org.ternlang.core.Reserved.PLACE_HOLDER;
 
 import org.ternlang.core.Compilation;
 import org.ternlang.core.Context;
 import org.ternlang.core.Evaluation;
+import org.ternlang.core.Expansion;
+import org.ternlang.core.Reserved;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.error.InternalStateException;
 import org.ternlang.core.function.Function;
@@ -30,11 +31,22 @@ import org.ternlang.core.type.Type;
 import org.ternlang.core.type.TypeExtractor;
 import org.ternlang.core.variable.Constant;
 import org.ternlang.core.variable.Value;
+import org.ternlang.parse.StringToken;
 import org.ternlang.tree.ArgumentList;
+import org.ternlang.tree.ModifierList;
 import org.ternlang.tree.NameReference;
+import org.ternlang.tree.PlaceHolder;
+import org.ternlang.tree.annotation.AnnotationList;
+import org.ternlang.tree.closure.Closure;
+import org.ternlang.tree.closure.ClosureParameterList;
 import org.ternlang.tree.constraint.GenericList;
 import org.ternlang.tree.constraint.GenericParameterExtractor;
 import org.ternlang.tree.literal.TextLiteral;
+import org.ternlang.tree.reference.GenericArgumentList;
+import org.ternlang.tree.reference.ReferenceNavigation;
+import org.ternlang.tree.variable.Variable;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 public class FunctionInvocation implements Compilation {
 
@@ -52,11 +64,31 @@ public class FunctionInvocation implements Compilation {
    
    @Override
    public Evaluation compile(Module module, Path path, int line) throws Exception {
+      Scope scope = module.getScope();
+      Evaluation evaluation = build(module, path, line);
+      Expansion expansion = arguments.expansion(scope);
+
+      if(expansion.isClosure()) {
+         StringToken token = new StringToken(PLACE_HOLDER);
+         PlaceHolder holder = new PlaceHolder(token);
+         ModifierList modifiers = new ModifierList();
+         GenericList generics = new GenericArgumentList();
+         AnnotationList annotations = new AnnotationList();
+         ParameterDeclaration declaration = new ParameterDeclaration(annotations, modifiers, holder);
+         ClosureParameterList parameters = new ClosureParameterList(declaration);
+         Closure closure = new Closure(modifiers, generics, parameters, evaluation);
+
+         return closure.compile(module, path, line);
+      }
+      return evaluation;
+   }
+
+   private Evaluation build(Module module, Path path, int line) throws Exception {
       Context context = module.getContext();
-      TraceInterceptor interceptor = context.getInterceptor();     
+      TraceInterceptor interceptor = context.getInterceptor();
       Trace trace = Trace.getInvoke(module, path, line);
       Evaluation invocation = create(module, path, line);
-      
+
       return new TraceEvaluation(interceptor, invocation, trace);
    }
    

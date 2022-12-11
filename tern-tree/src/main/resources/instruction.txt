@@ -18,6 +18,7 @@ super = org.ternlang.tree.Super
 argument = org.ternlang.tree.Argument
 range = org.ternlang.tree.collection.Range
 cast = org.ternlang.tree.Cast
+place-holder = org.ternlang.tree.PlaceHolder
 variable = org.ternlang.tree.variable.Variable
 variable-reference = org.ternlang.tree.variable.VariableReference
 function-invocation = org.ternlang.tree.function.FunctionInvocation

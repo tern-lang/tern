@@ -1,9 +1,5 @@
 package org.ternlang.tree;
 
-import static org.ternlang.core.Expansion.CLOSURE;
-import static org.ternlang.core.Expansion.NORMAL;
-
-import org.ternlang.core.Expansion;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.variable.Value;
@@ -19,22 +15,21 @@ public class ArgumentList {
       this.empty = new Object[]{};
       this.list = list;
    }
-   
+
+   public boolean expansion(Scope scope) throws Exception {
+      for(int i = 0; i < list.length; i++){
+         if(list[i].expansion(scope)) {
+            return true;
+         }
+      }
+      return false;
+   }
+
    public int define(Scope scope) throws Exception{
       for(int i = 0; i < list.length; i++){
          list[i].define(scope);
       }
       return list.length;
-   }
-
-
-   public Expansion expansion(Scope scope) throws Exception {
-      for(int i = 0; i < list.length; i++){
-         if(list[i].expansion(scope).isClosure()) {
-            return CLOSURE;
-         }
-      }
-      return NORMAL;
    }
    
    public Constraint[] compile(Scope scope, Constraint... prefix) throws Exception{
@@ -68,5 +63,20 @@ public class ArgumentList {
          return values;
       }
       return empty;
+   }
+
+
+   public ArgumentList expand(Scope scope, Expansion expansion) throws Exception {
+      if(expansion(scope)) {
+         Argument[] expanded = new Argument[list.length];
+
+         for(int i = 0; i < list.length; i++) {
+            if (list[i].expansion(scope)) {
+               expanded[i] = list[i].expand(scope, expansion);
+            }
+         }
+         return new ArgumentList(expanded);
+      }
+      return this;
    }
 }

@@ -1,14 +1,8 @@
 package org.ternlang.tree.function;
 
-import static org.ternlang.core.constraint.Constraint.NONE;
-import static org.ternlang.core.variable.Value.NULL;
-import static org.ternlang.core.Reserved.PLACE_HOLDER;
-
 import org.ternlang.core.Compilation;
 import org.ternlang.core.Context;
 import org.ternlang.core.Evaluation;
-import org.ternlang.core.Expansion;
-import org.ternlang.core.Reserved;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.error.InternalStateException;
 import org.ternlang.core.function.Function;
@@ -43,10 +37,12 @@ import org.ternlang.tree.constraint.GenericList;
 import org.ternlang.tree.constraint.GenericParameterExtractor;
 import org.ternlang.tree.literal.TextLiteral;
 import org.ternlang.tree.reference.GenericArgumentList;
-import org.ternlang.tree.reference.ReferenceNavigation;
-import org.ternlang.tree.variable.Variable;
 
 import java.util.concurrent.atomic.AtomicReference;
+
+import static org.ternlang.core.Reserved.PLACE_HOLDER;
+import static org.ternlang.core.constraint.Constraint.NONE;
+import static org.ternlang.core.variable.Value.NULL;
 
 public class FunctionInvocation implements Compilation {
 
@@ -64,11 +60,10 @@ public class FunctionInvocation implements Compilation {
    
    @Override
    public Evaluation compile(Module module, Path path, int line) throws Exception {
-      Scope scope = module.getScope();
       Evaluation evaluation = build(module, path, line);
-      Expansion expansion = arguments.expansion(scope);
+      Scope scope = module.getScope();
 
-      if(expansion.isClosure()) {
+      if(arguments.expansion(scope)) {
          StringToken token = new StringToken(PLACE_HOLDER);
          PlaceHolder holder = new PlaceHolder(token);
          ModifierList modifiers = new ModifierList();

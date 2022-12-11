@@ -1,11 +1,8 @@
 package org.ternlang.tree.variable;
 
-import static org.ternlang.core.Expansion.NORMAL;
-
 import org.ternlang.core.Compilation;
 import org.ternlang.core.Context;
 import org.ternlang.core.Evaluation;
-import org.ternlang.core.Expansion;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.convert.proxy.ProxyWrapper;
 import org.ternlang.core.error.ErrorHandler;
@@ -25,15 +22,15 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Variable implements Compilation {
    
    private final NameReference reference;
-   private final Expansion expansion;
+   private final boolean expand;
    
    public Variable(Evaluation identifier) {
-      this(identifier, NORMAL);
+      this(identifier, false);
    }
 
-   public Variable(Evaluation identifier, Expansion expansion) {
+   public Variable(Evaluation identifier, boolean expand) {
       this.reference = new NameReference(identifier);
-      this.expansion = expansion;
+      this.expand = expand;
    }
    
    @Override
@@ -44,7 +41,7 @@ public class Variable implements Compilation {
       ProxyWrapper wrapper = context.getWrapper();
       String name = reference.getName(scope);
       
-      return new CompileResult(handler, wrapper, expansion, name);
+      return new CompileResult(handler, wrapper, name, expand);
    }
    
    private static class CompileResult extends Evaluation {
@@ -53,21 +50,21 @@ public class Variable implements Compilation {
       private final ImplicitImportLoader loader;
       private final LocalValueFinder finder;
       private final VariableBinder binder;
-      private final Expansion expansion;
       private final String name;
+      private final boolean expand;
       
-      public CompileResult(ErrorHandler handler, ProxyWrapper wrapper, Expansion expansion, String name) {
+      public CompileResult(ErrorHandler handler, ProxyWrapper wrapper, String name, boolean expand) {
          this.binder = new VariableBinder(handler, wrapper, name);
          this.location = new AtomicReference<Address>();
          this.finder = new LocalValueFinder(name);
          this.loader = new ImplicitImportLoader();
-         this.expansion = expansion;
+         this.expand = expand;
          this.name = name;
       }
 
       @Override
-      public Expansion expansion(Scope scope) throws Exception {
-         return expansion;
+      public boolean expansion(Scope scope) throws Exception {
+         return expand;
       }
 
       @Override

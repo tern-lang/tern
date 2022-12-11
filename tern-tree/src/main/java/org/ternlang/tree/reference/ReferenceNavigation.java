@@ -17,7 +17,6 @@ import org.ternlang.tree.constraint.GenericList;
 import org.ternlang.tree.function.ParameterDeclaration;
 import org.ternlang.tree.variable.Variable;
 
-import static org.ternlang.core.Expansion.CLOSURE;
 import static org.ternlang.core.constraint.Constraint.NONE;
 import static org.ternlang.tree.reference.ReferenceOperator.FORCE;
 
@@ -65,7 +64,7 @@ public class ReferenceNavigation implements Compilation {
    }
 
    private Evaluation variable(Module module, Path path, int line) throws Exception {
-      return new Variable(holder, CLOSURE).compile(module, path, line);
+      return new Variable(holder, true).compile(module, path, line);
    }
 
    private Evaluation create(Module module, Path path, int line) throws Exception {

@@ -3,7 +3,6 @@ package org.ternlang.core.trace;
 import static org.ternlang.core.constraint.Constraint.NONE;
 
 import org.ternlang.core.Evaluation;
-import org.ternlang.core.Expansion;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.variable.Value;
@@ -21,13 +20,13 @@ public class TraceEvaluation extends Evaluation {
    }
 
    @Override
-   public void define(Scope scope) throws Exception {
-      evaluation.define(scope);
+   public boolean expansion(Scope scope) throws Exception {
+      return evaluation.expansion(scope);
    }
 
    @Override
-   public Expansion expansion(Scope scope) throws Exception {
-      return evaluation.expansion(scope);
+   public void define(Scope scope) throws Exception {
+      evaluation.define(scope);
    }
    
    @Override

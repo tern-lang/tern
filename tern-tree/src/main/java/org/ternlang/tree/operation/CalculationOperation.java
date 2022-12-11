@@ -1,12 +1,9 @@
 package org.ternlang.tree.operation;
 
-import static org.ternlang.core.Expansion.CLOSURE;
-import static org.ternlang.core.Expansion.NORMAL;
 import static org.ternlang.core.constraint.Constraint.STRING;
 import static org.ternlang.core.variable.Value.NULL;
 
 import org.ternlang.core.Evaluation;
-import org.ternlang.core.Expansion;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.convert.StringBuilder;
 import org.ternlang.core.convert.TypeInspector;
@@ -31,22 +28,16 @@ public class CalculationOperation extends Evaluation {
       this.left = left;
       this.right = right;
    }
-   
+
+   @Override
+   public boolean expansion(Scope scope) throws Exception {
+      return left.expansion(scope) || right.expansion(scope);
+   }
+
    @Override
    public void define(Scope scope) throws Exception {
       left.define(scope);
       right.define(scope);
-   }
-
-   @Override
-   public Expansion expansion(Scope scope) throws Exception {
-      if(left.expansion(scope).isClosure()) {
-         return CLOSURE;
-      }
-      if(right.expansion(scope).isClosure()) {
-         return CLOSURE;
-      }
-      return NORMAL;
    }
 
    @Override

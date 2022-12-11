@@ -1,7 +1,6 @@
 package org.ternlang.tree;
 
 import org.ternlang.core.Evaluation;
-import org.ternlang.core.Expansion;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.constraint.TypeParameterConstraint;
 import org.ternlang.core.scope.Scope;
@@ -22,15 +21,15 @@ public class Argument extends Evaluation{
       this.identifier = identifier;
       this.evaluation = evaluation;
    }
+
+   @Override
+   public boolean expansion(Scope scope) throws Exception {
+      return evaluation.expansion(scope);
+   }
    
    @Override
    public void define(Scope scope) throws Exception {
       evaluation.define(scope);
-   }
-
-   @Override
-   public Expansion expansion(Scope scope) throws Exception {
-      return evaluation.expansion(scope);
    }
 
    @Override
@@ -50,5 +49,14 @@ public class Argument extends Evaluation{
    @Override
    public Value evaluate(Scope scope, Value left) throws Exception {
       return evaluation.evaluate(scope, left);
+   }
+
+   public Argument expand(Scope scope, Expansion expansion) throws Exception {
+      Evaluation expanded = expansion.expand(scope, evaluation);
+
+      if(expanded != evaluation) {
+         return new Argument(expanded);
+      }
+      return this;
    }
 }

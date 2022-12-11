@@ -18,7 +18,7 @@ public class ListExtensionTest extends TestCase {
    "assert l == [5, 4, 3, 2, 1, 0];\n";
 
    private static final String SOURCE_5 =
-   "assert [0 .. 5].disjoint([6 .. 10]);\n";
+   "assert [1, 2, 3].disjoint([3, 4, 5]) == [1, 2, 4, 5];\n";
 
    private static final String SOURCE_6 =
    "assert [].fill(0, 6)(44) == [44, 44, 44, 44, 44, 44];\n"+
@@ -76,7 +76,11 @@ public class ListExtensionTest extends TestCase {
    "assert [2, 3, 4].fold(1)((a, b) -> a + b) == 10;\n"+
    "assert [1 .. 5].fold(1)((a, b) -> a + b) == 16;\n"+
    "assert [0 .. 5].fold(1)((a, b) -> a + b) == 16;\n"+
-   "assert [0 .. 5].fold(0)(adder::add) == 15;\n";
+   "assert [0 .. 5].fold(0)(adder::add) == 15;\n"+
+   "assert [1, 2, 3].foldLeft(1)((a, b) -> a + b) == 7;\n"+
+   "assert [1, 2, 3].foldLeft([])((a, b) -> {a.add(b + 1); return a;}) == [2, 3, 4];\n"+
+   "assert [1, 2, 3].foldLeft([])((a, b) -> a.plus(b + 1)) == [2, 3, 4];\n"+
+   "assert {1, 2, 3}.foldLeft({})((a, b) -> a.plus(b + 1)) == {2, 3, 4};\n";
 
    private static final String SOURCE_13 =
    "assert [0 .. 12].filter(i -> i % 2 == 0) == [0, 2, 4, 6, 8, 10, 12];\n";

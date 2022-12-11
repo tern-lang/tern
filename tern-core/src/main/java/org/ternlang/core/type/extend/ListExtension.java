@@ -3,11 +3,13 @@ package org.ternlang.core.type.extend;
 import org.ternlang.common.functional.FoldLeft;
 import org.ternlang.common.functional.FoldRight;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
@@ -25,7 +27,7 @@ public class ListExtension {
          List<T> copy = new ArrayList<>(list);
 
          for(int i = 0; i < count; i++) {
-            copy.add(i, value);
+            copy.add(value);
          }
          return copy;
       };
@@ -96,6 +98,26 @@ public class ListExtension {
 
    public <T> Integer search(List<T> list, T value, Comparator<T> comparator) {
       return Collections.binarySearch(list, value, comparator);
+   }
+
+   public <T> List<T> plus(List<T> list, T value) {
+      List<T> result = new ArrayList<>();
+
+      result.addAll(list);
+      result.add(value);
+
+      return result;
+   }
+
+   public <T> List<T> minus(List<T> list, T value) {
+      List<T> result = new ArrayList<>();
+
+      for(T element : list) {
+         if(element != value) {
+            result.add(element);
+         }
+      }
+      return result;
    }
 
    public <T> List<T> disjoint(List<T> left, List<T> right) {
@@ -331,7 +353,7 @@ public class ListExtension {
          int count = list.size();
          B result = value;
 
-         for (int i = 0; i < count; i++) {
+         for (int i = count - 1; i >= 0; i--) {
             A next = list.get(i);
             result = operator.apply(next, result);
          }
@@ -352,6 +374,14 @@ public class ListExtension {
          return elements;
       }
       return Collections.emptyList();
+   }
+
+   public <A> Set<A> toSet(List<A> list) {
+      return new LinkedHashSet<>(list);
+   }
+
+   public <A> Queue<A> toQueue(List<A> list) {
+      return new ArrayDeque<>(list);
    }
 
    public static class ZipOne<T> {

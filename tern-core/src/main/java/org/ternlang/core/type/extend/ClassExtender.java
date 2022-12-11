@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -42,6 +43,7 @@ public class ClassExtender {
          registry.register(URLConnection.class, URLConnectionExtension.class);
          registry.register(URL.class, URLExtension.class);
          registry.register(Iterator.class, IteratorExtension.class);
+         registry.register(Set.class, SetExtension.class);
          registry.register(List.class, ListExtension.class);
          registry.register(Collection.class, CollectionExtension.class);
          registry.register(Number.class, NumberExtension.class);

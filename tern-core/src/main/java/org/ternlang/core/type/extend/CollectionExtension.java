@@ -1,8 +1,14 @@
 package org.ternlang.core.type.extend;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 
 public class CollectionExtension {
 
@@ -30,7 +36,15 @@ public class CollectionExtension {
       return Collections.min(collection, comparator);
    }
 
-   public <T> boolean disjoint(Collection<? extends T> left, Collection<? extends T> right) {
-      return Collections.disjoint(left, right);
+   public <T> Set<T> toSet(Collection<T> collection) {
+      return new LinkedHashSet<>(collection);
+   }
+
+   public <T> List<T> toList(Collection<T> collection) {
+      return new ArrayList<>(collection);
+   }
+
+   public <T> Queue<T> toQueue(Collection<T> collection) {
+      return new ArrayDeque<>(collection);
    }
 }

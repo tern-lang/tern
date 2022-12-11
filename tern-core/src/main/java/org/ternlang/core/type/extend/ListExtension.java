@@ -197,14 +197,7 @@ public class ListExtension {
    }
 
    public <A> List<A> filter(List<A> list, Predicate<A> filter) {
-      int length = list.size();
-
-      if (length > 0) {
-         return list.stream()
-              .filter(filter)
-              .collect(Collectors.toList());
-      }
-      return Collections.emptyList();
+      return filterNot(list, filter.negate());
    }
 
    public <A> List<A> filterNot(List<A> list, Predicate<A> filter) {

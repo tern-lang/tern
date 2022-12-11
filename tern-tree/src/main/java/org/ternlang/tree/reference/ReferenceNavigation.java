@@ -1,9 +1,5 @@
 package org.ternlang.tree.reference;
 
-import static org.ternlang.core.constraint.Constraint.NONE;
-import static org.ternlang.tree.reference.ReferenceOperator.FORCE;
-import static org.ternlang.core.Expansion.CLOSURE;
-
 import org.ternlang.core.Compilation;
 import org.ternlang.core.Evaluation;
 import org.ternlang.core.constraint.Constraint;
@@ -20,6 +16,10 @@ import org.ternlang.tree.closure.ClosureParameterList;
 import org.ternlang.tree.constraint.GenericList;
 import org.ternlang.tree.function.ParameterDeclaration;
 import org.ternlang.tree.variable.Variable;
+
+import static org.ternlang.core.Expansion.CLOSURE;
+import static org.ternlang.core.constraint.Constraint.NONE;
+import static org.ternlang.tree.reference.ReferenceOperator.FORCE;
 
 public class ReferenceNavigation implements Compilation {
 
@@ -53,24 +53,36 @@ public class ReferenceNavigation implements Compilation {
    @Override
    public Object compile(Module module, Path path, int line) throws Exception {
       if (next == null && holder != null) {
-         return new Variable(holder, CLOSURE).compile(module, path, line);
+         return variable(module, path, line);
       }
       if (next != null && holder != null) {
-         Evaluation variable = new Variable(holder).compile(module, path, line);
-         Evaluation expression = new CompileResult(variable, operator, next);
-         ModifierList modifiers = new ModifierList();
-         GenericList generics = new GenericArgumentList();
-         AnnotationList annotations = new AnnotationList();
-         ParameterDeclaration declaration = new ParameterDeclaration(annotations, modifiers, holder);
-         ClosureParameterList parameters = new ClosureParameterList(declaration);
-         Closure closure = new Closure(modifiers, generics, parameters, expression);
-
-         return closure.compile(module, path, line);
+         return closure(module, path, line);
       }
       if(next != null) {
-         return new CompileResult(part, operator, next);
+         return create(module, path, line);
       }
       return part;
+   }
+
+   private Evaluation variable(Module module, Path path, int line) throws Exception {
+      return new Variable(holder, CLOSURE).compile(module, path, line);
+   }
+
+   private Evaluation create(Module module, Path path, int line) throws Exception {
+      return new CompileResult(part, operator, next);
+   }
+
+   private Evaluation closure(Module module, Path path, int line) throws Exception {
+      Evaluation variable = new Variable(holder).compile(module, path, line);
+      Evaluation expression = new CompileResult(variable, operator, next);
+      ModifierList modifiers = new ModifierList();
+      GenericList generics = new GenericArgumentList();
+      AnnotationList annotations = new AnnotationList();
+      ParameterDeclaration declaration = new ParameterDeclaration(annotations, modifiers, holder);
+      ClosureParameterList parameters = new ClosureParameterList(declaration);
+      Closure closure = new Closure(modifiers, generics, parameters, expression);
+
+      return closure.compile(module, path, line);
    }
 
    private static class CompileResult extends Evaluation {

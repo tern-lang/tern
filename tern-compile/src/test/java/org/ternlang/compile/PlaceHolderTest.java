@@ -12,6 +12,13 @@ public class PlaceHolderTest extends ScriptTestCase {
    "['xx%s'].forEach(printf(_, 1));\n"+
    "[12, 13, 14].forEach(printf('(%s)', _));\n";
 
+   private static final String SOURCE_4=
+   "println([12, 13, 14].map(_ + 2));\n"+
+   "assert [12, 13, 14].map(_ + 2) == [14, 15, 16];\n";
+
+   private static final String SOURCE_5=
+   "assert [12, 13, 14].filter(_ > 12) == [13, 14];\n";
+
    public void testPlaceHolder() throws Exception {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       Executable executable = compiler.compile(SOURCE_1);
@@ -30,6 +37,20 @@ public class PlaceHolderTest extends ScriptTestCase {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       Executable executable = compiler.compile(SOURCE_3);
       System.err.println(SOURCE_3);
+      executable.execute();
+   }
+
+   public void testExpansionCalculation() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      Executable executable = compiler.compile(SOURCE_4);
+      System.err.println(SOURCE_4);
+      executable.execute();
+   }
+
+   public void testExpansionComparison() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      Executable executable = compiler.compile(SOURCE_5);
+      System.err.println(SOURCE_5);
       executable.execute();
    }
 }

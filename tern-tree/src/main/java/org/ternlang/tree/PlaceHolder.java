@@ -1,7 +1,9 @@
 package org.ternlang.tree;
 
 import static org.ternlang.core.variable.Constant.STRING;
+import static org.ternlang.core.Expansion.CLOSURE;
 
+import org.ternlang.core.Expansion;
 import org.ternlang.core.error.InternalStateException;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.parse.StringToken;
@@ -13,6 +15,11 @@ public class PlaceHolder extends Literal {
 
    public PlaceHolder(StringToken token) {
       this.token = token;
+   }
+
+   @Override
+   public Expansion expansion(Scope scope) throws Exception {
+      return CLOSURE;
    }
 
    @Override

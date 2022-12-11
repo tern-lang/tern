@@ -3,6 +3,7 @@ package org.ternlang.tree.reference;
 import org.ternlang.core.Compilation;
 import org.ternlang.core.Context;
 import org.ternlang.core.Evaluation;
+import org.ternlang.core.Expansion;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.error.ErrorHandler;
 import org.ternlang.core.error.InternalStateException;
@@ -21,12 +22,23 @@ import org.ternlang.core.trace.TraceInterceptor;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.type.TypeExtractor;
 import org.ternlang.core.variable.Value;
+import org.ternlang.parse.StringToken;
 import org.ternlang.tree.ArgumentList;
 import org.ternlang.tree.ModifierAccessVerifier;
+import org.ternlang.tree.ModifierList;
 import org.ternlang.tree.NameReference;
+import org.ternlang.tree.PlaceHolder;
+import org.ternlang.tree.annotation.AnnotationList;
+import org.ternlang.tree.closure.Closure;
+import org.ternlang.tree.closure.ClosureParameterList;
 import org.ternlang.tree.constraint.GenericList;
 import org.ternlang.tree.constraint.GenericParameterExtractor;
+import org.ternlang.tree.function.ParameterDeclaration;
 import org.ternlang.tree.literal.TextLiteral;
+
+import static org.ternlang.core.Expansion.CLOSURE;
+import static org.ternlang.core.Expansion.NORMAL;
+import static org.ternlang.core.Reserved.PLACE_HOLDER;
 
 public class ReferenceInvocation implements Compilation {
 
@@ -45,10 +57,10 @@ public class ReferenceInvocation implements Compilation {
    @Override
    public Evaluation compile(Module module, Path path, int line) throws Exception {
       Context context = module.getContext();
-      TraceInterceptor interceptor = context.getInterceptor();     
+      TraceInterceptor interceptor = context.getInterceptor();
       Trace trace = Trace.getInvoke(module, path, line);
       Evaluation invocation = create(module, path, line);
-      
+
       return new TraceEvaluation(interceptor, invocation, trace);
    }
    
@@ -83,6 +95,11 @@ public class ReferenceInvocation implements Compilation {
          this.arguments = arguments;
          this.matcher = matcher;
          this.name = name;
+      }
+
+      @Override
+      public Expansion expansion(Scope scope) throws Exception {
+         return arguments.expansion(scope);
       }
       
       @Override

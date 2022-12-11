@@ -9,7 +9,8 @@ public class ListExtensionTest extends TestCase {
    "assert [1, 2, 3, 4, 5, 3, 4].indexOfSlice([3], 4) == 5;\n"+
    "assert [1, 2, 3, 4, 5, 3, 4].indexOfSlice([], 4) == 4;\n"+
    "assert [1, 2, 3, 4, 5].indexOfSlice([3, 4]) == 2;\n"+
-   "assert [1, 2, 3, 4, 5].indexOfSlice([8, 4]) == -1;\n";
+   "assert [1, 2, 3, 4, 5].indexOfSlice([8, 4]) == -1;\n"+
+   "assert [1, 2, 3, 4, 5, 3, 4].containsSlice([3, 4]);\n";
 
    private static final String SOURCE_2 =
    "let l = [0 .. 5].reverse();\n" +
@@ -90,7 +91,8 @@ public class ListExtensionTest extends TestCase {
    "assert {1, 2, 3}.foldLeft({})((a, b) -> a.plus(b + 1)) == {2, 3, 4};\n";
 
    private static final String SOURCE_13 =
-   "assert [0 .. 12].filter(i -> i % 2 == 0) == [0, 2, 4, 6, 8, 10, 12];\n";
+   "assert [0 .. 12].filter(i -> i % 2 == 0) == [0, 2, 4, 6, 8, 10, 12];\n"+
+   "assert [0 .. 12].filterNot(i -> i % 2 == 0) == [1, 3, 5, 7, 9, 11];\n";
 
    private static final String SOURCE_14 =
    "assert [1, 2, 3, 4, 5, 3, 4].indexWhere(_ == 3, 4) == 5;\n"+

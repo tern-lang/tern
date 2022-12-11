@@ -205,6 +205,17 @@ public class ListExtension {
       return Collections.emptyList();
    }
 
+   public <A> List<A> filterNot(List<A> list, Predicate<A> filter) {
+      int length = list.size();
+
+      if (length > 0) {
+         return list.stream()
+              .filter(filter.negate())
+              .collect(Collectors.toList());
+      }
+      return Collections.emptyList();
+   }
+
    public <A, B> List<B> map(List<A> list, Function<A, B> function) {
       int length = list.size();
 
@@ -376,6 +387,10 @@ public class ListExtension {
          }
       }
       return -1;
+   }
+
+   public <A> boolean containsSlice(List<A> list, List<A> slice) {
+      return indexOfSlice(list, slice) != -1;
    }
 
    public <A> int indexOfSlice(List<A> list, List<A> slice) {

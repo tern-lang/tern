@@ -27,6 +27,9 @@ public class PlaceHolderTest extends ScriptTestCase {
    private static final String SOURCE_6=
    "assert [0 .. 4].filter(_ % 2 == 0) == [0, 2, 4];\n";
 
+   private static final String SOURCE_7=
+   "assert [0 .. 10].filter(_ == 1 || _ == 2) == [1, 2];\n";
+
    public void testPlaceHolder() throws Exception {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       Executable executable = compiler.compile(SOURCE_1);
@@ -66,6 +69,13 @@ public class PlaceHolderTest extends ScriptTestCase {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       Executable executable = compiler.compile(SOURCE_6);
       System.err.println(SOURCE_6);
+      executable.execute();
+   }
+
+   public void testRelationalOperator() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      Executable executable = compiler.compile(SOURCE_7);
+      System.err.println(SOURCE_7);
       executable.execute();
    }
 }

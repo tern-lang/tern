@@ -21,24 +21,14 @@ import org.ternlang.core.trace.TraceInterceptor;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.type.TypeExtractor;
 import org.ternlang.core.variable.Value;
-import org.ternlang.parse.StringToken;
 import org.ternlang.tree.ArgumentList;
 import org.ternlang.tree.ClosureExpansion;
 import org.ternlang.tree.Expansion;
 import org.ternlang.tree.ModifierAccessVerifier;
-import org.ternlang.tree.ModifierList;
 import org.ternlang.tree.NameReference;
-import org.ternlang.tree.PlaceHolder;
-import org.ternlang.tree.annotation.AnnotationList;
-import org.ternlang.tree.closure.Closure;
-import org.ternlang.tree.closure.ClosureParameterList;
-import org.ternlang.tree.condition.Comparison;
 import org.ternlang.tree.constraint.GenericList;
 import org.ternlang.tree.constraint.GenericParameterExtractor;
-import org.ternlang.tree.function.ParameterDeclaration;
 import org.ternlang.tree.literal.TextLiteral;
-
-import static org.ternlang.core.Reserved.PLACE_HOLDER;
 
 public class ReferenceInvocation implements Compilation {
 
@@ -56,7 +46,6 @@ public class ReferenceInvocation implements Compilation {
    
    @Override
    public Evaluation compile(Module module, Path path, int line) throws Exception {
-      Scope scope = module.getScope();
       Context context = module.getContext();
       TraceInterceptor interceptor = context.getInterceptor();
       Trace trace = Trace.getInvoke(module, path, line);

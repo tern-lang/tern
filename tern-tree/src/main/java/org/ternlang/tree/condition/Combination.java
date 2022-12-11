@@ -27,6 +27,14 @@ public class Combination extends Evaluation {
    }
 
    @Override
+   public boolean expansion(Scope scope) throws Exception {
+      if (right != null) {
+         return right.expansion(scope) || left.expansion(scope);
+      }
+      return left.expansion(scope);
+   }
+
+   @Override
    public void define(Scope scope) throws Exception { 
       left.define(scope);
       

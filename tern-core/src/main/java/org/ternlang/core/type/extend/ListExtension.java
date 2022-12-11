@@ -361,6 +361,45 @@ public class ListExtension {
       };
    }
 
+   public <A> int indexWhere(List<A> list, Predicate<A> filter) {
+      return indexWhere(list, filter, 0);
+   }
+
+   public <A> int indexWhere(List<A> list, Predicate<A> filter, int from) {
+      int count = list.size();
+
+      for(int i = from; i < count; i++) {
+         A next = list.get(i);
+
+         if(filter.test(next)) {
+            return i;
+         }
+      }
+      return -1;
+   }
+
+   public <A> int indexOfSlice(List<A> list, List<A> slice) {
+      return indexOfSlice(list, slice, 0);
+   }
+
+   public <A> int indexOfSlice(List<A> list, List<A> slice, int from) {
+      int count = slice.size();
+
+      if(count > 0) {
+         int length = list.size();
+
+         for(int i = from; i <= length - count; i++) {
+            List<A> value = list.subList(i, i + count);
+
+            if(value.equals(slice)) {
+               return i;
+            }
+         }
+         return -1;
+      }
+      return from;
+   }
+
    public <T> List<List<T>> sliding(List<T> list, int size) {
       int count = list.size();
 

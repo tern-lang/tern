@@ -73,6 +73,8 @@ public class ArgumentList {
          for(int i = 0; i < list.length; i++) {
             if (list[i].expansion(scope)) {
                expanded[i] = list[i].expand(scope, expansion);
+            } else {
+               expanded[i] = list[i];
             }
          }
          return new ArgumentList(expanded);

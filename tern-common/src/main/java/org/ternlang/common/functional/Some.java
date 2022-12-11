@@ -49,12 +49,12 @@ public class Some<A> implements Option<A> {
    }
 
    @Override
-   public <B> FoldLeft<A, B> foldLeft(B other) {
+   public <B> FoldLeft<A, B, B> foldLeft(B other) {
       return function -> function.apply(other, value);
    }
 
    @Override
-   public <B> FoldRight<A, B> foldRight(B other) {
+   public <B> FoldRight<A, B, B> foldRight(B other) {
       return function -> function.apply(value, other);
    }
 

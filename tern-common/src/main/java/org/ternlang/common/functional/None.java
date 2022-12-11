@@ -44,12 +44,12 @@ public class None<A> implements Option<A> {
    }
 
    @Override
-   public <B> FoldLeft<A, B> foldLeft(B value) {
+   public <B> FoldLeft<A, B, B> foldLeft(B value) {
       return ignore -> value;
    }
 
    @Override
-   public <B> FoldRight<A, B> foldRight(B value) {
+   public <B> FoldRight<A, B, B> foldRight(B value) {
       return ignore -> value;
    }
 

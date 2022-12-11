@@ -7,8 +7,10 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
@@ -333,7 +335,7 @@ public class ListExtension {
       return list;
    }
 
-   public <A> FoldLeft<A, A> fold(List<A> list, A value) {
+   public <A> FoldLeft<A, A, A> fold(List<A> list, A value) {
       return operator -> {
          int count = list.size();
          A result = value;
@@ -346,7 +348,7 @@ public class ListExtension {
       };
    }
 
-   public <A, B> FoldLeft<A, B> foldLeft(List<A> list, B value) {
+   public <A, B> FoldLeft<A, B, B> foldLeft(List<A> list, B value) {
       return operator -> {
          int count = list.size();
          B result = value;
@@ -359,7 +361,7 @@ public class ListExtension {
       };
    }
 
-   public <A, B> FoldRight<A, B> foldRight(List<A> list, B value) {
+   public <A, B> FoldRight<A, B, B> foldRight(List<A> list, B value) {
       return operator -> {
          int count = list.size();
          B result = value;
@@ -369,6 +371,63 @@ public class ListExtension {
             result = operator.apply(next, result);
          }
          return result;
+      };
+   }
+
+   public <A> FoldLeft<A, A, List<A>> scan(List<A> list, A value) {
+      return operator -> {
+         int count = list.size();
+         A result = value;
+
+         if(count > 0) {
+            List<A> results = new ArrayList<>();
+
+            for (int i = 0; i < count; i++) {
+               A next = list.get(i);
+               result = operator.apply(result, next);
+               results.add(result);
+            }
+            return results;
+         }
+         return Collections.emptyList();
+      };
+   }
+
+   public <A, B> FoldLeft<A, B, List<B>> scanLeft(List<A> list, B value) {
+      return operator -> {
+         int count = list.size();
+         B result = value;
+
+         if (count > 0) {
+            List<B> results = new ArrayList<>();
+
+            for (int i = 0; i < count; i++) {
+               A next = list.get(i);
+               result = operator.apply(result, next);
+               results.add(result);
+            }
+            return results;
+         }
+         return Collections.emptyList();
+      };
+   }
+
+   public <A, B> FoldRight<A, B, List<B>> scanRight(List<A> list, B value) {
+      return operator -> {
+         int count = list.size();
+         B result = value;
+
+         if (count > 0) {
+            List<B> results = new ArrayList<>();
+
+            for (int i = count - 1; i >= 0; i--) {
+               A next = list.get(i);
+               result = operator.apply(next, result);
+               results.add(result);
+            }
+            return results;
+         }
+         return Collections.emptyList();
       };
    }
 
@@ -428,6 +487,23 @@ public class ListExtension {
          return elements;
       }
       return Collections.emptyList();
+   }
+
+   public <K, V> Map<K, V> toMap(List<V> list, Function<V, K> extractor) {
+      int count = list.size();
+
+      if(count > 0) {
+         Map<K, V> map = new LinkedHashMap<>();
+
+         for(int i = 0; i < count; i++) {
+            V value = list.get(i);
+            K key = extractor.apply(value);
+
+            map.put(key, value);
+         }
+         return map;
+      }
+      return Collections.emptyMap();
    }
 
    public <A> Set<A> toSet(List<A> list) {

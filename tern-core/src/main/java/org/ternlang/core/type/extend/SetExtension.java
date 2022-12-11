@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.function.Function;
@@ -22,11 +24,11 @@ public class SetExtension {
       super();
    }
 
-   public <T>  Function<T, Set<T>> fill(Set<T> list, int count) {
+   public <T> Function<T, Set<T>> fill(Set<T> list, int count) {
       return value -> {
          Set<T> copy = new LinkedHashSet<>(list);
 
-         for(int i = 0; i < count; i++) {
+         for (int i = 0; i < count; i++) {
             copy.add(value);
          }
          return copy;
@@ -45,8 +47,8 @@ public class SetExtension {
    public <T> Set<T> minus(Set<T> list, T value) {
       Set<T> result = new LinkedHashSet<>();
 
-      for(T element : list) {
-         if(element != value) {
+      for (T element : list) {
+         if (element != value) {
             result.add(element);
          }
       }
@@ -56,13 +58,13 @@ public class SetExtension {
    public <T> Set<T> disjoint(Set<T> left, Set<T> right) {
       Set<T> result = new LinkedHashSet<>();
 
-      for(T value : left) {
-         if(!right.contains(value)) {
+      for (T value : left) {
+         if (!right.contains(value)) {
             result.add(value);
          }
       }
-      for(T value : right) {
-         if(!left.contains(value)) {
+      for (T value : right) {
+         if (!left.contains(value)) {
             result.add(value);
          }
       }
@@ -81,13 +83,13 @@ public class SetExtension {
    public <T> Set<T> intersect(Set<T> left, Set<T> right) {
       Set<T> result = new LinkedHashSet<>();
 
-      for(T value : left) {
-         if(right.contains(value)) {
+      for (T value : left) {
+         if (right.contains(value)) {
             result.add(value);
          }
       }
-      for(T value : right) {
-         if(left.contains(value)) {
+      for (T value : right) {
+         if (left.contains(value)) {
             result.add(value);
          }
       }
@@ -116,12 +118,12 @@ public class SetExtension {
       return Collections.emptySet();
    }
 
-   public <A> FoldLeft<A, A> fold(List<A> list, A value) {
+   public <A> FoldLeft<A, A, A> fold(List<A> set, A value) {
       return operator -> {
-         Iterator<A> iterator = list.iterator();
+         Iterator<A> iterator = set.iterator();
          A result = value;
 
-         while(iterator.hasNext()) {
+         while (iterator.hasNext()) {
             A next = iterator.next();
             result = operator.apply(result, next);
          }
@@ -129,31 +131,115 @@ public class SetExtension {
       };
    }
 
-   public <A, B> FoldLeft<A, B> foldLeft(Set<A> set, B value) {
+   public <A, B> FoldLeft<A, B, B> foldLeft(Set<A> set, B value) {
       return operator -> {
          B result = value;
 
-         for(A element : set) {
+         for (A element : set) {
             result = operator.apply(result, element);
          }
          return result;
       };
    }
 
-   public <A, B> FoldRight<A, B> foldRight(Set<A> set, B value) {
+   public <A, B> FoldRight<A, B, B> foldRight(Set<A> set, B value) {
       return operator -> {
-         Deque<A> queue = new ArrayDeque<>();
+         Iterator<A> iterator = set.iterator();
          B result = value;
 
-         for(A element : set) {
-            queue.addFirst(element);
-         }
-         while(queue.isEmpty()) {
-            A next = queue.pollFirst();
-            result = operator.apply(next, result);
+         if (iterator.hasNext()) {
+            Deque<A> queue = new ArrayDeque<>();
+
+            while (iterator.hasNext()) {
+               A next = iterator.next();
+               queue.addFirst(next);
+            }
+            while (queue.isEmpty()) {
+               A next = queue.pollFirst();
+               result = operator.apply(next, result);
+            }
          }
          return result;
       };
+   }
+
+   public <A> FoldLeft<A, A, Set<A>> scan(Set<A> set, A value) {
+      return operator -> {
+         Iterator<A> iterator = set.iterator();
+         A result = value;
+
+         if (iterator.hasNext()) {
+            Set<A> results = new LinkedHashSet<>();
+
+            while (iterator.hasNext()) {
+               A next = iterator.next();
+               result = operator.apply(result, next);
+               results.add(result);
+            }
+            return results;
+         }
+         return Collections.emptySet();
+      };
+   }
+
+   public <A, B> FoldLeft<A, B, Set<B>> scanLeft(Set<A> set, B value) {
+      return operator -> {
+         Iterator<A> iterator = set.iterator();
+         B result = value;
+
+         if (iterator.hasNext()) {
+            Set<B> results = new LinkedHashSet<>();
+
+            while (iterator.hasNext()) {
+               A next = iterator.next();
+               result = operator.apply(result, next);
+               results.add(result);
+            }
+            return results;
+         }
+         return Collections.emptySet();
+      };
+   }
+
+   public <A, B> FoldRight<A, B, Set<B>> scanRight(Set<A> set, B value) {
+      return operator -> {
+         Iterator<A> iterator = set.iterator();
+         B result = value;
+
+         if (iterator.hasNext()) {
+            Deque<A> queue = new ArrayDeque<>();
+            Set<B> results = new LinkedHashSet<>();
+
+            while (iterator.hasNext()) {
+               A next = iterator.next();
+               queue.addFirst(next);
+            }
+            while (queue.isEmpty()) {
+               A next = queue.pollFirst();
+               result = operator.apply(next, result);
+               results.add(result);
+            }
+            return results;
+         }
+         return Collections.emptySet();
+      };
+   }
+
+   public <K, V> Map<K, V> toMap(Set<V> set, Function<V, K> extractor) {
+      Iterator<V> iterator = set.iterator();
+
+      if (iterator.hasNext()) {
+         Map<K, V> map = new LinkedHashMap<>();
+
+         while (iterator.hasNext()) {
+            V value = iterator.next();
+            K key = extractor.apply(value);
+
+            map.put(key, value);
+         }
+         return map;
+      }
+      return Collections.emptyMap();
    }
 
    public <A> List<A> toList(Set<A> set) {

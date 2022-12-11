@@ -29,7 +29,6 @@ import org.ternlang.parse.StringToken;
 import org.ternlang.tree.ArgumentList;
 import org.ternlang.tree.ModifierList;
 import org.ternlang.tree.NameReference;
-import org.ternlang.tree.PlaceHolder;
 import org.ternlang.tree.annotation.AnnotationList;
 import org.ternlang.tree.closure.Closure;
 import org.ternlang.tree.closure.ClosureParameterList;
@@ -65,7 +64,7 @@ public class FunctionInvocation implements Compilation {
 
       if(arguments.expansion(scope)) {
          StringToken token = new StringToken(PLACE_HOLDER);
-         PlaceHolder holder = new PlaceHolder(token);
+         TextLiteral holder = new TextLiteral(token);
          ModifierList modifiers = new ModifierList();
          GenericList generics = new GenericArgumentList();
          AnnotationList annotations = new AnnotationList();

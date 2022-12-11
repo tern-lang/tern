@@ -13,7 +13,7 @@ public class PlaceHolderTest extends ScriptTestCase {
    "[12, 13, 14].forEach(printf('(%s)', _));\n";
 
    private static final String SOURCE_4=
-   "println([12, 13, 14].map(_ + 2));\n"+
+   "println([12].map(_ + 2));\n"+
    "assert [12, 13, 14].map(_ + 2) == [14, 15, 16];\n";
 
    private static final String SOURCE_5=
@@ -29,6 +29,12 @@ public class PlaceHolderTest extends ScriptTestCase {
 
    private static final String SOURCE_7=
    "assert [0 .. 10].filter(_ == 1 || _ == 2) == [1, 2];\n";
+
+   private static final String SOURCE_8=
+   "println(['a', 'bbb'].map(_.length + 1));\n"+
+   "assert ['a', 'bbb'].map(_.length + 1) == [2, 4];\n"+
+   "assert ['a', 'bb'].map(_ + _.length + 1) == ['a11', 'bb21'];\n"+
+   "assert ['a', 'bb'].map(_ + (_.length + 1)) == ['a2', 'bb3'];\n";
 
    public void testPlaceHolder() throws Exception {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
@@ -76,6 +82,13 @@ public class PlaceHolderTest extends ScriptTestCase {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       Executable executable = compiler.compile(SOURCE_7);
       System.err.println(SOURCE_7);
+      executable.execute();
+   }
+
+   public void testExpansionOfReference() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      Executable executable = compiler.compile(SOURCE_8);
+      System.err.println(SOURCE_8);
       executable.execute();
    }
 }

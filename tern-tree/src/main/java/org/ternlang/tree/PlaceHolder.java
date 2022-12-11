@@ -1,32 +1,24 @@
 package org.ternlang.tree;
 
-import org.ternlang.core.error.InternalStateException;
-import org.ternlang.core.scope.Scope;
+import org.ternlang.core.Compilation;
+import org.ternlang.core.module.Module;
+import org.ternlang.core.module.Path;
 import org.ternlang.parse.StringToken;
-import org.ternlang.tree.literal.Literal;
+import org.ternlang.tree.literal.TextLiteral;
+import org.ternlang.tree.variable.Variable;
 
-import static org.ternlang.core.variable.Constant.STRING;
+public class PlaceHolder implements Compilation {
 
-public class PlaceHolder extends Literal {
-
-   private final StringToken token;
+   private final TextLiteral identifier;
+   private final Variable variable;
 
    public PlaceHolder(StringToken token) {
-      this.token = token;
+      this.identifier = new TextLiteral(token);
+      this.variable = new Variable(identifier, true);
    }
 
    @Override
-   public boolean expansion(Scope scope) throws Exception {
-      return true;
-   }
-
-   @Override
-   protected Literal.LiteralValue create(Scope scope) throws Exception {
-      String text = token.getValue();
-
-      if(text == null) {
-         throw new InternalStateException("Place holder value was null");
-      }
-      return new LiteralValue(text, STRING);
+   public Object compile(Module module, Path path, int line) throws Exception {
+      return variable.compile(module, path, line);
    }
 }

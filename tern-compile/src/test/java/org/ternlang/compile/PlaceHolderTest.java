@@ -36,6 +36,11 @@ public class PlaceHolderTest extends ScriptTestCase {
    "assert ['a', 'bb'].map(_ + _.length + 1) == ['a11', 'bb21'];\n"+
    "assert ['a', 'bb'].map(_ + (_.length + 1)) == ['a2', 'bb3'];\n";
 
+   private static final String SOURCE_9=
+   "assert [[1, 1],[2, 3],[3, 8]].map(_[1]) == [1, 3, 8];\n"+
+   "assert ['hello', 'world'].map(_[1]).toString() == '[e, o]';\n"+
+   "assert ['hello', 'world'].map(_.charAt(1)).toString() == '[e, o]';\n";
+
    public void testPlaceHolder() throws Exception {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       Executable executable = compiler.compile(SOURCE_1);
@@ -89,6 +94,13 @@ public class PlaceHolderTest extends ScriptTestCase {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();
       Executable executable = compiler.compile(SOURCE_8);
       System.err.println(SOURCE_8);
+      executable.execute();
+   }
+
+   public void testExpansionOfIndex() throws Exception {
+      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+      System.err.println(SOURCE_9);
+      Executable executable = compiler.compile(SOURCE_9);
       executable.execute();
    }
 }

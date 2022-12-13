@@ -33,8 +33,8 @@ super = 'super';
 module = 'module'; 
 
 # ((array[x])[x] -> (<var>[])
-variable = {<class> | <module> | [identifier] | [type]};         
-variable-reference = {<super> | <this> | <variable>} *( '(' <function-curry>')' | '[' <collection-index> ']' ) ?('::' <function-handle>);
+variable = {<class> | <module> | [identifier] | [type]};
+variable-reference = {<super> | <this> | <place-holder> | <variable>} *( '(' <function-curry>')' | '[' <collection-index> ']' ) ?('::' <function-handle>);
 
 collection-index = <argument>;
 

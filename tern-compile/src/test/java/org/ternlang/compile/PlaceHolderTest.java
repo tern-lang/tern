@@ -3,7 +3,7 @@ package org.ternlang.compile;
 public class PlaceHolderTest extends ScriptTestCase {
 
    private static final String SOURCE_1=
-   "println(['1.1'].map(_.split('.')));\n";
+   "assert List.of('1.1').map(_.split('\\.')).map(_[0]).toString() == '[1]';\n";
 
    private static final String SOURCE_2=
    "println(['a','b','c'].map(_.toUpperCase()));\n";
@@ -39,7 +39,9 @@ public class PlaceHolderTest extends ScriptTestCase {
    private static final String SOURCE_9=
    "assert [[1, 1],[2, 3],[3, 8]].map(_[1]) == [1, 3, 8];\n"+
    "assert ['hello', 'world'].map(_[1]).toString() == '[e, o]';\n"+
-   "assert ['hello', 'world'].map(_.charAt(1)).toString() == '[e, o]';\n";
+   "assert ['hello', 'world'].map(_[1].toUpperCase()).toString() == '[E, O]';\n"+
+   "assert ['hello', 'world'].map(_.charAt(1)).toString() == '[e, o]';\n"+
+   "['hello', 'world'].forEach(printf('%s-%s%n', _[0], _[1].toUpperCase()));\n";
 
    public void testPlaceHolder() throws Exception {
       Compiler compiler = ClassPathCompilerBuilder.createCompiler();

@@ -356,6 +356,16 @@ public class FileExtension {
       return paths;
    }
 
+   public boolean moveTo(File input, String output) {
+      File parent = input.getParentFile();
+      File result = parent.toPath().resolve(output).toFile();
+
+      if (!input.exists()) {
+         throw new IllegalArgumentException("Path " + input + " does not exist");
+      }
+      return moveTo(input, result);
+   }
+
    public boolean moveTo(File from, File to) {
       if (!from.exists()) {
          throw new IllegalArgumentException("File " + from + " does not exist");
@@ -370,6 +380,16 @@ public class FileExtension {
          return from.renameTo(file);
       }
       return from.renameTo(to);
+   }
+
+   public File copyTo(File input, String output) {
+      File parent = input.getParentFile();
+      File result = parent.toPath().resolve(output).toFile();
+
+      if (!input.exists()) {
+         throw new IllegalArgumentException("Path " + input + " does not exist");
+      }
+      return copyTo(input, result);
    }
 
    public File copyTo(File from, File to) {

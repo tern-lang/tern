@@ -603,7 +603,7 @@ public class FileExtension {
             SecretKey key = new SecretKeySpec(encoded, KEY_ALGORITHM);
 
             try {
-               cipher.init(decrypt ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, key);
+               cipher.init(decrypt ? Cipher.DECRYPT_MODE : Cipher.ENCRYPT_MODE, key);
                streams.copyTo(source, destination);
                destination.close();
                source.close();

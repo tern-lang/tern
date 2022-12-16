@@ -2,6 +2,9 @@ package org.ternlang.core.type.extend;
 
 import org.ternlang.common.Consumer;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -10,12 +13,15 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -28,13 +34,16 @@ import java.util.zip.ZipOutputStream;
 public class FileExtension {
 
    private static final String EXTENSION_ZIP = ".zip";
+   private static final String DIGEST_ALGORITHM = "SHA-256";
+   private static final String KEY_ALGORITHM = "AES";
+   private static final String CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
 
    private final InputStreamExtension streams;
 
    public FileExtension() {
       this.streams = new InputStreamExtension();
    }
-   
+
    public InputStream stream(File file) throws IOException {
       return new FileInputStream(file);
    }
@@ -42,14 +51,14 @@ public class FileExtension {
    public Reader reader(File file) throws IOException {
       InputStream stream = new FileInputStream(file);
       Reader reader = new InputStreamReader(stream);
-      
+
       return new BufferedReader(reader);
    }
-   
+
    public Reader reader(File file, String charset) throws IOException {
       InputStream stream = new FileInputStream(file);
       Reader reader = new InputStreamReader(stream, charset);
-      
+
       return new BufferedReader(reader);
    }
 
@@ -57,15 +66,15 @@ public class FileExtension {
       FileReader source = new FileReader(file);
       LineNumberReader reader = new LineNumberReader(source);
       List<String> lines = new ArrayList<String>();
-      
+
       try {
-         while(true) {
+         while (true) {
             String line = reader.readLine();
-            
-            if(line == null) {
+
+            if (line == null) {
                return lines;
             }
-            if(line.contains(pattern)) {
+            if (line.contains(pattern)) {
                lines.add(line);
             }
          }
@@ -73,20 +82,20 @@ public class FileExtension {
          reader.close();
       }
    }
-   
+
    public List<String> search(File file, String pattern) throws IOException {
       FileReader source = new FileReader(file);
       LineNumberReader reader = new LineNumberReader(source);
       List<String> lines = new ArrayList<String>();
-      
+
       try {
-         while(true) {
+         while (true) {
             String line = reader.readLine();
-            
-            if(line == null) {
+
+            if (line == null) {
                return lines;
             }
-            if(line.matches(pattern)) {
+            if (line.matches(pattern)) {
                lines.add(line);
             }
          }
@@ -94,55 +103,55 @@ public class FileExtension {
          reader.close();
       }
    }
-   
+
    public void writeBytes(File file, byte[] data) throws IOException {
       OutputStream stream = new FileOutputStream(file);
-      
+
       try {
-         if(data.length > 0) {
+         if (data.length > 0) {
             stream.write(data);
          }
       } finally {
          stream.close();
       }
    }
-   
+
    public void writeText(File file, String text) throws IOException {
       OutputStream stream = new FileOutputStream(file);
-      
+
       try {
          byte[] data = text.getBytes();
-         
-         if(data.length > 0) {
+
+         if (data.length > 0) {
             stream.write(data);
          }
       } finally {
          stream.close();
       }
    }
-   
+
    public void writeText(File file, String text, String encoding) throws IOException {
       OutputStream stream = new FileOutputStream(file);
-      
+
       try {
          byte[] data = text.getBytes(encoding);
-         
-         if(data.length > 0) {
+
+         if (data.length > 0) {
             stream.write(data);
          }
       } finally {
          stream.close();
       }
    }
-   
+
    public byte[] readBytes(File file) throws IOException {
       InputStream stream = new FileInputStream(file);
       ByteArrayOutputStream buffer = new ByteArrayOutputStream();
       byte[] data = new byte[1024];
       int count = 0;
-      
+
       try {
-         while((count = stream.read(data)) != -1) {
+         while ((count = stream.read(data)) != -1) {
             buffer.write(data, 0, count);
          }
          return buffer.toByteArray();
@@ -150,15 +159,15 @@ public class FileExtension {
          stream.close();
       }
    }
-   
+
    public String readText(File file) throws IOException {
       InputStream stream = new FileInputStream(file);
       ByteArrayOutputStream buffer = new ByteArrayOutputStream();
       byte[] data = new byte[1024];
       int count = 0;
-      
+
       try {
-         while((count = stream.read(data)) != -1) {
+         while ((count = stream.read(data)) != -1) {
             buffer.write(data, 0, count);
          }
          return buffer.toString();
@@ -166,15 +175,15 @@ public class FileExtension {
          stream.close();
       }
    }
-   
+
    public String readText(File file, String encoding) throws IOException {
       InputStream stream = new FileInputStream(file);
       ByteArrayOutputStream buffer = new ByteArrayOutputStream();
       byte[] data = new byte[1024];
       int count = 0;
-      
+
       try {
-         while((count = stream.read(data)) != -1) {
+         while ((count = stream.read(data)) != -1) {
             buffer.write(data, 0, count);
          }
          return buffer.toString(encoding);
@@ -182,17 +191,17 @@ public class FileExtension {
          stream.close();
       }
    }
-   
+
    public List<String> readLines(File file) throws IOException {
       FileReader reader = new FileReader(file);
       LineNumberReader iterator = new LineNumberReader(reader);
       List<String> lines = new ArrayList<String>();
-      
+
       try {
-         while(true) {
+         while (true) {
             String line = iterator.readLine();
-            
-            if(line == null) {
+
+            if (line == null) {
                return lines;
             }
             lines.add(line);
@@ -201,18 +210,18 @@ public class FileExtension {
          iterator.close();
       }
    }
-   
+
    public List<String> readLines(File file, String encoding) throws IOException {
       InputStream stream = new FileInputStream(file);
       Reader reader = new InputStreamReader(stream, encoding);
       LineNumberReader iterator = new LineNumberReader(reader);
       List<String> lines = new ArrayList<String>();
-      
+
       try {
-         while(true) {
+         while (true) {
             String line = iterator.readLine();
-            
-            if(line == null) {
+
+            if (line == null) {
                return lines;
             }
             lines.add(line);
@@ -228,10 +237,10 @@ public class FileExtension {
       LineNumberReader iterator = new LineNumberReader(reader);
 
       try {
-         while(true) {
+         while (true) {
             String line = iterator.readLine();
 
-            if(line == null) {
+            if (line == null) {
                break;
             }
             consumer.consume(line);
@@ -247,10 +256,10 @@ public class FileExtension {
       LineNumberReader iterator = new LineNumberReader(reader);
 
       try {
-         while(true) {
+         while (true) {
             String line = iterator.readLine();
 
-            if(line == null) {
+            if (line == null) {
                break;
             }
             consumer.consume(line);
@@ -262,22 +271,22 @@ public class FileExtension {
 
    public List<File> findFiles(File directory, String pattern) throws IOException {
       List<File> files = new ArrayList<File>();
-      
-      if(directory.exists()) {
+
+      if (directory.exists()) {
          File[] list = directory.listFiles();
-         
-         if(list != null) {
-            for(File file : list) {
+
+         if (list != null) {
+            for (File file : list) {
                File normal = file.getCanonicalFile();
                String name = normal.getName();
-               
-               if(name.matches(pattern)) {
+
+               if (name.matches(pattern)) {
                   files.add(normal);
                }
-               if(file.isDirectory()) {
+               if (file.isDirectory()) {
                   List<File> children = findFiles(normal, pattern);
-                  
-                  if(!children.isEmpty()) {
+
+                  if (!children.isEmpty()) {
                      files.addAll(children);
                   }
                }
@@ -286,24 +295,24 @@ public class FileExtension {
       }
       return files;
    }
-   
+
    public List<File> findFiles(File directory, FileFilter filter) throws IOException {
       List<File> files = new ArrayList<File>();
-      
-      if(directory.exists()) {
+
+      if (directory.exists()) {
          File[] list = directory.listFiles();
-         
-         if(list != null) {
-            for(File file : list) {
+
+         if (list != null) {
+            for (File file : list) {
                File normal = file.getCanonicalFile();
-               
-               if(filter.accept(normal)) {
+
+               if (filter.accept(normal)) {
                   files.add(normal);
                }
-               if(file.isDirectory()) {
+               if (file.isDirectory()) {
                   List<File> children = findFiles(normal, filter);
-                  
-                  if(!children.isEmpty()) {
+
+                  if (!children.isEmpty()) {
                      files.addAll(children);
                   }
                }
@@ -312,34 +321,34 @@ public class FileExtension {
       }
       return files;
    }
-   
+
    public List<String> findPaths(File directory, String pattern) throws IOException {
       List<String> paths = new ArrayList<String>();
-      
-      if(directory.exists()) {
+
+      if (directory.exists()) {
          List<File> files = findFiles(directory, pattern);
-         
-         for(File file : files) {
+
+         for (File file : files) {
             String path = file.getCanonicalPath();
-            
-            if(path != null) {
+
+            if (path != null) {
                paths.add(path);
             }
          }
       }
       return paths;
    }
-   
+
    public List<String> findPaths(File directory, FileFilter filter) throws IOException {
       List<String> paths = new ArrayList<String>();
-      
-      if(directory.exists()) {
+
+      if (directory.exists()) {
          List<File> files = findFiles(directory, filter);
-         
-         for(File file : files) {
+
+         for (File file : files) {
             String path = file.getCanonicalPath();
-            
-            if(path != null) {
+
+            if (path != null) {
                paths.add(path);
             }
          }
@@ -354,7 +363,7 @@ public class FileExtension {
       if (to.exists()) {
          throw new IllegalArgumentException("File " + to + " already exists");
       }
-      if(to.isDirectory()) {
+      if (to.isDirectory()) {
          String name = from.getName();
          File file = to.toPath().resolve(name).toFile();
 
@@ -413,7 +422,8 @@ public class FileExtension {
       if (!input.exists()) {
          throw new IllegalArgumentException("Path " + input + " does not exist");
       }
-      String name = output.getName();;
+      String name = output.getName();
+      ;
 
       if (!name.endsWith(EXTENSION_ZIP)) {
          throw new IllegalArgumentException("Output file " + output + " does not end with " + EXTENSION_ZIP);
@@ -508,7 +518,7 @@ public class FileExtension {
             } else {
                File parent = file.getParentFile();
 
-               if(parent.mkdirs()) {
+               if (parent.mkdirs()) {
                   OutputStream to = new FileOutputStream(file);
 
                   try {
@@ -522,6 +532,135 @@ public class FileExtension {
       } finally {
          source.close();
          stream.close();
+      }
+   }
+
+   public File encrypt(File file, String secret) {
+      EncryptKey key = new EncryptKey(secret, false);
+
+      if (!file.exists()) {
+         throw new IllegalStateException("File " + file + " does not exist");
+      }
+      return key.apply(file);
+   }
+
+   public File decrypt(File file, String secret) throws Exception {
+      EncryptKey key = new EncryptKey(secret, true);
+
+      if (!file.exists()) {
+         throw new IllegalStateException("File " + file + " does not exist");
+      }
+      return key.apply(file);
+   }
+
+   private class EncryptKey {
+
+      private final String secret;
+      private final byte[] data;
+      private final boolean decrypt;
+
+      public EncryptKey(String secret, boolean decrypt) {
+         this.data = secret.getBytes(StandardCharsets.UTF_8);
+         this.decrypt = decrypt;
+         this.secret = secret;
+      }
+
+      public File apply(File file) {
+         try {
+            String path = file.getCanonicalPath();
+            MessageDigest digest = MessageDigest.getInstance(DIGEST_ALGORITHM);
+            Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
+            byte[] encoded = digest.digest(data);
+            long time = System.currentTimeMillis();
+
+            if (secret.isEmpty()) {
+               throw new IllegalStateException("Secret not strong enough");
+            }
+            File result = new File(path + ".tmp." + time);
+            InputStream source = new FileInputStream(file);
+            OutputStream stream = new FileOutputStream(result);
+            OutputStream destination = new EncryptOutputStream(stream, cipher, decrypt);
+            SecretKey key = new SecretKeySpec(encoded, KEY_ALGORITHM);
+
+            try {
+               cipher.init(decrypt ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, key);
+               streams.copyTo(source, destination);
+               destination.close();
+               source.close();
+               return copyTo(result, file);
+            } finally {
+               destination.close();
+               source.close();
+               result.delete();
+            }
+         } catch(Exception e) {
+            throw new IllegalStateException("Failed to encrypt " + file, e);
+         }
+      }
+
+      private class EncryptOutputStream extends FilterOutputStream {
+
+         private final Cipher cipher;
+         private final boolean decrypt;
+         private boolean closed;
+
+         public EncryptOutputStream(OutputStream output, Cipher cipher, boolean decrypt) {
+            super(output);
+            this.cipher = cipher;
+            this.decrypt = decrypt;
+         }
+
+         @Override
+         public void write(int octet) throws IOException {
+            byte[] swap = new byte[]{(byte) octet};
+            byte[] buffer = cipher.update(swap, 0, 1);
+
+            if (buffer != null) {
+               out.write(buffer);
+            }
+         }
+
+         @Override
+         public void write(byte data[]) throws IOException {
+            write(data, 0, data.length);
+         }
+
+         @Override
+         public void write(byte data[], int off, int len) throws IOException {
+            byte[] buffer = cipher.update(data, off, len);
+
+            if (buffer != null) {
+               out.write(buffer);
+            }
+         }
+
+         @Override
+         public void flush() throws IOException {
+            out.flush();
+         }
+
+         @Override
+         public void close() throws IOException {
+            if (!closed) {
+               try {
+                  byte[] buffer = cipher.doFinal();
+
+                  if (buffer != null) {
+                     out.write(buffer);
+                     out.flush();
+                  }
+               } catch (Throwable cause) {
+                  if (decrypt) {
+                     throw new IOException("Failed to decrypt", cause);
+                  } else {
+                     throw new IOException("Failed to encrypt", cause);
+                  }
+               }
+               out.close();
+               closed = true;
+               return;
+            }
+         }
       }
    }
 }

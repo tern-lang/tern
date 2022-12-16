@@ -443,7 +443,6 @@ public class FileExtension {
          throw new IllegalArgumentException("Path " + input + " does not exist");
       }
       String name = output.getName();
-      ;
 
       if (!name.endsWith(EXTENSION_ZIP)) {
          throw new IllegalArgumentException("Output file " + output + " does not end with " + EXTENSION_ZIP);
@@ -502,7 +501,10 @@ public class FileExtension {
       if (!path.exists()) {
          path.mkdirs();
       }
-      return unzip(input, path);
+      if (path.isDirectory()) {
+         return unzip(input, path);
+      }
+      return unzip(input, parent);
    }
 
    public File unzip(File input, File output) throws IOException {
@@ -524,12 +526,9 @@ public class FileExtension {
       ZipInputStream source = new ZipInputStream(stream);
 
       try {
-         while (true) {
-            ZipEntry entry = source.getNextEntry();
+         ZipEntry entry = source.getNextEntry();
 
-            if (entry == null) {
-               return output;
-            }
+         while (entry != null) {
             String element = entry.getName();
             File file = output.toPath().resolve(element).toFile();
 
@@ -538,7 +537,7 @@ public class FileExtension {
             } else {
                File parent = file.getParentFile();
 
-               if (parent.mkdirs()) {
+               if (parent.exists() || parent.mkdirs()) {
                   OutputStream to = new FileOutputStream(file);
 
                   try {
@@ -548,11 +547,17 @@ public class FileExtension {
                   }
                }
             }
+            try {
+               entry = source.getNextEntry();
+            } catch(IOException e) {
+               return output;
+            }
          }
       } finally {
          source.close();
          stream.close();
       }
+      return output;
    }
 
    public File encrypt(File file, String secret) {
@@ -613,7 +618,7 @@ public class FileExtension {
                source.close();
                result.delete();
             }
-         } catch(Exception e) {
+         } catch (Exception e) {
             throw new IllegalStateException("Failed to encrypt " + file, e);
          }
       }

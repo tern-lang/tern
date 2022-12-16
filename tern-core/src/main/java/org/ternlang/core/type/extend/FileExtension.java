@@ -1,5 +1,8 @@
 package org.ternlang.core.type.extend;
 
+import org.ternlang.common.Consumer;
+
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -14,14 +17,22 @@ import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-
-import org.ternlang.common.Consumer;
+import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 public class FileExtension {
-   
+
+   private static final String EXTENSION_ZIP = ".zip";
+
+   private final InputStreamExtension streams;
+
    public FileExtension() {
-      super();
+      this.streams = new InputStreamExtension();
    }
    
    public InputStream stream(File file) throws IOException {
@@ -334,5 +345,183 @@ public class FileExtension {
          }
       }
       return paths;
+   }
+
+   public boolean moveTo(File from, File to) {
+      if (!from.exists()) {
+         throw new IllegalArgumentException("File " + from + " does not exist");
+      }
+      if (to.exists()) {
+         throw new IllegalArgumentException("File " + to + " already exists");
+      }
+      if(to.isDirectory()) {
+         String name = from.getName();
+         File file = to.toPath().resolve(name).toFile();
+
+         return from.renameTo(file);
+      }
+      return from.renameTo(to);
+   }
+
+   public File copyTo(File from, File to) {
+      if (!from.exists()) {
+         throw new IllegalArgumentException("File " + from + " does not exist");
+      }
+      if (!from.isFile()) {
+         throw new IllegalArgumentException("File " + from + " is not a file");
+      }
+      try {
+         String name = from.getName();
+         File result = to.isDirectory() ? to.toPath().resolve(name).toFile() : to;
+
+         if (!from.equals(result)) {
+            FileInputStream source = new FileInputStream(from);
+            OutputStream destination = new FileOutputStream(result);
+            BufferedOutputStream buffer = new BufferedOutputStream(destination, 8192);
+
+            try {
+               streams.copyTo(source, buffer);
+            } finally {
+               buffer.close();
+            }
+         }
+         return result;
+      } catch (Exception e) {
+         throw new IllegalArgumentException("Unable to copy from " + from + " to " + to, e);
+      }
+   }
+
+   public File zip(File input) throws IOException {
+      String name = input.getName();
+      File parent = input.getParentFile();
+      File output = parent.toPath().resolve(name + EXTENSION_ZIP).toFile();
+
+      return zip(input, output);
+   }
+
+   public File zip(File input, String output) throws IOException {
+      File parent = input.getParentFile();
+      File result = parent.toPath().resolve(output).toFile();
+
+      if (!input.exists()) {
+         throw new IllegalArgumentException("Path " + input + " does not exist");
+      }
+      return zip(input, result);
+   }
+
+   public File zip(File input, File output) throws IOException {
+      if (!input.exists()) {
+         throw new IllegalArgumentException("Path " + input + " does not exist");
+      }
+      String name = output.getName();;
+
+      if (!name.endsWith(EXTENSION_ZIP)) {
+         throw new IllegalArgumentException("Output file " + output + " does not end with " + EXTENSION_ZIP);
+      }
+      OutputStream stream = new FileOutputStream(output);
+      ZipOutputStream out = new ZipOutputStream(stream);
+      Set<String> done = new HashSet<>();
+
+      try {
+         List<File> files = input.isDirectory() ? findFiles(input, ".*") : Arrays.asList(input);
+         String path = input.isDirectory() ? input.getCanonicalPath() : input.getParent();
+         int length = path.length();
+
+         for (File entry : files) {
+            String child = entry.getCanonicalPath();
+            String relative = child.substring(length).replace(File.separatorChar, '/');
+
+            if (relative.startsWith("/")) {
+               relative = relative.substring(1); // /org/domain/Type.class -> org/domain/Type.class
+            }
+            if (done.add(relative)) {
+               if (entry.isFile()) {
+                  ZipEntry element = new ZipEntry(relative);
+                  FileInputStream source = new FileInputStream(entry);
+
+                  out.putNextEntry(element);
+                  streams.copyTo(source, out);
+               } else if (entry.isDirectory()) {
+                  ZipEntry element = new ZipEntry(relative + "/");
+
+                  out.putNextEntry(element);
+               }
+            }
+         }
+      } finally {
+         out.close();
+         stream.close();
+      }
+      return output;
+   }
+
+   public File unzip(File input) throws IOException {
+      if (!input.exists()) {
+         throw new IllegalArgumentException("Input file " + input + " does not exist");
+      }
+      String name = input.getName();
+
+      if (!name.endsWith(EXTENSION_ZIP)) {
+         throw new IllegalArgumentException("Input file " + input + " does not end with " + EXTENSION_ZIP);
+      }
+      int length = name.length();
+      String original = name.substring(0, length - 4);
+      File parent = input.getParentFile();
+      File path = parent.toPath().resolve(original).toFile();
+
+      if (!path.exists()) {
+         path.mkdirs();
+      }
+      return unzip(input, path);
+   }
+
+   public File unzip(File input, File output) throws IOException {
+      if (!output.exists()) {
+         throw new IllegalArgumentException("Path " + output + " does not exist");
+      }
+      if (!output.isDirectory()) {
+         throw new IllegalArgumentException("Path " + output + " is not a  directory");
+      }
+      if (!input.exists()) {
+         throw new IllegalArgumentException("Input file " + input + " does not exist");
+      }
+      String name = input.getName();
+
+      if (!name.endsWith(EXTENSION_ZIP)) {
+         throw new IllegalArgumentException("Input file " + input + " does not end with " + EXTENSION_ZIP);
+      }
+      FileInputStream stream = new FileInputStream(input);
+      ZipInputStream source = new ZipInputStream(stream);
+
+      try {
+         while (true) {
+            ZipEntry entry = source.getNextEntry();
+
+            if (entry == null) {
+               return output;
+            }
+            String element = entry.getName();
+            File file = output.toPath().resolve(element).toFile();
+
+            if (entry.isDirectory()) {
+               file.mkdirs();
+            } else {
+               File parent = file.getParentFile();
+
+               if(parent.mkdirs()) {
+                  OutputStream to = new FileOutputStream(file);
+
+                  try {
+                     streams.copyTo(source, to);
+                  } finally {
+                     to.close();
+                  }
+               }
+            }
+         }
+      } finally {
+         source.close();
+         stream.close();
+      }
    }
 }

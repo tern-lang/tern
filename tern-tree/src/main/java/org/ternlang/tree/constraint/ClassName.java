@@ -1,5 +1,7 @@
 package org.ternlang.tree.constraint;
 
+import static org.ternlang.core.ModifierType.CLASS;
+
 import org.ternlang.core.Evaluation;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.link.ImportManager;
@@ -9,11 +11,8 @@ import org.ternlang.core.type.Type;
 import org.ternlang.core.type.TypePart;
 import org.ternlang.tree.NameReference;
 import org.ternlang.tree.define.TypeName;
-import org.ternlang.tree.literal.TextLiteral;
 
 import java.util.List;
-
-import static org.ternlang.core.ModifierType.CLASS;
 
 public class ClassName implements TypeName {
    

@@ -1,10 +1,8 @@
 package org.ternlang.tree.function;
 
+import static java.util.Collections.EMPTY_LIST;
 import static org.ternlang.core.constraint.Constraint.NONE;
 import static org.ternlang.core.function.Origin.DEFAULT;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.function.FunctionSignature;
@@ -13,6 +11,9 @@ import org.ternlang.core.function.ParameterBuilder;
 import org.ternlang.core.function.Signature;
 import org.ternlang.core.module.Module;
 import org.ternlang.core.scope.Scope;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ParameterListCompiler {
    
@@ -25,7 +26,33 @@ public class ParameterListCompiler {
       this.builder = new ParameterBuilder();
       this.list = list;
    }
-   
+
+   public Signature implicit(Scope scope) throws Exception{
+      return implicit(scope, null);
+   }
+
+   public Signature implicit(Scope scope, String prefix) throws Exception{
+      List<Parameter> parameters = new ArrayList<Parameter>();
+
+      if(prefix != null) {
+         Parameter parameter = builder.create(NONE, prefix, 0); // this is constrained by type
+         parameters.add(parameter);
+      }
+      Module module = scope.getModule();
+      boolean variable = checker.isVariable(scope);
+      int start = parameters.size();
+
+      for(int i = 0; i < list.length; i++) {
+         ParameterDeclaration declaration = list[i];
+
+         if(declaration != null) {
+            Parameter parameter = declaration.get(scope, start + i);
+            parameters.add(parameter);
+         }
+      }
+      return new FunctionSignature(parameters, EMPTY_LIST, module, null, DEFAULT, false, variable);
+   }
+
    public Signature compile(Scope scope, List<Constraint> generics) throws Exception{
       return compile(scope, generics, null);
    }

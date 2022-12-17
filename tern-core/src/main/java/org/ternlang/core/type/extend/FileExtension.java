@@ -361,7 +361,7 @@ public class FileExtension {
       File from = file.getAbsoluteFile();
       Path path = from.toPath();
 
-      if(!name.isEmpty()) {
+      if (!name.isEmpty()) {
          return path.resolve(name).toFile();
       }
       return from;
@@ -371,19 +371,22 @@ public class FileExtension {
       File from = file.getAbsoluteFile();
       Path path = from.toPath();
 
-      if(!name.isEmpty()) {
+      if (!name.isEmpty()) {
          return path.resolveSibling(name).toFile();
       }
       return from;
    }
 
-   public boolean moveTo(File input, String output) {
-      File to = resolveSibling(input, output);
+   public boolean moveTo(File from, String output) {
+      File to = resolveSibling(from, output);
 
-      if (!input.exists()) {
-         throw new IllegalArgumentException("Path " + input + " does not exist");
+      if (!from.exists()) {
+         throw new IllegalArgumentException("Path " + from + " does not exist");
       }
-      return moveTo(input, to);
+      if (!from.equals(to)) {
+         return moveTo(from, to);
+      }
+      return true;
    }
 
    public boolean moveTo(File from, File to) {
@@ -393,22 +396,28 @@ public class FileExtension {
       if (to.exists()) {
          throw new IllegalArgumentException("File " + to + " already exists");
       }
-      if (to.isDirectory()) {
-         String name = from.getName();
-         File file = resolve(to, name);
+      if (!from.equals(to)) {
+         if (to.isDirectory()) {
+            String name = from.getName();
+            File file = resolve(to, name);
 
-         return from.renameTo(file);
+            return from.renameTo(file);
+         }
+         return from.renameTo(to);
       }
-      return from.renameTo(to);
+      return true;
    }
 
-   public File copyTo(File input, String output) {
-      File result = resolveSibling(input, output);
+   public File copyTo(File from, String output) {
+      File result = resolveSibling(from, output);
 
-      if (!input.exists()) {
-         throw new IllegalArgumentException("Path " + input + " does not exist");
+      if (!from.exists()) {
+         throw new IllegalArgumentException("Path " + from + " does not exist");
       }
-      return copyTo(input, result);
+      if (!from.equals(result)) {
+         return copyTo(from, result);
+      }
+      return from;
    }
 
    public File copyTo(File from, File to) {
@@ -561,7 +570,7 @@ public class FileExtension {
             }
             try {
                entry = source.getNextEntry();
-            } catch(IOException e) {
+            } catch (IOException e) {
                return output;
             }
          }

@@ -2,6 +2,7 @@ package org.ternlang.tree.define;
 
 import static java.util.Collections.EMPTY_LIST;
 import static org.ternlang.core.Reserved.TYPE_CLASS;
+import static org.ternlang.core.constraint.Constraint.NONE;
 
 import org.ternlang.core.Compilation;
 import org.ternlang.core.Evaluation;
@@ -17,6 +18,7 @@ import org.ternlang.tree.annotation.AnnotationList;
 import org.ternlang.tree.constraint.GenericList;
 import org.ternlang.tree.function.ParameterList;
 import org.ternlang.tree.literal.TextLiteral;
+import org.ternlang.tree.reference.GenericArgumentList;
 
 import java.util.List;
 
@@ -33,17 +35,17 @@ public abstract class ImplicitConstructor implements Compilation {
    }
 
    public ImplicitConstructor(TextLiteral name, GenericList generics, ParameterList parameters) {
+      this.generics = generics != null ? generics : new GenericArgumentList();
       this.annotations = new AnnotationList();
       this.modifiers = new ModifierList();
       this.parameters = parameters;
-      this.generics = generics;
       this.name = name;
    }
 
    @Override
    public TypeName compile(Module module, Path path, int line) throws Exception {
       Scope scope = module.getScope();
-      Signature signature = parameters.create(scope, EMPTY_LIST, TYPE_CLASS);
+      Signature signature = parameters.implicit(scope, TYPE_CLASS);
       TypePart[] parts = declare(module, path, line);
 
       return construct(name, generics, signature, parts);
@@ -51,20 +53,19 @@ public abstract class ImplicitConstructor implements Compilation {
 
    private TypePart[] declare(Module module, Path path, int line) throws Exception {
       Scope scope = module.getScope();
-      Signature signature = parameters.create(scope, EMPTY_LIST, TYPE_CLASS);
-      List<Parameter> parameters = signature.getParameters();
-      int count = parameters.size();
+      Signature signature = parameters.implicit(scope, TYPE_CLASS);
+      List<Parameter> list = signature.getParameters();
+      int count = list.size();
 
       if (count > 1) {
          ImplicitFieldBuilder builder = new ImplicitFieldBuilder(module, path, line);
          TypePart[] declarations = new TypePart[count - 1];
 
          for (int i = 1; i < count; i++) {
-            Parameter parameter = parameters.get(i);
-            Constraint constraint = parameter.getConstraint();
+            Parameter parameter = list.get(i);
             String name = parameter.getName();
 
-            declarations[i - 1] = builder.create(name, constraint);
+            declarations[i - 1] = builder.create(name, NONE);
          }
          return declarations;
       }

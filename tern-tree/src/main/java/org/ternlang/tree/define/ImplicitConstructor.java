@@ -1,12 +1,10 @@
 package org.ternlang.tree.define;
 
-import static java.util.Collections.EMPTY_LIST;
 import static org.ternlang.core.Reserved.TYPE_CLASS;
 import static org.ternlang.core.constraint.Constraint.NONE;
 
 import org.ternlang.core.Compilation;
 import org.ternlang.core.Evaluation;
-import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.function.Parameter;
 import org.ternlang.core.function.Signature;
 import org.ternlang.core.module.Module;
@@ -45,7 +43,7 @@ public abstract class ImplicitConstructor implements Compilation {
    @Override
    public TypeName compile(Module module, Path path, int line) throws Exception {
       Scope scope = module.getScope();
-      Signature signature = parameters.implicit(scope, TYPE_CLASS);
+      Signature signature = parameters.expose(scope, TYPE_CLASS);
       TypePart[] parts = declare(module, path, line);
 
       return construct(name, generics, signature, parts);
@@ -53,7 +51,7 @@ public abstract class ImplicitConstructor implements Compilation {
 
    private TypePart[] declare(Module module, Path path, int line) throws Exception {
       Scope scope = module.getScope();
-      Signature signature = parameters.implicit(scope, TYPE_CLASS);
+      Signature signature = parameters.expose(scope, TYPE_CLASS);
       List<Parameter> list = signature.getParameters();
       int count = list.size();
 

@@ -27,11 +27,11 @@ public class ParameterListCompiler {
       this.list = list;
    }
 
-   public Signature implicit(Scope scope) throws Exception{
-      return implicit(scope, null);
+   public Signature expose(Scope scope) throws Exception{
+      return expose(scope, null);
    }
 
-   public Signature implicit(Scope scope, String prefix) throws Exception{
+   public Signature expose(Scope scope, String prefix) throws Exception{ // no generics
       List<Parameter> parameters = new ArrayList<Parameter>();
 
       if(prefix != null) {

@@ -18,15 +18,15 @@ public class ParameterList {
       this.mapper = new ConstraintMapper();
    }
 
-   public Signature implicit(Scope scope) throws Exception {
-      return implicit(scope, null);
+   public Signature expose(Scope scope) throws Exception {
+      return expose(scope, null);
    }
 
-   public Signature implicit(Scope scope, String prefix) throws Exception {
+   public Signature expose(Scope scope, String prefix) throws Exception {
       if(prefix == null) {
-         return compiler.implicit(scope);
+         return compiler.expose(scope);
       }
-      return compiler.implicit(scope, prefix);
+      return compiler.expose(scope, prefix);
    }
 
    public Signature create(Scope scope, List<Constraint> generics) throws Exception{

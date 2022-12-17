@@ -29,7 +29,7 @@ public class ReferenceNavigation implements Compilation {
    }
 
    @Override
-   public Object compile(Module module, Path path, int line) throws Exception {
+   public Evaluation compile(Module module, Path path, int line) throws Exception {
       if(next != null) {
          return new CompileResult(part, operator, next);
       }

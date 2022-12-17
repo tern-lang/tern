@@ -31,9 +31,11 @@ import org.ternlang.tree.constraint.EnumName;
 public class EnumDefinition implements Compilation {
    
    private final Statement definition;
+   private final EnumBody body;
    
    public EnumDefinition(AnnotationList annotations, EnumName name, TypeHierarchy hierarchy, EnumList list, TypePart... parts) {
-      this.definition = new CompileResult(annotations, name, hierarchy, list, parts);
+      this.body = new EnumBody(name, parts);
+      this.definition = new CompileResult(annotations, name, hierarchy, list, body);
    }
 
    @Override
@@ -56,9 +58,9 @@ public class EnumDefinition implements Compilation {
       private final EnumBuilder builder;
       private final Execution execution;
       private final EnumList list;
-      private final TypePart[] parts;
+      private final EnumBody body;
       
-      public CompileResult(AnnotationList annotations, EnumName name, TypeHierarchy hierarchy, EnumList list, TypePart[] parts) {
+      public CompileResult(AnnotationList annotations, TypeName name, TypeHierarchy hierarchy, EnumList list, EnumBody body) {
          this.builder = new EnumBuilder(name, hierarchy);
          this.collector = new TypeStateCollector();
          this.constructor = new DefaultConstructor(collector, true);
@@ -66,7 +68,7 @@ public class EnumDefinition implements Compilation {
          this.compile = new AtomicBoolean();
          this.define = new AtomicBoolean();
          this.create = new AtomicBoolean();
-         this.parts = parts;
+         this.body = body;
          this.list = list;
       }
       
@@ -87,6 +89,7 @@ public class EnumDefinition implements Compilation {
             Scope scope = type.getScope();
             TypeState keys = list.define(collector, type, scope);
             Progress<Phase> progress = type.getProgress();
+            TypePart[] parts = body.getParts(scope);
             
             try {
                collector.update(keys); // collect enum constants first

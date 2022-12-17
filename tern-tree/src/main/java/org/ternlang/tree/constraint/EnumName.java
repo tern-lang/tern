@@ -3,22 +3,33 @@ package org.ternlang.tree.constraint;
 import static java.util.Collections.EMPTY_LIST;
 import static org.ternlang.core.ModifierType.ENUM;
 
-import java.util.List;
-
+import org.ternlang.core.Evaluation;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.type.Type;
+import org.ternlang.core.type.TypePart;
 import org.ternlang.tree.NameReference;
 import org.ternlang.tree.define.TypeName;
-import org.ternlang.tree.literal.TextLiteral;
+
+import java.util.List;
 
 public class EnumName implements TypeName {
    
    private final NameReference reference;
+   private final TypePart part;
 
-   public EnumName(TextLiteral literal) {
+   public EnumName(Evaluation literal) {
+      this(literal, null);
+   }
+
+   public EnumName(Evaluation literal, TypePart part) {
       this.reference = new NameReference(literal);
-   }   
+      this.part = part;
+   }
+
+   public TypePart getConstructor(Scope scope) throws Exception {
+      return part;
+   }
 
    @Override
    public int getModifiers(Scope scope) throws Exception{

@@ -13,7 +13,6 @@ import org.ternlang.core.scope.ScopeState;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.type.TypeBody;
 import org.ternlang.core.variable.Value;
-import org.ternlang.tree.constraint.EnumName;
 
 public class EnumBuilder {
 
@@ -21,10 +20,10 @@ public class EnumBuilder {
    private final EnumPropertyGenerator generator;
    private final ConstantPropertyBuilder builder;
    private final TypeHierarchy hierarchy;
-   private final EnumName name;
+   private final TypeName name;
    private final List values;
    
-   public EnumBuilder(EnumName name, TypeHierarchy hierarchy) {
+   public EnumBuilder(TypeName name, TypeHierarchy hierarchy) {
       this.reference = new AtomicReference<Type>();
       this.generator = new EnumPropertyGenerator();
       this.builder = new ConstantPropertyBuilder();

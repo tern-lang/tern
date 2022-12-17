@@ -60,7 +60,7 @@ public class ThisConstructor implements Compilation {
       }
       
       @Override
-      public TypeState define(TypeBody body, Type type, Scope scope) throws Exception {  
+      public TypeState define(TypeBody body, Type type, Scope scope) throws Exception {
          Execution execution = new StaticBody(body, type);
          Constraint constraint = new StaticConstraint(type);
          CreateObject evaluation = new CreateObject(resolver, handler, constraint, arguments, TRAIT.mask | ENUM.mask | MODULE.mask);

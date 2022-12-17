@@ -21,6 +21,7 @@ import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -356,14 +357,33 @@ public class FileExtension {
       return paths;
    }
 
+   public File resolve(File file, String name) {
+      File from = file.getAbsoluteFile();
+      Path path = from.toPath();
+
+      if(!name.isEmpty()) {
+         return path.resolve(name).toFile();
+      }
+      return from;
+   }
+
+   public File resolveSibling(File file, String name) {
+      File from = file.getAbsoluteFile();
+      Path path = from.toPath();
+
+      if(!name.isEmpty()) {
+         return path.resolveSibling(name).toFile();
+      }
+      return from;
+   }
+
    public boolean moveTo(File input, String output) {
-      File parent = input.getParentFile();
-      File result = parent.toPath().resolve(output).toFile();
+      File to = resolveSibling(input, output);
 
       if (!input.exists()) {
          throw new IllegalArgumentException("Path " + input + " does not exist");
       }
-      return moveTo(input, result);
+      return moveTo(input, to);
    }
 
    public boolean moveTo(File from, File to) {
@@ -375,7 +395,7 @@ public class FileExtension {
       }
       if (to.isDirectory()) {
          String name = from.getName();
-         File file = to.toPath().resolve(name).toFile();
+         File file = resolve(to, name);
 
          return from.renameTo(file);
       }
@@ -383,8 +403,7 @@ public class FileExtension {
    }
 
    public File copyTo(File input, String output) {
-      File parent = input.getParentFile();
-      File result = parent.toPath().resolve(output).toFile();
+      File result = resolveSibling(input, output);
 
       if (!input.exists()) {
          throw new IllegalArgumentException("Path " + input + " does not exist");
@@ -422,15 +441,16 @@ public class FileExtension {
 
    public File zip(File input) throws IOException {
       String name = input.getName();
-      File parent = input.getParentFile();
-      File output = parent.toPath().resolve(name + EXTENSION_ZIP).toFile();
+      File result = resolveSibling(input, name + EXTENSION_ZIP);
 
-      return zip(input, output);
+      if (!input.exists()) {
+         throw new IllegalArgumentException("Path " + input + " does not exist");
+      }
+      return zip(input, result);
    }
 
    public File zip(File input, String output) throws IOException {
-      File parent = input.getParentFile();
-      File result = parent.toPath().resolve(output).toFile();
+      File result = resolveSibling(input, output);
 
       if (!input.exists()) {
          throw new IllegalArgumentException("Path " + input + " does not exist");
@@ -493,17 +513,9 @@ public class FileExtension {
       if (!name.endsWith(EXTENSION_ZIP)) {
          throw new IllegalArgumentException("Input file " + input + " does not end with " + EXTENSION_ZIP);
       }
-      int length = name.length();
-      String original = name.substring(0, length - 4);
-      File parent = input.getParentFile();
-      File path = parent.toPath().resolve(original).toFile();
+      File path = input.getAbsoluteFile();
+      File parent = path.getParentFile();
 
-      if (!path.exists()) {
-         path.mkdirs();
-      }
-      if (path.isDirectory()) {
-         return unzip(input, path);
-      }
       return unzip(input, parent);
    }
 

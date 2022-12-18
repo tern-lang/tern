@@ -41,9 +41,9 @@ public class ImplicitTest extends TestCase {
    "      `${a}, ${b}`;\n"+
    "   }\n"+
    "}\n" +
-   "const pair = Pair(1, 2);\n"+
+   "const pair = Pair(17, 82);\n"+
    "pair.a++;\n"+
-   "assert pair.a == 2;\n"+
+   "assert pair.a == 18;\n"+
    "assert Pair<Integer, Integer>(1, 2).a == 1;\n"+
    "assert Pair<Integer, Double>(1, 2).toString() == '1, 2';\n";
 

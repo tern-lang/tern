@@ -26,7 +26,7 @@ public class ImplicitTest extends TestCase {
    "assert Move.RIGHT.y == 0;\n";
 
    private static final String SOURCE_2 =
-   "class Point(x, y){\n"+
+   "class Point(const x, const y){\n"+
     "   override toString(){\n"+
     "      `${x}, ${y}`;\n"+
     "   }\n"+

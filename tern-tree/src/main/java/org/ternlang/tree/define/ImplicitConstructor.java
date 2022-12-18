@@ -1,5 +1,7 @@
 package org.ternlang.tree.define;
 
+import static org.ternlang.core.ModifierType.CONSTANT;
+import static org.ternlang.core.ModifierType.VARIABLE;
 import static org.ternlang.core.Reserved.TYPE_CLASS;
 import static org.ternlang.core.constraint.Constraint.NONE;
 
@@ -63,7 +65,11 @@ public abstract class ImplicitConstructor implements Compilation {
             Parameter parameter = list.get(i);
             String name = parameter.getName();
 
-            declarations[i - 1] = builder.create(name, NONE);
+            if(parameter.isConstant()) {
+               declarations[i - 1] = builder.create(name, NONE, CONSTANT.mask);
+            } else {
+               declarations[i - 1] = builder.create(name, NONE, VARIABLE.mask);
+            }
          }
          return declarations;
       }

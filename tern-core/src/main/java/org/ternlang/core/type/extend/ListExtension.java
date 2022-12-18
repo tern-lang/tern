@@ -5,12 +5,15 @@ import org.ternlang.common.functional.FoldRight;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
@@ -103,26 +106,40 @@ public class ListExtension {
    }
 
    public <T> List<T> plus(List<T> list, T value) {
+      if(value instanceof Collection) {
+         return plus(list, (Collection)value);
+      }
+      return plus(list, Arrays.asList(value));
+   }
+
+   public <T> List<T> plus(List<T> list, Collection<T> values) {
       List<T> result = new ArrayList<>();
 
       result.addAll(list);
-      result.add(value);
+      result.addAll(values);
 
       return result;
    }
 
    public <T> List<T> minus(List<T> list, T value) {
+      if(value instanceof Collection) {
+         return minus(list, (Collection)value);
+      }
+      return minus(list, Arrays.asList(value));
+   }
+
+   public <T> List<T> minus(List<T> list, Collection<T> values) {
       List<T> result = new ArrayList<>();
 
       for(T element : list) {
-         if(element != value) {
+         if(!values.contains(element)) {
             result.add(element);
          }
       }
       return result;
    }
 
-   public <T> List<T> disjoint(List<T> left, List<T> right) {
+   public <T> List<T> disjoint(List<T> left, Collection<T> right) {
       List<T> result = new ArrayList<>();
 
       for(T value : left) {
@@ -138,7 +155,7 @@ public class ListExtension {
       return result;
    }
 
-   public <T> List<T> union(List<T> left, List<T> right) {
+   public <T> List<T> union(List<T> left, Collection<T> right) {
       List<T> result = new ArrayList<>();
 
       result.addAll(left);
@@ -147,7 +164,7 @@ public class ListExtension {
       return result;
    }
 
-   public <T> List<T> intersect(List<T> left, List<T> right) {
+   public <T> List<T> intersect(List<T> left, Collection<T> right) {
       List<T> result = new ArrayList<>();
 
       for(T value : left) {

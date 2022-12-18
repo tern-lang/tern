@@ -5,6 +5,8 @@ import org.ternlang.common.functional.FoldRight;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
@@ -12,6 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 import java.util.function.Function;
@@ -36,26 +39,41 @@ public class SetExtension {
    }
 
    public <T> Set<T> plus(Set<T> list, T value) {
+      if(value instanceof Collection) {
+         return plus(list, (Collection)value);
+      }
+      return plus(list, Arrays.asList(value));
+   }
+
+   public <T> Set<T> plus(Set<T> list, Collection<T> values) {
       Set<T> result = new LinkedHashSet<>();
 
       result.addAll(list);
-      result.add(value);
+      result.addAll(values);
 
       return result;
    }
 
+
    public <T> Set<T> minus(Set<T> list, T value) {
+      if(value instanceof Collection) {
+         return minus(list, (Collection)value);
+      }
+      return minus(list, Arrays.asList(value));
+   }
+
+   public <T> Set<T> minus(Set<T> list, Collection<T> values) {
       Set<T> result = new LinkedHashSet<>();
 
       for (T element : list) {
-         if (element != value) {
+         if (!values.contains(element)) {
             result.add(element);
          }
       }
       return result;
    }
 
-   public <T> Set<T> disjoint(Set<T> left, Set<T> right) {
+   public <T> Set<T> disjoint(Set<T> left, Collection<T> right) {
       Set<T> result = new LinkedHashSet<>();
 
       for (T value : left) {
@@ -71,7 +89,7 @@ public class SetExtension {
       return result;
    }
 
-   public <T> Set<T> union(Set<T> left, Set<T> right) {
+   public <T> Set<T> union(Set<T> left, Collection<T> right) {
       Set<T> result = new LinkedHashSet<>();
 
       result.addAll(left);
@@ -80,7 +98,7 @@ public class SetExtension {
       return result;
    }
 
-   public <T> Set<T> intersect(Set<T> left, Set<T> right) {
+   public <T> Set<T> intersect(Set<T> left, Collection<T> right) {
       Set<T> result = new LinkedHashSet<>();
 
       for (T value : left) {

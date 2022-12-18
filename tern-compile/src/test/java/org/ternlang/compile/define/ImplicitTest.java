@@ -27,10 +27,11 @@ public class ImplicitTest extends TestCase {
 
    private static final String SOURCE_2 =
    "class Point(const x, const y){\n"+
-    "   override toString(){\n"+
-    "      `${x}, ${y}`;\n"+
-    "   }\n"+
-    "}\n" +
+   "   override toString(){\n"+
+   "      `${x}, ${y}`;\n"+
+   "   }\n"+
+   "}\n" +
+   "const p = Point(2, 2);\n"+
    "assert Point(1, 2).x == 1;\n"+
    "assert Point(1, 2).toString() == '1, 2';\n";
 
@@ -40,6 +41,9 @@ public class ImplicitTest extends TestCase {
    "      `${a}, ${b}`;\n"+
    "   }\n"+
    "}\n" +
+   "const pair = Pair(1, 2);\n"+
+   "pair.a++;\n"+
+   "assert pair.a == 2;\n"+
    "assert Pair<Integer, Integer>(1, 2).a == 1;\n"+
    "assert Pair<Integer, Double>(1, 2).toString() == '1, 2';\n";
 

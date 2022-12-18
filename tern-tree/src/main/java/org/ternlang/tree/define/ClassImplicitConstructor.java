@@ -12,7 +12,7 @@ import org.ternlang.tree.literal.TextLiteral;
 public class ClassImplicitConstructor extends ImplicitConstructor {
 
    public ClassImplicitConstructor(TextLiteral name, ParameterList parameters) {
-      super(name, parameters);
+      this(name, null, parameters);
    }
 
    public ClassImplicitConstructor(TextLiteral name, GenericList generics, ParameterList parameters) {
@@ -20,7 +20,7 @@ public class ClassImplicitConstructor extends ImplicitConstructor {
    }
 
    @Override
-   protected TypeName construct(Evaluation name, GenericList generics, Signature signature, TypePart[] parts) throws Exception {
+   protected TypeName construct(Evaluation name, Signature signature, TypePart[] parts) throws Exception {
       Statement statement = new ImplicitBody(signature);
       ClassConstructor constructor = new ClassConstructor(annotations, modifiers, parameters, statement);
       TypePart part = new ImplicitPart(constructor, parts);

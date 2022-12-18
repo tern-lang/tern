@@ -7,6 +7,7 @@ import static org.ternlang.core.constraint.Constraint.NONE;
 
 import org.ternlang.core.Compilation;
 import org.ternlang.core.Evaluation;
+import org.ternlang.core.ModifierType;
 import org.ternlang.core.function.Parameter;
 import org.ternlang.core.function.Signature;
 import org.ternlang.core.module.Module;
@@ -29,16 +30,18 @@ public abstract class ImplicitConstructor implements Compilation {
    protected final ModifierList modifiers;
    protected final GenericList generics;
    protected final TextLiteral name;
-
-   public ImplicitConstructor(TextLiteral name, ParameterList parameters) {
-      this(name, null, parameters);
-   }
+   protected final int modifier;
 
    public ImplicitConstructor(TextLiteral name, GenericList generics, ParameterList parameters) {
+      this(name, generics, parameters, 0);
+   }
+
+   public ImplicitConstructor(TextLiteral name, GenericList generics, ParameterList parameters, int modifier) {
       this.generics = generics != null ? generics : new GenericArgumentList();
       this.annotations = new AnnotationList();
       this.modifiers = new ModifierList();
       this.parameters = parameters;
+      this.modifier = modifier;
       this.name = name;
    }
 
@@ -48,10 +51,10 @@ public abstract class ImplicitConstructor implements Compilation {
       Signature signature = parameters.expose(scope, TYPE_CLASS);
       TypePart[] parts = declare(module, path, line);
 
-      return construct(name, generics, signature, parts);
+      return construct(name, signature, parts);
    }
 
-   private TypePart[] declare(Module module, Path path, int line) throws Exception {
+   protected TypePart[] declare(Module module, Path path, int line) throws Exception {
       Scope scope = module.getScope();
       Signature signature = parameters.expose(scope, TYPE_CLASS);
       List<Parameter> list = signature.getParameters();
@@ -65,7 +68,7 @@ public abstract class ImplicitConstructor implements Compilation {
             Parameter parameter = list.get(i);
             String name = parameter.getName();
 
-            if(parameter.isConstant()) {
+            if(ModifierType.isConstant(modifier) || parameter.isConstant()) {
                declarations[i - 1] = builder.create(name, NONE, CONSTANT.mask);
             } else {
                declarations[i - 1] = builder.create(name, NONE, VARIABLE.mask);
@@ -76,6 +79,6 @@ public abstract class ImplicitConstructor implements Compilation {
       return new TypePart[]{};
    }
 
-   protected abstract TypeName construct(Evaluation name, GenericList generics, Signature signature, TypePart[] parts) throws Exception;
+   protected abstract TypeName construct(Evaluation name, Signature signature, TypePart[] parts) throws Exception;
 
 }

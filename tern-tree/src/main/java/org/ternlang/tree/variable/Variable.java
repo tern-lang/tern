@@ -1,7 +1,5 @@
 package org.ternlang.tree.variable;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.ternlang.core.Compilation;
 import org.ternlang.core.Context;
 import org.ternlang.core.Evaluation;
@@ -13,18 +11,26 @@ import org.ternlang.core.module.Module;
 import org.ternlang.core.module.Path;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.scope.index.Address;
-import org.ternlang.core.scope.index.ScopeIndex;
 import org.ternlang.core.scope.index.LocalValueFinder;
+import org.ternlang.core.scope.index.ScopeIndex;
 import org.ternlang.core.variable.Value;
 import org.ternlang.core.variable.bind.VariableBinder;
 import org.ternlang.tree.NameReference;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class Variable implements Compilation {
    
    private final NameReference reference;
+   private final boolean expand;
    
    public Variable(Evaluation identifier) {
+      this(identifier, false);
+   }
+
+   public Variable(Evaluation identifier, boolean expand) {
       this.reference = new NameReference(identifier);
+      this.expand = expand;
    }
    
    @Override
@@ -35,7 +41,7 @@ public class Variable implements Compilation {
       ProxyWrapper wrapper = context.getWrapper();
       String name = reference.getName(scope);
       
-      return new CompileResult(handler, wrapper, name);
+      return new CompileResult(handler, wrapper, name, expand);
    }
    
    private static class CompileResult extends Evaluation {
@@ -45,15 +51,22 @@ public class Variable implements Compilation {
       private final LocalValueFinder finder;
       private final VariableBinder binder;
       private final String name;
+      private final boolean expand;
       
-      public CompileResult(ErrorHandler handler, ProxyWrapper wrapper, String name) {
+      public CompileResult(ErrorHandler handler, ProxyWrapper wrapper, String name, boolean expand) {
          this.binder = new VariableBinder(handler, wrapper, name);
          this.location = new AtomicReference<Address>();
          this.finder = new LocalValueFinder(name);
          this.loader = new ImplicitImportLoader();
+         this.expand = expand;
          this.name = name;
       }
-   
+
+      @Override
+      public boolean expansion(Scope scope) throws Exception {
+         return expand;
+      }
+
       @Override
       public void define(Scope scope) throws Exception{
          ScopeIndex index = scope.getIndex();

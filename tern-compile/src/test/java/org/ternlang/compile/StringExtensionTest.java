@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 public class StringExtensionTest extends TestCase {
 
    private static final String SOURCE_1 =
-   "\"hello\".each(e -> {\n"+
+   "\"hello\".zip().forEach(e -> {\n"+
    "   println(e.index + \"=\" + e.value);\n"+
    "   assert e.value == e.source.charAt(e.index);\n"+
    "});\n";
@@ -19,20 +19,20 @@ public class StringExtensionTest extends TestCase {
    "assert \"a\".get(0).minus(2) == 95;\n";
 
    private static final String SOURCE_4 =
-   "assert \"hello\".map(e -> {\n"+
-   "   return e.index % 2 == 0 ? e.value.toUpperCase() : e.value.toLowerCase();\n"+
-   "}) == \"HeLlO\";\n";
+   "assert \"hello\".map(e -> e.toUpperCase()) == 'HELLO';\n"+
+   "assert \"hello\".map(_.toUpperCase()) == 'HELLO';\n";
 
    private static final String SOURCE_5 =
-   "assert \"hello\".head(2) == \"he\";\n"+
-   "assert \"hello\".head(221) == \"hello\";\n"+
-   "assert \"hello\".tail(2) == \"lo\";\n"+
-   "assert \"hello\".tail(12) == \"hello\";\n";
+   "assert \"hello\".take(2) == \"he\";\n"+
+   "assert \"hello\".take(221) == \"hello\";\n"+
+   "assert \"hello\".takeRight(2) == \"lo\";\n"+
+   "assert \"hello\".takeRight(12) == \"hello\";\n";
 
    private static final String SOURCE_6 =
    "assert \"hello\".distinct() == \"helo\";\n"+
    "assert \"hello\".sort() == \"ehllo\";\n"+
    "assert \"hello\".filter(c -> c == 'l') == \"ll\";\n"+
+   "assert \"hello\".filterNot(c -> c == 'l') == \"heo\";\n"+
    "assert \"hello\".reverse() == \"olleh\";\n";
 
    private static final String SOURCE_7 =

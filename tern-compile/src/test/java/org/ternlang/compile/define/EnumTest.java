@@ -78,7 +78,7 @@ public class EnumTest extends TestCase{
    "}\n"+
    "\n"+
    "assert Word.WORDS[0].char == 'a';\n";
-   
+
    public void testSimpleEnum() throws Exception {
       Map map = new HashMap<String,Value>();
       map.put("out",System.out);

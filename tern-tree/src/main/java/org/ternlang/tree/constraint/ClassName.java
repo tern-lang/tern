@@ -2,25 +2,36 @@ package org.ternlang.tree.constraint;
 
 import static org.ternlang.core.ModifierType.CLASS;
 
-import java.util.List;
-
+import org.ternlang.core.Evaluation;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.link.ImportManager;
 import org.ternlang.core.module.Module;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.type.Type;
+import org.ternlang.core.type.TypePart;
 import org.ternlang.tree.NameReference;
 import org.ternlang.tree.define.TypeName;
-import org.ternlang.tree.literal.TextLiteral;
+
+import java.util.List;
 
 public class ClassName implements TypeName {
    
    private final NameReference reference;
    private final GenericList generics;
+   private final TypePart part;
 
-   public ClassName(TextLiteral literal, GenericList generics) {
+   public ClassName(Evaluation literal, GenericList generics) {
+      this(literal, generics, null);
+   }
+
+   public ClassName(Evaluation literal, GenericList generics, TypePart part) {
       this.reference = new NameReference(literal);
       this.generics = generics;
+      this.part = part;
+   }
+
+   public TypePart getConstructor(Scope scope) throws Exception {
+      return part;
    }
    
    @Override

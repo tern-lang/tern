@@ -54,6 +54,6 @@ public class ComparisonTest extends TestCase {
       Module module = context.getRegistry().addModule(Reserved.DEFAULT_MODULE);
       ModelScope scope = new ModelScope(model, module);
 
-      assertEquals(comparison.evaluate(scope, Value.NULL).getValue(), result ? Boolean.TRUE : Boolean.FALSE);
+      assertEquals(comparison.compile(module, null, 1).evaluate(scope, Value.NULL).getValue(), result ? Boolean.TRUE : Boolean.FALSE);
    }
 }

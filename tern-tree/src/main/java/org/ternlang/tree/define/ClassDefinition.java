@@ -31,9 +31,11 @@ import org.ternlang.tree.constraint.ClassName;
 public class ClassDefinition implements Compilation { 
    
    private final Statement definition;
+   private final ClassBody body;
    
    public ClassDefinition(AnnotationList annotations, ClassName name, TypeHierarchy hierarchy, TypePart... parts) {
-      this.definition = new CompileResult(annotations, name, hierarchy, parts); 
+      this.body = new ClassBody(name, parts);
+      this.definition = new CompileResult(annotations, name, hierarchy, body);
    }
 
    @Override
@@ -57,9 +59,9 @@ public class ClassDefinition implements Compilation {
       private final AtomicBoolean create;
       private final ClassBuilder builder;
       private final Execution execution;
-      private final TypePart[] parts;
+      private final ClassBody body;
       
-      public CompileResult(AnnotationList annotations, ClassName name, TypeHierarchy hierarchy, TypePart[] parts) {
+      public CompileResult(AnnotationList annotations, ClassName name, TypeHierarchy hierarchy, ClassBody body) {
          this.builder = new ClassBuilder(annotations, name, hierarchy);
          this.generator = new FunctionPropertyGenerator(); 
          this.collector = new TypeStateCollector();
@@ -69,7 +71,7 @@ public class ClassDefinition implements Compilation {
          this.compile = new AtomicBoolean();
          this.define = new AtomicBoolean();
          this.create = new AtomicBoolean();
-         this.parts = parts;
+         this.body = body;
       }
       
       @Override
@@ -78,6 +80,7 @@ public class ClassDefinition implements Compilation {
             Type type = builder.create(collector, outer);
             Progress<Phase> progress = type.getProgress();
             Scope scope = type.getScope();
+            TypePart[] parts = body.getParts(scope);
                   
             try {
                for(TypePart part : parts) {
@@ -95,7 +98,8 @@ public class ClassDefinition implements Compilation {
             Type type = builder.define(collector, outer);
             Progress<Phase> progress = type.getProgress();
             Scope scope = type.getScope();
-            
+            TypePart[] parts = body.getParts(scope);
+
             try {
                collector.update(constants); // collect static constants first
                

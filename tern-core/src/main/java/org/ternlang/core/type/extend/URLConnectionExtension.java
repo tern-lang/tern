@@ -80,7 +80,7 @@ public class URLConnectionExtension {
    
    public URLConnection success(URLConnection connection, Runnable task) throws IOException {
       URLResponse response = response(connection);
-      int status = response.getStatus();
+      int status = response.status();
       
       if(status >= 200 && status < 300) {
          task.run();
@@ -90,7 +90,7 @@ public class URLConnectionExtension {
    
    public URLConnection success(URLConnection connection, Consumer<URLResponse, ?> consumer) throws IOException {
       URLResponse response = response(connection);
-      int status = response.getStatus();
+      int status = response.status();
       
       if(status >= 200 && status < 300) {
          consumer.consume(response);
@@ -100,7 +100,7 @@ public class URLConnectionExtension {
    
    public URLConnection failure(URLConnection connection, Runnable task) throws IOException {
       URLResponse response = response(connection);
-      int status = response.getStatus();
+      int status = response.status();
       
       if(status < 200 || status >= 300) {
          task.run();
@@ -110,8 +110,8 @@ public class URLConnectionExtension {
    
    public URLConnection failure(URLConnection connection, Consumer<URLResponse, ?> consumer) throws IOException {
       URLResponse response = response(connection);
-      int status = response.getStatus();
-      
+      int status = response.status();
+
       if(status < 200 || status >= 300) {
          consumer.consume(response);
       }
@@ -215,15 +215,15 @@ public class URLConnectionExtension {
          this.code = code;
       }
 
-      public int getStatus() {
+      public int status() {
          return code;
       }
 
-      public URLConnection getConnection() {
+      public URLConnection connection() {
          return connection;
       }
 
-      public InputStream getInputStream() {
+      public InputStream stream() {
          try {
             return connection.getInputStream();
          } catch(Exception e) {
@@ -231,7 +231,7 @@ public class URLConnectionExtension {
          }
       }
 
-      public String getHeader(String name) {
+      public String header(String name) {
          Map<String, List<String>> headers = connection.getHeaderFields();
          List<String> values = headers.get(name);
 
@@ -243,7 +243,7 @@ public class URLConnectionExtension {
          return null;
       }
 
-      public List<String> getHeaders(String name) {
+      public List<String> headers(String name) {
          Map<String, List<String>> headers = connection.getHeaderFields();
          List<String> values = headers.get(name);
 

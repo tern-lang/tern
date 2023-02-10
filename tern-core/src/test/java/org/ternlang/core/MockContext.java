@@ -7,6 +7,7 @@ import org.ternlang.core.convert.ConstraintMatcher;
 import org.ternlang.core.convert.proxy.ProxyWrapper;
 import org.ternlang.core.error.ErrorHandler;
 import org.ternlang.core.function.bind.FunctionBinder;
+import org.ternlang.core.function.index.ClosureAdapter;
 import org.ternlang.core.function.index.FunctionIndexer;
 import org.ternlang.core.function.resolve.FunctionResolver;
 import org.ternlang.core.link.NoPackage;
@@ -36,6 +37,7 @@ public class MockContext implements Context {
    private final ProxyWrapper wrapper;
    private final FunctionResolver resolver;
    private final FunctionIndexer indexer;
+   private final ClosureAdapter adapter;
    private final PackageLinker linker;
    private final ErrorHandler handler;
    private final FunctionBinder table;
@@ -52,8 +54,9 @@ public class MockContext implements Context {
       this.extractor = new TypeExtractor(loader);
       this.transformer = new ConstraintTransformer(extractor);
       this.indexer = new FunctionIndexer(extractor, stack);
-      this.resolver = new FunctionResolver(extractor, wrapper, indexer, stack);
       this.matcher = new ConstraintMatcher(loader, wrapper);
+      this.adapter = new ClosureAdapter(matcher, extractor, loader, stack);
+      this.resolver = new FunctionResolver(extractor, wrapper, indexer, adapter, stack);
       this.handler = new ErrorHandler(extractor, stack);
       this.table = new FunctionBinder(resolver, handler);
       this.scheduler = new ExecutorScheduler(handler,null);

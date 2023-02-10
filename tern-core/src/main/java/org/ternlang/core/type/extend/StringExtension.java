@@ -6,19 +6,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class StringExtension {
 
-   private final BiFunction<String, Integer, Element> element;
-
    public StringExtension() {
-      this.element = Element::new;
+      super();
    }
 
    public Character get(String value, int index) {
@@ -74,42 +74,81 @@ public class StringExtension {
       return value;
    }
 
-   public String head(String value, int count) {
+   public String drop(String value, int count) {
       int length = value.length();
 
-      if(length > count) {
+      if (length > count) {
+         return value.substring(count, length);
+      }
+      return value;
+   }
+
+   public String dropRight(String value, int count) {
+      int length = value.length();
+
+      if (length > count) {
+         return value.substring(0, length - count);
+      }
+      return value;
+   }
+
+   public String dropWhile(String value, Predicate<Character> filter) {
+      int length = value.length();
+
+      if (length > 0) {
+         for(int i = 0; i < length; i++) {
+            Character next = value.charAt(i);
+
+            if(!filter.test(next)) {
+               return value.substring(i, length);
+            }
+         }
+         return "";
+      }
+      return value;
+   }
+
+   public String take(String value, int count) {
+      int length = value.length();
+
+      if (length > count) {
          return value.substring(0, count);
       }
       return value;
    }
 
-   public String tail(String value, int count) {
+   public String takeRight(String value, int count) {
       int length = value.length();
 
-      if(length > count) {
+      if (length > count) {
          return value.substring(length - count, length);
       }
       return value;
    }
 
-   public String each(String value, Consumer<Element> consumer) {
+   public String takeWhile(String value, Predicate<Character> filter) {
       int length = value.length();
 
-      for(int i = 0; i < length; i++) {
-         Element next = element.apply(value, i);
-         consumer.accept(next);
+      if (length > 0) {
+         for(int i = 0; i < length; i++) {
+            Character next = value.charAt(i);
+
+            if(!filter.test(next)) {
+               return value.substring(0, i);
+            }
+         }
       }
       return value;
    }
 
-   public String map(String value, Function<Element, Object> consumer) {
+   public String map(String value, Function<Character, Object> consumer) {
       int length = value.length();
 
       if(length > 0) {
          StringBuilder builder = new StringBuilder();
 
          for (int i = 0; i < length; i++) {
-            Element next = element.apply(value, i);
+            char next = value.charAt(i);
             Object result = consumer.apply(next);
 
             builder.append(result);
@@ -119,14 +158,14 @@ public class StringExtension {
       return value;
    }
 
-   public List<Element> elements(String value) {
+   public List<ZipOne> zip(String value) {
       int length = value.length();
 
       if(length > 0) {
-         List<Element> list = new ArrayList<>(length);
+         List<ZipOne> list = new ArrayList<>(length);
 
          for(int i = 0; i < length; i++) {
-            Element next = element.apply(value, i);
+            ZipOne next = new ZipOne(value, i);
             list.add(next);
          }
          return list;
@@ -134,22 +173,34 @@ public class StringExtension {
       return Collections.emptyList();
    }
 
-   public Iterator<Character> iterator(String value) {
-      int length = value.length();
+   public List<ZipMany> zip(String left, String right) {
+      int count = Math.min(left.length(), right.length());
 
-      if(length > 0) {
-         List<Character> list = new ArrayList<>(length);
+      if (count > 0) {
+         List<ZipMany> result = new ArrayList<>();
+         List<String> sources = new ArrayList<>();
 
-         for(int i = 0; i < length; i++) {
-            Character next = value.charAt(i);
-            list.add(next);
+         sources.add(left);
+         sources.add(right);
+
+         for (int i = 0; i < count; i++) {
+            List<Character> values = new ArrayList<>();
+            ZipMany value = new ZipMany(sources, values, i);
+
+            values.add(left.charAt(i));
+            values.add(right.charAt(i));
+            result.add(value);
          }
-         return list.iterator();
+         return result;
       }
-      return Collections.emptyIterator();
+      return Collections.emptyList();
    }
 
    public String filter(String value, Predicate<Character> predicate) {
+      return filterNot(value, predicate.negate());
+   }
+
+   public String filterNot(String value, Predicate<Character> predicate) {
       int length = value.length();
 
       if(length > 0) {
@@ -158,7 +209,7 @@ public class StringExtension {
          for (int i = 0; i < length; i++) {
             char next = value.charAt(i);
 
-            if(predicate.test(next)) {
+            if(!predicate.test(next)) {
                builder.append(next);
             }
          }
@@ -177,6 +228,53 @@ public class StringExtension {
          return new String(values);
       }
       return value;
+   }
+
+   public <K> Map<K, Character> toMap(String value, Function<Character, K> extractor) {
+      int length = value.length();
+
+      if(length > 0) {
+         Map<K, Character> map = new LinkedHashMap<>();
+
+         for(int i = 0; i < length; i++) {
+            Character next = value.charAt(i);
+            K key = extractor.apply(next);
+
+            map.put(key, next);
+         }
+         return map;
+      }
+      return Collections.emptyMap();
+   }
+
+   public List<Character> toList(String value) {
+      int length = value.length();
+
+      if(length > 0) {
+         List<Character> list = new ArrayList<>();
+
+         for(int i = 0; i < length; i++) {
+            Character next = value.charAt(i);
+            list.add(next);
+         }
+         return list;
+      }
+      return Collections.emptyList();
+   }
+
+   public Set<Character> toSet(String value) {
+      int length = value.length();
+
+      if(length > 0) {
+         Set<Character> set = new LinkedHashSet<>();
+
+         for(int i = 0; i < length; i++) {
+            Character next = value.charAt(i);
+            set.add(next);
+         }
+         return set;
+      }
+      return Collections.emptySet();
    }
 
    public Integer toInteger(String value) {
@@ -211,13 +309,13 @@ public class StringExtension {
       return URI.create(value);
    }
 
-   public static class Element<T> {
+   public static class ZipOne<T> {
 
       private final String source;
       private final char value;
       private final int index;
 
-      public Element(String source, int index) {
+      public ZipOne(String source, int index) {
          this.value =  source.charAt(index);
          this.source = source;
          this.index = index;
@@ -238,6 +336,45 @@ public class StringExtension {
       @Override
       public String toString() {
          return value + " at " + index;
+      }
+   }
+
+
+   public static class ZipMany {
+
+      private final List<Character> values;
+      private final List<String> sources;
+      private final int index;
+
+      public ZipMany(List<String> sources, List<Character> values, int index) {
+         this.sources = Collections.unmodifiableList(sources);
+         this.values = Collections.unmodifiableList(values);
+         this.index = index;
+      }
+
+      public int index() {
+         return index;
+      }
+
+      public Character value(int i) {
+         return values.get(i);
+      }
+
+      public List<Character> values(int i) {
+         return values;
+      }
+
+      public String source(int i) {
+         return sources.get(i);
+      }
+
+      public List<String> sources() {
+         return sources;
+      }
+
+      @Override
+      public String toString() {
+         return String.format("%s at %s", values, index);
       }
    }
 }

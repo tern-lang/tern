@@ -1,16 +1,16 @@
 package org.ternlang.tree.define;
 
+import org.ternlang.core.Evaluation;
 import org.ternlang.core.ModifierType;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.type.Type;
 import org.ternlang.tree.NameReference;
-import org.ternlang.tree.literal.TextLiteral;
 
 public class MemberFieldReference {
    
    private final NameReference identifier;
    
-   public MemberFieldReference(TextLiteral identifier) {
+   public MemberFieldReference(Evaluation identifier) {
       this.identifier = new NameReference(identifier);
    }
    

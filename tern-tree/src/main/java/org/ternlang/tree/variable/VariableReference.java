@@ -36,6 +36,11 @@ public class VariableReference implements Compilation {
          this.evaluations = evaluations;
          this.variable = variable;
       }
+
+      @Override
+      public boolean expansion(Scope scope) throws Exception {
+         return variable.expansion(scope);
+      }
       
       @Override
       public void define(Scope scope) throws Exception{

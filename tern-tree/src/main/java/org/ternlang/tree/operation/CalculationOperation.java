@@ -28,13 +28,18 @@ public class CalculationOperation extends Evaluation {
       this.left = left;
       this.right = right;
    }
-   
+
+   @Override
+   public boolean expansion(Scope scope) throws Exception {
+      return left.expansion(scope) || right.expansion(scope);
+   }
+
    @Override
    public void define(Scope scope) throws Exception {
       left.define(scope);
       right.define(scope);
    }
-   
+
    @Override
    public Constraint compile(Scope scope, Constraint context) throws Exception {
       Constraint leftResult = left.compile(scope, null);

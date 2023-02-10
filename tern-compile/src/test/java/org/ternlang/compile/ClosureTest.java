@@ -64,7 +64,7 @@ public class ClosureTest extends ScriptTestCase {
    "   .stream()\n"+
    "   .map(e -> {'entry.key': e.key, 'entry.value': e.value})\n"+
    "   .iterator()\n"+
-   "   .gather();\n"+
+   "   .toList();\n"+
    "\n"+
    "assert list[0]['entry.key'] == 'key-1';\n"+
    "assert list[0]['entry.value'] == 'val-1';\n"+

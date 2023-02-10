@@ -33,8 +33,8 @@ super = 'super';
 module = 'module'; 
 
 # ((array[x])[x] -> (<var>[])
-variable = {<class> | <module> | [identifier] | [type]};         
-variable-reference = {<super> | <this> | <variable>} *( '(' <function-curry>')' | '[' <collection-index> ']' ) ?('::' <function-handle>);
+variable = {<class> | <module> | [identifier] | [type]};
+variable-reference = {<super> | <this> | <place-holder> | <variable>} *( '(' <function-curry>')' | '[' <collection-index> ']' ) ?('::' <function-handle>);
 
 collection-index = <argument>;
 
@@ -42,6 +42,8 @@ range-operator = {'..' | 'from' | 'to'};
 range = <argument>?_<range-operator>?_<argument>;
  
 constructor = 'new';
+
+place-holder = '_';
 
 function = {<constructor> | [identifier]};
 function-name = [identifier] <generic-parameter-list>;
@@ -66,7 +68,8 @@ reference-variable = { <array-reference> |
                   <function-invocation> |
                   <construct> |
                   <variable-reference> |
-                  '(' <cast> ')' };
+                  '(' <cast> ')' |
+                  <place-holder> };
 
 reference = <reference-variable>*(<reference-operator><reference-navigation>);
 
@@ -324,9 +327,10 @@ class-field-declaration = <assignment-variable>?(':'<constraint>)?('='<assignmen
 class-field = <annotation-list><field-modifier-list><class-field-declaration>*(','<class-field-declaration>)';';
 class-function = <annotation-list><function-modifier-list><function-name>'('<parameter-list>')'?(':'<constraint>){';' | <group-statement>};
 class-constructor = <annotation-list><access-modifier-list>'new''('<parameter-list>')'?(':'{<this-constructor> | <super-constructor>})<group-statement>;
+class-implicit-constructor = [type] <generic-parameter-list> '('<parameter-list>')';
 class-part = {<class-field> | <class-constructor> | <class-function> |  <inner-definition> };
 class-hierarchy = ?{?_'extends'_<class-constraint> | ?_'with'_<trait-constraint>}*(?_'with'_<trait-constraint>);
-class-definition = ?<annotation-list>'class'_<class-name>?<class-hierarchy>{'{}' | '{'*<class-part>'}'};
+class-definition = ?<annotation-list>'class'_{<class-implicit-constructor>|<class-name>}?<class-hierarchy>{'{}' | '{'*<class-part>'}'};
 
 abstract-class-name = [type] <generic-parameter-list>;
 abstract-class-definition = ?<annotation-list>'abstract'_'class'_<abstract-class-name>?<class-hierarchy>{'{}' | '{'*<class-part>'}'};
@@ -344,11 +348,12 @@ enum-key = [identifier];
 enum-value = <enum-key>?('('<argument-list>')');
 enum-list = <enum-value>*(','<enum-value>);
 enum-constructor = <annotation-list><access-modifier-list>'new''('<parameter-list>')'<group-statement>;
+enum-implicit-constructor = [type]'('<parameter-list>')';
 enum-field-declaration = <assignment-variable>?(':'<constraint>)?('='<assignment-expression>);
 enum-field = <annotation-list><field-modifier-list><enum-field-declaration>*(','<enum-field-declaration>)';';
 enum-function = <annotation-list><function-modifier-list><function-name>'('<parameter-list>')'?(':'<constraint>){';' | <group-statement>};
 enum-part = {<enum-field> | <enum-constructor> | <enum-function>};
-enum-definition = ?<annotation-list>'enum'_<enum-name>?<enum-hierarchy>'{'<enum-list>?(';'*<enum-part>)'}';
+enum-definition = ?<annotation-list>'enum'_{<enum-implicit-constructor>|<enum-name>}?<enum-hierarchy>'{'<enum-list>?(';'*<enum-part>)'}';
 
 inner-class-definition = <class-definition>;
 inner-abstract-class-definition = <abstract-class-definition>;

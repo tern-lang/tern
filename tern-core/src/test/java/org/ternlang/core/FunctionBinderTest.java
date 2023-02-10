@@ -1,8 +1,6 @@
 package org.ternlang.core;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import junit.framework.TestCase;
 import org.ternlang.common.store.ClassPathStore;
 import org.ternlang.common.store.Store;
 import org.ternlang.core.constraint.transform.ConstraintTransformer;
@@ -10,6 +8,7 @@ import org.ternlang.core.convert.ConstraintMatcher;
 import org.ternlang.core.convert.proxy.ProxyWrapper;
 import org.ternlang.core.error.ErrorHandler;
 import org.ternlang.core.function.bind.FunctionBinder;
+import org.ternlang.core.function.index.ClosureAdapter;
 import org.ternlang.core.function.index.FunctionIndexer;
 import org.ternlang.core.function.resolve.FunctionResolver;
 import org.ternlang.core.link.NoPackage;
@@ -32,7 +31,8 @@ import org.ternlang.core.type.CacheTypeLoader;
 import org.ternlang.core.type.TypeExtractor;
 import org.ternlang.core.type.TypeLoader;
 
-import junit.framework.TestCase;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FunctionBinderTest extends TestCase {
    
@@ -146,6 +146,7 @@ public class FunctionBinderTest extends TestCase {
       private final ProxyWrapper wrapper;
       private final FunctionResolver resolver;
       private final FunctionIndexer indexer;
+      private final ClosureAdapter adapter;
       private final PackageLinker linker;
       private final ErrorHandler handler;
       private final FunctionBinder table;
@@ -162,8 +163,9 @@ public class FunctionBinderTest extends TestCase {
          this.extractor = new TypeExtractor(loader);
          this.transformer = new ConstraintTransformer(extractor);
          this.indexer = new FunctionIndexer(extractor, stack);
-         this.resolver = new FunctionResolver(extractor, wrapper, indexer, stack);
          this.matcher = new ConstraintMatcher(loader, wrapper);
+         this.adapter = new ClosureAdapter(matcher, extractor, loader, stack);
+         this.resolver = new FunctionResolver(extractor, wrapper, indexer, adapter, stack);
          this.handler = new ErrorHandler(extractor, stack);
          this.table = new FunctionBinder(resolver, handler);
          this.scheduler = new ExecutorScheduler(handler,null);

@@ -1,5 +1,7 @@
 package org.ternlang.tree;
 
+import static org.ternlang.core.constraint.Constraint.NONE;
+
 import org.ternlang.core.Compilation;
 import org.ternlang.core.Context;
 import org.ternlang.core.Evaluation;
@@ -50,7 +52,7 @@ public class ExpressionStatement implements Compilation {
       
       @Override
       public Execution compile(Scope scope, Constraint returns) throws Exception {
-         expression.compile(scope, null);
+         expression.compile(scope, NONE);
          return new CompileExecution(expression);
       }
    }

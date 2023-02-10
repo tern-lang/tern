@@ -65,19 +65,19 @@ public class IteratorExtension {
       return list.iterator();
    }
 
-   public <T> Iterator<T> distinct(Iterator<T> iterator) {
-      Set<T> set = new LinkedHashSet<T>();
-
+   public <T> Set<T> toSet(Iterator<T> iterator) {
+      Set<T> list = new LinkedHashSet<>();
+      
       while(iterator.hasNext()) {
          T value = iterator.next();
-         set.add(value);
+         list.add(value);
       }
-      return set.iterator();
+      return list;
    }
 
-   public <T> List<T> gather(Iterator<T> iterator) {
+   public <T> List<T> toList(Iterator<T> iterator) {
       List<T> list = new ArrayList<T>();
-      
+
       while(iterator.hasNext()) {
          T value = iterator.next();
          list.add(value);

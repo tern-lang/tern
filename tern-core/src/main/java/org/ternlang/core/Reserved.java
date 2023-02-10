@@ -34,6 +34,7 @@ public interface Reserved {
    String IMPORT_TERN = "org.ternlang.";
    String DEFAULT_RESOURCE = "Unknown Source";
    String DEFAULT_PARAMETER = "a";
+   String PLACE_HOLDER = "_";
    String IMPORT_FILE = "import.txt";
    String INSTRUCTION_FILE = "instruction.txt";
    String GRAMMAR_FILE = "grammar.txt";

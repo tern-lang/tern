@@ -21,12 +21,17 @@ public class Argument extends Evaluation{
       this.identifier = identifier;
       this.evaluation = evaluation;
    }
+
+   @Override
+   public boolean expansion(Scope scope) throws Exception {
+      return evaluation.expansion(scope);
+   }
    
    @Override
    public void define(Scope scope) throws Exception {
       evaluation.define(scope);
    }
-   
+
    @Override
    public Constraint compile(Scope scope, Constraint left) throws Exception {
       Constraint constraint = evaluation.compile(scope, left);
@@ -44,5 +49,14 @@ public class Argument extends Evaluation{
    @Override
    public Value evaluate(Scope scope, Value left) throws Exception {
       return evaluation.evaluate(scope, left);
+   }
+
+   public Argument expand(Scope scope, Expansion expansion) throws Exception {
+      Evaluation expanded = expansion.expand(scope, evaluation);
+
+      if(expanded != evaluation) {
+         return new Argument(expanded);
+      }
+      return this;
    }
 }

@@ -4,12 +4,10 @@ import static org.ternlang.core.ModifierType.CONSTANT;
 import static org.ternlang.core.ModifierType.PUBLIC;
 
 import org.ternlang.core.Evaluation;
-import org.ternlang.core.IdentityEvaluation;
 import org.ternlang.core.constraint.Constraint;
 import org.ternlang.core.constraint.DeclarationConstraint;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.type.Type;
-import org.ternlang.tree.literal.TextLiteral;
 
 public class MemberFieldDeclaration {
 
@@ -17,19 +15,19 @@ public class MemberFieldDeclaration {
    private final MemberFieldReference identifier;
    private final Evaluation value;
    
-   public MemberFieldDeclaration(TextLiteral identifier) {
+   public MemberFieldDeclaration(Evaluation identifier) {
       this(identifier, null, null);
    }
    
-   public MemberFieldDeclaration(TextLiteral identifier, Constraint constraint) {      
+   public MemberFieldDeclaration(Evaluation identifier, Constraint constraint) {
       this(identifier, constraint, null);
    }
    
-   public MemberFieldDeclaration(TextLiteral identifier, Evaluation value) {
+   public MemberFieldDeclaration(Evaluation identifier, Evaluation value) {
       this(identifier, null, value);
    }
    
-   public MemberFieldDeclaration(TextLiteral identifier, Constraint constraint, Evaluation value) {      
+   public MemberFieldDeclaration(Evaluation identifier, Constraint constraint, Evaluation value) {
       this.constraint = new DeclarationConstraint(constraint);
       this.identifier = new MemberFieldReference(identifier);
       this.value = value;

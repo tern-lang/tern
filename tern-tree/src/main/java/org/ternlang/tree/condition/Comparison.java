@@ -1,17 +1,20 @@
 package org.ternlang.tree.condition;
 
-import static org.ternlang.core.constraint.Constraint.BOOLEAN;
-import static org.ternlang.core.variable.Value.NULL;
-
+import org.ternlang.core.Compilation;
 import org.ternlang.core.Evaluation;
 import org.ternlang.core.constraint.Constraint;
+import org.ternlang.core.module.Module;
+import org.ternlang.core.module.Path;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.variable.Value;
 import org.ternlang.parse.StringToken;
 
-public class Comparison extends Evaluation {   
-   
-   private final RelationalOperator operator;
+import static org.ternlang.core.constraint.Constraint.BOOLEAN;
+import static org.ternlang.core.variable.Value.NULL;
+
+public class Comparison implements Compilation {
+
+   private final StringToken operator;
    private final Evaluation left;
    private final Evaluation right;
    
@@ -20,36 +23,62 @@ public class Comparison extends Evaluation {
    }
    
    public Comparison(Evaluation left, StringToken operator, Evaluation right) {
-      this.operator = RelationalOperator.resolveOperator(operator);
+      this.operator = operator;
       this.left = left;
       this.right = right;
    }
 
    @Override
-   public void define(Scope scope) throws Exception {
-      if(right != null) {
-         right.define(scope);
-      }
-      left.define(scope);
-   }  
-   
-   @Override
-   public Constraint compile(Scope scope, Constraint context) throws Exception {
-      if(right != null) {
-         right.compile(scope, null);
-      }
-      left.compile(scope, null);
-      return BOOLEAN;
+   public Evaluation compile(Module module, Path path, int line) throws Exception {
+      return new CompileResult(left, operator, right);
    }
-   
-   @Override
-   public Value evaluate(Scope scope, Value context) throws Exception {
-      if(right != null) {
-         Value leftResult = left.evaluate(scope, NULL);
-         Value rightResult = right.evaluate(scope, NULL);
-         
-         return operator.operate(scope, leftResult, rightResult);
+
+   public static class CompileResult extends Evaluation {
+
+      private final RelationalOperator operator;
+      private final Evaluation left;
+      private final Evaluation right;
+
+      public CompileResult(Evaluation left, StringToken operator, Evaluation right) {
+         this.operator = RelationalOperator.resolveOperator(operator);
+         this.left = left;
+         this.right = right;
       }
-      return left.evaluate(scope, NULL);
-   }      
+
+      @Override
+      public boolean expansion(Scope scope) throws Exception {
+         if (right != null) {
+            return right.expansion(scope) || left.expansion(scope);
+         }
+         return left.expansion(scope);
+      }
+
+      @Override
+      public void define(Scope scope) throws Exception {
+         if (right != null) {
+            right.define(scope);
+         }
+         left.define(scope);
+      }
+
+      @Override
+      public Constraint compile(Scope scope, Constraint context) throws Exception {
+         if (right != null) {
+            right.compile(scope, null);
+         }
+         left.compile(scope, null);
+         return BOOLEAN;
+      }
+
+      @Override
+      public Value evaluate(Scope scope, Value context) throws Exception {
+         if (right != null) {
+            Value leftResult = left.evaluate(scope, NULL);
+            Value rightResult = right.evaluate(scope, NULL);
+
+            return operator.operate(scope, leftResult, rightResult);
+         }
+         return left.evaluate(scope, NULL);
+      }
+   }
 }

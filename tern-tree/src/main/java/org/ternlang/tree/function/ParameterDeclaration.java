@@ -50,7 +50,7 @@ public class ParameterDeclaration {
       }
       return parameter.getParameter(index);
    }
-   
+
    private Parameter create(Scope scope, int index) throws Exception {
       boolean constant = checker.isConstant();
       int modifiers = checker.getModifiers();

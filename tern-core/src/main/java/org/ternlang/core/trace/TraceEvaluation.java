@@ -20,6 +20,11 @@ public class TraceEvaluation extends Evaluation {
    }
 
    @Override
+   public boolean expansion(Scope scope) throws Exception {
+      return evaluation.expansion(scope);
+   }
+
+   @Override
    public void define(Scope scope) throws Exception {
       evaluation.define(scope);
    }

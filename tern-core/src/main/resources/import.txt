@@ -118,3 +118,7 @@ resume = org.ternlang.core.resume { Yield, Promise, Task, Answer }
 compile = org.ternlang.compile {}
 common = org.ternlang.common {}
 
+# functional
+
+funcional = org.ternlang.common.functional { Option, None, Some }
+

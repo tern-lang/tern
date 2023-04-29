@@ -13,7 +13,7 @@ scalaVersion := "2.13.8"
 
 // It's possible to define many kinds of settings, such as:
 
-name := "dsl"
+name := "tern-scala"
 organization := "ch.epfl.scala"
 version := "1.0"
 

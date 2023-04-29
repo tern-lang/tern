@@ -41,7 +41,7 @@ import org.ternlang.core.type.TypeLoader;
 
 import java.util.Arrays;
 
-public class SeriesAsVarArgsTest extends TestCase {
+public class SpreadAsVarArgsTest extends TestCase {
 
    private static class Foo {
       public final Spread<String> values;
@@ -59,7 +59,7 @@ public class SeriesAsVarArgsTest extends TestCase {
       }
    }
 
-   public void testVarArgsAsSeries() throws Exception {
+   public void testVarArgsAsSpread() throws Exception {
       Context context = new TestContext();
       Model model = new EmptyModel();
       Path path = new Path(Reserved.DEFAULT_RESOURCE);

@@ -33,8 +33,6 @@ object AnnotationType {
   def appply(reference: Boolean, name: String, attributes: List[String] = List.empty) = {
     AnnotationType(reference, name, None, attributes)
   }
-
-
 }
 
 case class AnnotationType(reference: Boolean, name: String, attribute: Option[String], attributes: List[String] = List.empty)

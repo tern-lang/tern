@@ -1,5 +1,4 @@
 package org.ternlang.scala.domain
+import scala.annotation._
 
-class Production {
-
-}
+case class Production(name: String) extends ClassfileAnnotation

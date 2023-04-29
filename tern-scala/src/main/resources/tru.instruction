@@ -1,0 +1,21 @@
+decimal = org.ternlang.tree.literal.NumberLiteral
+hexadecimal = org.ternlang.tree.literal.NumberLiteral
+binary = org.ternlang.tree.literal.NumberLiteral
+boolean = org.ternlang.tree.literal.BooleanLiteral
+identifier = org.ternlang.tree.literal.TextLiteral
+template = org.ternlang.tree.template.TextTemplate
+type = org.ternlang.tree.literal.TextLiteral
+text = org.ternlang.tree.literal.TextLiteral
+null = org.ternlang.tree.literal.NullLiteral
+number = org.ternlang.tree.operation.SignedNumber
+wild-qualifier = org.ternlang.tree.WildQualifier
+full-qualifier = org.ternlang.tree.FullQualifier
+
+
+namespace = org.ternlang.scala.domain.tree.NamespaceCompilation
+import = org.ternlang.scala.domain.tree.ImportCompilation
+import-list = org.ternlang.scala.domain.tree.ImportList
+schema = org.ternlang.scala.domain.tree.Schema
+
+
+

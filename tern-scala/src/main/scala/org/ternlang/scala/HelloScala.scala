@@ -5,7 +5,9 @@ import org.ternlang.common.thread.ThreadPool
 import org.ternlang.compile.StoreContext
 import org.ternlang.compile.assemble.OperationBuilder
 import org.ternlang.parse.{CharacterToken, Line}
+import org.ternlang.scala.domain.{DomainLoader, Version}
 
+import java.net.URL
 import java.util.concurrent.Executors
 
 object HelloScala extends App {
@@ -27,6 +29,11 @@ object HelloScala extends App {
   val i = a.create(t, x, new BasicLine)
   println(i)
   println("Hello Scala"+ new CharacterToken('c'))
+
+
+  val loader = new DomainLoader(Version(1, true))
+  val domain = loader.load(Seq[URL](new java.io.File("C:\\Work\\development\\tern-lang\\tern\\tern-scala\\src\\main\\resources\\example.idl").toURL))
+  println(domain.scope)
 }
 
 class BasicLine extends Line{
@@ -42,3 +49,4 @@ class Foo(a: String, b: Boolean, c: Array[String]) {
   override def toString = "Foo....."
 
 }
+

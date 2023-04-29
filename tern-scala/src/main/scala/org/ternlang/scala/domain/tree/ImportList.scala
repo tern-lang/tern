@@ -1,8 +1,6 @@
 package org.ternlang.scala.domain.tree
 
-import org.ternlang.scala.domain.Production
+import org.ternlang.common.functional.Spread
 
-@Production(name ="import-list")
-class ImportList {
-
+case class ImportList(imports: Spread[Import]) {
 }

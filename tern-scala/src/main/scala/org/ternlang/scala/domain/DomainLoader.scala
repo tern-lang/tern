@@ -13,8 +13,8 @@ import java.net.URL
 import java.util.concurrent.ScheduledThreadPoolExecutor
 
 object DomainLoader {
-  val instructions = "idl.instruction"
-  val grammar = "idl.grammar"
+  val instructions = "tru.instruction"
+  val grammar = "tru.grammar"
   val expression = "schema"
   val scope = "default"
 }

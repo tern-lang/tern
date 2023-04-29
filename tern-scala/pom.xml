@@ -26,7 +26,7 @@
         </dependency>
         <dependency>
             <groupId>org.ternlang</groupId>
-            <artifactId>tern-parse</artifactId>
+            <artifactId>tern-compile</artifactId>
             <version>${tern.version}</version>
         </dependency>
     </dependencies>

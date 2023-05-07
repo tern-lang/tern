@@ -2,10 +2,9 @@ package cluster.server.group
 
 import java.net.InetAddress
 import scala.util.matching.Regex
+import cluster.server.group.NodeGroup._
 
 object NodeGroupParser {
-
-  private val CLIENT_FACING_PORT_PREFIX = 20100
 
   def parse(addresses: String, count: Int): List[NodeAddress] = {
     if (addresses == null) {
@@ -27,7 +26,7 @@ object NodeGroupParser {
       if (address.memberId != i) {
         throw new IllegalArgumentException(s"Member $i missing from group")
       }
-      val port = CLIENT_FACING_PORT_PREFIX * 10 + i
+      val port = (CLIENT_FACING_PORT_PREFIX * 10) + i
 
       if (address.port != port) {
         throw new IllegalArgumentException(s"Member $i has ${address.port} instead of $port")

@@ -1,8 +1,23 @@
 package cluster.server.group
 
+import com.typesafe.config.ConfigFactory
 import io.aeron.archive.client.AeronArchive
 
+import scala.collection.JavaConverters._
+
 object NodeMember {
+
+  def apply(): NodeMember = {
+    val cluster = ConfigFactory.load.getConfig("cluster")
+    val count = cluster.getInt("count")
+    val memberId = cluster.getInt("memberId")
+    val group = cluster.getStringList("group")
+      .asScala.zipWithIndex.map {
+      case (address, index) => s"${index}=${address}"
+    }.mkString(",")
+
+    apply(group, memberId, count)
+  }
 
   def apply(group: String, memberId: Int, memberCount: Int): NodeMember = {
     NodeMember(NodeFileSystem(memberId), NodeGroup(group, memberCount), memberId)

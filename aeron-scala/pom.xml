@@ -18,6 +18,7 @@
         <artio.version>0.131</artio.version>
         <agrona.version>1.15.1</agrona.version>
         <tern.version>1.4.6</tern.version>
+        <typesafe.version>1.4.2</typesafe.version>
     </properties>
 
     <dependencies>
@@ -31,6 +32,11 @@
             <groupId>org.ternlang</groupId>
             <artifactId>tern-compile</artifactId>
             <version>${tern.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>${typesafe.version}</version>
         </dependency>
         <dependency>
             <groupId>io.aeron</groupId>

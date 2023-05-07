@@ -1,11 +1,25 @@
 package cluster.server.group
 
+import com.typesafe.config.ConfigFactory
+import scala.collection.JavaConverters._
+
 object NodeGroup {
   val CLIENT_FACING_PORT_PREFIX = 2011
   val MEMBER_FACING_PORT_PREFIX = 2022
   val LOG_PORT_PREFIX = 2033
   val TRANSFER_PORT_PREFIX = 2044
   val ARCHIVE_PORT_PREFIX = 801
+
+  def apply(): NodeGroup = {
+    val cluster = ConfigFactory.load.getConfig("cluster")
+    val memberId = cluster.getInt("memberId")
+    val group = cluster.getStringList("group")
+      .asScala.zipWithIndex.map {
+      case (address, index) => s"${index}=${address}"
+    }.mkString(",")
+
+    NodeGroup(group, memberId)
+  }
 }
 
 case class NodeGroup(group: String, count: Int) {

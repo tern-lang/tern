@@ -13,7 +13,7 @@ object Main extends App {
     handler = new TradingClientAdapter,
     mode = mode,
     group = group,
-    host = "localhost"
+    host = "localhost:1234"
   ))
 
 

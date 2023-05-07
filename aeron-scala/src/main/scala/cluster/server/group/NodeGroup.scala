@@ -12,13 +12,13 @@ object NodeGroup {
 
   def apply(): NodeGroup = {
     val cluster = ConfigFactory.load.getConfig("cluster")
-    val memberId = cluster.getInt("memberId")
+    val count = cluster.getInt("count")
     val group = cluster.getStringList("group")
       .asScala.zipWithIndex.map {
       case (address, index) => s"${index}=${address}"
     }.mkString(",")
 
-    NodeGroup(group, memberId)
+    NodeGroup(group, count)
   }
 }
 

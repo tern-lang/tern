@@ -1,20 +1,18 @@
 package cluster.server.client
 
 import cluster.server.ClusterMode
-import io.aeron.protocol.DataHeaderFlyweight
 import org.agrona.BitUtil.findNextPositivePowerOfTwo
 import org.agrona.DirectBuffer
-import org.agrona.concurrent.ringbuffer.{ManyToOneRingBuffer, RingBuffer, RingBufferDescriptor}
+import org.agrona.concurrent.ringbuffer.RingBufferDescriptor.TRAILER_LENGTH
+import org.agrona.concurrent.ringbuffer.{ManyToOneRingBuffer, RingBuffer}
 import org.agrona.concurrent.{IdleStrategy, MessageHandler, UnsafeBuffer}
 
 import java.nio.ByteBuffer
 import java.util.concurrent.TimeUnit
 
-
 object InputRingBuffer {
   val EXPIRY = TimeUnit.MINUTES.toMillis(1)
   val CAPACITY = 32 * 1024 * 1024 // 32 MB
-  val TRAILER_LENGTH = DataHeaderFlyweight.HEADER_LENGTH + RingBufferDescriptor.TRAILER_LENGTH
 
   def create(mode: ClusterMode): InputRingBuffer = {
     val buffer = new UnsafeBuffer(ByteBuffer.allocateDirect(findNextPositivePowerOfTwo(CAPACITY) + TRAILER_LENGTH))

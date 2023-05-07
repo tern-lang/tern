@@ -11,11 +11,11 @@ trait ClusterClientHandler extends EgressListener{
   }
 
   override def onSessionEvent(correlationId: Long, clusterSessionId: Long, leadershipTermId: Long, leaderMemberId: Int, code: EventCode, detail: String): Unit = {
-    onSessionEvent(correlationId, clusterSessionId, leadershipTermId, leaderMemberId, code, detail)
+    onClusterSessionEvent(correlationId, clusterSessionId, leadershipTermId, leaderMemberId, code, detail)
   }
 
   override def onNewLeader(clusterSessionId: Long, leadershipTermId: Long, leaderMemberId: Int, ingressEndpoints: String): Unit = {
-    onNewLeader(clusterSessionId,leadershipTermId, leaderMemberId, ingressEndpoints)
+    onClusterNewLeader(clusterSessionId,leadershipTermId, leaderMemberId, ingressEndpoints)
   }
 
   def onClusterConnected(session: ClusterSession): Unit = {

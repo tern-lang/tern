@@ -16,10 +16,10 @@ class MatchingEngineAdapter(me: MatchingEngine) extends TopicRoute {
   override def handle(frame: MessageFrame, payload: Fragment): Unit = {
     payload.getBuffer.getByte(payload.getOffset) match {
       case MatchingEngineAdapter.PLACE_ORDER =>
-        placeOrder.assign(payload.getBuffer, payload.getLength, payload.getOffset)
+        placeOrder.assign(payload.getBuffer, payload.getOffset, payload.getLength)
         me.onPlaceOrder(placeOrder)
       case MatchingEngineAdapter.CANCEL_ORDER =>
-        cancelOrder.assign(payload.getBuffer, payload.getLength, payload.getOffset)
+        cancelOrder.assign(payload.getBuffer, payload.getOffset, payload.getLength)
         me.onCancelOrder(cancelOrder)
     }
   }

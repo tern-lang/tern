@@ -2,16 +2,33 @@ package cluster.server.gateway.demo
 
 import cluster.server.demo.MatchingEngineAdapter
 import cluster.server.demo.api.{CancelOrderCommandCodec, PlaceOrderCommandCodec}
-import cluster.server.gateway.GatewayHandler
-import cluster.server.message.DirectBufferWrapper
+import cluster.server.gateway.demo.Main.gatewayClient
+import cluster.server.gateway.{GatewayContext, GatewayHandler}
+import cluster.server.message.{DirectBufferWrapper, MessageFrame}
 import io.aeron.cluster.codecs.EventCode
 import io.aeron.logbuffer.Header
 import org.agrona.DirectBuffer
 
-class TradingClientAdapter(command: TradingClientCommandHandler, response: TradingClientResponseHandler) extends GatewayHandler {
+class TradingClientAdapter extends GatewayHandler {
   private val placeOrder: PlaceOrderCommandCodec = new PlaceOrderCommandCodec
   private val cancelOrder: CancelOrderCommandCodec = new CancelOrderCommandCodec
   private val wrapper = new DirectBufferWrapper
+  private var command: TradingClientCommandHandler = _
+  private var response: TradingClientResponseHandler = _
+
+  override def onStart(context: GatewayContext): Unit = {
+    println("onStart")
+    val cluster = context.getClusterOutput
+    val client = new TradingClient((frame: MessageFrame, _: Any) => {
+      val buffer = frame.getFrame.getBuffer
+      val offset = frame.getFrame.getOffset
+      val length = frame.getFrame.getLength
+
+      buffer.getBytes(offset, (a, b, c) => cluster.publish(a, b, c), length)
+    })
+    command = new TradingClientCommandHandler(client)
+    response = new TradingClientResponseHandler
+  }
 
   override def onContainerMessage(buffer: DirectBuffer, offset: Int, length: Int): Unit = {
     println("onContainerMessage")

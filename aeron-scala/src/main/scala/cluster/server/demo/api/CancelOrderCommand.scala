@@ -13,7 +13,7 @@ object CancelOrderCommandCodec {
 }
 
 class CancelOrderCommandCodec extends CancelOrderCommand with Flyweight[CancelOrderCommandCodec] {
-  import PlaceOrderCommandCodec._
+  import CancelOrderCommandCodec._
 
   private var buffer: ByteBuffer = _
   private var offset: Int = _

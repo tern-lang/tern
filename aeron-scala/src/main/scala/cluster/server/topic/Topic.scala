@@ -5,6 +5,7 @@ import cluster.server.topic.TopicMessageHeader.HEADER_SIZE
 
 object Topic {
   val MatchingEngine = Topic(1, "matching engine")
+  val MatchingEngineResponse = Topic(2, "matching engine response")
 }
 
 case class Topic(code: Byte, description: String)

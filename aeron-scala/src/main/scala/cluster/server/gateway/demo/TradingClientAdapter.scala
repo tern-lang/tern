@@ -1,10 +1,10 @@
 package cluster.server.gateway.demo
 
 import cluster.server.demo.MatchingEngineAdapter
-import cluster.server.demo.api.{CancelOrderCommandCodec, PlaceOrderCommandCodec}
-import cluster.server.gateway.demo.Main.gatewayClient
+import cluster.server.demo.api.{CancelOrderCommandCodec, CancelOrderResponseCodec, PlaceOrderCommandCodec, PlaceOrderResponseCodec}
 import cluster.server.gateway.{GatewayContext, GatewayHandler}
-import cluster.server.message.{DirectBufferWrapper, MessageFrame}
+import cluster.server.message.{ByteSize, DirectBufferWrapper, MessageFrame}
+import cluster.server.topic.TopicMessageHeader
 import io.aeron.cluster.codecs.EventCode
 import io.aeron.logbuffer.Header
 import org.agrona.DirectBuffer
@@ -12,6 +12,8 @@ import org.agrona.DirectBuffer
 class TradingClientAdapter extends GatewayHandler {
   private val placeOrder: PlaceOrderCommandCodec = new PlaceOrderCommandCodec
   private val cancelOrder: CancelOrderCommandCodec = new CancelOrderCommandCodec
+  private val placeOrderResponse: PlaceOrderResponseCodec = new PlaceOrderResponseCodec
+  private val cancelOrderResponse: CancelOrderResponseCodec = new CancelOrderResponseCodec
   private val wrapper = new DirectBufferWrapper
   private var command: TradingClientCommandHandler = _
   private var response: TradingClientResponseHandler = _
@@ -31,22 +33,38 @@ class TradingClientAdapter extends GatewayHandler {
   }
 
   override def onContainerMessage(buffer: DirectBuffer, offset: Int, length: Int): Unit = {
+    val startOffset = TopicMessageHeader.HEADER_SIZE + ByteSize.BYTE_SIZE
+    val codeOffset = TopicMessageHeader.HEADER_SIZE
+    val size = startOffset - length
+
     println("onContainerMessage")
-    wrapper.wrap(buffer, offset, length)
-    wrapper.getByte(0) match {
+    wrapper.wrap(buffer, offset + startOffset, length)
+    buffer.getByte(offset + codeOffset) match {
       case MatchingEngineAdapter.PLACE_ORDER =>
-        placeOrder.assign(wrapper, 0, length)
+        placeOrder.assign(wrapper, 0, size)
         command.onPlaceOrder(placeOrder)
       case MatchingEngineAdapter.CANCEL_ORDER =>
-        placeOrder.assign(wrapper, 0, length)
+        cancelOrder.assign(wrapper, 0, size)
         command.onCancelOrder(cancelOrder)
     }
   }
 
   override def onClusterMessage(clusterSessionId: Long, timestamp: Long,
                                 buffer: DirectBuffer, offset: Int, length: Int, header: Header): Unit = {
+    val startOffset = TopicMessageHeader.HEADER_SIZE + ByteSize.BYTE_SIZE
+    val codeOffset = TopicMessageHeader.HEADER_SIZE
+    val size = startOffset - length
+
     println("onClusterMessage")
-    wrapper.wrap(buffer, offset, length)
+    wrapper.wrap(buffer, offset + startOffset, length)
+    buffer.getByte(offset + codeOffset) match {
+      case MatchingEngineAdapter.PLACE_ORDER_RESPONSE =>
+        placeOrderResponse.assign(wrapper, 0, size)
+        command.onPlaceOrder(placeOrder)
+      case MatchingEngineAdapter.CANCEL_ORDER_RESPONSE =>
+        cancelOrderResponse.assign(wrapper, 0, size)
+        command.onCancelOrder(cancelOrder)
+    }
   }
 
   override def onClusterSessionEvent(correlationId: Long, clusterSessionId: Long, leadershipTermId: Long,

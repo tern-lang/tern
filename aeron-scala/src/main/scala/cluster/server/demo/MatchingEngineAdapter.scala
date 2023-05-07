@@ -7,6 +7,8 @@ import cluster.server.topic.{Topic, TopicRoute}
 object MatchingEngineAdapter {
   val PLACE_ORDER: Byte = 1
   val CANCEL_ORDER: Byte = 2
+  val PLACE_ORDER_RESPONSE: Byte = 2
+  val CANCEL_ORDER_RESPONSE: Byte = 2
 }
 
 class MatchingEngineAdapter(me: MatchingEngine) extends TopicRoute {

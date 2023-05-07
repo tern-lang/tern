@@ -9,9 +9,11 @@ class TopicMessageComposer[M](body: Flyweight[_ <: M], buffer: ByteBuffer, topic
   private val frame = new TopicFrame
   private var message: Option[M] = None
 
-  override def compose(): M = {
+  override def compose(code: Byte): M = {
     buffer.clear()
-    message = Some(body.assign(buffer, HEADER_SIZE, MAX_VALUE))
+    buffer.setCount(HEADER_SIZE)
+    buffer.setByte(HEADER_SIZE, code)
+    message = Some(body.assign(buffer, HEADER_SIZE + ByteSize.BYTE_SIZE, MAX_VALUE))
     message.get
   }
 

@@ -1,4 +1,4 @@
-package cluster.server.io
+package cluster.server.message
 
 import io.aeron.Publication._
 

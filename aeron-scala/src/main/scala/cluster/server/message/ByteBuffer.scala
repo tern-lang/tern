@@ -1,4 +1,4 @@
-package cluster.server.io
+package cluster.server.message
 
 import org.agrona.DirectBuffer
 

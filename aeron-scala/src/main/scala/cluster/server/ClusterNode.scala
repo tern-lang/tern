@@ -1,8 +1,5 @@
 package cluster.server
 
-import cluster.server.group.NodeMember
-import cluster.server.log.ErrorLogger
-import cluster.server.service.{ManagedService, ManagedServiceContainer}
 import org.agrona.ErrorHandler
 import org.agrona.concurrent.SystemEpochClock
 
@@ -10,6 +7,9 @@ import io.aeron.Aeron
 import io.aeron.RethrowingErrorHandler
 import io.aeron.cluster.service.ClusteredService
 import io.aeron.cluster.service.ClusteredServiceContainer
+import cluster.server.group.NodeMember
+import cluster.server.log.ErrorLogger
+import cluster.server.service.{ManagedService, ManagedServiceContainer}
 
 class ClusterNode(private val mediaDriver: ClusterMediaDriver,
                   private val service: ClusteredService,

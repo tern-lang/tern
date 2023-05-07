@@ -1,6 +1,6 @@
-package cluster.server.io
+package cluster.server.message
 
-import cluster.server.io.ByteSize.LONG_SIZE
+import cluster.server.message.ByteSize.LONG_SIZE
 import org.agrona.{DirectBuffer, ExpandableDirectByteBuffer, MutableDirectBuffer}
 
 import java.io.OutputStream
@@ -12,8 +12,8 @@ object DirectByteBuffer {
   def apply(order: ByteOrder, initialCapacity: Int, cleaner: (ByteBuffer) => Unit) =  new DirectByteBuffer(order, initialCapacity, cleaner)
 }
 
-final class DirectByteBuffer(private val order: ByteOrder, initialCapacity: Int, cleaner: (ByteBuffer) => Unit) extends ByteBuffer {
-  private val buffer: MutableDirectBuffer = new ExpandableDirectByteBuffer(initialCapacity)
+final class DirectByteBuffer(private val order: ByteOrder, capacity: Int, cleaner: (ByteBuffer) => Unit) extends ByteBuffer {
+  private val buffer: MutableDirectBuffer = new ExpandableDirectByteBuffer(capacity)
   private var len: Int = 0
 
   def this(order: ByteOrder) = this(order, 8192, null)
@@ -203,7 +203,7 @@ final class DirectByteBuffer(private val order: ByteOrder, initialCapacity: Int,
 
   override def dispose(): DirectByteBuffer = {
     if (cleaner != null) {
-      cleaner.accept(this)
+      cleaner.apply(this)
     }
     this
   }

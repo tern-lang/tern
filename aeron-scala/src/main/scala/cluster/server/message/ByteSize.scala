@@ -1,4 +1,4 @@
-package cluster.server.io
+package cluster.server.message
 
 object ByteSize {
   val CHAR_SIZE = 2

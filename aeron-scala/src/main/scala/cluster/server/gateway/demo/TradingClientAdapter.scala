@@ -35,17 +35,17 @@ class TradingClientAdapter extends GatewayHandler {
   override def onContainerMessage(buffer: DirectBuffer, offset: Int, length: Int): Unit = {
     val startOffset = TopicMessageHeader.HEADER_SIZE + ByteSize.BYTE_SIZE
     val codeOffset = TopicMessageHeader.HEADER_SIZE
-    val size = startOffset - length
+    val size = length - startOffset
 
     println("onContainerMessage")
-    wrapper.wrap(buffer, offset + startOffset, length)
+    wrapper.wrap(buffer, offset + startOffset, size)
     buffer.getByte(offset + codeOffset) match {
       case MatchingEngineAdapter.PLACE_ORDER =>
-        placeOrderResponse.assign(wrapper, 0, size)
-        response.onPlaceOrderResponse(placeOrderResponse)
+        placeOrder.assign(wrapper, 0, size)
+        command.onPlaceOrder(placeOrder)
       case MatchingEngineAdapter.CANCEL_ORDER =>
-        cancelOrderResponse.assign(wrapper, 0, size)
-        response.onCancelOrderResponse(cancelOrderResponse)
+        cancelOrder.assign(wrapper, 0, size)
+        command.onCancelOrder(cancelOrder)
     }
   }
 
@@ -53,17 +53,17 @@ class TradingClientAdapter extends GatewayHandler {
                                 buffer: DirectBuffer, offset: Int, length: Int, header: Header): Unit = {
     val startOffset = TopicMessageHeader.HEADER_SIZE + ByteSize.BYTE_SIZE
     val codeOffset = TopicMessageHeader.HEADER_SIZE
-    val size = startOffset - length
+    val size = length - startOffset
 
     println("onClusterMessage")
-    wrapper.wrap(buffer, offset + startOffset, length)
+    wrapper.wrap(buffer, offset + startOffset, size)
     buffer.getByte(offset + codeOffset) match {
       case MatchingEngineAdapter.PLACE_ORDER_RESPONSE =>
         placeOrderResponse.assign(wrapper, 0, size)
-        command.onPlaceOrder(placeOrder)
+        response.onPlaceOrderResponse(placeOrderResponse)
       case MatchingEngineAdapter.CANCEL_ORDER_RESPONSE =>
         cancelOrderResponse.assign(wrapper, 0, size)
-        command.onCancelOrder(cancelOrder)
+        response.onCancelOrderResponse(cancelOrderResponse)
     }
   }
 

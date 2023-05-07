@@ -52,7 +52,7 @@ object TopicMessageHeader {
   val VENUE_ID_SIZE: Int = ByteSize.BYTE_SIZE
   val TOPIC_ID_OFFSET: Int = VENUE_ID_OFFSET + VENUE_ID_SIZE
   val TOPIC_ID_SIZE: Int = ByteSize.BYTE_SIZE
-  val HEADER_SIZE: Int = TOPIC_ID_OFFSET
+  val HEADER_SIZE: Int = TOPIC_ID_OFFSET + TOPIC_ID_SIZE
 }
 
 class TopicMessageHeader extends MessageHeader with Flyweight[TopicMessageHeader] {

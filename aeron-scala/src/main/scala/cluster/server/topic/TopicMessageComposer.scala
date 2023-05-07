@@ -11,7 +11,7 @@ class TopicMessageComposer[M](body: Flyweight[_ <: M], buffer: ByteBuffer, topic
 
   override def compose(code: Byte): M = {
     buffer.clear()
-    buffer.setCount(HEADER_SIZE)
+    buffer.setCount(HEADER_SIZE + ByteSize.BYTE_SIZE)
     buffer.setByte(HEADER_SIZE, code)
     message = Some(body.assign(buffer, HEADER_SIZE + ByteSize.BYTE_SIZE, MAX_VALUE))
     message.get

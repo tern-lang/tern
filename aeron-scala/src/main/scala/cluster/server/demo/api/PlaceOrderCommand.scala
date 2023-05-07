@@ -11,7 +11,7 @@ trait PlaceOrderCommand {
 
 object PlaceOrderCommandCodec {
   val ORDER_ID_OFFSET: Int = 0
-  val ORDER_ID_SIZE: Int = ByteSize.INT_SIZE
+  val ORDER_ID_SIZE: Int = ByteSize.LONG_SIZE
   val INSTRUMENT_ID_OFFSET: Int = ORDER_ID_OFFSET + ORDER_ID_SIZE
   val INSTRUMENT_ID_SIZE: Int = ByteSize.INT_SIZE
   val QUANTITY_OFFSET: Int = INSTRUMENT_ID_OFFSET + INSTRUMENT_ID_SIZE

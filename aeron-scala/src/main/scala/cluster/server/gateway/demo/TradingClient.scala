@@ -20,17 +20,27 @@ class TradingClient(consumer: MessageConsumer[_]) {
     0)
 
   def placeOrder(orderId: Long, instrumentId: Int, quantity: Long, price: Double): Unit = {
-    placeOrderCodec.compose(MatchingEngineAdapter.PLACE_ORDER)
+    val command = placeOrderCodec.compose(MatchingEngineAdapter.PLACE_ORDER)
       .withOrderId(orderId)
       .withInstrumentId(instrumentId)
       .withQuantity(quantity)
       .withPrice(price)
 
+    if(command.getOrderId != orderId) {
+      throw new IllegalArgumentException("Invalid order " + command.getOrderId)
+    }
+    if(command.getInstrumentId != instrumentId) {
+      throw new IllegalArgumentException("Invalid instrument " + command.getInstrumentId)
+    }
     placeOrderCodec.commit(consumer.asInstanceOf[MessageConsumer[PlaceOrderCommandCodec]], 1, 1)
   }
 
   def cancelOrder(orderId: Long): Unit = {
-    cancelOrderCodec.compose(MatchingEngineAdapter.CANCEL_ORDER).withOrderId(orderId)
+    val command = cancelOrderCodec.compose(MatchingEngineAdapter.CANCEL_ORDER).withOrderId(orderId)
+
+    if(command.getOrderId == orderId) {
+      throw new IllegalArgumentException("Invalid order " + command.getOrderId)
+    }
     cancelOrderCodec.commit(consumer.asInstanceOf[MessageConsumer[CancelOrderCommandCodec]], 1, 1)
   }
 }

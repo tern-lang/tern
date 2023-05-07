@@ -10,7 +10,7 @@ trait ExecutionReportEvent {
 
 object ExecutionReportEventCodec {
   val ORDER_ID_OFFSET: Int = 0
-  val ORDER_ID_SIZE: Int = ByteSize.INT_SIZE
+  val ORDER_ID_SIZE: Int = ByteSize.LONG_SIZE
   val QUANTITY_OFFSET: Int = ORDER_ID_OFFSET + ORDER_ID_SIZE
   val QUANTITY_SIZE: Int = ByteSize.LONG_SIZE
   val TIME_OFFSET: Int = QUANTITY_OFFSET + QUANTITY_SIZE

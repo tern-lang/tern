@@ -5,15 +5,15 @@ import cluster.server.demo.api.{CancelOrderResponse, ExecutionReportEvent, Place
 class TradingClientResponseHandler {
 
   def onPlaceOrderResponse(response: PlaceOrderResponse) = {
-    println("onPlaceOrderResponse")
+    println(s"TradingClientResponseHandler.onPlaceOrderResponse ${response.getOrderId}")
   }
 
   def onCancelOrderResponse(response: CancelOrderResponse) = {
-    println("onCancelOrderResponse")
+    println(s"TradingClientResponseHandler.onCancelOrderResponse ${response.getOrderId}")
   }
 
   def onExecutionReport(report: ExecutionReportEvent) =  {
-    println("onExecutionReport")
+    println(s"TradingClientResponseHandler.onExecutionReport ${report.getOrderId}")
   }
 
 }

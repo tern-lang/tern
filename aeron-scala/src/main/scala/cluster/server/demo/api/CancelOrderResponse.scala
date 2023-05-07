@@ -9,7 +9,7 @@ trait CancelOrderResponse {
 
 object CancelOrderResponseCodec {
   val ORDER_ID_OFFSET: Int = 0
-  val ORDER_ID_SIZE: Int = ByteSize.INT_SIZE
+  val ORDER_ID_SIZE: Int = ByteSize.LONG_SIZE
   val SUCCESS_OFFSET: Int = ORDER_ID_OFFSET + ORDER_ID_SIZE
   val SUCCESS_SIZE: Int = ByteSize.BOOL_SIZE
   val MESSAGE_SIZE: Int = SUCCESS_OFFSET + SUCCESS_SIZE

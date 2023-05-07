@@ -41,11 +41,11 @@ class TradingClientAdapter extends GatewayHandler {
     wrapper.wrap(buffer, offset + startOffset, length)
     buffer.getByte(offset + codeOffset) match {
       case MatchingEngineAdapter.PLACE_ORDER =>
-        placeOrder.assign(wrapper, 0, size)
-        command.onPlaceOrder(placeOrder)
+        placeOrderResponse.assign(wrapper, 0, size)
+        response.onPlaceOrderResponse(placeOrderResponse)
       case MatchingEngineAdapter.CANCEL_ORDER =>
-        cancelOrder.assign(wrapper, 0, size)
-        command.onCancelOrder(cancelOrder)
+        cancelOrderResponse.assign(wrapper, 0, size)
+        response.onCancelOrderResponse(cancelOrderResponse)
     }
   }
 

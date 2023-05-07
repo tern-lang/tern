@@ -1,19 +1,19 @@
 package cluster.server.gateway.demo
 
-import cluster.server.gateway.demo.api.{CancelOrderResponse, ExecutionReport, PlaceOrderResponse}
+import cluster.server.demo.api.{CancelOrderResponse, ExecutionReportEvent, PlaceOrderResponse}
 
 class TradingClientResponseHandler {
 
   def onPlaceOrderResponse(response: PlaceOrderResponse) = {
-
+    println("onPlaceOrderResponse")
   }
 
-  def onCanceOrderResponse(response: CancelOrderResponse) = {
-
+  def onCancelOrderResponse(response: CancelOrderResponse) = {
+    println("onCancelOrderResponse")
   }
 
-  def onExecutionReport(report: ExecutionReport) =  {
-
+  def onExecutionReport(report: ExecutionReportEvent) =  {
+    println("onExecutionReport")
   }
 
 }

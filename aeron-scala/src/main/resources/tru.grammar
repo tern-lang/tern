@@ -1,0 +1,27 @@
+# |  represents a logical "or"
+# *  represents one or more
+# +  represents at least once
+# ?  represents one or none
+# <> define a production
+# () groups productions
+# {} group productions, first match wins
+# _  represents whitespace
+# [] represents a symbol
+# '' represents a literal text value
+
+sign = {'-' | '+'};
+number = ?<sign>{[hexadecimal] | [binary] | [decimal]};
+boolean = {'true' | 'false'};
+null = 'null';
+literal = {<null> | <boolean> | <number> | [template] | [text]};
+
+full-qualifier = [qualifier]*('.'[qualifier]);
+wild-qualifier = [qualifier]*('.'[qualifier])'.*';
+
+namespace = 'namespace' _ (<full-qualifier> | <wild-qualifier>) ';';
+
+import = 'import' _ (<full-qualifier> | <wild-qualifier>) ';';
+import-list = *<import>;
+
+schema = <namespace> <import-list>;
+

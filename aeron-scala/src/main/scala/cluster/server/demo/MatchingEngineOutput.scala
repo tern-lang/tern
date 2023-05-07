@@ -26,7 +26,7 @@ class MatchingEngineOutput(publisher: Publisher) {
     0)
 
   def onPlaceOrderSuccess(command: PlaceOrderCommand) = {
-    placeOrderCodec.compose()
+    placeOrderCodec.compose(MatchingEngineAdapter.PLACE_ORDER_RESPONSE)
       .withOrderId(command.getOrderId)
       .withSuccess(true)
 
@@ -34,7 +34,7 @@ class MatchingEngineOutput(publisher: Publisher) {
   }
 
   def onPlaceOrderFailure(command: PlaceOrderCommand) = {
-    placeOrderCodec.compose()
+    placeOrderCodec.compose(MatchingEngineAdapter.PLACE_ORDER_RESPONSE)
       .withOrderId(command.getOrderId)
       .withSuccess(false)
 
@@ -42,7 +42,7 @@ class MatchingEngineOutput(publisher: Publisher) {
   }
 
   def onCancelOrderSuccess(command: CancelOrderCommand) = {
-    cancelOrderCodec.compose()
+    cancelOrderCodec.compose(MatchingEngineAdapter.CANCEL_ORDER_RESPONSE)
       .withOrderId(command.getOrderId)
       .withSuccess(true)
 
@@ -50,7 +50,7 @@ class MatchingEngineOutput(publisher: Publisher) {
   }
 
   def onCancelOrderFailure(command: CancelOrderCommand) = {
-    cancelOrderCodec.compose()
+    cancelOrderCodec.compose(MatchingEngineAdapter.CANCEL_ORDER_RESPONSE)
       .withOrderId(command.getOrderId)
       .withSuccess(false)
 

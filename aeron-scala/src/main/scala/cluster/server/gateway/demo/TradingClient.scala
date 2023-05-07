@@ -1,5 +1,6 @@
 package cluster.server.gateway.demo
 
+import cluster.server.demo.MatchingEngineAdapter
 import cluster.server.demo.api.{CancelOrderCommandCodec, PlaceOrderCommandCodec}
 import cluster.server.message.{DirectByteBuffer, MessageConsumer}
 import cluster.server.topic.{Topic, TopicMessageComposer}
@@ -19,7 +20,7 @@ class TradingClient(consumer: MessageConsumer[_]) {
     0)
 
   def placeOrder(orderId: Long, instrumentId: Int, quantity: Long, price: Double): Unit = {
-    placeOrderCodec.compose()
+    placeOrderCodec.compose(MatchingEngineAdapter.PLACE_ORDER)
       .withOrderId(orderId)
       .withInstrumentId(instrumentId)
       .withQuantity(quantity)
@@ -29,7 +30,7 @@ class TradingClient(consumer: MessageConsumer[_]) {
   }
 
   def cancelOrder(orderId: Long): Unit = {
-    cancelOrderCodec.compose().withOrderId(orderId)
+    cancelOrderCodec.compose(MatchingEngineAdapter.CANCEL_ORDER).withOrderId(orderId)
     cancelOrderCodec.commit(consumer.asInstanceOf[MessageConsumer[CancelOrderCommandCodec]], 1, 1)
   }
 }

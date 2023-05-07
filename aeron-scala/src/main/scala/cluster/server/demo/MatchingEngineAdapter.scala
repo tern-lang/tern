@@ -1,7 +1,7 @@
 package cluster.server.demo
 
 import cluster.server.demo.api.{CancelOrderCommandCodec, PlaceOrderCommandCodec}
-import cluster.server.message.{Fragment, MessageFrame}
+import cluster.server.message.{ByteSize, Fragment, MessageFrame}
 import cluster.server.topic.{Topic, TopicRoute}
 
 object MatchingEngineAdapter {
@@ -18,10 +18,10 @@ class MatchingEngineAdapter(me: MatchingEngine) extends TopicRoute {
   override def handle(frame: MessageFrame, payload: Fragment): Unit = {
     payload.getBuffer.getByte(payload.getOffset) match {
       case MatchingEngineAdapter.PLACE_ORDER =>
-        placeOrder.assign(payload.getBuffer, payload.getOffset, payload.getLength)
+        placeOrder.assign(payload.getBuffer, payload.getOffset + ByteSize.BYTE_SIZE, payload.getLength - ByteSize.BYTE_SIZE)
         me.onPlaceOrder(placeOrder)
       case MatchingEngineAdapter.CANCEL_ORDER =>
-        cancelOrder.assign(payload.getBuffer, payload.getOffset, payload.getLength)
+        cancelOrder.assign(payload.getBuffer, payload.getOffset + ByteSize.BYTE_SIZE, payload.getLength - ByteSize.BYTE_SIZE)
         me.onCancelOrder(cancelOrder)
     }
   }

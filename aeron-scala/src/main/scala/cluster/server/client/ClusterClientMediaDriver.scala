@@ -60,7 +60,7 @@ class ClusterClientMediaDriver(mode: ClusterMode, group: NodeGroup, host: String
     val idle = mode.getIdleStrategy
 
     val connection = new ClusterConnection(listener, aeron, group, host)
-    val poller = new ClusterClientPoller(connection, () => idle.idle())
+    val poller = new ClusterClientPoller(connection, () => idle)
 
     ClusterClient(poller, inputBuffer, outputBuffer)
   }

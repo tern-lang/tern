@@ -37,7 +37,7 @@ class TradingClientAdapter extends GatewayHandler {
     val codeOffset = TopicMessageHeader.HEADER_SIZE
     val size = length - startOffset
 
-    println("onContainerMessage")
+    //println("onContainerMessage")
     wrapper.wrap(buffer, offset + startOffset, size)
     buffer.getByte(offset + codeOffset) match {
       case MatchingEngineAdapter.PLACE_ORDER =>
@@ -55,7 +55,7 @@ class TradingClientAdapter extends GatewayHandler {
     val codeOffset = TopicMessageHeader.HEADER_SIZE
     val size = length - startOffset
 
-    println("onClusterMessage")
+    //println("onClusterMessage")
     wrapper.wrap(buffer, offset + startOffset, size)
     buffer.getByte(offset + codeOffset) match {
       case MatchingEngineAdapter.PLACE_ORDER_RESPONSE =>

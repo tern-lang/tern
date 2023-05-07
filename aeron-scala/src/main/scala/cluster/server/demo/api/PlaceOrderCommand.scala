@@ -7,6 +7,7 @@ trait PlaceOrderCommand {
   def getInstrumentId: Int
   def getQuantity: Long
   def getPrice: Double
+  def getTime: Long
 }
 
 object PlaceOrderCommandCodec {
@@ -18,7 +19,9 @@ object PlaceOrderCommandCodec {
   val QUANTITY_SIZE: Int = ByteSize.LONG_SIZE
   val PRICE_OFFSET: Int = QUANTITY_OFFSET + QUANTITY_SIZE
   val PRICE_SIZE: Int = ByteSize.DOUBLE_SIZE
-  val MESSAGE_SIZE: Int = PRICE_OFFSET + PRICE_SIZE
+  val TIME_OFFSET: Int = PRICE_OFFSET + PRICE_SIZE
+  val TIME_SIZE: Int = ByteSize.LONG_SIZE
+  val MESSAGE_SIZE: Int = TIME_OFFSET + TIME_SIZE
 }
 
 class PlaceOrderCommandCodec extends PlaceOrderCommand with Flyweight[PlaceOrderCommandCodec] {
@@ -60,6 +63,12 @@ class PlaceOrderCommandCodec extends PlaceOrderCommand with Flyweight[PlaceOrder
     this
   }
 
+  def withTime(time: Long): PlaceOrderCommandCodec = {
+    buffer.setCount(offset + MESSAGE_SIZE)
+    buffer.setLong(offset + TIME_OFFSET, time)
+    this
+  }
+
   override def getInstrumentId: Int = buffer.getInt(offset + INSTRUMENT_ID_OFFSET)
 
   override def getQuantity: Long = buffer.getLong(offset + QUANTITY_OFFSET)
@@ -67,5 +76,7 @@ class PlaceOrderCommandCodec extends PlaceOrderCommand with Flyweight[PlaceOrder
   override def getPrice: Double = buffer.getDouble(offset + PRICE_OFFSET)
 
   override def getOrderId: Long = buffer.getLong(offset + ORDER_ID_OFFSET)
+
+  override def getTime: Long = buffer.getLong(offset + TIME_OFFSET)
 }
 

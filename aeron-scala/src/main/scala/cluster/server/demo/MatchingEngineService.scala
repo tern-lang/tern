@@ -13,7 +13,7 @@ import org.agrona.DirectBuffer
 
 object MatchingEngineService {
 
-  def apply(member: NodeMember,scheduler: ClusterScheduler, clock: ClusterClock) = {
+  def apply(member: NodeMember, scheduler: ClusterScheduler, clock: ClusterClock) = {
     val publisher = new ClientSessionPublisher // publish to connected client
     val me: MatchingEngine = new MatchingEngine(new MatchingEngineOutput(publisher))
     new MatchingEngineService(me, publisher, member, scheduler, clock)

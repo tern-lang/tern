@@ -28,6 +28,7 @@ class MatchingEngineOutput(publisher: Publisher) {
   def onPlaceOrderSuccess(command: PlaceOrderCommand) = {
     placeOrderCodec.compose(MatchingEngineAdapter.PLACE_ORDER_RESPONSE)
       .withOrderId(command.getOrderId)
+      .withTime(command.getTime)
       .withSuccess(true)
 
     placeOrderCodec.commit(consumer.asInstanceOf[MessageConsumer[PlaceOrderResponseCodec]], 1, 1)
@@ -36,6 +37,7 @@ class MatchingEngineOutput(publisher: Publisher) {
   def onPlaceOrderFailure(command: PlaceOrderCommand) = {
     placeOrderCodec.compose(MatchingEngineAdapter.PLACE_ORDER_RESPONSE)
       .withOrderId(command.getOrderId)
+      .withTime(command.getTime)
       .withSuccess(false)
 
     placeOrderCodec.commit(consumer.asInstanceOf[MessageConsumer[PlaceOrderResponseCodec]], 1, 1)

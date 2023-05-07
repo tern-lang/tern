@@ -1,6 +1,6 @@
 package cluster.server.gateway.demo
 
-import cluster.server.TestMode
+import cluster.server.{ProdMode, TestMode}
 import cluster.server.gateway.GatewayLauncher
 import cluster.server.group.NodeGroup
 import cluster.server.message.MessageFrame
@@ -22,7 +22,7 @@ object Main extends App {
     }
   }
 
-  val mode = TestMode
+  val mode = ProdMode
   val group = NodeGroup()
   val subscriber = new TradingTopicSubscriber
   val consumer = new TopicMessageConsumer(subscriber)
@@ -38,5 +38,12 @@ object Main extends App {
     buffer.getBytes(offset, (a, b, c) => gatewayClient.input.publish(a, b, c), length)
   })
 
-  tradingClient.placeOrder(1, 1, 1, 2)
+  tradingClient.placeOrder(1, 1, 1, 1, System.currentTimeMillis())
+  Thread.sleep(1000)
+  tradingClient.placeOrder(1, 1, 1, 1, System.currentTimeMillis())
+  Thread.sleep(1000)
+
+  for(i <- 1 to 100000) {
+    tradingClient.placeOrder(i, i, i, i, System.currentTimeMillis())
+  }
 }

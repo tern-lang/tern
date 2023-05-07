@@ -5,13 +5,16 @@ import cluster.server.message.{ByteBuffer, ByteSize, Flyweight}
 
 trait PlaceOrderResponse {
   def getOrderId: Long
+  def getTime: Long
   def isSuccess: Boolean
 }
 
 object PlaceOrderResponseCodec {
   val ORDER_ID_OFFSET: Int = 0
   val ORDER_ID_SIZE: Int = ByteSize.LONG_SIZE
-  val SUCCESS_OFFSET: Int = ORDER_ID_OFFSET + ORDER_ID_SIZE
+  val TIME_OFFSET: Int = ORDER_ID_OFFSET + ORDER_ID_SIZE
+  val TIME_SIZE: Int = ByteSize.LONG_SIZE
+  val SUCCESS_OFFSET: Int = TIME_OFFSET + TIME_SIZE
   val SUCCESS_SIZE: Int = ByteSize.BOOL_SIZE
   val MESSAGE_SIZE: Int = SUCCESS_OFFSET + SUCCESS_SIZE
 }
@@ -43,7 +46,15 @@ class PlaceOrderResponseCodec extends PlaceOrderResponse with Flyweight[PlaceOrd
     this
   }
 
+  def withTime(time: Long): PlaceOrderResponseCodec = {
+    buffer.setCount(offset + MESSAGE_SIZE)
+    buffer.setLong(offset + TIME_OFFSET, time)
+    this
+  }
+
   override def getOrderId: Long = buffer.getLong(offset + ORDER_ID_OFFSET)
+
+  override def getTime: Long = buffer.getLong(offset + TIME_OFFSET)
 
   override def isSuccess: Boolean = buffer.getBoolean(offset + SUCCESS_OFFSET)
 }

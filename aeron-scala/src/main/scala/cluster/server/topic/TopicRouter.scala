@@ -43,7 +43,7 @@ class TopicRouter(venue: Byte) extends MessageHeader {
     this
   }
 
-  def route(buffer: ByteBuffer, offset: Int, length: Int): Unit = {
+  def route(buffer: ByteBuffer, offset: Int, length: Int): Option[TopicStatus] = {
     val venueId = header.assign(buffer, offset, HEADER_SIZE).getVenueId()
     val currentId = this.venue
 
@@ -75,8 +75,9 @@ class TopicRouter(venue: Byte) extends MessageHeader {
           route.last = duration
           route.count += 1
         }
-      }
-    }
+        Some(route)
+      } else None
+    } else None
   }
 
   class TopicStatus(val handler: TopicRoute) {

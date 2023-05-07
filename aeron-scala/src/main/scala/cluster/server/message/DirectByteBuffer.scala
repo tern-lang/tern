@@ -7,6 +7,7 @@ import java.io.OutputStream
 import java.nio.ByteOrder
 
 object DirectByteBuffer {
+  def apply() = new DirectByteBuffer(ByteOrder.LITTLE_ENDIAN, 8192, null)
   def apply(order: ByteOrder) = new DirectByteBuffer(order, 8192, null)
   def apply(order: ByteOrder, initialCapacity: Int) =  new DirectByteBuffer(order, initialCapacity, null)
   def apply(order: ByteOrder, initialCapacity: Int, cleaner: (ByteBuffer) => Unit) =  new DirectByteBuffer(order, initialCapacity, cleaner)

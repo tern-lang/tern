@@ -14,7 +14,7 @@ trait MessageHeader {
 
 trait MessageComposer[T] {
   def compose: T
-  def commit(consumer: MessageConsumer[T], header: MessageHeader): MessageComposer[T]
+  def commit(consumer: MessageConsumer[T], userId: Int, correlationId: Long): MessageComposer[T]
 }
 
 trait MessageConsumer[B] {

@@ -19,9 +19,11 @@ trait ClusterClientHandler extends EgressListener{
   }
 
   def onClusterConnected(session: ClusterSession): Unit = {
+    println("onClusterConnected")
   }
 
   def onClusterDisconnected(session: ClusterSession, cause: Throwable): Unit = {
+    println("onClusterDisconnected")
   }
 
   def onClusterMessage(clusterSessionId: Long, timestamp: Long, buffer: DirectBuffer, offset: Int, length: Int, header: Header): Unit

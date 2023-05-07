@@ -1,3 +1,3 @@
 package cluster.server.client
 
-case class ClusterClient(session: ClusterSession, input: InputRingBuffer, output: OutputRingBuffer)
+case class ClusterClient(cluster: ClusterClientPoller, input: InputRingBuffer, output: OutputRingBuffer)

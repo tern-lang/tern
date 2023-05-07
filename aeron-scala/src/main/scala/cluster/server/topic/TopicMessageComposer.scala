@@ -9,13 +9,13 @@ class TopicMessageComposer[M](body: Flyweight[_ <: M], buffer: ByteBuffer, topic
   private val frame = new TopicFrame
   private var message: Option[M] = None
 
-  override def compose: M = {
+  override def compose(): M = {
     buffer.clear()
     message = Some(body.assign(buffer, HEADER_SIZE, MAX_VALUE))
     message.get
   }
 
-  override def commit(consumer: MessageConsumer[M], target: MessageHeader): MessageComposer[M] = {
+  override def commit(consumer: MessageConsumer[M], userId: Int, correlationId: Long): MessageComposer[M] = {
     val length = buffer.length()
 
     if (length == 0) {
@@ -24,15 +24,13 @@ class TopicMessageComposer[M](body: Flyweight[_ <: M], buffer: ByteBuffer, topic
     if (message.isEmpty) {
       throw new IllegalStateException("Message has not been composed")
     }
-    val userId = target.getUserId
-    val correlationId = target.getCorrelationId
-
     header.assign(buffer, 0, HEADER_SIZE)
       .withUserId(userId)
       .withCorrelationId(correlationId)
       .withVenueId(venueId)
       .withTopicId(topic.code)
 
+    frame.assign(header, buffer, 0, length)
     consumer.consume(frame, message.get)
     message = None
     this

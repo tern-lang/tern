@@ -57,10 +57,12 @@ class ClusterClientMediaDriver(mode: ClusterMode, group: NodeGroup, host: String
     val aeron = Aeron.connect(context)
     val inputBuffer = InputRingBuffer.create(mode)
     val outputBuffer = OutputRingBuffer.create(mode)
+    val idle = mode.getIdleStrategy
 
-    ClusterClient(new ClusterConnection(listener, aeron, group, host).connect(),
-      inputBuffer,
-      outputBuffer)
+    val connection = new ClusterConnection(listener, aeron, group, host)
+    val poller = new ClusterClientPoller(connection, () => idle.idle())
+
+    ClusterClient(poller, inputBuffer, outputBuffer)
   }
 
   private def availableImage(image: Image): Unit = {

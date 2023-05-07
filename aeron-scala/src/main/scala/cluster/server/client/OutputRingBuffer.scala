@@ -1,11 +1,12 @@
 package cluster.server.client
 
 import cluster.server.ClusterMode
+import cluster.server.message.Publisher
 import org.agrona.BitUtil.findNextPositivePowerOfTwo
 import org.agrona.DirectBuffer
-import org.agrona.concurrent.{IdleStrategy, MessageHandler, UnsafeBuffer}
-import org.agrona.concurrent.ringbuffer.{OneToOneRingBuffer, RingBuffer}
 import org.agrona.concurrent.ringbuffer.RingBufferDescriptor.TRAILER_LENGTH
+import org.agrona.concurrent.ringbuffer.{OneToOneRingBuffer, RingBuffer}
+import org.agrona.concurrent.{IdleStrategy, MessageHandler, UnsafeBuffer}
 
 import java.nio.ByteBuffer.allocateDirect
 

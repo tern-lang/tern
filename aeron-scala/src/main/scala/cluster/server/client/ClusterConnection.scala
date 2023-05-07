@@ -33,10 +33,10 @@ class ClusterConnection(listener: ClusterClientHandler, aeron: Aeron, group: Nod
       .messageTimeoutNs(TimeUnit.SECONDS.toNanos(TIMEOUT_SECONDS))
       .ingressEndpoints(group.getClusterAddresses))
 
-    new AsyncClientConnection(listener, connect)
+    new AsyncClientSession(listener, connect)
   }
 
-  private class AsyncClientConnection(
+  private class AsyncClientSession(
            private val listener: ClusterClientHandler,
            private var connect: AsyncConnect) extends ClusterSession {
 
@@ -110,7 +110,8 @@ class ClusterConnection(listener: ClusterClientHandler, aeron: Aeron, group: Nod
               listener.onClusterConnected(this)
             }
           } catch {
-            case _: Exception =>
+            case cause: Exception =>
+              cause.printStackTrace()
               CloseHelper.quietClose(connect)
               connect = null
           }

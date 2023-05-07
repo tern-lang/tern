@@ -1,8 +1,8 @@
-package cluster.server.client.demo
+package cluster.server.gateway.demo
 
-import cluster.server.client.demo.api.{CancelOrderResponse, ExecutionReport, PlaceOrderResponse}
+import cluster.server.gateway.demo.api.{CancelOrderResponse, ExecutionReport, PlaceOrderResponse}
 
-class TradingClientHandler {
+class TradingClientResponseHandler {
 
   def onPlaceOrderResponse(response: PlaceOrderResponse) = {
 

@@ -12,7 +12,7 @@ object ClusterConnected extends ClusterStatus
 object ClusterDisconnected extends ClusterStatus
 
 trait ClusterSession {
-  def status: ClusterStatus
+  def status(): ClusterStatus
   def offer(buffer: DirectBuffer, offset: Int, length: Int): Long
-  def poll: Int
+  def poll(): Int
 }

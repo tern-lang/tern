@@ -2,11 +2,13 @@ package cluster.server.demo
 
 import cluster.server.demo.api.{CancelOrderCommand, PlaceOrderCommand}
 
+import java.util.concurrent.TimeUnit
+
 class MatchingEngine(output: MatchingEngineOutput) {
   var count = 0
 
   def onPlaceOrder(command: PlaceOrderCommand): Unit = {
-    val currentTime = System.currentTimeMillis()
+    val currentTime = TimeUnit.NANOSECONDS.toMicros(System.nanoTime())
     val sendTime = command.getTime
     val duration = currentTime - sendTime
     count += 1

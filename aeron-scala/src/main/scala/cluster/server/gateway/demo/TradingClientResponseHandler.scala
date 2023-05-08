@@ -2,11 +2,13 @@ package cluster.server.gateway.demo
 
 import cluster.server.demo.api.{CancelOrderResponse, ExecutionReportEvent, PlaceOrderResponse}
 
+import java.util.concurrent.TimeUnit
+
 class TradingClientResponseHandler {
   var count = 0
 
   def onPlaceOrderResponse(response: PlaceOrderResponse) = {
-    val currentTime = System.currentTimeMillis()
+    val currentTime = TimeUnit.NANOSECONDS.toMicros(System.nanoTime())
     val sendTime = response.getTime
     val duration = currentTime - sendTime
     count += 1

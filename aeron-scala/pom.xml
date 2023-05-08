@@ -151,6 +151,7 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <finalName>trumid</finalName>
                 </configuration>
                 <executions>
                     <execution>
@@ -161,6 +162,7 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
 </project>

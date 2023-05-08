@@ -45,7 +45,7 @@ sealed trait ClusterMode {
     if (isProd) {
       YieldingIdleStrategy.INSTANCE
     } else {
-      new BackoffIdleStrategy(10, 20, MICROSECONDS.toNanos(50), MILLISECONDS.toNanos(2))
+      new BackoffIdleStrategy(10, 20, MICROSECONDS.toNanos(50), MILLISECONDS.toNanos(1))
     }
   }
 }

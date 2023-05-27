@@ -15,7 +15,8 @@ sealed trait ClusterMode {
 
   def isProd: Boolean = this eq ProdMode
 
-  def isDeleteOnStart: Boolean = isTest
+  // XXX delete on start for PROD ONLY
+  def isDeleteOnStart: Boolean = isTest || isProd
 
   def getThreadingMode: ThreadingMode = {
     if (isProd) {

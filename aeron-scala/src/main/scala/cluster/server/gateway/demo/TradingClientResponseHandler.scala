@@ -12,7 +12,7 @@ class TradingClientResponseHandler {
     val sendTime = response.getTime
     val duration = currentTime - sendTime
     count += 1
-    if(count % 1000 == 0) {
+    if(count % 20000 == 0) {
       println(s"TradingClientResponseHandler.onPlaceOrderResponse duration=${duration} ${response.getOrderId} originalTime=${sendTime} currentTime=${currentTime}")
     }
   }

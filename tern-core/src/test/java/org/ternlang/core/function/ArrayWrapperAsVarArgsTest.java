@@ -1,7 +1,7 @@
 package org.ternlang.core.function;
 
 import junit.framework.TestCase;
-import org.ternlang.common.functional.Spread;
+import org.ternlang.common.Array;
 import org.ternlang.common.store.ClassPathStore;
 import org.ternlang.common.store.Store;
 import org.ternlang.core.Context;
@@ -41,12 +41,12 @@ import org.ternlang.core.type.TypeLoader;
 
 import java.util.Arrays;
 
-public class SpreadAsVarArgsTest extends TestCase {
+public class ArrayWrapperAsVarArgsTest extends TestCase {
 
    private static class Foo {
-      public final Spread<String> values;
+      public final Array<String> values;
 
-      public Foo(Spread<String> values) {
+      public Foo(Array<String> values) {
          this.values = values;
       }
    }

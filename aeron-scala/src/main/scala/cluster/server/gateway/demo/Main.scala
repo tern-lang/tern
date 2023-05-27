@@ -33,6 +33,11 @@ object Main {
         case "prod" => ProdMode
       }
     }
+    val throttle = if(args.length > 1) {
+      Integer.parseInt(args(1))
+    } else {
+      2
+    }
     val group = NodeGroup()
     val subscriber = new TradingTopicSubscriber
     val consumer = new TopicMessageConsumer(subscriber)
@@ -50,7 +55,10 @@ object Main {
 
     for (i <- 1 to 10000000) {
       tradingClient.placeOrder(i, i, i, i, TimeUnit.NANOSECONDS.toMicros(System.nanoTime()))
-      Thread.sleep(1)
+
+      if(i % throttle == 0) {
+        Thread.sleep(1)
+      }
     }
   }
 }

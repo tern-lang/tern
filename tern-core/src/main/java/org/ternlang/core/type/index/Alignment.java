@@ -1,6 +1,6 @@
 package org.ternlang.core.type.index;
 
-import org.ternlang.common.functional.Spread;
+import org.ternlang.common.ArraySlice;
 import org.ternlang.core.error.InternalStateException;
 
 import java.lang.reflect.Array;
@@ -47,7 +47,7 @@ public enum Alignment {
          return list;
       }
    },
-   SPREAD(true) {
+   ARRAY(true) {
       @Override
       public Object[] align(Executable executable, Object[] list) {
          Class[] types = executable.getParameterTypes();
@@ -72,7 +72,7 @@ public enum Alignment {
             } else {
                System.arraycopy(list, 0, copy, 0, require);
             }
-            copy[start] = Spread.of(array);
+            copy[start] = new ArraySlice(array);
             return copy;
          }
          return list;
@@ -99,10 +99,11 @@ public enum Alignment {
 
       if(require > 0) {
          Class[] types = executable.getParameterTypes();
+         Class expect = org.ternlang.common.Array.class;
          Class last = types[require - 1];
 
-         if(last == Spread.class) {
-            return SPREAD;
+         if(last == expect) {
+            return ARRAY;
          }
       }
       return NORMAL;

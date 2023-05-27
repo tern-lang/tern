@@ -11,7 +11,8 @@ import org.ternlang.tru.domain.DomainLoader.{expression, grammar, instructions, 
 import org.ternlang.tru.domain.tree.Source
 import org.ternlang.tru.model.{Domain, Version}
 
-import java.net.URL
+import java.net.{URI, URL}
+import java.util
 import java.util.concurrent.ScheduledThreadPoolExecutor
 
 object DomainLoader {
@@ -39,32 +40,54 @@ class DomainLoader(version: Version) {
   }
 
   private def process(resources: Seq[URL], domain: Domain): Domain = {
-    var schemas: List[Source] = List.empty
+    var sources: List[Source] = List.empty
     val scope: Scope = domain.scope
+    val done = new util.HashSet[URL]()
+    val queue = new util.ArrayDeque[URL]()
 
-    for (resource <- resources) {
-      val definition: DomainDefinition = read(resource)
-      val location: String = definition.path.getPath
+    resources.foreach(resource => queue.offer(resource))
 
-      try {
-        val node: SyntaxNode = parser.parse(location, definition.source, expression)
-        val schema: Source = assembler.assemble(node, definition.path)
-        schema.define(scope, domain)
-        schemas ++= List(schema)
-      } catch {
-        case e: Exception =>
-          throw new IllegalStateException("Could not process " + location + "\n: " + definition.source, e)
+    while (!queue.isEmpty) {
+      val resource: URL = queue.poll()
+
+      if (done.add(resource)) {
+        val definition: DomainDefinition = read(resource)
+        val location: String = definition.path.getPath
+
+        try {
+          val node: SyntaxNode = parser.parse(location, definition.source, expression)
+          val source: Source = assembler.assemble(node, definition.path)
+          val namespace = source.define(scope, domain)
+          val imports = namespace.getImports();
+
+          imports.forEach(path => {
+            try {
+              val resource = URI.create(path).toURL()
+
+              if (!done.contains(resource)) {
+                queue.offer(resource)
+              }
+            } catch {
+              case e: Throwable =>
+                throw new IllegalStateException(s"Could not resolve ${path}", e)
+            }
+          })
+          sources ++= List(source)
+        } catch {
+          case e: Exception =>
+            throw new IllegalStateException("Could not process " + location + "\n: " + definition.source, e)
+        }
       }
     }
 
-    for (schema <- schemas) {
+    for (schema <- sources) {
       val child: Scope = scope.getChild // get a private scope
       schema.include(child, domain)
     }
-    for (schema <- schemas) {
+    for (schema <- sources) {
       schema.process(scope, domain)
     }
-    for (schema <- schemas) {
+    for (schema <- sources) {
       schema.extend(scope, domain)
     }
     processor.process(domain) // generate commands and substitute primary keys

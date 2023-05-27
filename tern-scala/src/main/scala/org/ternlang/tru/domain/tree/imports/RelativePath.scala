@@ -1,9 +1,11 @@
 package org.ternlang.tru.domain.tree.imports
 
 import org.ternlang.core.Compilation
+import org.ternlang.core.Reserved._
 import org.ternlang.core.module.{Module, Path}
 import org.ternlang.tree.NameReference
 import org.ternlang.tree.literal.TextLiteral
+import org.ternlang.tru.domain.Constants._
 
 import java.net.URI
 
@@ -28,14 +30,14 @@ object RelativePath {
     }
   }
 
-  private def resolve(path: Path): String = {
+  def resolve(path: Path): String = {
     val resource: String = if(path.getPath.startsWith("/")) {
       path.getPath.substring(1)
     } else {
       path.getPath
     }
-    if (resource.endsWith("/tru.tern")) {
-      resource.replace("/tru.tern", ".tru")
+    if (resource.endsWith(s"/${EXTENSION}${SCRIPT_EXTENSION}")) {
+      resource.replace(s"/${EXTENSION}${SCRIPT_EXTENSION}", s".${EXTENSION}")
     } else {
       resource
     }

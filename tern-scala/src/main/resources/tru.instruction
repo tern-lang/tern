@@ -10,10 +10,7 @@ null = org.ternlang.tree.literal.NullLiteral
 number = org.ternlang.tree.operation.SignedNumber
 
 
-namespace = org.ternlang.tru.domain.tree.NamespaceCompilation
-import = org.ternlang.tru.domain.tree.imports.ImportCompilation
-import-list = org.ternlang.tru.domain.tree.imports.ImportList
-
+namespace = org.ternlang.tru.domain.tree.PackageName
 path = org.ternlang.tru.domain.tree.imports.RelativePath
 type-set = org.ternlang.tru.domain.tree.imports.TypeSet
 wild-qualifier = org.ternlang.tru.domain.tree.imports.WildQualifier

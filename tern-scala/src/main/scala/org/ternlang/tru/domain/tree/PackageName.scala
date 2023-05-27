@@ -5,9 +5,9 @@ import org.ternlang.core.Compilation
 import org.ternlang.core.module.{Module, Path}
 import org.ternlang.parse.StringToken
 
-case class NamespaceCompilation(qualifier: Array[StringToken]) extends Compilation {
+case class PackageName(qualifier: Array[StringToken]) extends Compilation {
 
-  override def compile(module: Module, path: Path, line: Int): SourceNamespace = {
+  override def compile(module: Module, path: Path, line: Int): Package = {
     val builder = new StringBuilder()
 
     qualifier.forEach(entry => {
@@ -16,7 +16,7 @@ case class NamespaceCompilation(qualifier: Array[StringToken]) extends Compilati
       }
       builder.append(entry.getValue)
     })
-    new SourceNamespace(builder.toString, path)
+    new Package(builder.toString, path)
   }
 
 }

@@ -2,19 +2,19 @@ package org.ternlang.tru.domain.tree.imports
 
 import org.ternlang.common.Array
 import org.ternlang.core.scope.Scope
-import org.ternlang.tru.model.Domain
+import org.ternlang.tru.model.{Domain, Namespace}
 
 case class ImportList(imports: Array[Import]) {
 
-  def define(scope: Scope, domain: Domain): Unit = {
+  def define(scope: Scope, namespace: Namespace): Unit = {
     imports.forEach(entry => {
-      entry.define(scope, domain)
+      entry.define(scope, namespace)
     })
   }
 
-  def include(scope: Scope, domain: Domain): Unit = {
+  def include(scope: Scope, namespace: Namespace): Unit = {
     imports.forEach(entry => {
-      entry.include(scope, domain)
+      entry.include(scope, namespace)
     })
   }
 }

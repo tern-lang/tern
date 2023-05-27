@@ -1,10 +1,10 @@
 package org.ternlang.tru.model
 
-import org.ternlang.common.{Cache, CopyOnWriteCache}
+import org.ternlang.common.CopyOnWriteCache
 import org.ternlang.core.scope.Scope
 
 import java.util
-import java.util.{Collections, List}
+import java.util.Collections
 import java.util.concurrent.CopyOnWriteArrayList
 
 case class Domain(version: Version, scope: Scope) {
@@ -22,12 +22,11 @@ case class Domain(version: Version, scope: Scope) {
     def addNamespace(name: String): Namespace = {
       var namespace = namespaces.fetch(name)
 
-      if (namespace != null) {
-        throw new IllegalStateException(s"Namespace '${name}' already exists at '${namespace.getPath}'")
+      if (namespace == null) {
+        namespace = new Namespace(domain, name)
+        namespaces.cache(name, namespace)
+        declared.add(namespace)
       }
-      namespace = new Namespace(domain, name)
-      namespaces.cache(name, namespace)
-      declared.add(namespace)
       namespace
     }
 

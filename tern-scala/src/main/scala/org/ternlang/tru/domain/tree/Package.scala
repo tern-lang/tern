@@ -3,15 +3,14 @@ package org.ternlang.tru.domain.tree
 import org.ternlang.core.module.Path
 import org.ternlang.core.scope.{Scope, ScopeState}
 import org.ternlang.core.variable.Value
-import org.ternlang.tru.domain.tree.imports.Qualifier
+import org.ternlang.tru.domain.tree.imports.RelativePath
 import org.ternlang.tru.model.{Domain, Namespace}
 
-class SourceNamespace(qualifier: String, path: Path) {
+class Package(qualifier: String, path: Path) {
 
   def define(scope: Scope, domain: Domain): Namespace = {
     try {
-      // here we need to ensure that each time we reference a new file we should schedule it for reference
-      domain.addNamespace(qualifier).setPath(path.getPath)
+      domain.addNamespace(qualifier).addImport(RelativePath.resolve(path))
     } catch {
       case e: Exception =>
         throw new IllegalStateException(s"Namespace '${qualifier}' could not be created from '${path.getPath}'", e)
@@ -51,20 +50,5 @@ class SourceNamespace(qualifier: String, path: Path) {
 
   def extend(scope: Scope, domain: Domain): Namespace = {
     domain.getNamespace(qualifier)
-  }
-}
-
-object SourceNamespace {
-
-  def resolve(qualifier: Qualifier, path: Path): String = {
-    var resource: String = path.getPath
-
-    if (resource.startsWith("/")) {
-      resource = resource.substring(1)
-    }
-    if (resource.endsWith("/idl.tern")) {
-      resource = resource.replace("/idl.tern", ".idl")
-    }
-    resource
   }
 }

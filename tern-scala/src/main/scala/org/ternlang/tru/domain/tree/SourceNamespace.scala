@@ -3,6 +3,7 @@ package org.ternlang.tru.domain.tree
 import org.ternlang.core.module.Path
 import org.ternlang.core.scope.{Scope, ScopeState}
 import org.ternlang.core.variable.Value
+import org.ternlang.tru.domain.tree.imports.Qualifier
 import org.ternlang.tru.model.{Domain, Namespace}
 
 class SourceNamespace(qualifier: String, path: Path) {

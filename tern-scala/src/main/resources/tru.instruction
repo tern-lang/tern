@@ -11,15 +11,15 @@ number = org.ternlang.tree.operation.SignedNumber
 
 
 namespace = org.ternlang.tru.domain.tree.NamespaceCompilation
-import = org.ternlang.tru.domain.tree.ImportCompilation
-import-list = org.ternlang.tru.domain.tree.ImportList
+import = org.ternlang.tru.domain.tree.imports.ImportCompilation
+import-list = org.ternlang.tru.domain.tree.imports.ImportList
 
-path = org.ternlang.tru.domain.tree.PathCompilation
-type-set = org.ternlang.tru.domain.tree.TypeSetCompilation
-wild-qualifier = org.ternlang.tru.domain.tree.WildQualifier
-full-qualifier = org.ternlang.tru.domain.tree.FullQualifier
-import-list = org.ternlang.tru.domain.tree.ImportList
-import-list = org.ternlang.tru.domain.tree.ImportList
+path = org.ternlang.tru.domain.tree.imports.RelativePath
+type-set = org.ternlang.tru.domain.tree.imports.TypeSet
+wild-qualifier = org.ternlang.tru.domain.tree.imports.WildQualifier
+full-qualifier = org.ternlang.tru.domain.tree.imports.FullQualifier
+import-list = org.ternlang.tru.domain.tree.imports.ImportList
+import = org.ternlang.tru.domain.tree.imports.ImportDeclaration
 
 source = org.ternlang.tru.domain.tree.Source
 

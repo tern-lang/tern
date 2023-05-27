@@ -1,4 +1,4 @@
-package org.ternlang.tru.domain.tree
+package org.ternlang.tru.domain.tree.imports
 
 import java.util.function.Predicate
 

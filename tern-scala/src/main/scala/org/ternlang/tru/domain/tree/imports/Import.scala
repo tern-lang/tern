@@ -1,8 +1,9 @@
-package org.ternlang.tru.domain.tree
+package org.ternlang.tru.domain.tree.imports
 
 import org.ternlang.core.module.Path
 import org.ternlang.core.scope.{Scope, ScopeState}
 import org.ternlang.core.variable.Value
+import org.ternlang.tru.domain.tree.SourceNamespace
 import org.ternlang.tru.model._
 
 import java.util.List

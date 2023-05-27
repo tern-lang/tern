@@ -1,4 +1,4 @@
-package org.ternlang.tru.domain.tree
+package org.ternlang.tru.domain.tree.imports
 
 import org.ternlang.common.Array
 import org.ternlang.core.Compilation
@@ -8,7 +8,7 @@ import org.ternlang.tree.literal.TextLiteral
 
 import java.util.{HashSet, Set}
 
-class TypeSetCompilation(types: Array[TextLiteral]) extends Compilation {
+class TypeSet(types: Array[TextLiteral]) extends Compilation {
 
   override def compile(module: Module, path: Path, line: Int): Set[String] = {
     val set = new HashSet[String]()

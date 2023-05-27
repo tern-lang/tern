@@ -1,13 +1,11 @@
-package org.ternlang.tru.domain.tree
+package org.ternlang.tru.domain.tree.imports
 
 import org.ternlang.core.Compilation
 import org.ternlang.core.module.{Module, Path}
-import org.ternlang.tree.Qualifier
 
-case class ImportCompilation(qualifier: Qualifier) extends Compilation {
+case class ImportDeclaration(qualifier: Qualifier) extends Compilation {
 
   override def compile(module: Module, path: Path, line: Int): Import = {
     new Import(qualifier, path)
   }
 }
-

@@ -2,6 +2,7 @@ package org.ternlang.tru.domain.tree
 
 import org.ternlang.common.Array
 import org.ternlang.core.scope.Scope
+import org.ternlang.tru.domain.tree.imports.ImportList
 import org.ternlang.tru.model.Domain
 
 class Source(namespace: SourceNamespace, imports: ImportList, definitions: Array[Definition[_]]) {

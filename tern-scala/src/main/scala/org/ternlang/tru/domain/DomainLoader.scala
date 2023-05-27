@@ -1,4 +1,4 @@
-package org.ternlang.scala.domain
+package org.ternlang.tru.domain
 
 import org.ternlang.common.store.ClassPathStore
 import org.ternlang.compile.StoreContext
@@ -6,8 +6,10 @@ import org.ternlang.compile.assemble.{ModelScopeBuilder, OperationAssembler}
 import org.ternlang.core.module.Path
 import org.ternlang.core.scope.{EmptyModel, Scope}
 import org.ternlang.parse.{SyntaxCompiler, SyntaxNode}
-import org.ternlang.scala.domain.DomainLoader.{expression, grammar, instructions, scope}
-import org.ternlang.scala.domain.tree.Schema
+import org.ternlang.tru
+import org.ternlang.tru.domain.DomainLoader.{expression, grammar, instructions, scope}
+import org.ternlang.tru.domain.tree.Source
+import org.ternlang.tru.model.{Domain, Version}
 
 import java.net.URL
 import java.util.concurrent.ScheduledThreadPoolExecutor
@@ -15,7 +17,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor
 object DomainLoader {
   val instructions = "tru.instruction"
   val grammar = "tru.grammar"
-  val expression = "schema"
+  val expression = "source"
   val scope = "default"
 }
 
@@ -31,13 +33,13 @@ class DomainLoader(version: Version) {
 
   def load(resources: Seq[URL]): Domain = {
     val model = new EmptyModel
-    val domain = Domain(version, merger.create(model, scope))
+    val domain = tru.model.Domain(version, merger.create(model, scope))
 
     process(resources, domain)
   }
 
   private def process(resources: Seq[URL], domain: Domain): Domain = {
-    var schemas: List[Schema] = List.empty
+    var schemas: List[Source] = List.empty
     val scope: Scope = domain.scope
 
     for (resource <- resources) {
@@ -45,7 +47,7 @@ class DomainLoader(version: Version) {
       val location: String = definition.path.getPath
       try {
         val node: SyntaxNode = parser.parse(location, definition.source, expression)
-        val schema: Schema = assembler.assemble(node, definition.path)
+        val schema: Source = assembler.assemble(node, definition.path)
         schema.define(scope, domain)
         schemas ++= List(schema)
       } catch {

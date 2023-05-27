@@ -1,6 +1,6 @@
-package org.ternlang.scala.domain
+package org.ternlang.tru.domain
 
-import org.ternlang.scala.domain.Documentation._
+import org.ternlang.tru.domain.Documentation._
 
 object AnnotationType {
   val PositiveOrZero = appply(false, "PositiveOrZero")
@@ -32,6 +32,12 @@ object AnnotationType {
 
   def appply(reference: Boolean, name: String, attributes: List[String] = List.empty) = {
     AnnotationType(reference, name, None, attributes)
+  }
+
+  def resolve(name: String): Option[AnnotationType] = {
+    name match {
+      case "PositiveOrZero" => Some(PositiveOrZero)
+    }
   }
 }
 

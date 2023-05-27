@@ -43,4 +43,9 @@ public class ArraySlice<T> implements Array<T> {
    public int length() {
       return length;
    }
+
+   @Override
+   public String toString() {
+      return Arrays.asList(array).subList(off, length).toString();
+   }
 }

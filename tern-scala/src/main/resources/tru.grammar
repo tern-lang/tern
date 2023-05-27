@@ -23,5 +23,5 @@ namespace = 'namespace' _ (<full-qualifier> | <wild-qualifier>) ';';
 import = 'import' _ (<full-qualifier> | <wild-qualifier>) ';';
 import-list = *<import>;
 
-schema = <namespace> <import-list>;
+source = <namespace> <import-list>;
 

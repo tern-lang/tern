@@ -12,10 +12,10 @@ wild-qualifier = org.ternlang.tree.WildQualifier
 full-qualifier = org.ternlang.tree.FullQualifier
 
 
-namespace = org.ternlang.scala.domain.tree.NamespaceCompilation
-import = org.ternlang.scala.domain.tree.ImportCompilation
-import-list = org.ternlang.scala.domain.tree.ImportList
-schema = org.ternlang.scala.domain.tree.Schema
+namespace = org.ternlang.tru.domain.tree.NamespaceCompilation
+import = org.ternlang.tru.domain.tree.ImportCompilation
+import-list = org.ternlang.tru.domain.tree.ImportList
+source = org.ternlang.tru.domain.tree.Source
 
 
 

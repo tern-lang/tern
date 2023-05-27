@@ -1,4 +1,6 @@
-package org.ternlang.scala.domain
+package org.ternlang.tru.domain
+
+import org.ternlang.tru.model.Domain
 
 class DomainProcessor {
 

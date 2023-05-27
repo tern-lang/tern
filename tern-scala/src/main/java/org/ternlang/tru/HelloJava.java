@@ -1,4 +1,4 @@
-package org.ternlang.scala;
+package org.ternlang.tru;
 import org.ternlang.parse.CharacterToken;
 public class HelloJava {
 

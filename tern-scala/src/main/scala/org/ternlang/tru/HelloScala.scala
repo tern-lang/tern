@@ -1,11 +1,12 @@
-package org.ternlang.scala
+package org.ternlang.tru
 
 import org.ternlang.common.store.ClassPathStore
 import org.ternlang.common.thread.ThreadPool
 import org.ternlang.compile.StoreContext
 import org.ternlang.compile.assemble.OperationBuilder
 import org.ternlang.parse.{CharacterToken, Line}
-import org.ternlang.scala.domain.{DomainLoader, Version}
+import org.ternlang.tru.domain.DomainLoader
+import org.ternlang.tru.model.Version
 
 import java.net.URL
 import java.util.concurrent.Executors
@@ -15,7 +16,7 @@ object HelloScala extends App {
   private val store = new ClassPathStore
   private val context = new StoreContext(store)
 
-  val t = context.getLoader().loadType("org.ternlang.scala.Foo")
+  val t = context.getLoader().loadType("org.ternlang.tru.Foo")
   t.getFunctions.forEach(x => {
     println(x)
   })

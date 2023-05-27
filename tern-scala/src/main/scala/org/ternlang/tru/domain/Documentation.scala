@@ -1,4 +1,4 @@
-package org.ternlang.scala.domain
+package org.ternlang.tru.domain
 
 object Documentation {
   val description = "description"

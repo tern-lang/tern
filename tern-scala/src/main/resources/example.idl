@@ -1,5 +1,5 @@
 
 namespace com.foo.blah;
 
-import com.foo.array;
-import com.foo.na;
+import com.foo.array.*;
+import com.foo.na.*;

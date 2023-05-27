@@ -23,7 +23,7 @@ case class Domain(version: Version, scope: Scope) {
       var namespace = namespaces.fetch(name)
 
       if (namespace != null) {
-        throw new IllegalStateException("Namespace '" + name + "' already exists at '" + namespace.getPath + "'")
+        throw new IllegalStateException(s"Namespace '${name}' already exists at '${namespace.getPath}'")
       }
       namespace = new Namespace(domain, name)
       namespaces.cache(name, namespace)

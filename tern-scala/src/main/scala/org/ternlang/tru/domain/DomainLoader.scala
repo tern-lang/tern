@@ -45,6 +45,7 @@ class DomainLoader(version: Version) {
     for (resource <- resources) {
       val definition: DomainDefinition = read(resource)
       val location: String = definition.path.getPath
+
       try {
         val node: SyntaxNode = parser.parse(location, definition.source, expression)
         val schema: Source = assembler.assemble(node, definition.path)

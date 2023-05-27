@@ -8,13 +8,19 @@ type = org.ternlang.tree.literal.TextLiteral
 text = org.ternlang.tree.literal.TextLiteral
 null = org.ternlang.tree.literal.NullLiteral
 number = org.ternlang.tree.operation.SignedNumber
-wild-qualifier = org.ternlang.tree.WildQualifier
-full-qualifier = org.ternlang.tree.FullQualifier
 
 
 namespace = org.ternlang.tru.domain.tree.NamespaceCompilation
 import = org.ternlang.tru.domain.tree.ImportCompilation
 import-list = org.ternlang.tru.domain.tree.ImportList
+
+path = org.ternlang.tru.domain.tree.PathCompilation
+type-set = org.ternlang.tru.domain.tree.TypeSetCompilation
+wild-qualifier = org.ternlang.tru.domain.tree.WildQualifier
+full-qualifier = org.ternlang.tru.domain.tree.FullQualifier
+import-list = org.ternlang.tru.domain.tree.ImportList
+import-list = org.ternlang.tru.domain.tree.ImportList
+
 source = org.ternlang.tru.domain.tree.Source
 
 

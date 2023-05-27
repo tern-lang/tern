@@ -1,0 +1,6 @@
+
+namespace foo.bar;
+
+import * from "../../other.tru";
+import {String, Blah} from "foo/x.tru";
+

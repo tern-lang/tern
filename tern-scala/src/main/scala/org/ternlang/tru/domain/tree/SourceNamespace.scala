@@ -4,25 +4,21 @@ import org.ternlang.core.module.Path
 import org.ternlang.core.scope.{Scope, ScopeState}
 import org.ternlang.core.variable.Value
 import org.ternlang.tru.model.{Domain, Namespace}
-import org.ternlang.tree.Qualifier
 
-class SourceNamespace(qualifier: Qualifier, path: Path) {
-  private val resource: String = SourceNamespace.resolve(qualifier, path)
+class SourceNamespace(qualifier: String, path: Path) {
 
   def define(scope: Scope, domain: Domain): Namespace = {
-    val location: String = qualifier.getQualifier
-
     try {
-      domain.addNamespace(location).setPath(resource)
+      // here we need to ensure that each time we reference a new file we should schedule it for reference
+      domain.addNamespace(qualifier).setPath(path.getPath)
     } catch {
       case e: Exception =>
-        throw new IllegalStateException(s"Namespace '${location}' could not be created from '${resource}'", e)
+        throw new IllegalStateException(s"Namespace '${qualifier}' could not be created from '${path.getPath}'", e)
     }
   }
 
   def include(scope: Scope, domain: Domain): Namespace = {
-    val location: String = qualifier.getQualifier
-    val namespace: Namespace = domain.getNamespace(location)
+    val namespace: Namespace = domain.getNamespace(qualifier)
     val state: ScopeState = scope.getState
 
     namespace.getEntities().forEach(entity => {
@@ -49,11 +45,11 @@ class SourceNamespace(qualifier: Qualifier, path: Path) {
   }
 
   def process(scope: Scope, domain: Domain): Namespace = {
-    domain.getNamespace(qualifier.getQualifier)
+    domain.getNamespace(qualifier)
   }
 
   def extend(scope: Scope, domain: Domain): Namespace = {
-    domain.getNamespace(qualifier.getQualifier)
+    domain.getNamespace(qualifier)
   }
 }
 

@@ -3,7 +3,6 @@ package org.ternlang.tru.domain.tree
 import org.ternlang.core.module.Path
 import org.ternlang.core.scope.{Scope, ScopeState}
 import org.ternlang.core.variable.Value
-import org.ternlang.tree.Qualifier
 import org.ternlang.tru.model._
 
 import java.util.List
@@ -16,16 +15,12 @@ class Import(qualifier: Qualifier, path: Path) {
   def define(scope: Scope, domain: Domain): Unit = {
     val resource = SourceNamespace.resolve(qualifier, path)
     val location: String = qualifier.getLocation
-    val name: String = qualifier.getName
+    val predicate: Predicate[String] = qualifier.getPredicate
 
     if (location == null) {
       throw new IllegalStateException(s"Import has no namespace in ${resource}")
     }
-    if (name == null) {
-      matched.set((_: String) => true)
-    } else {
-      matched.set((entry: String) => name == entry)
-    }
+    matched.set(predicate)
   }
 
   def include(scope: Scope, domain: Domain): Unit = {

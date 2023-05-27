@@ -15,12 +15,14 @@ boolean = {'true' | 'false'};
 null = 'null';
 literal = {<null> | <boolean> | <number> | [template] | [text]};
 
-full-qualifier = [qualifier]*('.'[qualifier]);
-wild-qualifier = [qualifier]*('.'[qualifier])'.*';
+type-set = '{' [type]*(','[type]) '}';
+path = [text];
+full-qualifier = <type-set> 'from' <path>;
+wild-qualifier = '*' 'from' <path>;
 
-namespace = 'namespace' _ (<full-qualifier> | <wild-qualifier>) ';';
+namespace = 'namespace' _ [qualifier]*('.'[qualifier]) ';';
 
-import = 'import' _ (<full-qualifier> | <wild-qualifier>) ';';
+import = 'import' (<full-qualifier> | <wild-qualifier>) ';';
 import-list = *<import>;
 
 source = <namespace> <import-list>;

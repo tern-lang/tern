@@ -33,7 +33,7 @@ object HelloScala extends App {
 
 
   val loader = new DomainLoader(Version(1, true))
-  val domain = loader.load(Seq[URL](new java.io.File("C:\\Work\\development\\tern-lang\\tern\\tern-scala\\src\\main\\resources\\example.idl").toURL))
+  val domain = loader.load(Seq[URL](new java.io.File("C:\\Work\\development\\tern-lang\\tern\\tern-scala\\src\\main\\resources\\example.tru").toURL))
   println(domain.scope)
 }
 

@@ -4,6 +4,8 @@ namespace foo.bar;
 import * from "./other.tru";
 import {String, Blah} from "foo/x.tru";
 
+const DEFAULT_VALUE = 0.0;
+
 /**
  * This represents a struct that is generated in to a codec
  * that aligns by data in to a single byte buffer.
@@ -11,7 +13,7 @@ import {String, Blah} from "foo/x.tru";
 type IndexPrice {
 
    @PositiveOrZero
-   price: Double = 0.0;
+   price: Double = DEFAULT_VALUE;
 
    @NotBlank
    symbol: String;

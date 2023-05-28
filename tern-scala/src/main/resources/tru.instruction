@@ -49,3 +49,5 @@ enum-definition = org.ternlang.tru.domain.tree.enumeration.EnumDefinition
 enum-reference = org.ternlang.tru.domain.tree.enumeration.EnumReference
 enum-reference-list = org.ternlang.tru.domain.tree.enumeration.EnumReferenceList
 inner-enum-definition = org.ternlang.tru.domain.tree.enumeration.InnerEnumDefinition
+
+constant-definition = org.ternlang.tru.domain.tree.ConstantDefinition

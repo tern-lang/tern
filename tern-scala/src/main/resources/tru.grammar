@@ -57,5 +57,8 @@ enum-reference-list = '[' <enum-reference> *(',' <enum-reference>) ']';
 inner-enum-definition = <enum-definition>;
 inner-struct-definition = <struct-definition>;
 
-source = <namespace> <import-list> *{<struct-definition> | <enum-definition>};
+#alias-definition = ?<annotation-list>'alias' _ [type] '=' <struct-constraint> ';';
+constant-definition = 'const' _ [identifier] '=' <struct-value> ';';
+
+source = <namespace> <import-list> *{<struct-definition> | <enum-definition> | <constant-definition>};
 

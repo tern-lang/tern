@@ -10,13 +10,11 @@ null = org.ternlang.tree.literal.NullLiteral
 number = org.ternlang.tree.operation.SignedNumber
 
 
+# namespace
 namespace = org.ternlang.tru.domain.tree.PackageDeclaration
 
 
-struct-definition = org.ternlang.tru.domain.tree.struct.StructDefinition
-struct-extension = org.ternlang.tru.domain.tree.struct.StructExtension
-struct-property = org.ternlang.tru.domain.tree.struct.StructProperty
-
+# imports
 path = org.ternlang.tru.domain.tree.imports.ResourcePath
 type-set = org.ternlang.tru.domain.tree.imports.TypeSet
 wild-qualifier = org.ternlang.tru.domain.tree.imports.WildQualifier
@@ -25,14 +23,29 @@ import-list = org.ternlang.tru.domain.tree.imports.ImportList
 import = org.ternlang.tru.domain.tree.imports.ImportDeclaration
 
 source = org.ternlang.tru.domain.tree.Source
-
 entity-constraint = org.ternlang.tru.domain.tree.constraint.EntityConstraint
 
+# maps
 map-entry-data = org.ternlang.tree.construct.MapEntryData
 map-entry = org.ternlang.tree.construct.MapEntry
 map-key = org.ternlang.tree.construct.MapKey
+
+# annotations
 attribute = com.eimex.core.domain.tree.Attribute
 attribute-list = com.eimex.core.domain.tree.AttributeList
 annotation-name = org.ternlang.tree.annotation.AnnotationName
 annotation-list = org.ternlang.tree.annotation.AnnotationList
 annotation-declaration = org.ternlang.tree.annotation.AnnotationDeclaration
+
+# structs
+struct-definition = org.ternlang.tru.domain.tree.struct.StructDefinition
+struct-extension = org.ternlang.tru.domain.tree.struct.StructExtension
+struct-property = org.ternlang.tru.domain.tree.struct.StructProperty
+inner-struct-definition = org.ternlang.tru.domain.tree.struct.InnerStructDefinition
+
+# enums
+enum-property = org.ternlang.tru.domain.tree.enumeration.EnumProperty
+enum-definition = org.ternlang.tru.domain.tree.enumeration.EnumDefinition
+enum-reference = org.ternlang.tru.domain.tree.enumeration.EnumReference
+enum-reference-list = org.ternlang.tru.domain.tree.enumeration.EnumReferenceList
+inner-enum-definition = org.ternlang.tru.domain.tree.enumeration.InnerEnumDefinition

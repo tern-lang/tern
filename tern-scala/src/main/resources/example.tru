@@ -4,6 +4,10 @@ namespace foo.bar;
 import * from "./other.tru";
 import {String, Blah} from "foo/x.tru";
 
+/**
+ * This represents a struct that is generated in to a codec
+ * that aligns by data in to a single byte buffer.
+ */
 type IndexPrice {
 
    @PositiveOrZero
@@ -11,4 +15,12 @@ type IndexPrice {
 
    @NotBlank
    symbol: String;
+   convention: PriceConvention;
+
+   // inner enum to define price convention
+   enum PriceConvention {
+      Spread,
+      Price
+   }
 }
+

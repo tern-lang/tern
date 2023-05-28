@@ -44,8 +44,18 @@ struct-constraint = (<entity-constraint>);
 struct-value = (<literal> | [type]);
 struct-property = ?<annotation-list>[identifier] ':' <struct-constraint> ?('=' <struct-value>) ';';
 struct-extension = [type];
-struct-element = (<struct-property>);
+struct-element = (<struct-property> | <inner-struct-definition> | <inner-enum-definition>);
 struct-definition = ?<annotation-list> 'type' _ [type] ?( _ 'extends' _ <struct-extension>) '{' *<struct-element> '}';
 
-source = <namespace> <import-list> *{<struct-definition>};
+enum-name = [type];
+enum-attributes = '('?<map-entry-data>')';
+enum-property = <enum-name>?<enum-attributes>;
+enum-definition = ?<annotation-list> 'enum' _ [type] '{' <enum-property> *(',' <enum-property>) '}';
+enum-reference = <enum-name> '.' [identifier];
+enum-reference-list = '[' <enum-reference> *(',' <enum-reference>) ']';
+
+inner-enum-definition = <enum-definition>;
+inner-struct-definition = <struct-definition>;
+
+source = <namespace> <import-list> *{<struct-definition> | <enum-definition>};
 

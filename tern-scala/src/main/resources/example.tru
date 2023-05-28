@@ -6,14 +6,17 @@ import {String, Blah} from "foo/x.tru";
 
 const DEFAULT_VALUE = 0.0;
 
+interface Price {
+
+    @PositiveOrZero
+    price: Double;
+}
+
 /**
  * This represents a struct that is generated in to a codec
  * that aligns by data in to a single byte buffer.
  */
-type IndexPrice {
-
-   @PositiveOrZero
-   price: Double = DEFAULT_VALUE;
+type IndexPrice extends Price {
 
    @NotBlank
    symbol: String;

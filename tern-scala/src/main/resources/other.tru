@@ -2,3 +2,7 @@
 namespace foo.bar;
 
 
+type PlaceOrderCommand {
+   symbol: String;
+}
+

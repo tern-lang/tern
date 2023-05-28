@@ -62,8 +62,9 @@ class StructDefinition(val annotations: AnnotationList,
     val entity: Entity = module.getEntity(name)
 
     elements.forEach(element => {
-      try element.process(scope, entity, path)
-      catch {
+      try {
+        element.process(scope, entity, path)
+      } catch {
         case e: Exception =>
           throw new IllegalStateException(s"Error creating '${name}' in ${path}", e)
       }

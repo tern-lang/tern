@@ -10,8 +10,14 @@ null = org.ternlang.tree.literal.NullLiteral
 number = org.ternlang.tree.operation.SignedNumber
 
 
-namespace = org.ternlang.tru.domain.tree.PackageName
-path = org.ternlang.tru.domain.tree.imports.RelativePath
+namespace = org.ternlang.tru.domain.tree.PackageDeclaration
+
+
+struct-definition = org.ternlang.tru.domain.tree.struct.StructDefinition
+struct-extension = org.ternlang.tru.domain.tree.struct.StructExtension
+struct-property = org.ternlang.tru.domain.tree.struct.StructProperty
+
+path = org.ternlang.tru.domain.tree.imports.ResourcePath
 type-set = org.ternlang.tru.domain.tree.imports.TypeSet
 wild-qualifier = org.ternlang.tru.domain.tree.imports.WildQualifier
 full-qualifier = org.ternlang.tru.domain.tree.imports.FullQualifier
@@ -20,5 +26,13 @@ import = org.ternlang.tru.domain.tree.imports.ImportDeclaration
 
 source = org.ternlang.tru.domain.tree.Source
 
+entity-constraint = org.ternlang.tru.domain.tree.constraint.EntityConstraint
 
-
+map-entry-data = org.ternlang.tree.construct.MapEntryData
+map-entry = org.ternlang.tree.construct.MapEntry
+map-key = org.ternlang.tree.construct.MapKey
+attribute = com.eimex.core.domain.tree.Attribute
+attribute-list = com.eimex.core.domain.tree.AttributeList
+annotation-name = org.ternlang.tree.annotation.AnnotationName
+annotation-list = org.ternlang.tree.annotation.AnnotationList
+annotation-declaration = org.ternlang.tree.annotation.AnnotationDeclaration

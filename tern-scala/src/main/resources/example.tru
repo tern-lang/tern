@@ -4,3 +4,11 @@ namespace foo.bar;
 import * from "./other.tru";
 import {String, Blah} from "foo/x.tru";
 
+type IndexPrice {
+
+   @PositiveOrZero
+   price: Double = 0.0;
+
+   @NotBlank
+   symbol: String;
+}

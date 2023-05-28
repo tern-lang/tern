@@ -11,9 +11,8 @@ class Source(namespace: Package, imports: ImportList, definitions: Array[Definit
     val local = namespace.define(scope, domain)
 
     imports.define(scope, local)
-
     definitions.forEach(definition => {
-      definition.define(scope, local)
+      definition.define(scope, local, namespace.path)
     })
 
     local
@@ -24,9 +23,8 @@ class Source(namespace: Package, imports: ImportList, definitions: Array[Definit
 
     local.setScope(scope)
     imports.include(scope, local)
-
     definitions.forEach(definition => {
-      definition.include(scope, local)
+      definition.include(scope, local, namespace.path)
     })
   }
 
@@ -35,7 +33,7 @@ class Source(namespace: Package, imports: ImportList, definitions: Array[Definit
     val inner = local.getScope
 
     definitions.forEach(definition => {
-      definition.process(inner, local)
+      definition.process(inner, local, namespace.path)
     })
   }
 
@@ -44,7 +42,7 @@ class Source(namespace: Package, imports: ImportList, definitions: Array[Definit
     val inner = local.getScope
 
     definitions.forEach(definition => {
-      definition.extend(inner, local)
+      definition.extend(inner, local, namespace.path)
     })
   }
 }

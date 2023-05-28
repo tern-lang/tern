@@ -25,5 +25,27 @@ namespace = 'namespace' _ [qualifier]*('.'[qualifier]) ';';
 import = 'import' (<full-qualifier> | <wild-qualifier>) ';';
 import-list = *<import>;
 
-source = <namespace> <import-list>;
+attribute = [identifier];
+attribute-list = '[' <attribute> *(',' <attribute>) ']';
+
+map-key = [identifier];
+map-value = {<literal> | [type] | <annotation-declaration> | <attribute-list>};
+map-entry = (<map-key> | <literal>)':'<map-value>;
+map-entry-data = <map-entry>*(','<map-entry>);
+
+annotation-name = [type];
+annotation-list = *<annotation-declaration>?_;
+annotation-declaration = '@'<annotation-name>?<annotation-attributes>;
+annotation-attributes = '('?<map-entry-data>')';
+
+entity-constraint = [identifier];
+
+struct-constraint = (<entity-constraint>);
+struct-value = (<literal> | [type]);
+struct-property = ?<annotation-list>[identifier] ':' <struct-constraint> ?('=' <struct-value>) ';';
+struct-extension = [type];
+struct-element = (<struct-property>);
+struct-definition = ?<annotation-list> 'type' _ [type] ?( _ 'extends' _ <struct-extension>) '{' *<struct-element> '}';
+
+source = <namespace> <import-list> *{<struct-definition>};
 

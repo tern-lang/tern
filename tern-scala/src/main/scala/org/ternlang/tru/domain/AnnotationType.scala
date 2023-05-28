@@ -37,6 +37,7 @@ object AnnotationType {
   def resolve(name: String): Option[AnnotationType] = {
     name match {
       case "PositiveOrZero" => Some(PositiveOrZero)
+      case "NotBlank" => Some(NotBlank)
     }
   }
 }

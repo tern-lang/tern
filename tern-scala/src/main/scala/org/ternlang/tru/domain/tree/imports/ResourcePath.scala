@@ -9,15 +9,24 @@ import org.ternlang.tru.domain.Constants._
 
 import java.net.URI
 
-class RelativePath(literal: TextLiteral) extends Compilation {
+class ResourcePath(literal: TextLiteral) extends Compilation {
 
   override def compile(module: Module, path: Path, line: Int): URI = {
     val resource = new NameReference(literal).getName(module.getScope)
-    RelativePath.relative(path, resource)
+
+    try {
+      if(resource.startsWith("/")) {
+        ResourcePath.getClass.getResource(resource).toURI
+      } else {
+        ResourcePath.getClass.getResource(s"/${resource}").toURI
+      }
+    } catch {
+      case _ => ResourcePath.relative(path, resource)
+    }
   }
 }
 
-object RelativePath {
+object ResourcePath {
 
   def relative(path: Path, resource: String): URI = {
     val from: String = resolve(path);

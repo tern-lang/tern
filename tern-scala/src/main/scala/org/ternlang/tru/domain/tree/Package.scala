@@ -3,14 +3,14 @@ package org.ternlang.tru.domain.tree
 import org.ternlang.core.module.Path
 import org.ternlang.core.scope.{Scope, ScopeState}
 import org.ternlang.core.variable.Value
-import org.ternlang.tru.domain.tree.imports.RelativePath
+import org.ternlang.tru.domain.tree.imports.ResourcePath
 import org.ternlang.tru.model.{Domain, Namespace}
 
-class Package(qualifier: String, path: Path) {
+class Package(val qualifier: String, val path: Path) {
 
   def define(scope: Scope, domain: Domain): Namespace = {
     try {
-      domain.addNamespace(qualifier).addImport(RelativePath.resolve(path))
+      domain.addNamespace(qualifier).addImport(ResourcePath.resolve(path))
     } catch {
       case e: Exception =>
         throw new IllegalStateException(s"Namespace '${qualifier}' could not be created from '${path.getPath}'", e)

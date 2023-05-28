@@ -2,14 +2,24 @@
 namespace foo.bar.foo;
 
 
-union PlaceOrder {
+union PlaceOrder requires Order {
     market: MarketOrder;
     limit: LimitOrder;
 
-    type LimitOrder {
+    interface Order {
 
         @PositiveOrZero
         price: Double;
+
+        @PositiveOrZero
+        quantity: Double;
+    }
+
+    type LimitOrder extends Order {
+
+        @NotBlank
+        symbol: String;
+        timeInForce: TimeInForce;
 
         enum TimeInForce {
             GoodTilCancel,
@@ -17,9 +27,9 @@ union PlaceOrder {
         }
     }
 
-    type MarketOrder {
+    type MarketOrder extends Order {
 
-        @PositiveOrZero
-        price: Double;
+        @NotBlank
+        symbol: String;
     }
 }

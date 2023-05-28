@@ -30,7 +30,6 @@ class Entity(namespace: Namespace, name: String) extends Importable with Annotat
   }
 
   def getNamespace(): Namespace = namespace
-
   def getProperties(): List[Property] = properties.getProperties
   def getProperty(name: String): Property = properties.getProperty(name)
   def addProperty(name: String): Property = properties.addProperty(name)

@@ -13,7 +13,7 @@ object CodeGenMain extends App {
 
   domain.getNamespaces().forEach(namespace => {
     namespace.getEntities().forEach(entity => {
-      println(entity.getName())
+      println(namespace.getName() + "." +entity.getName())
     })
   })
 }

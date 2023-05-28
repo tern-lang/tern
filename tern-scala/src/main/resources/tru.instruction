@@ -57,5 +57,5 @@ inner-enum-definition = org.ternlang.tru.domain.tree.enumeration.InnerEnumDefini
 union-property = org.ternlang.tru.domain.tree.union.UnionProperty
 union-requirement = org.ternlang.tru.domain.tree.union.UnionRequirement
 union-definition = org.ternlang.tru.domain.tree.union.UnionDefinition
-
+inner-union-definition = org.ternlang.tru.domain.tree.union.InnerUnionDefinition
 

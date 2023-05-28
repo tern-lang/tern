@@ -4,5 +4,10 @@ namespace foo.bar;
 
 type PlaceOrderCommand {
    symbol: String;
+
+   union Order {
+        market: String;
+        limit: Double;
+   }
 }
 

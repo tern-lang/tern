@@ -1,6 +1,7 @@
 
 namespace foo.bar.foo;
 
+import * from "../example.tru";
 
 union PlaceOrder requires Order {
     market: MarketOrder;

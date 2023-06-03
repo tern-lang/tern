@@ -1,7 +1,7 @@
 package org.ternlang.tru.cluster.codegen
 
 import org.ternlang.tru.cluster.codegen.enumeration.EnumTrait
-import org.ternlang.tru.cluster.codegen.struct.{StructBuilder, StructTrait}
+import org.ternlang.tru.cluster.codegen.struct.{StructBuilder, StructCodec, StructTrait}
 import org.ternlang.tru.codegen.common.{Template, TemplateRegistry}
 import org.ternlang.tru.model.{Domain, Entity, Mode}
 
@@ -27,6 +27,7 @@ class ClusterRegistry(domain: Domain, mode: Mode) extends TemplateRegistry {
   private def addStructs(entity: Entity, templates: util.List[Template]) = {
     templates.add(new StructTrait(domain, entity, mode))
     templates.add(new StructBuilder(domain, entity, mode))
+    templates.add(new StructCodec(domain, entity, mode))
   }
 
   private def addInterfaces(entity: Entity, templates: util.List[Template]) = {

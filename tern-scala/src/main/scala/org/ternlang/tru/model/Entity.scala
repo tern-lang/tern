@@ -10,6 +10,7 @@ import java.util.{Collections, List, Map}
 class Entity(unit: SourceUnit, name: String) extends Importable with Annotated {
   private val annotations: Map[String, Annotation] = new ConcurrentHashMap[String, Annotation]()
   private val properties: PropertySet = new PropertySet(this)
+  private var size: EntitySize = new EntitySize(0, 0)
   private var category: Category = null
   private var extend: String = null
 
@@ -23,6 +24,13 @@ class Entity(unit: SourceUnit, name: String) extends Importable with Annotated {
 
   def setCategory(category: Category): Entity = {
     this.category = category
+    this
+  }
+
+  def getSize(): EntitySize = size
+
+  def setSize(size: EntitySize): Entity = {
+    this.size = size
     this
   }
 
@@ -64,7 +72,7 @@ object Entity {
       val parent = entity.getName
 
       if (property != null) {
-        throw new IllegalStateException("Property '" + name + "' already exists for '" + parent + "'")
+        throw new IllegalStateException(s"Property '${name}' already exists for '${parent}'")
       }
       property = new Property(name)
       properties.put(name, property)

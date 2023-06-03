@@ -1,7 +1,6 @@
 package org.ternlang.tru.codegen.common
 
-class SourceBuilder {
-  private val builder: StringBuilder = new StringBuilder
+class SourceBuilder(builder: StringBuilder = StringBuilder.newBuilder){
 
   def append(number: Int): SourceBuilder = {
     builder.append(number)

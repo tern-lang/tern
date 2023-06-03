@@ -4,7 +4,9 @@ import org.ternlang.core.scope.Scope
 import org.ternlang.core.variable.Value
 import org.ternlang.tru.model.Namespace._
 
+import java.util
 import java.util.concurrent.ConcurrentHashMap
+import java.util.stream.Collectors
 
 class Namespace(domain: Domain, name: String) {
   private val resolver = new NamespaceResolver(this)
@@ -15,13 +17,15 @@ class Namespace(domain: Domain, name: String) {
 
   def getName(): String = name
 
+  def getVersion(): Version = domain.getVersion()
+
   def getScope(): Scope = scope
 
   def setScope(inner: Scope): Namespace = {
-    if(inner == null) {
+    if (inner == null) {
       throw new IllegalArgumentException(s"Scope is null for namespace ${name}")
     }
-    if(scope != null) {
+    if (scope != null) {
       throw new IllegalArgumentException(s"Scope already set for namespace ${name}")
     }
     scope = inner
@@ -31,6 +35,8 @@ class Namespace(domain: Domain, name: String) {
   def getVisibleEntity(name: String): Entity = resolver.getVisibleEntity(name)
 
   def getEntity(name: String): Entity = entities.get(name)
+
+  def getEntities(): util.List[Entity] = entities.values().stream().collect(Collectors.toList())
 
   def addEntity(entity: Entity): Namespace = {
     entities.put(entity.getName, entity)

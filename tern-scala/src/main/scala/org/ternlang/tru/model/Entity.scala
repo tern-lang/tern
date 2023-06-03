@@ -14,7 +14,11 @@ class Entity(unit: SourceUnit, name: String) extends Importable with Annotated {
   private var extend: String = null
 
   def getName(): String = name;
+
+  def getName(mode: Mode): String = mode.getName(name, unit.getNamespace.getVersion)
+
   def getSourceUnit(): SourceUnit = unit
+
   def getCategory(): Category = category
 
   def setCategory(category: Category): Entity = {
@@ -23,6 +27,8 @@ class Entity(unit: SourceUnit, name: String) extends Importable with Annotated {
   }
 
   def getExtends(): String = extend
+
+  def getExtends(mode: Mode): String = mode.getName(extend, unit.getNamespace.getVersion)
 
   def setExtends(extend: String): Entity = {
     this.extend = extend

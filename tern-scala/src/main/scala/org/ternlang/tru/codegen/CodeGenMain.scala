@@ -1,19 +1,15 @@
 package org.ternlang.tru.codegen
 
-import org.ternlang.tru.domain.DomainLoader
-import org.ternlang.tru.model.Version
+import org.ternlang.tru.codegen.cluster.ClusterRegistry
+import org.ternlang.tru.codegen.common.Generator
+import org.ternlang.tru.model.{ApiMode, Version}
 
-import java.net.URL
+import java.io.File
 
 object CodeGenMain extends App {
 
-  val loader = new DomainLoader(Version(1, true))
-  val domain = loader.load(Seq[URL](
-    CodeGenMain.getClass.getResource("/example.tru")))
+  val out =  new File("C:\\Work\\development\\tern-lang\\tern\\tern-scala\\target\\generated-sources")
+  val generator = new Generator((domain, mode) => new ClusterRegistry(domain, mode), Seq("/example.tru"), out)
 
-  domain.getSourceUnits().forEach(namespace => {
-    namespace.getEntities().forEach(entity => {
-      println(namespace.getName() + "." + entity.getName())
-    })
-  })
+  generator.generate(Version(1, true), ApiMode)
 }

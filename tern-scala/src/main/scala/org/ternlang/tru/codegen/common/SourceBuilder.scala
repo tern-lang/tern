@@ -18,11 +18,6 @@ class SourceBuilder {
     this
   }
 
-  def append(text: String, values: Any*): SourceBuilder = {
-    builder.append(String.format(text, values))
-    this
-  }
-
   def reset: SourceBuilder = {
     builder.setLength(0)
     this

@@ -12,21 +12,21 @@ import java.util.function.Predicate
 class Import(qualifier: Qualifier, path: Path) {
   private val matched = new AtomicReference[Predicate[String]]()
 
-  def define(scope: Scope, namespace: Namespace): Unit = {
+  def define(scope: Scope, unit: SourceUnit): Unit = {
     val location: String = qualifier.getLocation
     val predicate: Predicate[String] = qualifier.getPredicate
 
     if (location == null) {
       throw new IllegalStateException(s"Import has no path in ${location}")
     }
-    namespace.addImport(location)
+    unit.addImport(location)
     matched.set(predicate)
   }
 
-  def include(scope: Scope, namespace: Namespace): Unit = {
-    val entities: List[Entity] = namespace.getEntities
-    val aliases: List[Alias] = namespace.getAliases
-    val constants: List[Constant] = namespace.getConstants
+  def include(scope: Scope, unit: SourceUnit): Unit = {
+    val entities: List[Entity] = unit.getEntities
+    val aliases: List[Alias] = unit.getAliases
+    val constants: List[Constant] = unit.getConstants
 
     include(scope, entities)
     include(scope, aliases)

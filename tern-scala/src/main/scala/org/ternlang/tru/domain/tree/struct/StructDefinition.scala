@@ -27,13 +27,14 @@ class StructDefinition(val annotations: AnnotationList,
     this(annotations, identifier, null, elements)
   }
 
-  override def define(scope: Scope, namespace: Namespace, path: Path): Entity =
-    define(scope, namespace, path, StructCategory)
+  override def define(scope: Scope, unit: SourceUnit): Entity =
+    define(scope, unit, StructCategory)
 
-  protected def define(scope: Scope, namespace: Namespace, path: Path, category: Category): Entity = {
+  protected def define(scope: Scope, unit: SourceUnit, category: Category): Entity = {
     val name: String = reference.getName(scope)
-    val entity: Entity = namespace.addEntity(name)
+    val entity: Entity = unit.addEntity(name)
     val annotations: util.Map[String, Annotation] = entity.getAnnotations()
+    val path: Path = unit.getPath
 
     entity.setCategory(category)
     processor.create(scope, annotations)
@@ -48,18 +49,20 @@ class StructDefinition(val annotations: AnnotationList,
     entity
   }
 
-  override def include(scope: Scope, module: Namespace, path: Path): Unit = {
+  override def include(scope: Scope, unit: SourceUnit): Unit = {
     val name: String = reference.getName(scope)
-    val entity: Entity = module.getEntity(name)
+    val entity: Entity = unit.getEntity(name)
+    val path: Path = unit.getPath
 
     elements.forEach(element => {
       element.include(scope, entity, path)
     })
   }
 
-  override def process(scope: Scope, module: Namespace, path: Path): Unit = {
+  override def process(scope: Scope, unit: SourceUnit): Unit = {
     val name: String = reference.getName(scope)
-    val entity: Entity = module.getEntity(name)
+    val entity: Entity = unit.getEntity(name)
+    val path: Path = unit.getPath
 
     elements.forEach(element => {
       try {
@@ -72,19 +75,21 @@ class StructDefinition(val annotations: AnnotationList,
     validate(scope, entity, path)
   }
 
-  override def extend(scope: Scope, module: Namespace, path: Path): Unit = {
+  override def extend(scope: Scope, unit: SourceUnit): Unit = {
     val name: String = reference.getName(scope)
-    val entity: Entity = module.getEntity(name)
+    val entity: Entity = unit.getEntity(name)
     val requires: String = entity.getExtends
+    val path: Path = unit.getPath
 
     if (!extended.compareAndSet(false, true)) {
       throw new IllegalStateException(s"Extension for '${name}' already done")
     }
     if (requires != null) {
-      val base: Entity = module.getVisibleEntity(requires)
+      val namespace: Namespace = unit.getNamespace()
+      val base: Entity = namespace.getVisibleEntity(requires)
 
       if (base == null) {
-        throw new IllegalStateException(s"Could not resolve '${requires}' from '${module}'")
+        throw new IllegalStateException(s"Could not resolve '${requires}' from '${namespace}'")
       }
       val baseType: Category = base.getCategory()
       val entityType: Category = entity.getCategory()

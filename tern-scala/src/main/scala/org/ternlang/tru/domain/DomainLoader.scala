@@ -62,7 +62,7 @@ class DomainLoader(version: Version) {
 
           imports.forEach(path => {
             try {
-              val resource = URI.create(path).toURL()
+              val resource = URI.create(path.getPath).toURL()
 
               if (!done.contains(resource)) {
                 queue.offer(resource)

@@ -10,7 +10,7 @@ import org.ternlang.tree.literal.TextLiteral
 import org.ternlang.tru.domain.tree.EntityDefinition
 import org.ternlang.tru.domain.tree.annotation.AnnotationProcessor
 import org.ternlang.tru.domain.tree.struct.StructElement
-import org.ternlang.tru.model.{Entity, Namespace, Property, UnionCategory}
+import org.ternlang.tru.model._
 
 import java.util
 
@@ -19,16 +19,16 @@ class UnionDefinition(val annotations: AnnotationList,
                       val requirement: UnionRequirement,
                       val properties: Array[StructElement]) extends EntityDefinition[Entity] {
 
-  private var processor: AnnotationProcessor = new AnnotationProcessor(annotations)
-  private var reference: NameReference = new NameReference(identifier)
+  private val processor: AnnotationProcessor = new AnnotationProcessor(annotations)
+  private val reference: NameReference = new NameReference(identifier)
 
   def this(annotations: AnnotationList, identifier: TextLiteral, properties: Array[StructElement]) {
     this(annotations, identifier, null, properties)
   }
 
-  override def define(scope: Scope, namespace: Namespace, path: Path): Entity = {
+  override def define(scope: Scope, unit: SourceUnit): Entity = {
     val name: String = reference.getName(scope)
-    val entity: Entity = namespace.addEntity(name)
+    val entity: Entity = unit.addEntity(name)
     val annotations: util.Map[String, Annotation] = entity.getAnnotations
 
     entity.setCategory(UnionCategory)
@@ -47,9 +47,10 @@ class UnionDefinition(val annotations: AnnotationList,
   }
 
   @throws[Exception]
-  override def include(scope: Scope, namespace: Namespace, path: Path): Unit = {
+  override def include(scope: Scope, unit: SourceUnit): Unit = {
     val name: String = reference.getName(scope)
-    val entity: Entity = namespace.getEntity(name)
+    val entity: Entity = unit.getEntity(name)
+    val path: Path = unit.getPath
 
     if (properties == null || properties.length == 0) {
       throw new IllegalStateException(s"Union '${name}' has no entities")
@@ -62,9 +63,10 @@ class UnionDefinition(val annotations: AnnotationList,
     })
   }
 
-  override def process(scope: Scope, namespace: Namespace, path: Path): Unit = {
+  override def process(scope: Scope, unit: SourceUnit): Unit = {
     val name: String = reference.getName(scope)
-    val entity: Entity = namespace.getEntity(name)
+    val entity: Entity = unit.getEntity(name)
+    val path: Path = unit.getPath
 
     if (properties == null || properties.length == 0) {
       throw new IllegalStateException(s"Union '${name}' has no entities")
@@ -76,48 +78,50 @@ class UnionDefinition(val annotations: AnnotationList,
   }
 
   @throws[Exception]
-  override def extend(scope: Scope, namespace: Namespace, path: Path): Unit = {
+  override def extend(scope: Scope, unit: SourceUnit): Unit = {
     val name: String = reference.getName(scope)
-    val entity: Entity = namespace.getEntity(name)
+    val entity: Entity = unit.getEntity(name)
+    val path: Path = unit.getPath
     val requires: String = entity.getExtends
 
     properties.forEach(property => {
       property.extend(scope, entity, path)
     })
     if (requires != null) {
-        val base: Entity = namespace.getVisibleEntity(requires)
+      val namespace: Namespace = unit.getNamespace()
+      val base: Entity = namespace.getVisibleEntity(requires)
 
-        if (base == null) {
-          throw new IllegalStateException(s"Could not resolve '${requires}' from '${namespace}'")
+      if (base == null) {
+        throw new IllegalStateException(s"Could not resolve '${requires}' from '${namespace}'")
+      }
+      val properties: util.List[Property] = entity.getProperties
+      val iterator = properties.iterator()
+
+      while (iterator.hasNext) {
+        val property = iterator.next
+        val constraint: String = property.getConstraint
+        var reference: Entity = namespace.getVisibleEntity(constraint)
+
+        if (reference == null) {
+          throw new IllegalStateException("Union references unknown type '" + constraint + "'")
         }
-        val properties: util.List[Property] = entity.getProperties
-        val iterator = properties.iterator()
+        var found: Boolean = false
 
-        while(iterator.hasNext) {
-          val property = iterator.next
-          val constraint: String = property.getConstraint
-          var reference: Entity = namespace.getVisibleEntity(constraint)
+        while (reference != null && found == false) {
+          val actual: String = reference.getExtends
 
-          if (reference == null) {
-            throw new IllegalStateException("Union references unknown type '" + constraint + "'")
-          }
-          var found: Boolean = false
-
-          while (reference != null && found == false) {
-            val actual: String = reference.getExtends
-
-            if (requires == actual) {
-              found = true
-            } else if (actual == null) {
-              found = true
-            } else {
-              reference = namespace.getEntity(actual)
-            }
-          }
-          if (found == false) {
-            throw new IllegalStateException(s"Union type '${constraint}' must extend '${requires}'")
+          if (requires == actual) {
+            found = true
+          } else if (actual == null) {
+            found = true
+          } else {
+            reference = namespace.getEntity(actual)
           }
         }
+        if (found == false) {
+          throw new IllegalStateException(s"Union type '${constraint}' must extend '${requires}'")
+        }
+      }
     }
   }
 }

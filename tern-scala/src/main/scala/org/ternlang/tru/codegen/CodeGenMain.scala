@@ -1,4 +1,4 @@
-package org.ternlang.tru
+package org.ternlang.tru.codegen
 
 import org.ternlang.tru.domain.DomainLoader
 import org.ternlang.tru.model.Version
@@ -11,9 +11,9 @@ object CodeGenMain extends App {
   val domain = loader.load(Seq[URL](
     CodeGenMain.getClass.getResource("/example.tru")))
 
-  domain.getNamespaces().forEach(namespace => {
+  domain.getSourceUnits().forEach(namespace => {
     namespace.getEntities().forEach(entity => {
-      println(namespace.getName() + "." +entity.getName())
+      println(namespace.getName() + "." + entity.getName())
     })
   })
 }

@@ -7,14 +7,14 @@ import java.util
 import java.util.concurrent.{ConcurrentHashMap, CopyOnWriteArrayList}
 import java.util.{Collections, List, Map}
 
-class Entity(namespace: Namespace, name: String) extends Importable with Annotated {
+class Entity(unit: SourceUnit, name: String) extends Importable with Annotated {
   private val annotations: Map[String, Annotation] = new ConcurrentHashMap[String, Annotation]()
   private val properties: PropertySet = new PropertySet(this)
   private var category: Category = null
   private var extend: String = null
 
   def getName(): String = name;
-
+  def getSourceUnit(): SourceUnit = unit
   def getCategory(): Category = category
 
   def setCategory(category: Category): Entity = {
@@ -29,9 +29,12 @@ class Entity(namespace: Namespace, name: String) extends Importable with Annotat
     this
   }
 
-  def getNamespace(): Namespace = namespace
+  def getNamespace(): Namespace = unit.getNamespace
+
   def getProperties(): List[Property] = properties.getProperties
+
   def getProperty(name: String): Property = properties.getProperty(name)
+
   def addProperty(name: String): Property = properties.addProperty(name)
 
   override def getAnnotations(): Map[String, Annotation] = annotations
@@ -40,8 +43,9 @@ class Entity(namespace: Namespace, name: String) extends Importable with Annotat
 }
 
 object Entity {
+
   private class PropertySet(val entity: Entity) {
-    private val comparator =  new PropertyComparator
+    private val comparator = new PropertyComparator
     private val properties = new ConcurrentHashMap[String, Property]
     private val declared = new CopyOnWriteArrayList[Property]
     private var ordered = Collections.emptyList[Property]()
@@ -63,7 +67,9 @@ object Entity {
     }
 
     def getProperty(name: String): Property = properties.get(name)
+
     def getProperties: util.List[Property] = getProperties(SortedOrder)
+
     def getProperties(order: PropertyOrder): util.List[Property] =
       if (order.isDeclaration) {
         Collections.unmodifiableList(declared)
@@ -78,7 +84,8 @@ object Entity {
       Collections.sort(list, comparator) // important to align consistently
       list.forEach(property => {
         property.setIndex({
-          index += 1; index - 1
+          index += 1;
+          index - 1
         })
       })
       this.ordered = Collections.unmodifiableList(list)

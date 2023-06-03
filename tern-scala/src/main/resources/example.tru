@@ -28,4 +28,3 @@ type IndexPrice extends Price {
       Price
    }
 }
-

@@ -15,7 +15,7 @@ entity-constraint = org.ternlang.tru.domain.tree.constraint.EntityConstraint
 constant-definition = org.ternlang.tru.domain.tree.ConstantDefinition
 
 # namespace
-namespace = org.ternlang.tru.domain.tree.PackageDeclaration
+namespace = org.ternlang.tru.domain.tree.SourceNamespace
 
 # imports
 path = org.ternlang.tru.domain.tree.imports.ResourcePath

@@ -1,22 +1,21 @@
 package org.ternlang.tru.domain.tree.enumeration
 
 import org.ternlang.common.Array
-import org.ternlang.core.module.Path
 import org.ternlang.core.scope.Scope
 import org.ternlang.tree.NameReference
 import org.ternlang.tree.annotation.AnnotationList
 import org.ternlang.tree.literal.TextLiteral
 import org.ternlang.tru.domain.tree.EntityDefinition
-import org.ternlang.tru.model.{Entity, EnumCategory, Namespace}
+import org.ternlang.tru.model.{Entity, EnumCategory, SourceUnit}
 
 class EnumDefinition(annotations: AnnotationList, identifier: TextLiteral, properties: Array[EnumProperty])
     extends EntityDefinition[Entity] {
 
   private val reference = new NameReference(identifier)
 
-  override def define(scope: Scope, namespace: Namespace, path: Path): Entity = {
+  override def define(scope: Scope, unit: SourceUnit): Entity = {
     val name = reference.getName(scope)
-    val entity = namespace.addEntity(name)
+    val entity = unit.addEntity(name)
 
     entity.setCategory(EnumCategory)
 
@@ -29,9 +28,10 @@ class EnumDefinition(annotations: AnnotationList, identifier: TextLiteral, prope
     entity
   }
 
-  override def include(scope: Scope, namespace: Namespace, path: Path): Unit = {
+  override def include(scope: Scope, unit: SourceUnit): Unit = {
     val name = reference.getName(scope)
-    val entity = namespace.getEntity(name)
+    val entity = unit.getEntity(name)
+    val path = unit.getPath
 
     if (properties == null || properties.length == 0) {
       throw new IllegalStateException(s"Enum '${name}' has no entities")
@@ -41,9 +41,10 @@ class EnumDefinition(annotations: AnnotationList, identifier: TextLiteral, prope
     })
   }
 
-  override def process(scope: Scope, namespace: Namespace, path: Path): Unit = {
+  override def process(scope: Scope, unit: SourceUnit): Unit = {
     val name = reference.getName(scope)
-    val entity = namespace.getEntity(name)
+    val entity = unit.getEntity(name)
+    val path = unit.getPath
 
     if (entity == null) {
       throw new IllegalStateException(s"Enum ${name} has not been defined")

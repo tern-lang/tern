@@ -28,17 +28,6 @@ class ResourcePath(literal: TextLiteral) extends Compilation {
 
 object ResourcePath {
 
-  def relative(path: Path, resource: String): URI = {
-    val from: String = resolve(path);
-    val index = from.lastIndexOf('/')
-
-    if (index >= 0) {
-      URI.create(from.substring(0, index + 1) + resource).normalize()
-    } else {
-      URI.create(resource).normalize()
-    }
-  }
-
   def resolve(path: Path): String = {
     val resource: String = if(path.getPath.startsWith("/")) {
       path.getPath.substring(1)
@@ -49,6 +38,17 @@ object ResourcePath {
       resource.replace(s"/${EXTENSION}${SCRIPT_EXTENSION}", s".${EXTENSION}")
     } else {
       resource
+    }
+  }
+
+  def relative(path: Path, resource: String): URI = {
+    val from: String = resolve(path);
+    val index = from.lastIndexOf('/')
+
+    if (index >= 0) {
+      URI.create(from.substring(0, index + 1) + resource).normalize()
+    } else {
+      URI.create(resource).normalize()
     }
   }
 }

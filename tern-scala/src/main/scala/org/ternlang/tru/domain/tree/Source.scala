@@ -3,46 +3,49 @@ package org.ternlang.tru.domain.tree
 import org.ternlang.common.Array
 import org.ternlang.core.scope.Scope
 import org.ternlang.tru.domain.tree.imports.ImportList
-import org.ternlang.tru.model.{Domain, Namespace}
+import org.ternlang.tru.model.{Domain, SourceUnit}
 
-class Source(namespace: Package, imports: ImportList, definitions: Array[Definition[_]]) {
+class Source(file: SourceFile, imports: ImportList, definitions: Array[Definition[_]]) {
 
-  def define(scope: Scope, domain: Domain): Namespace = {
-    val local = namespace.define(scope, domain)
+  def define(scope: Scope, domain: Domain): SourceUnit = {
+    val unit = file.define(scope, domain)
 
-    imports.define(scope, local)
+    imports.define(scope, unit)
     definitions.forEach(definition => {
-      definition.define(scope, local, namespace.path)
+      definition.define(scope, unit)
     })
 
-    local
+    unit
   }
 
   def include(scope: Scope, domain: Domain): Unit = {
-    val local = namespace.include(scope, domain)
+    val unit = file.include(scope, domain)
+    val namespace = unit.getNamespace
 
-    local.setScope(scope)
-    imports.include(scope, local)
+    namespace.setScope(scope)
+    imports.include(scope, unit)
     definitions.forEach(definition => {
-      definition.include(scope, local, namespace.path)
+      definition.include(scope, unit)
     })
   }
 
   def process(scope: Scope, domain: Domain): Unit = {
-    val local = namespace.process(scope, domain)
-    val inner = local.getScope
+    val unit = file.include(scope, domain)
+    val namespace = unit.getNamespace
+    val inner = namespace.getScope
 
     definitions.forEach(definition => {
-      definition.process(inner, local, namespace.path)
+      definition.process(inner, unit)
     })
   }
 
   def extend(scope: Scope, domain: Domain): Unit = {
-    val local = namespace.extend(scope, domain)
-    val inner = local.getScope
+    val unit = file.extend(scope, domain)
+    val namespace = unit.getNamespace
+    val inner = namespace.getScope
 
     definitions.forEach(definition => {
-      definition.extend(inner, local, namespace.path)
+      definition.extend(inner, unit)
     })
   }
 }

@@ -4,33 +4,36 @@ namespace foo.bar.foo;
 import * from "../example.tru";
 
 union PlaceOrder requires Order {
-    market: MarketOrder;
-    limit: LimitOrder;
+  market: MarketOrder;
+  limit: LimitOrder;
 
-    interface Order {
+  interface Order {
 
-        @PositiveOrZero
-        price: Double;
+    @PositiveOrZero
+    price: Double;
 
-        @PositiveOrZero
-        quantity: Double;
+    @PositiveOrZero
+    quantity: Double;
+  }
+
+  /**
+   * Limit order has a time in force.
+   */
+  type LimitOrder extends Order {
+
+    @NotBlank
+    symbol: String;
+    timeInForce: TimeInForce;
+
+    enum TimeInForce {
+      GoodTilCancel,
+      GoodForSession
     }
+  }
 
-    type LimitOrder extends Order {
+  type MarketOrder extends Order {
 
-        @NotBlank
-        symbol: String;
-        timeInForce: TimeInForce;
-
-        enum TimeInForce {
-            GoodTilCancel,
-            GoodForSession
-        }
-    }
-
-    type MarketOrder extends Order {
-
-        @NotBlank
-        symbol: String;
-    }
+    @NotBlank
+    symbol: String;
+  }
 }

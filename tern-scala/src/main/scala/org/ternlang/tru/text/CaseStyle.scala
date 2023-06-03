@@ -148,7 +148,7 @@ object TitleCaseStyle extends CaseStyle {
   }
 }
 
-object SentanceCaseStyle extends CaseStyle {
+object SentenceCaseStyle extends CaseStyle {
 
   override def toCase(tokens: util.List[String], builder: StringBuilder): Unit = {
     val count = tokens.size

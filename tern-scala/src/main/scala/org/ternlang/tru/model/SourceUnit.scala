@@ -1,7 +1,7 @@
 package org.ternlang.tru.model
 
 import org.ternlang.core.module.Path
-import org.ternlang.tru.text.SentenceCaseStyle
+import org.ternlang.tru.common.SentenceCaseStyle
 
 import java.util
 import java.util.Collections

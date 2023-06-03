@@ -1,6 +1,6 @@
 package org.ternlang.tru.codegen.common
 
-import org.ternlang.tru.domain.DomainLoader
+import org.ternlang.tru.dsl.DomainLoader
 import org.ternlang.tru.model.{Domain, Mode, Version}
 
 import java.io.File

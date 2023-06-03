@@ -1,6 +1,6 @@
 package org.ternlang.tru.codegen
 
-import org.ternlang.tru.codegen.cluster.ClusterRegistry
+import org.ternlang.tru.cluster.codegen.ClusterRegistry
 import org.ternlang.tru.codegen.common.Generator
 import org.ternlang.tru.model.{ApiMode, Version}
 

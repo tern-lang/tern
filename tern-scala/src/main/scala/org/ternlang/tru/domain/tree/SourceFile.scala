@@ -3,17 +3,13 @@ package org.ternlang.tru.domain.tree
 import org.ternlang.core.module.Path
 import org.ternlang.core.scope.{Scope, ScopeState}
 import org.ternlang.core.variable.Value
-import org.ternlang.tru.domain.tree.imports.ResourcePath
 import org.ternlang.tru.model.{Domain, SourceUnit}
 
 class SourceFile(val qualifier: String, val path: Path) {
 
   def define(scope: Scope, domain: Domain): SourceUnit = {
     try {
-      val unit = domain.addSourceUnit(path.getPath, qualifier)
-
-      unit.addImport(ResourcePath.resolve(path))
-      unit
+      domain.addSourceUnit(path, qualifier)
     } catch {
       case e: Exception =>
         throw new IllegalStateException(s"Namespace '${qualifier}' could not be created from '${path.getPath}'", e)

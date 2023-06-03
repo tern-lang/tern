@@ -17,8 +17,14 @@ class Namespace(domain: Domain, name: String) {
 
   def getScope(): Scope = scope
 
-  def setScope(scope: Scope): Namespace = {
-    this.scope = scope
+  def setScope(inner: Scope): Namespace = {
+    if(inner == null) {
+      throw new IllegalArgumentException(s"Scope is null for namespace ${name}")
+    }
+    if(scope != null) {
+      throw new IllegalArgumentException(s"Scope already set for namespace ${name}")
+    }
+    scope = inner
     this
   }
 

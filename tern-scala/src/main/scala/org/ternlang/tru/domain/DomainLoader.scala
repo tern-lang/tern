@@ -80,16 +80,10 @@ class DomainLoader(version: Version) {
       }
     }
 
-    for (schema <- sources) {
-      val child: Scope = scope.getChild // get a private scope
-      schema.include(child, domain)
-    }
-    for (schema <- sources) {
-      schema.process(scope, domain)
-    }
-    for (schema <- sources) {
-      schema.extend(scope, domain)
-    }
+    domain.getNamespaces().forEach(namespace => namespace.setScope(scope.getChild))
+    sources.foreach(source => source.include(scope, domain))
+    sources.foreach(source => source.process(scope, domain))
+    sources.foreach(source => source.extend(scope, domain))
     processor.process(domain) // generate commands and substitute primary keys
     aligner.align(domain) // calculate lengths and offsets
     domain

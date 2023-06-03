@@ -51,9 +51,12 @@ class SourceUnit(domain: Domain, namespace: Namespace, file: String) extends Imp
   def getImport(path: String): Path = imports.getElement(path)
 
   def addImport(path: String): Path = imports.addElement(path)
+
+  override def toString() = file
 }
 
 object SourceUnit {
+
   abstract private class SourceUnitSet[T](unit: SourceUnit) {
     private val elements: util.Map[String, T] = new ConcurrentHashMap[String, T]
     private val declared: util.List[T] = new CopyOnWriteArrayList[T]

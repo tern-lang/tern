@@ -39,6 +39,7 @@ class Entity(unit: SourceUnit, name: String) extends Importable with Annotated {
 
   override def getAnnotations(): Map[String, Annotation] = annotations
 
+  override def toString(): String = name
 
 }
 

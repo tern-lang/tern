@@ -5,7 +5,7 @@ import org.ternlang.core.scope.Scope
 import org.ternlang.tru.domain.tree.imports.ImportList
 import org.ternlang.tru.model.{Domain, SourceUnit}
 
-class Source(file: SourceFile, imports: ImportList, definitions: Array[Definition[_]]) {
+class Source(val file: SourceFile, val imports: ImportList, val definitions: Array[Definition[_]]) {
 
   def define(scope: Scope, domain: Domain): SourceUnit = {
     val unit = file.define(scope, domain)
@@ -21,16 +21,16 @@ class Source(file: SourceFile, imports: ImportList, definitions: Array[Definitio
   def include(scope: Scope, domain: Domain): Unit = {
     val unit = file.include(scope, domain)
     val namespace = unit.getNamespace
+    val inner = namespace.getScope
 
-    namespace.setScope(scope)
-    imports.include(scope, unit)
+    imports.include(inner, unit)
     definitions.forEach(definition => {
-      definition.include(scope, unit)
+      definition.include(inner, unit)
     })
   }
 
   def process(scope: Scope, domain: Domain): Unit = {
-    val unit = file.include(scope, domain)
+    val unit = file.process(scope, domain)
     val namespace = unit.getNamespace
     val inner = namespace.getScope
 

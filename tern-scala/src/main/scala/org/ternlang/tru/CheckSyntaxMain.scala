@@ -7,9 +7,10 @@ object CheckSyntaxMain  extends App {
 
   val builder = new SyntaxCompiler("tru.grammar")
   val parser: SyntaxParser = builder.compile
-  LexerBuilder.print(parser, "{File,Foo}", "type-set")
-  LexerBuilder.print(parser, "{File,Foo} from 'some/path/foo.tru'", "full-qualifier")
-  LexerBuilder.print(parser, "import {File,Foo} from 'some/path/foo.tru';", "import")
+//  LexerBuilder.print(parser, "{File,Foo}", "type-set")
+//  LexerBuilder.print(parser, "{File,Foo} from 'some/path/foo.tru'", "full-qualifier")
+//  LexerBuilder.print(parser, "import {File,Foo} from 'some/path/foo.tru';", "import")
+  LexerBuilder.print(parser, "union PlaceOrder requires Order {x: X; y: Y;}", "union-definition")
 
   object LexerBuilder {
     def create(file: String): SyntaxParser = {

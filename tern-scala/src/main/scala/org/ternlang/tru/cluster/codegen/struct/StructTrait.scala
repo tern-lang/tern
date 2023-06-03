@@ -3,7 +3,7 @@ package org.ternlang.tru.cluster.codegen.struct
 import org.ternlang.tru.codegen.common.Template
 import org.ternlang.tru.model.{Domain, Entity, Mode}
 
-class StructInterface(domain: Domain, entity: Entity, mode: Mode) extends Template(domain, entity, mode) {
+class StructTrait(domain: Domain, entity: Entity, mode: Mode) extends Template(domain, entity, mode) {
 
   override protected def getName(): String = entity.getName(mode)
 

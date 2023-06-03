@@ -1,3 +1,4 @@
+# primitive
 decimal = org.ternlang.tree.literal.NumberLiteral
 hexadecimal = org.ternlang.tree.literal.NumberLiteral
 binary = org.ternlang.tree.literal.NumberLiteral
@@ -10,20 +11,20 @@ null = org.ternlang.tree.literal.NullLiteral
 number = org.ternlang.tree.operation.SignedNumber
 
 # misc
-source = org.ternlang.tru.domain.tree.Source
-entity-constraint = org.ternlang.tru.domain.tree.constraint.EntityConstraint
-constant-definition = org.ternlang.tru.domain.tree.ConstantDefinition
+source = org.ternlang.tru.dsl.tree.Source
+entity-constraint = org.ternlang.tru.dsl.tree.constraint.EntityConstraint
+constant-definition = org.ternlang.tru.dsl.tree.ConstantDefinition
 
 # namespace
-namespace = org.ternlang.tru.domain.tree.SourceNamespace
+namespace = org.ternlang.tru.dsl.tree.SourceNamespace
 
 # imports
-path = org.ternlang.tru.domain.tree.imports.ResourcePath
-type-set = org.ternlang.tru.domain.tree.imports.TypeSet
-wild-qualifier = org.ternlang.tru.domain.tree.imports.WildQualifier
-full-qualifier = org.ternlang.tru.domain.tree.imports.FullQualifier
-import-list = org.ternlang.tru.domain.tree.imports.ImportList
-import = org.ternlang.tru.domain.tree.imports.ImportDeclaration
+path = org.ternlang.tru.dsl.tree.imports.ResourcePath
+type-set = org.ternlang.tru.dsl.tree.imports.TypeSet
+wild-qualifier = org.ternlang.tru.dsl.tree.imports.WildQualifier
+full-qualifier = org.ternlang.tru.dsl.tree.imports.FullQualifier
+import-list = org.ternlang.tru.dsl.tree.imports.ImportList
+import = org.ternlang.tru.dsl.tree.imports.ImportDeclaration
 
 
 # maps
@@ -32,30 +33,30 @@ map-entry = org.ternlang.tree.construct.MapEntry
 map-key = org.ternlang.tree.construct.MapKey
 
 # annotations
-attribute = com.eimex.core.domain.tree.Attribute
-attribute-list = com.eimex.core.domain.tree.AttributeList
+attribute = com.eimex.core.dsl.tree.Attribute
+attribute-list = com.eimex.core.dsl.tree.AttributeList
 annotation-name = org.ternlang.tree.annotation.AnnotationName
 annotation-list = org.ternlang.tree.annotation.AnnotationList
 annotation-declaration = org.ternlang.tree.annotation.AnnotationDeclaration
 
 # structs
-struct-definition = org.ternlang.tru.domain.tree.struct.StructDefinition
-struct-extension = org.ternlang.tru.domain.tree.struct.StructExtension
-struct-property = org.ternlang.tru.domain.tree.struct.StructProperty
-interface-definition = org.ternlang.tru.domain.tree.struct.InterfaceDefinition
-inner-struct-definition = org.ternlang.tru.domain.tree.struct.InnerStructDefinition
-inner-interface-definition = org.ternlang.tru.domain.tree.struct.InnerInterfaceDefinition
+struct-definition = org.ternlang.tru.dsl.tree.struct.StructDefinition
+struct-extension = org.ternlang.tru.dsl.tree.struct.StructExtension
+struct-property = org.ternlang.tru.dsl.tree.struct.StructProperty
+interface-definition = org.ternlang.tru.dsl.tree.struct.InterfaceDefinition
+inner-struct-definition = org.ternlang.tru.dsl.tree.struct.InnerStructDefinition
+inner-interface-definition = org.ternlang.tru.dsl.tree.struct.InnerInterfaceDefinition
 
 # enums
-enum-property = org.ternlang.tru.domain.tree.enumeration.EnumProperty
-enum-definition = org.ternlang.tru.domain.tree.enumeration.EnumDefinition
-enum-reference = org.ternlang.tru.domain.tree.enumeration.EnumReference
-enum-reference-list = org.ternlang.tru.domain.tree.enumeration.EnumReferenceList
-inner-enum-definition = org.ternlang.tru.domain.tree.enumeration.InnerEnumDefinition
+enum-property = org.ternlang.tru.dsl.tree.enumeration.EnumProperty
+enum-definition = org.ternlang.tru.dsl.tree.enumeration.EnumDefinition
+enum-reference = org.ternlang.tru.dsl.tree.enumeration.EnumReference
+enum-reference-list = org.ternlang.tru.dsl.tree.enumeration.EnumReferenceList
+inner-enum-definition = org.ternlang.tru.dsl.tree.enumeration.InnerEnumDefinition
 
 # unions
-union-property = org.ternlang.tru.domain.tree.union.UnionProperty
-union-requirement = org.ternlang.tru.domain.tree.union.UnionRequirement
-union-definition = org.ternlang.tru.domain.tree.union.UnionDefinition
-inner-union-definition = org.ternlang.tru.domain.tree.union.InnerUnionDefinition
+union-property = org.ternlang.tru.dsl.tree.union.UnionProperty
+union-requirement = org.ternlang.tru.dsl.tree.union.UnionRequirement
+union-definition = org.ternlang.tru.dsl.tree.union.UnionDefinition
+inner-union-definition = org.ternlang.tru.dsl.tree.union.InnerUnionDefinition
 

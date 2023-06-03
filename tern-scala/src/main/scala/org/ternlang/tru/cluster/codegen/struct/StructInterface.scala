@@ -25,7 +25,7 @@ class StructInterface(domain: Domain, entity: Entity, mode: Mode) extends Templa
   }
 
   override protected def generateExtraImports(): Unit = {
-    builder.append("import com.eimex.core.validate.*;\n")
+    builder.append("import org.ternlang.tru.cluster.ResultCode\n")
   }
 
   override protected def generateBody(): Unit = {
@@ -43,6 +43,6 @@ class StructInterface(domain: Domain, entity: Entity, mode: Mode) extends Templa
     builder.append("    * Validate all attributes.\n")
     builder.append("    * @returns result of validation\n")
     builder.append("    */\n")
-    builder.append("   ResultCode validate();\n")
+    builder.append("   def validate(): ResultCode\n")
   }
 }

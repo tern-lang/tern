@@ -69,6 +69,12 @@ final class Chain[T](factory: () => Flyweight[_ <: T], dimensions: Int) {
     this
   }
 
+  def reset(): Unit = {
+    buffer.setShort(offset, 0.shortValue)
+    pool.collect()
+    table.clear()
+  }
+
 
   final class Link[T](flyweight: Option[Flyweight[_ <: T]]) {
     var value: Option[_ <: T] = None

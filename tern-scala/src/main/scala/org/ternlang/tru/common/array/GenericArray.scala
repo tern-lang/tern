@@ -11,6 +11,7 @@ trait GenericArray[G] {
 
 trait GenericArrayBuilder[G, A] extends GenericArray[G] {
   def add(): A
+  def clear(): Unit
 }
 
 
@@ -37,6 +38,10 @@ abstract class GenericArrayCodec[G, A](factory: () => Flyweight[_ <: A], convert
 
   override def size(): Int = {
     chain.size()
+  }
+
+  override def clear(): Unit = {
+    chain.reset()
   }
 
   final class GenericArrayIterator[G] extends Iterator[G] {

@@ -14,7 +14,11 @@
 
         <java.version>1.8</java.version>
         <scala.version>2.12.6</scala.version>
+        <aeron.version>1.38.1</aeron.version>
+        <artio.version>0.131</artio.version>
+        <agrona.version>1.15.1</agrona.version>
         <tern.version>1.4.6</tern.version>
+        <typesafe.version>1.4.2</typesafe.version>
     </properties>
 
     <dependencies>
@@ -28,6 +32,51 @@
             <groupId>org.ternlang</groupId>
             <artifactId>tern-compile</artifactId>
             <version>${tern.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>${typesafe.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-client</artifactId>
+            <version>${aeron.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-cluster</artifactId>
+            <version>${aeron.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-driver</artifactId>
+            <version>${aeron.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-archive</artifactId>
+            <version>${aeron.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-samples</artifactId>
+            <version>${aeron.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.agrona</groupId>
+            <artifactId>agrona</artifactId>
+            <version>${agrona.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.co.real-logic</groupId>
+            <artifactId>artio-codecs</artifactId>
+            <version>${artio.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.co.real-logic</groupId>
+            <artifactId>artio-core</artifactId>
+            <version>${artio.version}</version>
         </dependency>
     </dependencies>
 

@@ -7,9 +7,11 @@ import java.util.concurrent.ConcurrentHashMap
 
 class Property(name: String) extends Variable with Annotated {
   private val annotations = new ConcurrentHashMap[String, Annotation]()
-  private var constraint: String = null
-  private var default: Any = null
-  private var index: Int = 0
+  private var offset: PropertyOffset = _
+  private var size: PropertySize = _
+  private var constraint: String = _
+  private var default: Any = _
+  private var index: Int = _
 
   def copy(template: Property): Property = {
     this
@@ -19,6 +21,20 @@ class Property(name: String) extends Variable with Annotated {
 
   def setIndex(index: Int): Property = {
     this.index = index
+    this
+  }
+
+  def getOffset(): PropertyOffset = offset
+
+  def setOffset(offset: PropertyOffset): Property = {
+    this.offset = offset
+    this
+  }
+
+  def getSize(): PropertySize = size
+
+  def setSize(size: PropertySize): Property = {
+    this.size = size
     this
   }
 

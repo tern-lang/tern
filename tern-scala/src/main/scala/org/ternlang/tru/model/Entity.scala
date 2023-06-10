@@ -47,6 +47,8 @@ class Entity(unit: SourceUnit, name: String) extends Importable with Annotated {
 
   def getProperties(): List[Property] = properties.getProperties
 
+  def getProperties(order: PropertyOrder): List[Property] = properties.getProperties(order)
+
   def getProperty(name: String): Property = properties.getProperty(name)
 
   def addProperty(name: String): Property = properties.addProperty(name)

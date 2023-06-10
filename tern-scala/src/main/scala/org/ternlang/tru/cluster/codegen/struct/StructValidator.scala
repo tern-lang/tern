@@ -1,12 +1,13 @@
 package org.ternlang.tru.cluster.codegen.struct
 
 import org.ternlang.tru.codegen.common.Template
+import org.ternlang.tru.common.CamelCaseStyle
 import org.ternlang.tru.model.{Domain, Entity, Mode}
 
-class StructTrait(domain: Domain, entity: Entity, mode: Mode) extends Template(domain, entity, mode) {
+class StructValidator(domain: Domain, entity: Entity, mode: Mode) extends Template(domain, entity, mode) {
 
-  override protected def getName(): String = entity.getName(mode)
-  override protected def getCategory() = "trait"
+  override protected def getName(): String = entity.getName(mode) + "Validator"
+  override protected def getCategory() = "object"
 
   override protected def generateExtraImports(): Unit = {
     builder.append("import org.ternlang.tru.cluster.ResultCode\n")
@@ -15,13 +16,8 @@ class StructTrait(domain: Domain, entity: Entity, mode: Mode) extends Template(d
   override protected def generateEntity(): Unit = {
     val name = getName
     val category = getCategory
-    val extend = entity.getExtends(mode)
 
-    if (extend != null) {
-      builder.append(s"${category} ${name} extends ${extend}")
-    } else {
-      builder.append(s"${category} ${name}")
-    }
+    builder.append(s"${category} ${name}")
     builder.append(" {")
     generateBody()
     builder.append("}\n")
@@ -37,6 +33,12 @@ class StructTrait(domain: Domain, entity: Entity, mode: Mode) extends Template(d
   }
 
   private def generateValidationMethod(): Unit = {
-    builder.append("   def validate(): ResultCode\n")
+    val name = entity.getName(mode)
+    val identifier = CamelCaseStyle.toCase(name)
+
+    builder.append("\n")
+    builder.append(s"   def validate(${identifier}: ${name}): ResultCode = {\n")
+    builder.append(s"      null\n")
+    builder.append(s"   }\n")
   }
 }

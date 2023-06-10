@@ -63,7 +63,6 @@ abstract class Template(domain: Domain, entity: Entity, mode: Mode, sorted: Bool
       throw new IllegalStateException("Entity has no namespace")
     }
     generateImports(origin)
-    builder.append("import blah.blah.fo.*\n")
     generateExtraImports()
     builder.append("\n")
   }
@@ -96,7 +95,7 @@ abstract class Template(domain: Domain, entity: Entity, mode: Mode, sorted: Bool
           val namespace: String = origin.getName
 
           if (imports.add(namespace)) {
-            builder.append(s"import ${mode.getPackage(namespace, version)}.*\n")
+            builder.append(s"import ${mode.getPackage(namespace, version)}._\n")
           }
         }
       }
@@ -133,7 +132,7 @@ abstract class Template(domain: Domain, entity: Entity, mode: Mode, sorted: Bool
     builder.append(s"// Generated at ${date} (${origin})\n")
     builder.append("package ")
     builder.append(name)
-    builder.append(";\n\n")
+    builder.append("\n\n")
   }
 
   protected def getName(): String

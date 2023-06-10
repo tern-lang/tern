@@ -25,20 +25,10 @@ class StructBuilder(domain: Domain, entity: Entity, mode: Mode)  extends Templat
   }
 
   private def generateDefaultsMethod(): Unit = {
-    builder.append("\n")
-    builder.append("   /**\n")
-    builder.append("    * Set the default values.\n")
-    builder.append("    * @returns fluent builder\n")
-    builder.append("    */\n")
     builder.append(s"   def defaults(): ${getName}\n")
   }
 
   private def generateClearMethod(): Unit = {
-    builder.append("\n")
-    builder.append("   /**\n")
-    builder.append("    * Clear the values.\n")
-    builder.append("    * @returns fluent builder\n")
-    builder.append("    */\n")
     builder.append(s"   def clear(): ${getName}\n")
     builder.append("\n")
   }

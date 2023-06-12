@@ -25,7 +25,8 @@ public class InstructionReader extends PropertyReader<Set<Instruction>>{
       if(!name.startsWith(USE)) {
          throw new InternalStateException("Invalid statement from '" + file + "' at line " + line);
       }
-      String namespace = name.substring(4);
+      int size = USE.length();
+      String namespace = name.substring(size).trim();
 
       if(namespace.isEmpty()) {
          throw new InternalStateException("Invalid package name from '" + file + "' at line " + line);

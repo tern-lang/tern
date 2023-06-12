@@ -1,62 +1,77 @@
-# primitive
-decimal = org.ternlang.tree.literal.NumberLiteral
-hexadecimal = org.ternlang.tree.literal.NumberLiteral
-binary = org.ternlang.tree.literal.NumberLiteral
-boolean = org.ternlang.tree.literal.BooleanLiteral
-identifier = org.ternlang.tree.literal.TextLiteral
-template = org.ternlang.tree.template.TextTemplate
-type = org.ternlang.tree.literal.TextLiteral
-text = org.ternlang.tree.literal.TextLiteral
-null = org.ternlang.tree.literal.NullLiteral
-number = org.ternlang.tree.operation.SignedNumber
+# instructions for building the tree
 
-# misc
-source = org.ternlang.tru.dsl.tree.Source
-entity-constraint = org.ternlang.tru.dsl.tree.constraint.EntityConstraint
-constant-definition = org.ternlang.tru.dsl.tree.ConstantDefinition
+use org.ternlang.tree.literal {
+   binary = NumberLiteral,
+   boolean = BooleanLiteral,
+   decimal = NumberLiteral,
+   hexadecimal = NumberLiteral,
+   identifier = TextLiteral,
+   null = NullLiteral,
+   text = TextLiteral,
+   type = TextLiteral
+}
 
-# namespace
-namespace = org.ternlang.tru.dsl.tree.SourceNamespace
+use org.ternlang.tree.operation {
+   number = SignedNumber
+}
 
-# imports
-path = org.ternlang.tru.dsl.tree.imports.ResourcePath
-type-set = org.ternlang.tru.dsl.tree.imports.TypeSet
-wild-qualifier = org.ternlang.tru.dsl.tree.imports.WildQualifier
-full-qualifier = org.ternlang.tru.dsl.tree.imports.FullQualifier
-import-list = org.ternlang.tru.dsl.tree.imports.ImportList
-import = org.ternlang.tru.dsl.tree.imports.ImportDeclaration
+use org.ternlang.tree.template {
+   template = TextTemplate
+}
 
+use org.ternlang.tree.annotation {
+   annotation-declaration = AnnotationDeclaration,
+   annotation-list = AnnotationList,
+   annotation-name = AnnotationName
+}
 
-# maps
-map-entry-data = org.ternlang.tree.construct.MapEntryData
-map-entry = org.ternlang.tree.construct.MapEntry
-map-key = org.ternlang.tree.construct.MapKey
+use org.ternlang.tree.construct {
+   map-entry = MapEntry,
+   map-entry-data = MapEntryData,
+   map-key = MapKey
+}
 
-# annotations
-attribute = com.eimex.core.dsl.tree.Attribute
-attribute-list = com.eimex.core.dsl.tree.AttributeList
-annotation-name = org.ternlang.tree.annotation.AnnotationName
-annotation-list = org.ternlang.tree.annotation.AnnotationList
-annotation-declaration = org.ternlang.tree.annotation.AnnotationDeclaration
+use trumid.poc.dsl.tree {
+   constant-definition = ConstantDefinition,
+   namespace = SourceNamespace,
+   source = Source
+}
 
-# structs
-struct-definition = org.ternlang.tru.dsl.tree.struct.StructDefinition
-struct-extension = org.ternlang.tru.dsl.tree.struct.StructExtension
-struct-property = org.ternlang.tru.dsl.tree.struct.StructProperty
-interface-definition = org.ternlang.tru.dsl.tree.struct.InterfaceDefinition
-inner-struct-definition = org.ternlang.tru.dsl.tree.struct.InnerStructDefinition
-inner-interface-definition = org.ternlang.tru.dsl.tree.struct.InnerInterfaceDefinition
+use trumid.poc.dsl.tree.constraint {
+   entity-constraint = EntityConstraint
+}
 
-# enums
-enum-property = org.ternlang.tru.dsl.tree.enumeration.EnumProperty
-enum-definition = org.ternlang.tru.dsl.tree.enumeration.EnumDefinition
-enum-reference = org.ternlang.tru.dsl.tree.enumeration.EnumReference
-enum-reference-list = org.ternlang.tru.dsl.tree.enumeration.EnumReferenceList
-inner-enum-definition = org.ternlang.tru.dsl.tree.enumeration.InnerEnumDefinition
+use trumid.poc.dsl.tree.enumeration {
+   enum-definition = EnumDefinition,
+   enum-property = EnumProperty,
+   enum-reference = EnumReference,
+   enum-reference-list = EnumReferenceList,
+   inner-enum-definition = InnerEnumDefinition
+}
 
-# unions
-union-property = org.ternlang.tru.dsl.tree.union.UnionProperty
-union-requirement = org.ternlang.tru.dsl.tree.union.UnionRequirement
-union-definition = org.ternlang.tru.dsl.tree.union.UnionDefinition
-inner-union-definition = org.ternlang.tru.dsl.tree.union.InnerUnionDefinition
+use trumid.poc.dsl.tree.imports {
+   full-qualifier = FullQualifier,
+   import = ImportDeclaration,
+   import-list = ImportList,
+   path = ResourcePath,
+   type-set = TypeSet,
+   wild-qualifier = WildQualifier
+}
+
+use trumid.poc.dsl.tree.struct {
+   inner-interface-definition = InnerInterfaceDefinition,
+   inner-struct-definition = InnerStructDefinition,
+   interface-definition = InterfaceDefinition,
+   struct-definition = StructDefinition,
+   struct-extension = StructExtension,
+   struct-property = StructProperty
+}
+
+use trumid.poc.dsl.tree.union {
+   inner-union-definition = InnerUnionDefinition,
+   union-definition = UnionDefinition,
+   union-property = UnionProperty,
+   union-requirement = UnionRequirement
+}
+
 

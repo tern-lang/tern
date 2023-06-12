@@ -1,196 +1,244 @@
 # instructions used to assemble the execution tree
 
-decimal = org.ternlang.tree.literal.NumberLiteral
-hexadecimal = org.ternlang.tree.literal.NumberLiteral
-binary = org.ternlang.tree.literal.NumberLiteral
-boolean = org.ternlang.tree.literal.BooleanLiteral
-identifier = org.ternlang.tree.literal.TextLiteral
-template = org.ternlang.tree.template.TextTemplate
-constructor = org.ternlang.tree.literal.TextLiteral
-class = org.ternlang.tree.literal.TextLiteral
-module = org.ternlang.tree.literal.TextLiteral
-type = org.ternlang.tree.literal.TextLiteral
-text = org.ternlang.tree.literal.TextLiteral
-null = org.ternlang.tree.literal.NullLiteral
-number = org.ternlang.tree.operation.SignedNumber
-this = org.ternlang.tree.This
-super = org.ternlang.tree.Super
-argument = org.ternlang.tree.Argument
-range = org.ternlang.tree.collection.Range
-cast = org.ternlang.tree.Cast
-place-holder = org.ternlang.tree.PlaceHolder
-variable = org.ternlang.tree.variable.Variable
-variable-reference = org.ternlang.tree.variable.VariableReference
-function-invocation = org.ternlang.tree.function.FunctionInvocation
-function-curry = org.ternlang.tree.function.FunctionCurry
-function-handle = org.ternlang.tree.function.FunctionHandle
-argument-entry = org.ternlang.tree.Argument
-argument-list = org.ternlang.tree.ArgumentList
-reference = org.ternlang.tree.reference.ReferenceNavigation
-reference-invocation = org.ternlang.tree.reference.ReferenceInvocation
-reference-navigation = org.ternlang.tree.reference.ReferenceNavigation
-reference-part = org.ternlang.tree.reference.ReferencePart
-reference-variable = org.ternlang.tree.reference.ReferencePart
-reference-property = org.ternlang.tree.reference.ReferenceProperty
-calculation-list = org.ternlang.tree.operation.CalculationList
-calculation-operator = org.ternlang.tree.operation.CalculationOperator
-calculation-operand = org.ternlang.tree.operation.CalculationOperand
-comparison = org.ternlang.tree.condition.Comparison
-combination = org.ternlang.tree.condition.Combination
-postfix-increment = org.ternlang.tree.operation.PostfixIncrement
-postfix-decrement = org.ternlang.tree.operation.PostfixDecrement
-prefix-increment = org.ternlang.tree.operation.PrefixIncrement
-prefix-decrement = org.ternlang.tree.operation.PrefixDecrement
-prefix-operation = org.ternlang.tree.operation.PrefixOperation
-choice = org.ternlang.tree.condition.Choice
-null-coalesce = org.ternlang.tree.condition.NullCoalesce
-assignment = org.ternlang.tree.operation.Assignment
-assignment-list = org.ternlang.tree.operation.AssignmentList
-type-reference = org.ternlang.tree.reference.TypeReference
-type-reference-part = org.ternlang.tree.reference.TypeReferencePart
-array-reference = org.ternlang.tree.reference.ArrayReference
-list-reference = org.ternlang.tree.reference.ListReference
-set-reference = org.ternlang.tree.reference.SetReference
-map-reference = org.ternlang.tree.reference.MapReference
-function-reference = org.ternlang.tree.reference.FunctionReference
-generic-reference = org.ternlang.tree.reference.GenericReference
-generic-argument = org.ternlang.tree.reference.GenericArgument
-generic-argument-list = org.ternlang.tree.reference.GenericArgumentList
-construct-list = org.ternlang.tree.construct.ConstructList
-construct-array = org.ternlang.tree.construct.ConstructArray
-construct-object = org.ternlang.tree.construct.ConstructObject
-construct-map = org.ternlang.tree.construct.ConstructMap
-construct-set = org.ternlang.tree.construct.ConstructSet
-list-entry-data = org.ternlang.tree.construct.ElementData
-list-entry-list = org.ternlang.tree.ArgumentList
-list-entry = org.ternlang.tree.Argument
-set-entry-data = org.ternlang.tree.construct.ElementData
-set-entry-list = org.ternlang.tree.ArgumentList
-set-entry = org.ternlang.tree.Argument
-map-entry-data = org.ternlang.tree.construct.MapEntryData
-map-entry = org.ternlang.tree.construct.MapEntry
-map-key = org.ternlang.tree.construct.MapKey
-collection-index = org.ternlang.tree.collection.CollectionIndex
-global = org.ternlang.tree.Global
-global-statement = org.ternlang.tree.DeclarationStatement
-declaration = org.ternlang.tree.Declaration
-declaration-modifier = org.ternlang.tree.Modifier
-declaration-statement = org.ternlang.tree.DeclarationStatement
-assignment-statement = org.ternlang.tree.operation.AssignmentStatement
-assignment-list-statement = org.ternlang.tree.operation.AssignmentListStatement
-expression-statement = org.ternlang.tree.ExpressionStatement
-synchronized-statement = org.ternlang.tree.SynchronizedStatement
-terminal-statement = org.ternlang.tree.EmptyStatement
-empty-statement = org.ternlang.tree.EmptyStatement
-compound-statement = org.ternlang.tree.CompoundStatement
-if-statement = org.ternlang.tree.condition.IfStatement
-unless-statement = org.ternlang.tree.condition.UnlessStatement
-break-statement = org.ternlang.tree.BreakStatement
-continue-statement = org.ternlang.tree.ContinueStatement
-return-statement = org.ternlang.tree.ReturnStatement
-yield-statement = org.ternlang.tree.resume.YieldStatement
-await-declaration = org.ternlang.tree.resume.AwaitDeclaration
-await-statement = org.ternlang.tree.resume.AwaitStatement
-await-assignment-statement = org.ternlang.tree.resume.AwaitStatement
-await-declaration-statement = org.ternlang.tree.resume.AwaitStatement
-await-return-statement = org.ternlang.tree.resume.AwaitReturnStatement
-debug-statement = org.ternlang.tree.DebugStatement
-assert-statement = org.ternlang.tree.AssertStatement
-until-statement = org.ternlang.tree.condition.UntilStatement
-while-statement = org.ternlang.tree.condition.WhileStatement
-for-assignment-list = org.ternlang.tree.Expression
-for-statement = org.ternlang.tree.condition.ForStatement
-for-in-declaration = org.ternlang.tree.Declaration
-for-in-statement = org.ternlang.tree.condition.ForInStatement
-loop-statement = org.ternlang.tree.condition.LoopStatement
-switch-statement = org.ternlang.tree.condition.SwitchStatement
-switch-case = org.ternlang.tree.condition.ValueCase
-switch-default = org.ternlang.tree.condition.DefaultCase
-match-statement = org.ternlang.tree.condition.MatchStatement
-match-case = org.ternlang.tree.condition.ValueCase
-match-default = org.ternlang.tree.condition.DefaultCase
-type-constraint = org.ternlang.tree.constraint.TypeConstraint
-class-constraint = org.ternlang.tree.constraint.ClassConstraint
-trait-constraint = org.ternlang.tree.constraint.TraitConstraint
-variable-argument = org.ternlang.tree.Modifier
-parameter-modifier = org.ternlang.tree.Modifier
-parameter-modifier-list = org.ternlang.tree.ModifierList
-parameter-declaration = org.ternlang.tree.function.ParameterDeclaration
-parameter-list = org.ternlang.tree.function.ParameterList
-parameter-blank = org.ternlang.tree.function.ParameterBlank
-closure-modifier = org.ternlang.tree.Modifier
-closure-modifier-list = org.ternlang.tree.ModifierList
-closure-parameter-list = org.ternlang.tree.closure.ClosureParameterList
-closure = org.ternlang.tree.closure.Closure
-throw-statement = org.ternlang.tree.ThrowStatement
-catch-block = org.ternlang.tree.CatchBlock
-catch-block-list = org.ternlang.tree.CatchBlockList
-try-statement = org.ternlang.tree.TryStatement
-generic-parameter = org.ternlang.tree.constraint.GenericParameter
-generic-parameter-list = org.ternlang.tree.constraint.GenericParameterList
-alias-name = org.ternlang.tree.constraint.AliasName
-alias-hierarchy = org.ternlang.tree.define.AliasHierarchy
-alias-definition = org.ternlang.tree.define.AliasDefinition
-trait-name = org.ternlang.tree.constraint.TraitName
-trait-hierarchy = org.ternlang.tree.define.TraitHierarchy
-trait-constant = org.ternlang.tree.define.TraitConstant
-trait-definition = org.ternlang.tree.define.TraitDefinition
-trait-function = org.ternlang.tree.define.TraitFunction
-enum-name = org.ternlang.tree.constraint.EnumName
-enum-key = org.ternlang.tree.define.EnumKey
-enum-hierarchy = org.ternlang.tree.define.EnumHierarchy
-enum-field-declaration = org.ternlang.tree.define.MemberFieldDeclaration
-enum-field = org.ternlang.tree.define.MemberField
-enum-function = org.ternlang.tree.define.MemberFunction
-enum-definition = org.ternlang.tree.define.EnumDefinition
-enum-constructor = org.ternlang.tree.define.EnumConstructor
-enum-implicit-constructor = org.ternlang.tree.define.EnumImplicitConstructor
-enum-value = org.ternlang.tree.define.EnumValue
-enum-list = org.ternlang.tree.define.EnumList
-class-name = org.ternlang.tree.constraint.ClassName
-class-hierarchy = org.ternlang.tree.define.ClassHierarchy
-class-definition = org.ternlang.tree.define.ClassDefinition
-class-field-declaration = org.ternlang.tree.define.MemberFieldDeclaration
-class-field = org.ternlang.tree.define.MemberField
-class-function = org.ternlang.tree.define.MemberFunction
-class-constructor = org.ternlang.tree.define.ClassConstructor
-class-implicit-constructor = org.ternlang.tree.define.ClassImplicitConstructor
-abstract-class-name = org.ternlang.tree.define.AbstractClassName
-abstract-class-definition = org.ternlang.tree.define.AbstractClassDefinition
-inner-alias-definition = org.ternlang.tree.define.InnerTypeDefinition
-inner-class-definition = org.ternlang.tree.define.InnerTypeDefinition
-inner-enum-definition = org.ternlang.tree.define.InnerTypeDefinition
-inner-trait-definition = org.ternlang.tree.define.InnerTypeDefinition
-inner-abstract-class-definition = org.ternlang.tree.define.InnerTypeDefinition
-annotation-name = org.ternlang.tree.annotation.AnnotationName
-annotation-list = org.ternlang.tree.annotation.AnnotationList
-annotation-declaration = org.ternlang.tree.annotation.AnnotationDeclaration
-field-modifier = org.ternlang.tree.Modifier
-field-modifier-list = org.ternlang.tree.ModifierList
-function-name = org.ternlang.tree.constraint.FunctionName
-function-modifier = org.ternlang.tree.Modifier
-function-modifier-list = org.ternlang.tree.ModifierList
-access-modifier = org.ternlang.tree.Modifier
-access-modifier-list = org.ternlang.tree.ModifierList
-super-constructor = org.ternlang.tree.define.SuperConstructor
-this-constructor = org.ternlang.tree.define.ThisConstructor
-expression = org.ternlang.tree.Expression
-wild-qualifier = org.ternlang.tree.WildQualifier
-full-qualifier = org.ternlang.tree.FullQualifier
-import = org.ternlang.tree.Import
-import-list = org.ternlang.tree.ImportList
-import-static = org.ternlang.tree.ImportStatic
-module-name = org.ternlang.tree.define.ModuleName
-module-property = org.ternlang.tree.define.ModuleProperty
-module-declaration = org.ternlang.tree.define.ModuleDeclaration
-module-modifier = org.ternlang.tree.Modifier
-module-modifier-list = org.ternlang.tree.ModifierList
-module-function = org.ternlang.tree.define.ModuleFunction
-module-import = org.ternlang.tree.define.ModuleStatement
-module-statement = org.ternlang.tree.define.ModuleStatement
-module-definition = org.ternlang.tree.define.ModuleDefinition
-script-modifier = org.ternlang.tree.Modifier
-script-modifier-list = org.ternlang.tree.ModifierList
-script-function = org.ternlang.tree.script.ScriptFunction
-script-package = org.ternlang.tree.script.ScriptPackage
-script = org.ternlang.tree.script.Script
+use org.ternlang.tree.literal {
+   binary = NumberLiteral,
+   boolean = BooleanLiteral,
+   class = TextLiteral,
+   constructor = TextLiteral,
+   decimal = NumberLiteral,
+   hexadecimal = NumberLiteral,
+   identifier = TextLiteral,
+   module = TextLiteral,
+   null = NullLiteral,
+   text = TextLiteral,
+   type = TextLiteral
+}
+
+use org.ternlang.tree {
+   access-modifier = Modifier,
+   access-modifier-list = ModifierList,
+   argument = Argument,
+   argument-entry = Argument,
+   argument-list = ArgumentList,
+   assert-statement = AssertStatement,
+   break-statement = BreakStatement,
+   cast = Cast,
+   catch-block = CatchBlock,
+   catch-block-list = CatchBlockList,
+   closure-modifier = Modifier,
+   closure-modifier-list = ModifierList,
+   compound-statement = CompoundStatement,
+   continue-statement = ContinueStatement,
+   debug-statement = DebugStatement,
+   declaration = Declaration,
+   declaration-modifier = Modifier,
+   declaration-statement = DeclarationStatement,
+   empty-statement = EmptyStatement,
+   expression = Expression,
+   expression-statement = ExpressionStatement,
+   field-modifier = Modifier,
+   field-modifier-list = ModifierList,
+   for-assignment-list = Expression,
+   for-in-declaration = Declaration,
+   full-qualifier = FullQualifier,
+   function-modifier = Modifier,
+   function-modifier-list = ModifierList,
+   global = Global,
+   global-statement = DeclarationStatement,
+   import = Import,
+   import-list = ImportList,
+   import-static = ImportStatic,
+   list-entry = Argument,
+   list-entry-list = ArgumentList,
+   module-modifier = Modifier,
+   module-modifier-list = ModifierList,
+   parameter-modifier = Modifier,
+   parameter-modifier-list = ModifierList,
+   place-holder = PlaceHolder,
+   return-statement = ReturnStatement,
+   script-modifier = Modifier,
+   script-modifier-list = ModifierList,
+   set-entry = Argument,
+   set-entry-list = ArgumentList,
+   super = Super,
+   synchronized-statement = SynchronizedStatement,
+   terminal-statement = EmptyStatement,
+   this = This,
+   throw-statement = ThrowStatement,
+   try-statement = TryStatement,
+   variable-argument = Modifier,
+   wild-qualifier = WildQualifier
+}
+
+use org.ternlang.tree.annotation {
+   annotation-declaration = AnnotationDeclaration,
+   annotation-list = AnnotationList,
+   annotation-name = AnnotationName
+}
+
+use org.ternlang.tree.closure {
+   closure = Closure,
+   closure-parameter-list = ClosureParameterList
+}
+
+use org.ternlang.tree.collection {
+   collection-index = CollectionIndex,
+   range = Range
+}
+
+use org.ternlang.tree.condition {
+   choice = Choice,
+   combination = Combination,
+   comparison = Comparison,
+   for-in-statement = ForInStatement,
+   for-statement = ForStatement,
+   if-statement = IfStatement,
+   loop-statement = LoopStatement,
+   match-case = ValueCase,
+   match-default = DefaultCase,
+   match-statement = MatchStatement,
+   null-coalesce = NullCoalesce,
+   switch-case = ValueCase,
+   switch-default = DefaultCase,
+   switch-statement = SwitchStatement,
+   unless-statement = UnlessStatement,
+   until-statement = UntilStatement,
+   while-statement = WhileStatement
+}
+
+use org.ternlang.tree.constraint {
+   alias-name = AliasName,
+   class-constraint = ClassConstraint,
+   class-name = ClassName,
+   enum-name = EnumName,
+   function-name = FunctionName,
+   generic-parameter = GenericParameter,
+   generic-parameter-list = GenericParameterList,
+   trait-constraint = TraitConstraint,
+   trait-name = TraitName,
+   type-constraint = TypeConstraint
+}
+
+use org.ternlang.tree.construct {
+   construct-array = ConstructArray,
+   construct-list = ConstructList,
+   construct-map = ConstructMap,
+   construct-object = ConstructObject,
+   construct-set = ConstructSet,
+   list-entry-data = ElementData,
+   map-entry = MapEntry,
+   map-entry-data = MapEntryData,
+   map-key = MapKey,
+   set-entry-data = ElementData
+}
+
+use org.ternlang.tree.define {
+   abstract-class-definition = AbstractClassDefinition,
+   abstract-class-name = AbstractClassName,
+   alias-definition = AliasDefinition,
+   alias-hierarchy = AliasHierarchy,
+   class-constructor = ClassConstructor,
+   class-definition = ClassDefinition,
+   class-field = MemberField,
+   class-field-declaration = MemberFieldDeclaration,
+   class-function = MemberFunction,
+   class-hierarchy = ClassHierarchy,
+   class-implicit-constructor = ClassImplicitConstructor,
+   enum-constructor = EnumConstructor,
+   enum-definition = EnumDefinition,
+   enum-field = MemberField,
+   enum-field-declaration = MemberFieldDeclaration,
+   enum-function = MemberFunction,
+   enum-hierarchy = EnumHierarchy,
+   enum-implicit-constructor = EnumImplicitConstructor,
+   enum-key = EnumKey,
+   enum-list = EnumList,
+   enum-value = EnumValue,
+   inner-abstract-class-definition = InnerTypeDefinition,
+   inner-alias-definition = InnerTypeDefinition,
+   inner-class-definition = InnerTypeDefinition,
+   inner-enum-definition = InnerTypeDefinition,
+   inner-trait-definition = InnerTypeDefinition,
+   module-declaration = ModuleDeclaration,
+   module-definition = ModuleDefinition,
+   module-function = ModuleFunction,
+   module-import = ModuleStatement,
+   module-name = ModuleName,
+   module-property = ModuleProperty,
+   module-statement = ModuleStatement,
+   super-constructor = SuperConstructor,
+   this-constructor = ThisConstructor,
+   trait-constant = TraitConstant,
+   trait-definition = TraitDefinition,
+   trait-function = TraitFunction,
+   trait-hierarchy = TraitHierarchy
+}
+
+use org.ternlang.tree.function {
+   function-curry = FunctionCurry,
+   function-handle = FunctionHandle,
+   function-invocation = FunctionInvocation,
+   parameter-blank = ParameterBlank,
+   parameter-declaration = ParameterDeclaration,
+   parameter-list = ParameterList
+}
+
+use org.ternlang.tree.operation {
+   assignment = Assignment,
+   assignment-list = AssignmentList,
+   assignment-list-statement = AssignmentListStatement,
+   assignment-statement = AssignmentStatement,
+   calculation-list = CalculationList,
+   calculation-operand = CalculationOperand,
+   calculation-operator = CalculationOperator,
+   number = SignedNumber,
+   postfix-decrement = PostfixDecrement,
+   postfix-increment = PostfixIncrement,
+   prefix-decrement = PrefixDecrement,
+   prefix-increment = PrefixIncrement,
+   prefix-operation = PrefixOperation
+}
+
+use org.ternlang.tree.reference {
+   array-reference = ArrayReference,
+   function-reference = FunctionReference,
+   generic-argument = GenericArgument,
+   generic-argument-list = GenericArgumentList,
+   generic-reference = GenericReference,
+   list-reference = ListReference,
+   map-reference = MapReference,
+   reference = ReferenceNavigation,
+   reference-invocation = ReferenceInvocation,
+   reference-navigation = ReferenceNavigation,
+   reference-part = ReferencePart,
+   reference-property = ReferenceProperty,
+   reference-variable = ReferencePart,
+   set-reference = SetReference,
+   type-reference = TypeReference,
+   type-reference-part = TypeReferencePart
+}
+
+use org.ternlang.tree.resume {
+   await-assignment-statement = AwaitStatement,
+   await-declaration = AwaitDeclaration,
+   await-declaration-statement = AwaitStatement,
+   await-return-statement = AwaitReturnStatement,
+   await-statement = AwaitStatement,
+   yield-statement = YieldStatement
+}
+
+use org.ternlang.tree.script {
+   script = Script,
+   script-function = ScriptFunction,
+   script-package = ScriptPackage
+}
+
+use org.ternlang.tree.template {
+   template = TextTemplate
+}
+
+use org.ternlang.tree.variable {
+   variable = Variable,
+   variable-reference = VariableReference
+}
+

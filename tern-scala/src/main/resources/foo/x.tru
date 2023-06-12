@@ -37,3 +37,9 @@ union PlaceOrder requires Order {
     symbol: String;
   }
 }
+
+//service TradingEngine {
+//    def findTrades() returns TradesResponse;
+//    def placeOrder(PlaceOrder) returns PlaceOrderResponse;
+//    def cancelOrder(CancelOrder) returns CancelOrderResponse;
+//}

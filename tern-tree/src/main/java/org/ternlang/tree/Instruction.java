@@ -17,4 +17,9 @@ public class Instruction {
    public String getType(){
       return type;
    }
+
+   @Override
+   public String toString() {
+      return String.format("%s = %s", name, type);
+   }
 }

@@ -24,14 +24,18 @@ public abstract class PropertyReader<T> extends StatementReader<T> {
       }
       throw new StatementException("Error in '" + file + "' at line " + line);
    }
-   
+
+   protected boolean separator(char value) {
+      return value == '=';
+   }
+
    protected String format(char[] data, int off, int length) {
       int finish = off + length;
       int start = off;
 
       while(start < finish) {
          char next = data[start];
-         
+
          if(!space(next)) {
             break;
          }
@@ -39,7 +43,7 @@ public abstract class PropertyReader<T> extends StatementReader<T> {
       }
       while(finish > start) {
          char next = data[finish-1];
-         
+
          if(!space(next)) {
             break;
          }
@@ -47,10 +51,6 @@ public abstract class PropertyReader<T> extends StatementReader<T> {
       }
       return new String(data, start, finish -start);
    }
-   
-   protected boolean separator(char value) {
-      return value == '=';
-   }
-   
+
    protected abstract T create(String name, char[] data, int off, int length, int line);
 }

@@ -41,7 +41,16 @@ object OrderCodecTest extends App {
   if(codec.description().get.toString() != "foo") {
     throw new Error("Description")
   }
+  println(codec.stopPrice())
+  println(codec.stopPrice(Some(3333.2)).stopPrice())
   println(codec.description())
   println(codec.symbol())
   println(buffer.length())
+
+  codec.user(user => user.userId(1).accountId(22))
+
+  println(codec.user().userId())
+  println(codec.user().accountId())
+  println(codec.stopPrice())
+  println(codec.description())
 }

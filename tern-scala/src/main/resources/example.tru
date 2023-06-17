@@ -6,4 +6,11 @@ type Order {
    description: String?;
    price: Double;
    quantity: Long;
+   stopPrice: Double?;
+   user: User;
+}
+
+type User {
+   userId: Int;
+   accountId: Int;
 }

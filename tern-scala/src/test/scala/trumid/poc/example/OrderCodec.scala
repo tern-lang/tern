@@ -1,6 +1,7 @@
-// Generated at Sat Jun 17 19:31:04 BST 2023 (StructCodec)
+// Generated at Sat Jun 17 19:39:26 BST 2023 (StructCodec)
 package trumid.poc.example
 
+import trumid.poc.example._
 import trumid.poc.common._
 import trumid.poc.common.message._
 import trumid.poc.common.array._
@@ -8,13 +9,14 @@ import trumid.poc.cluster._
 
 object OrderCodec {
    val VERSION: Int = 1
-   val REQUIRED_SIZE: Int = 33
-   val TOTAL_SIZE: Int = 33
+   val REQUIRED_SIZE: Int = 54
+   val TOTAL_SIZE: Int = 54
 }
 
 final class OrderCodec(variable: Boolean = true) extends OrderBuilder with Flyweight[OrderCodec] {
    private val descriptionCodec: CharArrayCodec = new CharArrayCodec() // (0 * (2 + 2)) + 2 + 4+ 1 + 4
    private val symbolCodec: CharArrayCodec = new CharArrayCodec() // (0 * (2 + 2)) + 2 + 4
+   private val userCodec: UserCodec = new UserCodec(variable) // 8
    private var buffer: ByteBuffer = _
    private var offset: Int = _
    private var length: Int = _
@@ -89,22 +91,53 @@ final class OrderCodec(variable: Boolean = true) extends OrderBuilder with Flywe
       this
    }
 
+   override def stopPrice(): Option[Double] = {
+      // PrimitiveGenerator
+      this.buffer.setCount(this.offset + this.required)
+      if (this.buffer.getBoolean(this.offset + this.offset + 27)) {
+         Some(this.buffer.getDouble(this.offset + 27))
+      } else {
+         None
+      }
+   }
+
+   override def stopPrice(stopPrice: Option[Double]): OrderBuilder = {
+      // PrimitiveGenerator
+      this.buffer.setCount(this.offset + this.required)
+      this.buffer.setBoolean(this.offset + this.offset + 27, stopPrice.isDefined)
+      if (stopPrice.isDefined) this.buffer.setDouble(this.offset + this.offset + 27, stopPrice.get)
+      this
+   }
+
    override def symbol(): CharArray = {
       // PrimitiveArrayGenerator
       this.buffer.setCount(this.offset + this.required);
       this.symbolCodec.assign(
          this.buffer,
-         this.offset + (27 + this.buffer.getByte(this.offset + 27 + 1)),
-         this.length - (27 + this.buffer.getByte(this.offset + 27 + 1))
+         this.offset + (40 + this.buffer.getByte(this.offset + 40 + 1)),
+         this.length - (40 + this.buffer.getByte(this.offset + 40 + 1))
       )
    }
 
    override def symbol(symbol: CharSequence): OrderBuilder = {
       // PrimitiveArrayGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.symbolCodec.assign(this.buffer, this.offset + 27, this.length - 27)
+      this.symbolCodec.assign(this.buffer, this.offset + 40, this.length - 40)
             .clear()
             .append(symbol)
+      this
+   }
+
+   override def user(): User = {
+      // StructGenerator
+      this.buffer.setCount(this.offset + this.required);
+      this.userCodec.assign(this.buffer, this.offset + 46, this.length - 46)
+   }
+
+   override def user(user: (UserBuilder) => Unit): OrderBuilder = {
+      // StructGenerator
+      this.buffer.setCount(this.offset + this.required);
+      user.apply(this.userCodec.assign(this.buffer, this.offset + 46, this.length - 46))
       this
    }
 

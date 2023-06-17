@@ -17,7 +17,7 @@ abstract class PropertyGenerator protected(val domain: Domain, val entity: Entit
     if (requiredOffset == totalOffset) {
       String.valueOf(requiredOffset)
     } else {
-      s"(singleBlock ? ${totalOffset} : ${requiredOffset})"
+      s"(if (variable) ${requiredOffset} else ${totalOffset})"
     }
   }
 
@@ -29,7 +29,7 @@ abstract class PropertyGenerator protected(val domain: Domain, val entity: Entit
     if (requiredSize == totalSize) {
       String.valueOf(requiredSize)
     } else {
-      s"(singleBlock ? ${totalSize} : ${requiredSize})"
+      s"(if (variable) ${requiredSize} else ${totalSize})"
     }
   }
 

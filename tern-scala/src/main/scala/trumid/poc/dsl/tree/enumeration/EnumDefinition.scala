@@ -31,7 +31,7 @@ class EnumDefinition(annotations: AnnotationList, identifier: TextLiteral, prope
   override def include(scope: Scope, unit: SourceUnit): Unit = {
     val name = reference.getName(scope)
     val entity = unit.getEntity(name)
-    val path = unit.getPath
+    val path = unit.getPath()
 
     if (properties == null || properties.length == 0) {
       throw new IllegalStateException(s"Enum '${name}' has no entities")

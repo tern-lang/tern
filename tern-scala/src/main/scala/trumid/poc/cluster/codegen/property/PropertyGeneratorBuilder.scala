@@ -1,10 +1,9 @@
 package trumid.poc.cluster.codegen.property
 
 import trumid.poc.model._
-import trumid.poc.model.{DeclarationOrder, Domain, Entity, Mode, Property, SortedOrder}
 
 import java.util
-import java.util.{ArrayList, Collections, HashMap, List}
+import java.util.{Collections, HashMap, List}
 
 class PropertyGeneratorBuilder(domain: Domain, mode: Mode, sorted: Boolean) {
   private val generators = new HashMap[Entity, List[PropertyGenerator]]()
@@ -26,6 +25,27 @@ class PropertyGeneratorBuilder(domain: Domain, mode: Mode, sorted: Boolean) {
   })
 
   private def create(parent: Entity, property: Property): PropertyGenerator = {
-    return new StructGenerator(domain, parent, property, mode)
+    if (property.isPrimitive()) {
+      return new PrimitiveGenerator(domain, parent, property, mode)
+    } else {
+      val identifier = property.getName()
+      val constraint = property.getConstraint()
+
+      if (constraint == null) {
+        throw new IllegalStateException(s"Could not determine constraint for '${identifier}'")
+      }
+      val entity = parent.getSourceUnit().getNamespace().getVisibleEntity(constraint)
+
+      if (entity == null) {
+        throw new IllegalStateException("Could not find entity " + entity)
+      }
+      val category = entity.getCategory()
+
+      if (category.isEnum()) {
+        return new EnumGenerator(domain, parent, property, mode)
+      } else {
+        return new StructGenerator(domain, parent, property, mode)
+      }
+    }
   }
 }

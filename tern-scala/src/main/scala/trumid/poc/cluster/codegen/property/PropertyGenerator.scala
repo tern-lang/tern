@@ -9,26 +9,31 @@ abstract class PropertyGenerator protected(val domain: Domain, val entity: Entit
   def getProperty(): Property = property
   def getEntity(): Entity = entity
 
-  def getOffset: String = {
+  def getOffset(): String = {
     val offset = property.getOffset
     val requiredOffset = offset.getRequiredOffset
     val totalOffset = offset.getTotalOffset
-    if (requiredOffset == totalOffset) return String.valueOf(requiredOffset)
 
-    s"(singleBlock ? ${totalOffset} : ${requiredOffset})"
+    if (requiredOffset == totalOffset) {
+      String.valueOf(requiredOffset)
+    } else {
+      s"(singleBlock ? ${totalOffset} : ${requiredOffset})"
+    }
   }
 
   def getSize: String = {
     val size = property.getSize
     val requiredSize = size.getRequiredSize
     val totalSize = size.getTotalSize
-    if (requiredSize == totalSize) return String.valueOf(requiredSize)
 
-    s"(singleBlock ? ${totalSize} : ${requiredSize})"
+    if (requiredSize == totalSize) {
+      String.valueOf(requiredSize)
+    } else {
+      s"(singleBlock ? ${totalSize} : ${requiredSize})"
+    }
   }
 
   def generateField(builder: SourceBuilder): Unit
-  def generateConstructor(builder: SourceBuilder): Unit
   def generateGetter(builder: SourceBuilder): Unit
   def generateSetter(builder: SourceBuilder): Unit
   def generateGetterSignature(builder: SourceBuilder): Unit

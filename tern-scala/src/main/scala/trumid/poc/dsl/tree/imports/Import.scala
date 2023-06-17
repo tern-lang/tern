@@ -4,7 +4,6 @@ import org.ternlang.core.module.Path
 import org.ternlang.core.scope.{Scope, ScopeState}
 import org.ternlang.core.variable.Value
 import trumid.poc.model._
-import trumid.poc.model.{Alias, Constant, Entity, Importable, SourceUnit}
 
 import java.util.List
 import java.util.concurrent.atomic.AtomicReference

@@ -24,13 +24,31 @@ class StructCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(d
   }
 
   override protected def generateBody(): Unit = {
+    generateFields()
+    generateDefaultFields()
+    generateAssignMethod()
+    generateGetterMethods()
+    generateValidationMethod()
+  }
+
+  private def generateFields(): Unit = {
     builder.append("\n")
+    properties.create(entity).stream.forEach(generator => {
+      generator.generateField(builder)
+    })
+  }
+
+  private def generateDefaultFields(): Unit = {
     builder.append("   private var buffer: ByteBuffer = _\n")
     builder.append("   private var offset: Int = _\n")
     builder.append("   private var length: Int = _\n")
+  }
 
-    generateAssignMethod()
-    generateValidationMethod()
+  private def generateGetterMethods(): Unit = {
+    properties.create(entity).stream.forEach(generator => {
+      builder.append("\n")
+      generator.generateGetter(builder)
+    })
   }
 
   private def generateObject(): Unit = {

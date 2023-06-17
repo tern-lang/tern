@@ -6,8 +6,7 @@ import org.ternlang.compile.assemble.{ModelScopeBuilder, OperationAssembler}
 import org.ternlang.core.module.Path
 import org.ternlang.core.scope.{EmptyModel, Scope}
 import org.ternlang.parse.{SyntaxCompiler, SyntaxNode}
-import trumid.poc
-import DomainLoader.{expression, grammar, instructions, scope}
+import trumid.poc.dsl.DomainLoader.{expression, grammar, instructions, scope}
 import trumid.poc.dsl.tree.Source
 import trumid.poc.model.{Domain, Version}
 
@@ -40,8 +39,20 @@ class DomainLoader(version: Version) {
   }
 
   private def process(resources: Seq[URL], domain: Domain): Domain = {
-    var sources: List[Source] = List.empty
     val scope: Scope = domain.scope
+    val sources: List[Source] = define(resources, domain, scope)
+
+    domain.getNamespaces().forEach(namespace => namespace.setScope(scope.getChild))
+    sources.foreach(source => source.include(scope, domain))
+    sources.foreach(source => source.process(scope, domain))
+    sources.foreach(source => source.extend(scope, domain))
+    processor.process(domain) // generate commands and substitute primary keys
+    aligner.align(domain) // calculate lengths and offsets
+    domain
+  }
+
+  private def define(resources: Seq[URL], domain: Domain, scope: Scope): List[Source] = {
+    var sources: List[Source] = List.empty
     val done = new util.HashSet[URL]()
     val queue = new util.ArrayDeque[URL]()
 
@@ -79,14 +90,7 @@ class DomainLoader(version: Version) {
         }
       }
     }
-
-    domain.getNamespaces().forEach(namespace => namespace.setScope(scope.getChild))
-    sources.foreach(source => source.include(scope, domain))
-    sources.foreach(source => source.process(scope, domain))
-    sources.foreach(source => source.extend(scope, domain))
-    processor.process(domain) // generate commands and substitute primary keys
-    aligner.align(domain) // calculate lengths and offsets
-    domain
+    sources
   }
 
   private def read(resource: URL): DomainDefinition = {

@@ -3,7 +3,7 @@ package trumid.poc.cluster.codegen.property
 import trumid.poc.codegen.common.SourceBuilder
 import trumid.poc.model._
 
-class EnumGenerator(domain: Domain, entity: Entity, property: Property, mode: Mode) extends PropertyGenerator(domain, entity, property, mode) {
+class PrimitiveGenerator(domain: Domain, entity: Entity, property: Property, mode: Mode) extends PropertyGenerator(domain, entity, property, mode) {
 
   def generateField(builder: SourceBuilder): Unit = {}
 
@@ -18,7 +18,7 @@ class EnumGenerator(domain: Domain, entity: Entity, property: Property, mode: Mo
       builder.append(s"      // ${origin}\n")
       builder.append("      this.buffer.setCount(this.offset + this.required)\n")
       builder.append(s"      if(this.buffer.getBoolean(this.offset + this.offset + ${offset})) {\n")
-      builder.append(s"         Some(${constraint}.resolve(this.buffer.getByte(this.offset + ${offset})))\n")
+      builder.append(s"         Some(this.buffer.get${constraint}(this.offset + ${offset}))\n")
       builder.append(s"      } else {\n")
       builder.append(s"         None\n")
       builder.append(s"      }\n")
@@ -27,7 +27,7 @@ class EnumGenerator(domain: Domain, entity: Entity, property: Property, mode: Mo
       builder.append(s"   override def ${name}(): ${constraint} = {\n")
       builder.append(s"      // ${origin}\n")
       builder.append("      this.buffer.setCount(this.offset + this.required);\n")
-      builder.append(s"      ${constraint}.resolve(this.buffer.getByte(this.offset + ${offset}))\n")
+      builder.append(s"      this.buffer.get${constraint}(this.offset + ${offset})\n")
     }
     builder.append("   }\n")
   }

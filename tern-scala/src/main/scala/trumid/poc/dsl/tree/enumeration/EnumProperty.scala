@@ -24,16 +24,19 @@ class EnumProperty(identifier: TextLiteral, entries: MapEntryData) {
   def include(scope: Scope, entity: Entity, path: Path): Unit = {
     val name: String = reference.getName(scope)
     val property: Property = entity.addProperty(name)
-    val constraint: String = entity.getName
+    val constraint: String = entity.getName()
     val attributes: util.Map[String, Any] = create(scope)
 
+    property.getMask().add(Property.ENUM)
     property.setConstraint(constraint)
+    property.getAttributes().putAll(attributes)
   }
 
   def process(scope: Scope, entity: Entity, path: Path): Unit = {
     val name: String = reference.getName(scope)
     val property: Property = entity.getProperty(name)
 
+    property.getMask().add(Property.ENUM)
   }
 
   private def create(scope: Scope): util.Map[String, Any] = {

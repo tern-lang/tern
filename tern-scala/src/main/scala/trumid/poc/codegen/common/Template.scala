@@ -1,5 +1,6 @@
 package trumid.poc.codegen.common
 
+import trumid.poc.cluster.codegen.property.PropertyGeneratorBuilder
 import trumid.poc.model._
 import trumid.poc.model.{DeclarationOrder, Domain, Entity, Mode, Namespace, PropertyOrder, SortedOrder}
 
@@ -7,6 +8,7 @@ import java.util
 import java.util.Date
 
 abstract class Template(domain: Domain, entity: Entity, mode: Mode, sorted: Boolean = true) {
+  protected val properties = new PropertyGeneratorBuilder(domain, mode, sorted)
   protected val imports = new util.HashSet[String]
   protected val builder = new SourceBuilder
   protected val date = new Date

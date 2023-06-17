@@ -25,15 +25,16 @@ class EnumTrait(domain: Domain, entity: Entity, mode: Mode) extends Template(dom
       generateEnumCheck(property)
     })
     builder.append("   def toCode(): Byte\n")
-    entity.getProperties().forEach(property => {
-      generateEnumValue(property)
-    })
   }
 
   private def generateEnumObject(): Unit = {
     val name = entity.getName(mode)
 
     builder.append(s"object ${name} {\n")
+    entity.getProperties().forEach(property => {
+      generateEnumValue(property)
+    })
+    builder.append("\n")
     builder.append(s"   def resolve(code: Byte): ${name} = code match {\n")
 
     entity.getProperties().forEach(property => {

@@ -20,8 +20,8 @@ class Source(val file: SourceFile, val imports: ImportList, val definitions: Arr
 
   def include(scope: Scope, domain: Domain): Unit = {
     val unit = file.include(scope, domain)
-    val namespace = unit.getNamespace
-    val inner = namespace.getScope
+    val namespace = unit.getNamespace()
+    val inner = namespace.getScope()
 
     imports.include(inner, unit)
     definitions.forEach(definition => {
@@ -31,8 +31,8 @@ class Source(val file: SourceFile, val imports: ImportList, val definitions: Arr
 
   def process(scope: Scope, domain: Domain): Unit = {
     val unit = file.process(scope, domain)
-    val namespace = unit.getNamespace
-    val inner = namespace.getScope
+    val namespace = unit.getNamespace()
+    val inner = namespace.getScope()
 
     definitions.forEach(definition => {
       definition.process(inner, unit)
@@ -41,11 +41,15 @@ class Source(val file: SourceFile, val imports: ImportList, val definitions: Arr
 
   def extend(scope: Scope, domain: Domain): Unit = {
     val unit = file.extend(scope, domain)
-    val namespace = unit.getNamespace
-    val inner = namespace.getScope
+    val namespace = unit.getNamespace()
+    val inner = namespace.getScope()
 
     definitions.forEach(definition => {
       definition.extend(inner, unit)
     })
+  }
+
+  override def toString(): String =  {
+    file.path.getPath
   }
 }

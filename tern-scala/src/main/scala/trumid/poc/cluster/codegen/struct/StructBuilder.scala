@@ -22,6 +22,7 @@ class StructBuilder(domain: Domain, entity: Entity, mode: Mode)  extends Templat
     builder.append("\n")
     generateDefaultsMethod()
     generateClearMethod()
+
   }
 
   private def generateDefaultsMethod(): Unit = {

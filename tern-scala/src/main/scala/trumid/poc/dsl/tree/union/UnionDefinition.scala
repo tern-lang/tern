@@ -31,6 +31,7 @@ class UnionDefinition(val annotations: AnnotationList,
     val name: String = reference.getName(scope)
     val entity: Entity = unit.addEntity(name)
     val annotations: util.Map[String, Annotation] = entity.getAnnotations
+    val path: Path = unit.getPath()
 
     entity.setCategory(UnionCategory)
     processor.create(scope, annotations)
@@ -44,21 +45,20 @@ class UnionDefinition(val annotations: AnnotationList,
     if (properties.length >= 255) {
       throw new IllegalStateException(s"Union '${name}' is unable to support ${properties.length} options")
     }
+    properties.forEach(property => {
+      property.define(scope, entity, path)
+    })
     entity
   }
 
-  @throws[Exception]
   override def include(scope: Scope, unit: SourceUnit): Unit = {
     val name: String = reference.getName(scope)
     val entity: Entity = unit.getEntity(name)
-    val path: Path = unit.getPath
+    val path: Path = unit.getPath()
 
     if (properties == null || properties.length == 0) {
       throw new IllegalStateException(s"Union '${name}' has no entities")
     }
-    properties.forEach(property => {
-      property.define(scope, entity, path)
-    })
     properties.forEach(property => {
       property.include(scope, entity, path)
     })
@@ -78,7 +78,6 @@ class UnionDefinition(val annotations: AnnotationList,
     validate(scope, entity, path)
   }
 
-  @throws[Exception]
   override def extend(scope: Scope, unit: SourceUnit): Unit = {
     val name: String = reference.getName(scope)
     val entity: Entity = unit.getEntity(name)

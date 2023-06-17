@@ -18,17 +18,18 @@ class SourceFile(val qualifier: String, val path: Path) {
 
   def include(scope: Scope, domain: Domain): SourceUnit = {
     val unit: SourceUnit = domain.getSourceUnit(path.getPath)
-    val state: ScopeState = scope.getState
+    val inner: Scope = unit.getNamespace().getScope()
+    val state: ScopeState = inner.getState()
 
     unit.getEntities().forEach(entity => {
-      val name: String = entity.getName
+      val name: String = entity.getName()
       val value: Value = Value.getTransient(entity)
 
       state.addValue(name, value) // use for static analysis
     })
 
     unit.getAliases().forEach(alias => {
-      val name: String = alias.getName
+      val name: String = alias.getName()
       val value: Value = Value.getTransient(alias)
       val existing: Value = state.getValue(name)
 

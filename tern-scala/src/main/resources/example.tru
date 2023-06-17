@@ -1,5 +1,5 @@
 
-namespace foo.bar;
+namespace trumid.poc.example;
 
 type Order {
    symbol: String;

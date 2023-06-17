@@ -65,7 +65,7 @@ object Primitive {
   }
 
   object STRING extends Primitive {
-    override def size(): Int = -1
+    override def size(): Int = 2
     override def name(): String = "String"
     override def isString(): Boolean = true
   }

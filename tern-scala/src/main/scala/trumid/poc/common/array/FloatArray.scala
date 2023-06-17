@@ -4,7 +4,10 @@ import FloatArrayCodec.FloatValueCodec
 import trumid.poc.common.message.{ByteBuffer, ByteSize, Flyweight}
 
 trait FloatArray extends GenericArray[Float] {}
-trait FloatArrayBuilder extends FloatArray with GenericArrayBuilder[Float, FloatValue] {}
+
+trait FloatArrayBuilder extends FloatArray with GenericArrayBuilder[Float, FloatValue] {
+  def clear(): FloatArrayBuilder
+}
 
 trait FloatValue {
   def get(): Float
@@ -39,4 +42,10 @@ object FloatArrayCodec {
 final class FloatArrayCodec
   extends GenericArrayCodec[Float, FloatValue](() => new FloatValueCodec, value => value.get, ByteSize.FLOAT_SIZE)
     with FloatArrayBuilder
-    with Flyweight[FloatArrayCodec] {}
+    with Flyweight[FloatArrayCodec] {
+
+  override def clear(): FloatArrayCodec = {
+    super.clear()
+    this
+  }
+}

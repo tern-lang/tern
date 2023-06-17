@@ -2,7 +2,6 @@ package trumid.poc.model
 
 import org.ternlang.core.annotation.Annotation
 
-import java.util
 import java.util.Map
 import java.util.concurrent.ConcurrentHashMap
 
@@ -37,7 +36,7 @@ class Property(name: String) extends Variable with Annotated {
   private val attributes = new ConcurrentHashMap[String, Any]() // enum attributes mostly
   private val mask: Mask = new Mask(0)
   private var offset: PropertyOffset = new PropertyOffset(this, 0, 0)
-  private var size: PropertySize = new PropertySize(this, 0, 0)
+  private var size: PropertySize = new PropertySize(this, "?", 0, 0)
   private var version: Version = _
   private var constraint: String = _
   private var default: Any = _
@@ -97,6 +96,7 @@ class Property(name: String) extends Variable with Annotated {
   override def isOptional(): Boolean = Property.isOptional(mask)
 
   def getAttributes(): Map[String, Any] = attributes
+
   def getVersion(): Version = version
 
   def setVersion(version: Version): Property = {

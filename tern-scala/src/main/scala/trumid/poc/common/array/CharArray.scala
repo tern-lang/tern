@@ -5,10 +5,12 @@ import trumid.poc.common.message.{ByteBuffer, ByteSize, Flyweight}
 
 import java.lang.{StringBuilder => StringWrapper}
 
-trait CharArray extends GenericArray[Char] {}
+trait CharArray extends GenericArray[Char] with CharSequence {}
+
 trait CharArrayBuilder extends CharArray with GenericArrayBuilder[Char, CharValue] {
   def append(value: Char): CharArrayBuilder
-  def append(value: String): CharArrayBuilder
+  def append(value: CharSequence): CharArrayBuilder
+  def clear(): CharArrayBuilder
 }
 
 trait CharValue {
@@ -52,8 +54,10 @@ final class CharArrayCodec
     this
   }
 
-  override def append(value: String): CharArrayCodec = {
-    value.foreach(_ => add().set(_))
+  override def append(value: CharSequence): CharArrayCodec = {
+    for(index <- 0 to value.length - 1) {
+      add().set(value.charAt(index))
+    }
     this
   }
 
@@ -67,6 +71,11 @@ final class CharArrayCodec
 
   override def length(): Int = {
     size()
+  }
+
+  override def clear(): CharArrayCodec = {
+    super.clear()
+    this
   }
 
   override def toString(): String = {

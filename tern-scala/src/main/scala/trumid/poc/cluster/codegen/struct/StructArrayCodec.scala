@@ -25,6 +25,12 @@ class StructArrayCodec(domain: Domain, entity: Entity, mode: Mode) extends Templ
     builder.append(s"""${category} ${name}ArrayCodec
     extends GenericArrayCodec[${name}, ${name}Builder](() => new ${name}Codec, value => value, ${name}Codec.REQUIRED_SIZE)
     with ${name}ArrayBuilder
-    with Flyweight[${name}ArrayCodec] {}""")
+    with Flyweight[${name}ArrayCodec] {
+
+   override def clear(): ${name}ArrayCodec = {
+      super.clear()
+      this
+   }
+}""")
   }
 }

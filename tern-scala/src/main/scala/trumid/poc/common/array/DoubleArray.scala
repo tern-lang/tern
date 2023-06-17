@@ -4,7 +4,10 @@ import DoubleArrayCodec.DoubleValueCodec
 import trumid.poc.common.message.{ByteBuffer, ByteSize, Flyweight}
 
 trait DoubleArray extends GenericArray[Double] {}
-trait DoubleArrayBuilder extends DoubleArray with GenericArrayBuilder[Double, DoubleValue] {}
+
+trait DoubleArrayBuilder extends DoubleArray with GenericArrayBuilder[Double, DoubleValue] {
+  def clear(): DoubleArrayBuilder
+}
 
 trait DoubleValue {
   def get(): Double
@@ -39,4 +42,10 @@ object DoubleArrayCodec {
 final class DoubleArrayCodec
     extends GenericArrayCodec[Double, DoubleValue](() => new DoubleValueCodec, value => value.get, ByteSize.DOUBLE_SIZE)
       with DoubleArrayBuilder
-      with Flyweight[DoubleArrayCodec] {}
+      with Flyweight[DoubleArrayCodec] {
+
+  override def clear(): DoubleArrayCodec = {
+    super.clear()
+    this
+  }
+}

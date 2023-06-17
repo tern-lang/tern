@@ -6,10 +6,11 @@ import trumid.poc.model.{Domain, Entity, Mode, Property, Variable}
 class StructGenerator(domain: Domain, entity: Entity, property: Property, mode: Mode) extends PropertyGenerator(domain, entity, property, mode) {
 
   def generateField(builder: SourceBuilder): Unit = {
-    val name = property.getName
+    val name = property.getName()
+    val size = property.getSize()
     val constraint = property.getConstraint(mode)
 
-    builder.append(s"   private val ${name}Codec: ${constraint}Codec = new ${constraint}Codec(variable)\n")
+    builder.append(s"   private val ${name}Codec: ${constraint}Codec = new ${constraint}Codec(variable) // ${size.getComment}\n")
   }
 
   def generateGetter(builder: SourceBuilder): Unit = {
@@ -74,24 +75,26 @@ class StructGenerator(domain: Domain, entity: Entity, property: Property, mode: 
 
   def generateGetterSignature(builder: SourceBuilder): Unit = {
     val constraint = property.getConstraint(mode)
+    val origin = getClass.getSimpleName()
     val name = property.getName()
 
     if (property.isOptional) {
-      builder.append(s"   def ${name}(): Option[${constraint}]\n")
+      builder.append(s"   def ${name}(): Option[${constraint}] // ${origin}\n")
     } else {
-      builder.append(s"   def ${name}(): ${constraint}\n")
+      builder.append(s"   def ${name}(): ${constraint} // ${origin}\n")
     }
   }
 
   def generateSetterSignature(builder: SourceBuilder): Unit = {
     val constraint = property.getConstraint(mode)
+    val origin = getClass.getSimpleName()
     val name = property.getName()
     val parent = entity.getName(mode)
 
     if(property.isOptional()) {
-      builder.append(s"   def ${name}(${name}: (OptionBuilder[${constraint}Builder]) => Unit): ${parent}Builder\n")
+      builder.append(s"   def ${name}(${name}: (OptionBuilder[${constraint}Builder]) => Unit): ${parent}Builder // ${origin}\n")
     } else {
-      builder.append(s"   def ${name}(${name}: (${constraint}Builder) => Unit): ${parent}Builder\n")
+      builder.append(s"   def ${name}(${name}: (${constraint}Builder) => Unit): ${parent}Builder // ${origin}\n")
     }
   }
 

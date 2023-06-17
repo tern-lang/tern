@@ -4,7 +4,10 @@ import IntArrayCodec.IntValueCodec
 import trumid.poc.common.message.{ByteBuffer, ByteSize, Flyweight}
 
 trait IntArray extends GenericArray[Int] {}
-trait IntArrayBuilder extends IntArray with GenericArrayBuilder[Int, IntValue] {}
+
+trait IntArrayBuilder extends IntArray with GenericArrayBuilder[Int, IntValue] {
+  def clear(): IntArrayBuilder
+}
 
 trait IntValue {
   def get(): Int
@@ -39,4 +42,10 @@ object IntArrayCodec {
 final class IntArrayCodec
   extends GenericArrayCodec[Int, IntValue](() => new IntValueCodec, value => value.get, ByteSize.INT_SIZE)
     with IntArrayBuilder
-    with Flyweight[IntArrayCodec] {}
+    with Flyweight[IntArrayCodec] {
+
+  override def clear(): IntArrayCodec = {
+    super.clear()
+    this
+  }
+}

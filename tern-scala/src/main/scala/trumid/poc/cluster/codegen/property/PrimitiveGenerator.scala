@@ -58,24 +58,26 @@ class PrimitiveGenerator(domain: Domain, entity: Entity, property: Property, mod
 
   def generateGetterSignature(builder: SourceBuilder): Unit = {
     val constraint = property.getConstraint(mode)
+    val origin = getClass.getSimpleName()
     val name = property.getName()
 
     if (property.isOptional) {
-      builder.append(s"   def ${name}(): Option[${constraint}]\n")
+      builder.append(s"   def ${name}(): Option[${constraint}] // ${origin}\n")
     } else {
-      builder.append(s"   def ${name}(): ${constraint}\n")
+      builder.append(s"   def ${name}(): ${constraint} // ${origin}\n")
     }
   }
 
   def generateSetterSignature(builder: SourceBuilder): Unit = {
     val constraint = property.getConstraint(mode)
+    val origin = getClass.getSimpleName()
     val name = property.getName()
     val parent = entity.getName(mode)
 
     if(property.isOptional()) {
-      builder.append(s"   def ${name}(${name}: Option[${constraint}]): ${parent}Builder\n")
+      builder.append(s"   def ${name}(${name}: Option[${constraint}]): ${parent}Builder // ${origin}\n")
     } else {
-      builder.append(s"   def ${name}(${name}: ${constraint}): ${parent}Builder\n")
+      builder.append(s"   def ${name}(${name}: ${constraint}): ${parent}Builder // ${origin}\n")
     }
   }
 

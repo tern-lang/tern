@@ -83,7 +83,7 @@ class PropertyAligner {
         totalSize = requiredSize
 
         properties.forEach(property => {
-          val size: PropertySize = new PropertySize(property, ENUM_SIZE, ENUM_SIZE)
+          val size: PropertySize = new PropertySize(property, String.valueOf(ENUM_SIZE), ENUM_SIZE, ENUM_SIZE)
           property.setSize(size)
         })
       } else {
@@ -102,7 +102,7 @@ class PropertyAligner {
 
           totalSize = requiredSize
           entity.getProperties().forEach(property => {
-            val size: PropertySize = new PropertySize(property, requiredSize, totalSize)
+            val size: PropertySize = new PropertySize(property, String.valueOf(totalSize), requiredSize, totalSize)
             property.setSize(size)
           })
         }
@@ -162,7 +162,7 @@ class PropertyAligner {
   def sizeOfStruct(parent: Entity, property: Property, constraint: String): PropertySize = {
     val child: Entity = parent.getNamespace().getVisibleEntity(constraint)
     if (child == null) {
-      throw new IllegalStateException("Could not find entity '" + constraint + "'")
+      throw new IllegalStateException(s"Could not find entity '${constraint}'")
     }
     val entitySize: EntitySize = child.getSize()
 
@@ -174,17 +174,28 @@ class PropertyAligner {
       elementSize *= dimension
 
       if (property.isOptional) {
-        return new PropertySize(property, OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE,
+        val description = s"(${entitySize.getTotalSize() + ARRAY_OFFSET_SIZE} x ${dimension}) "+
+          s"+ ${OPTIONAL_PRESENCE_SIZE} + ${OPTIONAL_OFFSET_SIZE} + ${ARRAY_LENGTH_SIZE}"
+
+        return new PropertySize(property, description, OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE,
           OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE + ARRAY_LENGTH_SIZE + ARRAY_OFFSET_SIZE + elementSize)
       } else {
-        return new PropertySize(property, ARRAY_LENGTH_SIZE + ARRAY_OFFSET_SIZE, ARRAY_LENGTH_SIZE + ARRAY_OFFSET_SIZE + elementSize)
+        val description = s"(${entitySize.getTotalSize() + ARRAY_OFFSET_SIZE} x ${dimension}) "+
+          s"+ ${ARRAY_LENGTH_SIZE}"
+
+        return new PropertySize(property, description, ARRAY_LENGTH_SIZE + ARRAY_OFFSET_SIZE, ARRAY_LENGTH_SIZE + ARRAY_OFFSET_SIZE + elementSize)
       }
     }
     if (property.isOptional) {
-      return new PropertySize(property, OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE, OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE + entitySize.getTotalSize())
-    }
-    else {
-      return new PropertySize(property, entitySize.getRequiredSize(), entitySize.getTotalSize())
+      val description = s"${entitySize.getTotalSize()} "+
+        s"+ ${OPTIONAL_PRESENCE_SIZE} + ${OPTIONAL_OFFSET_SIZE}"
+
+      return new PropertySize(property, description,
+        OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE, OPTIONAL_PRESENCE_SIZE +
+          OPTIONAL_OFFSET_SIZE + entitySize.getTotalSize())
+    } else {
+      return new PropertySize(property, String.valueOf(entitySize.getTotalSize()),
+        entitySize.getRequiredSize(), entitySize.getTotalSize())
     }
   }
 
@@ -193,46 +204,62 @@ class PropertyAligner {
 
     if (property.isArray) {
       val dimension: Int = property.getDimension()
-      val blockSize: Int = (dimension * size) * ByteSize.SHORT_SIZE
+      val arraySize: Int = (dimension * size) * ByteSize.SHORT_SIZE
       val requiredBytes: Int = ARRAY_LENGTH_SIZE + ARRAY_OFFSET_SIZE
-      val totalBytes: Int = (blockSize) + ARRAY_LENGTH_SIZE + ARRAY_OFFSET_SIZE
+      val totalBytes: Int = (arraySize) + ARRAY_LENGTH_SIZE + ARRAY_OFFSET_SIZE
 
       if (property.isOptional) {
-        return new PropertySize(property, OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE
+        val description = s"(${dimension} * (${size} + ${ByteSize.SHORT_SIZE})) " +
+          s"+ ${ARRAY_LENGTH_SIZE} + ${ARRAY_OFFSET_SIZE}" +
+          s"+ ${OPTIONAL_PRESENCE_SIZE} + ${OPTIONAL_OFFSET_SIZE}"
+
+        return new PropertySize(property, description, OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE
           + requiredBytes, OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE + totalBytes)
       } else {
-        return new PropertySize(property, requiredBytes, totalBytes)
+        val description = s"(${dimension} * (${size} + ${ByteSize.SHORT_SIZE})) " +
+          s"+ ${ARRAY_LENGTH_SIZE} + ${ARRAY_OFFSET_SIZE}"
+
+        return new PropertySize(property, description, requiredBytes, totalBytes)
       }
     }
     if (property.isOptional) {
-      return new PropertySize(property, OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE + size, OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE + size)
+      val description = s"${size} ${OPTIONAL_PRESENCE_SIZE} + ${OPTIONAL_OFFSET_SIZE}"
+      return new PropertySize(property, description, OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE + size, OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE + size)
     } else {
-      return new PropertySize(property, size, size)
+      return new PropertySize(property, String.valueOf(size), size, size)
     }
   }
 
   def sizeOfPrimitive(parent: Entity, property: Property, constraint: String): PropertySize = {
     val primitive: Primitive = Primitive.resolve(constraint).get
-    var size: Int = primitive.size()
+    val size: Int = primitive.size()
 
     if (property.isArray) {
       val dimension: Int = property.getDimension()
-      val blockSize: Int = (dimension * size) * ByteSize.SHORT_SIZE
+      val arraySize: Int = (dimension * size) * ByteSize.SHORT_SIZE
       val requiredBytes: Int = ARRAY_LENGTH_SIZE + ARRAY_OFFSET_SIZE
-      val totalBytes: Int = (blockSize) + ARRAY_LENGTH_SIZE + ARRAY_OFFSET_SIZE
+      val totalBytes: Int = (arraySize) + ARRAY_LENGTH_SIZE + ARRAY_OFFSET_SIZE
 
       if (property.isOptional) {
-        return new PropertySize(property, OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE
+        val description = s"(${dimension} * (${size} + ${ByteSize.SHORT_SIZE})) " +
+          s"+ ${ARRAY_LENGTH_SIZE} + ${ARRAY_OFFSET_SIZE}" +
+          s"+ ${OPTIONAL_PRESENCE_SIZE} + ${OPTIONAL_OFFSET_SIZE}"
+
+        return new PropertySize(property, description, OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE
           + requiredBytes, OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE + totalBytes)
       } else {
-        return new PropertySize(property, requiredBytes, totalBytes)
+        val description = s"(${dimension} * (${size} + ${ByteSize.SHORT_SIZE})) " +
+          s"+ ${ARRAY_LENGTH_SIZE} + ${ARRAY_OFFSET_SIZE}"
+
+        return new PropertySize(property, description, requiredBytes, totalBytes)
       }
     }
     if (property.isOptional) {
-      return new PropertySize(property, OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE + size,
+      val description = s"${size} ${OPTIONAL_PRESENCE_SIZE} + ${OPTIONAL_OFFSET_SIZE}"
+      return new PropertySize(property, description, OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE + size,
         OPTIONAL_PRESENCE_SIZE + OPTIONAL_OFFSET_SIZE + size)
     } else {
-      return new PropertySize(property, size, size)
+      return new PropertySize(property, String.valueOf(size), size, size)
     }
   }
 }

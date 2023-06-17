@@ -1,15 +1,17 @@
 package trumid.poc.cluster.codegen.property
 
 import trumid.poc.codegen.common.SourceBuilder
+import trumid.poc.common.Primitive
 import trumid.poc.model._
 
 class PrimitiveArrayGenerator(domain: Domain, entity: Entity, property: Property, mode: Mode) extends PropertyGenerator(domain, entity, property, mode) {
 
   def generateField(builder: SourceBuilder): Unit = {
-    val name = property.getName
+    val name = property.getName()
+    val size = property.getSize()
     val constraint = property.getConstraint(mode)
 
-    builder.append(s"   private val ${name}Codec: ${constraint}ArrayCodec = new ${constraint}ArrayCodec()\n")
+    builder.append(s"   private val ${name}Codec: ${constraint}ArrayCodec = new ${constraint}ArrayCodec() // ${size.getComment}\n")
   }
 
   def generateGetter(builder: SourceBuilder): Unit = {
@@ -39,6 +41,7 @@ class PrimitiveArrayGenerator(domain: Domain, entity: Entity, property: Property
 
   def generateSetter(builder: SourceBuilder): Unit = {
     val constraint = property.getConstraint(mode)
+    val primitive = Primitive.resolve(constraint)
     val origin = getClass.getSimpleName()
     val name = property.getName()
     val parent = entity.getName(mode)
@@ -61,10 +64,21 @@ class PrimitiveArrayGenerator(domain: Domain, entity: Entity, property: Property
       builder.append(s"      this\n")
     }
     else {
-      builder.append(s"   override def ${name}(${name}: (${constraint}ArrayBuilder) => Unit): ${parent}Builder = {\n")
+      if(property.isArray() && primitive.contains(Primitive.CHAR)) {
+        builder.append(s"   override def ${name}(${name}: CharSequence): ${parent}Builder = {\n")
+      } else {
+        builder.append(s"   override def ${name}(${name}: (${constraint}ArrayBuilder) => Unit): ${parent}Builder = {\n")
+      }
       builder.append(s"      // ${origin}\n")
       builder.append("      this.buffer.setCount(this.offset + this.required);\n")
-      builder.append(s"      ${name}.apply(this.${name}Codec.assign(this.buffer, this.offset + ${offset}, this.length - ${offset}))\n")
+
+      if(property.isArray() && primitive.contains(Primitive.CHAR)) {
+        builder.append(s"      this.${name}Codec.assign(this.buffer, this.offset + ${offset}, this.length - ${offset})\n")
+        builder.append(s"            .clear()\n")
+        builder.append(s"            .append(${name})\n")
+      } else {
+        builder.append(s"      ${name}.apply(this.${name}Codec.assign(this.buffer, this.offset + ${offset}, this.length - ${offset}))\n")
+      }
       builder.append(s"      this\n")
     }
     builder.append("   }\n")
@@ -72,32 +86,45 @@ class PrimitiveArrayGenerator(domain: Domain, entity: Entity, property: Property
 
   def generateGetterSignature(builder: SourceBuilder): Unit = {
     val constraint = property.getConstraint(mode)
+    val primitive = Primitive.resolve(constraint)
+    val origin = getClass.getSimpleName()
     val name = property.getName()
 
     if (property.isOptional) {
-      if(property.isString()) {
-        builder.append(s"   def ${name}(): Option[CharSequence]\n")
+
+      if(property.isArray() && primitive.contains(Primitive.CHAR)) {
+        builder.append(s"   def ${name}(): Option[CharSequence] // ${origin}\n")
       } else {
-        builder.append(s"   def ${name}(): Option[${constraint}Array]\n")
+        builder.append(s"   def ${name}(): Option[${constraint}Array] // ${origin}\n")
       }
     } else {
-      if(property.isString()) {
-        builder.append(s"   def ${name}(): CharSequence]\n")
+      if(property.isArray() && primitive.contains(Primitive.CHAR)) {
+        builder.append(s"   def ${name}(): CharSequence // ${origin}\n")
       } else {
-        builder.append(s"   def ${name}(): ${constraint}Array\n")
+        builder.append(s"   def ${name}(): ${constraint}Array // ${origin}\n")
       }
     }
   }
 
   def generateSetterSignature(builder: SourceBuilder): Unit = {
     val constraint = property.getConstraint(mode)
+    val primitive = Primitive.resolve(constraint)
+    val origin = getClass.getSimpleName()
     val name = property.getName()
     val parent = entity.getName(mode)
 
     if(property.isOptional()) {
-      builder.append(s"   def ${name}(${name}: (OptionBuilder[${constraint}ArrayBuilder]) => Unit): ${parent}Builder\n")
+      if(property.isArray() && primitive.contains(Primitive.CHAR)) {
+        builder.append(s"   def ${name}(${name}: Option[CharSequence]): ${parent}Builder // ${origin}\n")
+      } else {
+        builder.append(s"   def ${name}(${name}: (OptionBuilder[${constraint}ArrayBuilder]) => Unit): ${parent}Builder // ${origin}\n")
+      }
     } else {
-      builder.append(s"   def ${name}(${name}: (${constraint}ArrayBuilder) => Unit): ${parent}Builder\n")
+      if(property.isArray() && primitive.contains(Primitive.CHAR)) {
+        builder.append(s"   def ${name}(${name}: CharSequence): ${parent}Builder // ${origin}\n")
+      } else {
+        builder.append(s"   def ${name}(${name}: (${constraint}ArrayBuilder) => Unit): ${parent}Builder // ${origin}\n")
+      }
     }
   }
 

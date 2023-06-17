@@ -4,7 +4,10 @@ import LongArrayCodec.LongValueCodec
 import trumid.poc.common.message.{ByteBuffer, ByteSize, Flyweight}
 
 trait LongArray extends GenericArray[Long] {}
-trait LongArrayBuilder extends LongArray with GenericArrayBuilder[Long, LongValue] {}
+
+trait LongArrayBuilder extends LongArray with GenericArrayBuilder[Long, LongValue] {
+  def clear(): LongArrayBuilder
+}
 
 trait LongValue {
   def get(): Long
@@ -39,4 +42,10 @@ object LongArrayCodec {
 final class LongArrayCodec
   extends GenericArrayCodec[Long, LongValue](() => new LongValueCodec, value => value.get, ByteSize.LONG_SIZE)
     with LongArrayBuilder
-    with Flyweight[LongArrayCodec] {}
+    with Flyweight[LongArrayCodec] {
+
+  override def clear(): LongArrayCodec = {
+    super.clear()
+    this
+  }
+}

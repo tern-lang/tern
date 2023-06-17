@@ -12,8 +12,8 @@ import trumid.poc.dsl.tree.alias.AliasReference
 import trumid.poc.model._
 
 object ArrayConstraint {
-  private val INVALID_SIZE = new NumberToken(-1)
-  private val INVALID_DIMENSION = new NumberLiteral(INVALID_SIZE)
+  private val EMPTY_SIZE = new NumberToken(0)
+  private val EMPTY_DIMENSION = new NumberLiteral(EMPTY_SIZE)
 }
 
 class ArrayConstraint(constraint: TextLiteral, dimension: Evaluation, optional: Optional) extends Constraint {
@@ -21,7 +21,7 @@ class ArrayConstraint(constraint: TextLiteral, dimension: Evaluation, optional: 
   private val reference = new NameReference(constraint)
 
   def this(identifier: TextLiteral) = {
-    this(identifier, ArrayConstraint.INVALID_DIMENSION, null)
+    this(identifier, ArrayConstraint.EMPTY_DIMENSION, null)
   }
 
   def this(identifier: TextLiteral, dimension: Evaluation) = {
@@ -29,7 +29,7 @@ class ArrayConstraint(constraint: TextLiteral, dimension: Evaluation, optional: 
   }
 
   def this(identifier: TextLiteral, optional: Optional) = {
-    this(identifier, ArrayConstraint.INVALID_DIMENSION, optional)
+    this(identifier, ArrayConstraint.EMPTY_DIMENSION, optional)
   }
 
   override def include(scope: Scope, property: Property, path: Path): Unit = {

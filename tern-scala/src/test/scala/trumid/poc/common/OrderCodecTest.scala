@@ -1,0 +1,41 @@
+package trumid.poc.common
+
+import trumid.poc.common.message.DirectByteBuffer
+import trumid.poc.example._
+object OrderCodecTest extends App {
+  val buffer = DirectByteBuffer()
+  val codec = new OrderCodec()
+
+  codec.assign(buffer, 0, 8192)
+    .price(11.2)
+    .quantity(1000)
+    .symbol("BTC")
+
+
+  if(codec.price() != 11.2) {
+    throw new Error("Price")
+  }
+  if(codec.quantity() != 1000) {
+    throw new Error("Quantity")
+  }
+  if(codec.symbol().toString() != "BTC") {
+    throw new Error("Symbol")
+  }
+  codec.symbol("FOOBAR")
+
+  if(codec.symbol().toString() != "FOOBAR") {
+    throw new Error("Symbol")
+  }
+  codec.symbol("ETH")
+
+  if(codec.symbol().toString() != "ETH") {
+    throw new Error("Symbol")
+  }
+  if(codec.price() != 11.2) {
+    throw new Error("Price")
+  }
+  if(codec.quantity() != 1000) {
+    throw new Error("Quantity")
+  }
+  println(buffer.length())
+}

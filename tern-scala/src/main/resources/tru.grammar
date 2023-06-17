@@ -20,6 +20,8 @@ path = [text];
 full-qualifier = <type-set> 'from' <path>;
 wild-qualifier = '*' 'from' <path>;
 
+option = '?';
+
 namespace = 'namespace' _ [qualifier]*('.'[qualifier]) ';';
 
 import = 'import' (<full-qualifier> | <wild-qualifier>) ';';
@@ -38,7 +40,7 @@ annotation-list = *<annotation-declaration>?_;
 annotation-declaration = '@'<annotation-name>?<annotation-attributes>;
 annotation-attributes = '('?<map-entry-data>')';
 
-entity-constraint = [identifier];
+entity-constraint = [identifier] ?<option>;
 
 struct-constraint = (<entity-constraint>);
 struct-value = (<literal> | [type]);

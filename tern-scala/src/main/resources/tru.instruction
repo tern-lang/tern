@@ -34,7 +34,8 @@ use org.ternlang.tree.construct {
 use trumid.poc.dsl.tree {
    constant-definition = ConstantDefinition,
    namespace = SourceNamespace,
-   source = Source
+   source = Source,
+   option = Optional
 }
 
 use trumid.poc.dsl.tree.constraint {

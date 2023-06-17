@@ -21,6 +21,8 @@ class StructCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(d
   override protected def generateExtraImports(): Unit = {
     builder.append("import trumid.poc.common._\n")
     builder.append("import trumid.poc.common.message._\n")
+    builder.append("import trumid.poc.common.array._\n")
+    builder.append("import trumid.poc.cluster._\n")
   }
 
   override protected def generateBody(): Unit = {
@@ -28,6 +30,8 @@ class StructCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(d
     generateDefaultFields()
     generateAssignMethod()
     generateGetterMethods()
+    generateDefaultsMethod()
+    generateClearMethod()
     generateValidationMethod()
   }
 
@@ -42,6 +46,7 @@ class StructCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(d
     builder.append("   private var buffer: ByteBuffer = _\n")
     builder.append("   private var offset: Int = _\n")
     builder.append("   private var length: Int = _\n")
+    builder.append("   private var required: Int = _\n")
   }
 
   private def generateGetterMethods(): Unit = {
@@ -73,7 +78,22 @@ class StructCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(d
     builder.append("      this.buffer = buffer;\n")
     builder.append("      this.offset = offset;\n")
     builder.append("      this.length = length;\n")
+    builder.append("      this.required = required;\n")
     builder.append("      this;\n")
+    builder.append("   }\n")
+  }
+
+  private def generateDefaultsMethod(): Unit = {
+    builder.append("\n")
+    builder.append(s"   override def defaults(): ${getName} = {\n")
+    builder.append("      this\n")
+    builder.append("   }\n")
+  }
+
+  private def generateClearMethod(): Unit = {
+    builder.append("\n")
+    builder.append(s"   override def clear(): ${getName} = {\n")
+    builder.append("      this\n")
     builder.append("   }\n")
   }
 

@@ -1,5 +1,5 @@
 
-namespace foo.bar.foo;
+namespace foo.bar.blah;
 
 import * from "../example.tru";
 
@@ -22,8 +22,8 @@ union PlaceOrder requires Order {
   type LimitOrder extends Order {
 
     @NotBlank
-    symbol: String;
-    timeInForce: TimeInForce;
+    symbol: String?;
+    timeInForce: TimeInForce?;
 
     enum TimeInForce {
       GoodTilCancel,

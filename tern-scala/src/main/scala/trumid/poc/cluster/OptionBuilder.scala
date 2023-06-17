@@ -7,7 +7,7 @@ trait OptionBuilder[S] {
 
 object OptionBuilder {
 
-  def apply[S, N](some: () => S, none: () => Unit): OptionBuilder[S] = {
+  def apply[S](some: () => S, none: () => Unit): OptionBuilder[S] = {
     new OptionHandler(some, none)
   }
 

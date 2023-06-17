@@ -17,7 +17,7 @@ class PrimitiveGenerator(domain: Domain, entity: Entity, property: Property, mod
       builder.append(s"   override def ${name}(): Option[${constraint}] = {\n")
       builder.append(s"      // ${origin}\n")
       builder.append("      this.buffer.setCount(this.offset + this.required)\n")
-      builder.append(s"      if(this.buffer.getBoolean(this.offset + this.offset + ${offset})) {\n")
+      builder.append(s"      if (this.buffer.getBoolean(this.offset + this.offset + ${offset})) {\n")
       builder.append(s"         Some(this.buffer.get${constraint}(this.offset + ${offset}))\n")
       builder.append(s"      } else {\n")
       builder.append(s"         None\n")
@@ -32,7 +32,29 @@ class PrimitiveGenerator(domain: Domain, entity: Entity, property: Property, mod
     builder.append("   }\n")
   }
 
-  def generateSetter(builder: SourceBuilder): Unit = {}
+  def generateSetter(builder: SourceBuilder): Unit = {
+    val constraint = property.getConstraint(mode)
+    val origin = getClass.getSimpleName()
+    val name = property.getName()
+    val parent = entity.getName(mode)
+    val offset = getOffset()
+
+    if (property.isOptional) {
+      builder.append(s"   override def ${name}(${name}: Option[${constraint}]): ${parent}Builder = {\n")
+      builder.append(s"      // ${origin}\n")
+      builder.append("      this.buffer.setCount(this.offset + this.required)\n")
+      builder.append(s"      this.buffer.setBoolean(this.offset + this.offset + ${offset}, ${name}.isDefined)\n")
+      builder.append(s"      if (${name}.isDefined) this.buffer.set${constraint}(this.offset + this.offset + ${offset}, ${name}.get)\n")
+    }
+    else {
+      builder.append(s"   override def ${name}(${name}: ${constraint}): ${parent}Builder = {\n")
+      builder.append(s"      // ${origin}\n")
+      builder.append("      this.buffer.setCount(this.offset + this.required);\n")
+      builder.append(s"      this.buffer.set${constraint}(this.offset + ${offset}, ${name})\n")
+    }
+    builder.append(s"      this\n")
+    builder.append("   }\n")
+  }
 
   def generateGetterSignature(builder: SourceBuilder): Unit = {
     val constraint = property.getConstraint(mode)

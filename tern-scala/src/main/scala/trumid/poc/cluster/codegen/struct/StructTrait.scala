@@ -9,6 +9,7 @@ class StructTrait(domain: Domain, entity: Entity, mode: Mode) extends Template(d
   override protected def getCategory() = "trait"
 
   override protected def generateExtraImports(): Unit = {
+    builder.append("import trumid.poc.common.array._\n")
     builder.append("import trumid.poc.cluster.ResultCode\n")
   }
 

@@ -9,6 +9,11 @@ class StructBuilder(domain: Domain, entity: Entity, mode: Mode)  extends Templat
 
   override protected def getCategory() = "trait"
 
+  override protected def generateExtraImports(): Unit = {
+    builder.append("import trumid.poc.common.array._\n")
+    builder.append("import trumid.poc.cluster.OptionBuilder\n")
+  }
+
   override protected def generateEntity(): Unit = {
     val category = getCategory()
     val name = entity.getName(mode)

@@ -11,10 +11,7 @@ import trumid.poc.dsl.tree.Optional
 import trumid.poc.dsl.tree.alias.AliasReference
 import trumid.poc.model._
 
-import java.lang.Short.MAX_VALUE
-
 object ArrayConstraint {
-  private val DEFAULT_BLOCK_CAPACITY = 32
   private val INVALID_SIZE = new NumberToken(-1)
   private val INVALID_DIMENSION = new NumberLiteral(INVALID_SIZE)
 }

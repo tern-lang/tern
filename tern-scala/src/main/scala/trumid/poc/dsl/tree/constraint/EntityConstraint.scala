@@ -8,14 +8,15 @@ import org.ternlang.tree.literal.TextLiteral
 import trumid.poc.common.Primitive
 import trumid.poc.dsl.Constants
 import trumid.poc.dsl.tree.Optional
-import trumid.poc.model.{Property, _}
+import trumid.poc.model._
 
-class EntityConstraint(identifier: TextLiteral, optional: Optional) extends Constraint {
-
+object EntityConstraint {
   private val CHAR_TOKEN = new StringToken(Constants.CHAR)
   private val CHAR_LITERAL = new TextLiteral(CHAR_TOKEN)
+}
 
-  private val string = new ArrayConstraint(CHAR_LITERAL, optional) // String -> char[]
+class EntityConstraint(identifier: TextLiteral, optional: Optional) extends Constraint {
+  private val string = new ArrayConstraint(EntityConstraint.CHAR_LITERAL, optional) // String -> char[]
   private val reference = new NameReference(identifier)
 
   def this(identifier: TextLiteral) = {
@@ -28,8 +29,9 @@ class EntityConstraint(identifier: TextLiteral, optional: Optional) extends Cons
 
   private def define(scope: Scope, property: Property, path: Path): Unit = {
     val constraint = reference.getName(scope)
+    val primitive = Primitive.resolve(constraint)
 
-    if (!Primitive.STRING.name().equals(constraint)) {
+    if (!primitive.contains(Primitive.STRING)) {
       val primitive = Primitive.resolve(constraint)
 
       property.getMask()

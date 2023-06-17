@@ -17,7 +17,7 @@ class EnumGenerator(domain: Domain, entity: Entity, property: Property, mode: Mo
       builder.append(s"   override def ${name}(): Option[${constraint}] = {\n")
       builder.append(s"      // ${origin}\n")
       builder.append("      this.buffer.setCount(this.offset + this.required)\n")
-      builder.append(s"      if(this.buffer.getBoolean(this.offset + this.offset + ${offset})) {\n")
+      builder.append(s"      if (this.buffer.getBoolean(this.offset + this.offset + ${offset})) {\n")
       builder.append(s"         Some(${constraint}.resolve(this.buffer.getByte(this.offset + ${offset})))\n")
       builder.append(s"      } else {\n")
       builder.append(s"         None\n")
@@ -32,6 +32,27 @@ class EnumGenerator(domain: Domain, entity: Entity, property: Property, mode: Mo
   }
 
   def generateSetter(builder: SourceBuilder): Unit = {
+    val constraint = property.getConstraint(mode)
+    val origin = getClass.getSimpleName()
+    val name = property.getName()
+    val parent = entity.getName(mode)
+    val offset = getOffset()
+
+    if (property.isOptional) {
+      builder.append(s"   override def ${name}(${name}: Option[${constraint}]): ${parent}Builder = {\n")
+      builder.append(s"      // ${origin}\n")
+      builder.append("      this.buffer.setCount(this.offset + this.required)\n")
+      builder.append(s"      this.buffer.setBoolean(this.offset + this.offset + ${offset}, ${name}.isDefined)\n")
+      builder.append(s"      if (${name}.isDefined) this.buffer.setByte(this.offset + this.offset + ${offset}, ${name}.get.toCode)\n")
+    }
+    else {
+      builder.append(s"   override def ${name}(${name}: ${constraint}): ${parent}Builder = {\n")
+      builder.append(s"      // ${origin}\n")
+      builder.append("      this.buffer.setCount(this.offset + this.required);\n")
+      builder.append(s"      this.buffer.setByte(this.offset + ${offset}, ${name}.toCode)\n")
+    }
+    builder.append(s"      this\n")
+    builder.append("   }\n")
   }
 
   def generateGetterSignature(builder: SourceBuilder): Unit = {
@@ -39,7 +60,7 @@ class EnumGenerator(domain: Domain, entity: Entity, property: Property, mode: Mo
     val name = property.getName()
 
     if (property.isOptional) {
-      builder.append(s"   def ${name}(): OptionBuilder[${constraint}]\n")
+      builder.append(s"   def ${name}(): Option[${constraint}]\n")
     } else {
       builder.append(s"   def ${name}(): ${constraint}\n")
     }

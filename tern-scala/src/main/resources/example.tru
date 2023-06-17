@@ -2,7 +2,7 @@
 namespace foo.bar;
 
 import * from "./other.tru";
-import {String, Blah} from "foo/x.tru";
+import {String, Blah} from "blah/x.tru";
 
 const DEFAULT_VALUE = 0.0;
 
@@ -11,5 +11,5 @@ type Foo {
 }
 
 type Blah {
-  foo: Foo;
+  foo: Foo?;
 }

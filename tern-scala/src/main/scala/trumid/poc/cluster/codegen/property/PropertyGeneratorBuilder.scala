@@ -26,7 +26,11 @@ class PropertyGeneratorBuilder(domain: Domain, mode: Mode, sorted: Boolean) {
 
   private def create(parent: Entity, property: Property): PropertyGenerator = {
     if (property.isPrimitive()) {
-      return new PrimitiveGenerator(domain, parent, property, mode)
+      if(property.isArray()) {
+        return new PrimitiveArrayGenerator(domain, parent, property, mode)
+      } else {
+        return new PrimitiveGenerator(domain, parent, property, mode)
+      }
     } else {
       val identifier = property.getName()
       val constraint = property.getConstraint()

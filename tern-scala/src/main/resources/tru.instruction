@@ -75,4 +75,12 @@ use trumid.poc.dsl.tree.union {
    union-requirement = UnionRequirement
 }
 
+use trumid.poc.dsl.tree.service {
+   service-definition = ServiceDefinition,
+   service-function = ServiceFunction,
+   service-requirement = ServiceRequirement,
+   service-returns = ServiceReturns,
+   service-streams = ServiceStreams
+}
+
 

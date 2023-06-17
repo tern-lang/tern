@@ -8,6 +8,7 @@ sealed trait Category {
   def isPrimitive(): Boolean = false
   def isTable(): Boolean = false
   def isDatabase(): Boolean = false
+  def isService(): Boolean = false
 }
 
 object EnumCategory extends Category {
@@ -37,4 +38,8 @@ object TableCategory extends Category {
 
 object DatabaseCategory extends Category {
   override def isDatabase(): Boolean = true
+}
+
+object ServiceCategory extends Category {
+  override def isService(): Boolean = true
 }

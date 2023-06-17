@@ -5,6 +5,7 @@ import org.ternlang.core.module.{Module, Path}
 
 import java.net.URI
 import java.util.Set
+import java.util.Collections
 import java.util.function.Predicate
 
 class FullQualifier(types: Set[String], resource: URI) extends Compilation {
@@ -16,5 +17,6 @@ class FullQualifier(types: Set[String], resource: URI) extends Compilation {
   private case class CompileResult(types: Set[String], location: String) extends Qualifier {
     override def getLocation(): String = location
     override def getPredicate(): Predicate[String] = name => types.contains(name)
+    override def getEntities(): Set[String] = Collections.unmodifiableSet(types)
   }
 }

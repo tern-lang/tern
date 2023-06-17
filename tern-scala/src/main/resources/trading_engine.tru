@@ -1,0 +1,24 @@
+
+namespace trumid.poc.example;
+
+import {PlaceOrderCommand, PlaceOrderResponse} from 'commands/place_order_command.tru';
+import {CancelOrderCommand, CancelOrderResponse} from 'commands/cancel_order_command.tru';
+import {CancelAllOrdersCommand, CancelAllOrdersResponse} from 'commands/cancel_all_orders_command.tru';
+
+service TradingEngine {
+
+   /**
+    * Place and order.
+    */
+   def placeOrder(PlaceOrderCommand) returns PlaceOrderResponse;
+
+   /**
+    * Cancel a specific order by orderId.
+    */
+   def cancelOrder(CancelOrderCommand) returns CancelOrderResponse;
+
+   /**
+    * Cancel any live orders on the system.
+    */
+   def cancelAllOrders(CancelAllOrdersCommand) returns CancelAllOrdersResponse;
+}

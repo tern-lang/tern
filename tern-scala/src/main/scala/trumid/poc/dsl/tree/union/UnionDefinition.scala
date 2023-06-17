@@ -48,6 +48,7 @@ class UnionDefinition(val annotations: AnnotationList,
     properties.forEach(property => {
       property.define(scope, entity, path)
     })
+    update(scope, unit, entity)
     entity
   }
 
@@ -123,6 +124,9 @@ class UnionDefinition(val annotations: AnnotationList,
         }
       }
     }
+  }
+
+  protected def update(scope: Scope, unit: SourceUnit, entity: Entity): Unit = {
   }
 }
 

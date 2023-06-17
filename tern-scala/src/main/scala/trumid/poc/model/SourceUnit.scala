@@ -14,6 +14,8 @@ class SourceUnit(domain: Domain, namespace: Namespace, file: String) extends Imp
   private val aliases = new SourceUnit.AliasSet(this)
   private val path = new Path(file)
 
+  def getDomain(): Domain = domain
+
   def getName(): String = file
 
   def getPath(): Path = path

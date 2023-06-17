@@ -1,0 +1,20 @@
+
+namespace trumid.poc.example.commands;
+
+type PlaceOrderCommand {
+   userId: Int;
+   accountId: Int?;
+   order: OrderInfo;
+
+   type OrderInfo {
+      orderId: String;
+      symbol: String;
+      price: Double;
+      quantity: Double;
+   }
+}
+
+type PlaceOrderResponse {
+   reason: String?;
+   success: Boolean;
+}

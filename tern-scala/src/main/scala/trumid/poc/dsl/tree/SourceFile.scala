@@ -25,7 +25,12 @@ class SourceFile(val qualifier: String, val path: Path) {
       val name: String = entity.getName()
       val value: Value = Value.getTransient(entity)
 
-      state.addValue(name, value) // use for static analysis
+      try {
+        state.addValue(name, value) // use for static analysis
+      } catch {
+        case e: Throwable =>
+          throw new IllegalStateException(s"Entity ${name} already defined", e)
+      }
     })
 
     unit.getAliases().forEach(alias => {

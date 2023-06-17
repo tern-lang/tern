@@ -68,6 +68,13 @@ union-requirement = [type];
 union-element = (<union-property> | <inner-struct-definition> | <inner-interface-definition>);
 union-definition = ?<annotation-list>'union' _ [type] ?( _ 'requires' _ <union-requirement>) '{' +<union-element> '}';
 
+service-function = ?<annotation-list> 'def' _ [identifier] '(' [type] ')' (<service-returns> | <service-streams>) ';';
+service-returns = 'returns' _ [identifier];
+service-streams = 'streams' _ [identifier];
+service-requirement = [type];
+service-element = (<service-function> | <inner-struct-definition> | <inner-interface-definition>);
+service-definition = ?<annotation-list>'service' _ [type] ?( _ 'requires' _ <service-requirement>) '{' +<service-element> '}';
+
 inner-enum-definition = <enum-definition>;
 inner-struct-definition = <struct-definition>;
 inner-interface-definition = <interface-definition>;
@@ -80,6 +87,7 @@ source = <namespace> <import-list> *{
     <struct-definition> |
     <interface-definition> |
     <union-definition> |
+    <service-definition> |
     <enum-definition> |
     <constant-definition> };
 

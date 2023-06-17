@@ -13,8 +13,8 @@ class Import(qualifier: Qualifier, path: Path) {
   private val matched = new AtomicReference[Predicate[String]]()
 
   def define(scope: Scope, unit: SourceUnit): Unit = {
-    val location: String = qualifier.getLocation
-    val predicate: Predicate[String] = qualifier.getPredicate
+    val location: String = qualifier.getLocation()
+    val predicate: Predicate[String] = qualifier.getPredicate()
 
     if (location == null) {
       throw new IllegalStateException(s"Import has no path in ${location}")
@@ -24,9 +24,11 @@ class Import(qualifier: Qualifier, path: Path) {
   }
 
   def include(scope: Scope, unit: SourceUnit): Unit = {
-    val entities: List[Entity] = unit.getEntities
-    val aliases: List[Alias] = unit.getAliases
-    val constants: List[Constant] = unit.getConstants
+    val location = qualifier.getLocation()
+    val other = unit.getDomain().getSourceUnit(location)
+    val entities: List[Entity] = other.getEntities()
+    val aliases: List[Alias] = other.getAliases()
+    val constants: List[Constant] = other.getConstants()
 
     include(scope, entities)
     include(scope, aliases)
@@ -34,14 +36,14 @@ class Import(qualifier: Qualifier, path: Path) {
   }
 
   private def include(scope: Scope, imports: List[_ <: Importable]): Unit = {
-    val state: ScopeState = scope.getState
-    val filter: Predicate[String] = matched.get
+    val state: ScopeState = scope.getState()
+    val filter: Predicate[String] = matched.get()
 
     if (filter == null) {
       throw new IllegalStateException("Import not defined")
     }
     imports.forEach(importable => {
-      val name: String = importable.getName
+      val name: String = importable.getName()
 
       if (filter.test(name)) {
         val value: Value = if (classOf[Value].isInstance(importable)) {

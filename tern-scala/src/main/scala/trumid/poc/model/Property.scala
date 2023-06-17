@@ -15,6 +15,8 @@ object Property {
   val COMPOSITE: Int = 32
   val OPTIONAL: Int = 64
   val DYNAMIC: Int = 128
+  val STREAMS: Int = 256
+  val RETURNS: Int = 1024
 
   def isEntity(mask: Mask): Boolean = (ENTITY & mask.value()) == ENTITY
 
@@ -29,6 +31,12 @@ object Property {
   def isComposite(mask: Mask): Boolean = (COMPOSITE & mask.value()) == COMPOSITE
 
   def isOptional(mask: Mask): Boolean = (OPTIONAL & mask.value()) == OPTIONAL
+
+  def isDynamic(mask: Mask): Boolean = (DYNAMIC & mask.value()) == DYNAMIC
+
+  def isStreams(mask: Mask): Boolean = (STREAMS & mask.value()) == STREAMS
+
+  def isReturns(mask: Mask): Boolean = (RETURNS & mask.value()) == RETURNS
 }
 
 class Property(name: String) extends Variable with Annotated {
@@ -38,6 +46,7 @@ class Property(name: String) extends Variable with Annotated {
   private var offset: PropertyOffset = new PropertyOffset(this, 0, 0)
   private var size: PropertySize = new PropertySize(this, "?", 0, 0)
   private var version: Version = _
+  private var response: String = _
   private var constraint: String = _
   private var default: Any = _
   private var dimension: Int = _
@@ -48,6 +57,7 @@ class Property(name: String) extends Variable with Annotated {
     this.attributes.putAll(template.attributes)
     this.mask.add(template.mask)
     this.constraint = template.constraint
+    this.response = template.response
     this.dimension = template.dimension
     this.offset = template.offset
     this.size = template.size
@@ -110,6 +120,15 @@ class Property(name: String) extends Variable with Annotated {
 
   def setConstraint(constraint: String): Property = {
     this.constraint = constraint
+    this
+  }
+
+  def getResponse(): String = response
+
+  def getResponse(mode: Mode): String = mode.getName(response, version)
+
+  def setResponse(response: String): Property = {
+    this.response = response
     this
   }
 

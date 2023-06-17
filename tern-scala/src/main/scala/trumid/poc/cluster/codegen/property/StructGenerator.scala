@@ -53,7 +53,7 @@ class StructGenerator(domain: Domain, entity: Entity, property: Property, mode: 
       builder.append(s"        some = () => {\n")
       builder.append(s"           this.buffer.setCount(this.offset + this.required)\n")
       builder.append(s"           this.buffer.setBoolean(this.offset + ${offset}, true)\n")
-      builder.append(s"           this.${name}Codec.assign(this.buffer, this.offset + ${offset}, this.length - ${offset})\n")
+      builder.append(s"           this.${name}Codec.assign(this.buffer, this.offset + ${offset}, this.length - ${offset}).defaults()\n")
       builder.append(s"        },\n")
       builder.append(s"        none = () => {\n")
       builder.append(s"           this.buffer.setCount(this.offset + this.required)\n")
@@ -66,7 +66,7 @@ class StructGenerator(domain: Domain, entity: Entity, property: Property, mode: 
       builder.append(s"   override def ${name}(${name}: (${constraint}Builder) => Unit): ${parent}Builder = {\n")
       builder.append(s"      // ${origin}\n")
       builder.append("      this.buffer.setCount(this.offset + this.required);\n")
-      builder.append(s"      ${name}.apply(this.${name}Codec.assign(this.buffer, this.offset + ${offset}, this.length - ${offset}))\n")
+      builder.append(s"      ${name}.apply(this.${name}Codec.assign(this.buffer, this.offset + ${offset}, this.length - ${offset}).defaults())\n")
       builder.append(s"      this\n")
     }
     builder.append("   }\n")

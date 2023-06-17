@@ -1,0 +1,13 @@
+
+namespace trumid.poc.example.commands;
+
+type CancelOrderCommand {
+   userId: Int;
+   accountId: Int?;
+   orderId: String;
+}
+
+type CancelOrderResponse {
+   reason: String?;
+   success: Boolean;
+}

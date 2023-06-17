@@ -5,6 +5,7 @@ import org.ternlang.core.module.{Module, Path}
 
 import java.net.URI
 import java.util.function.Predicate
+import java.util.{Collections, Set}
 
 class WildQualifier(resource: URI) extends Compilation {
 
@@ -15,5 +16,6 @@ class WildQualifier(resource: URI) extends Compilation {
   private case class CompileResult(location: String) extends Qualifier {
     override def getLocation(): String = location
     override def getPredicate(): Predicate[String] = _ => true
+    override def getEntities(): Set[String] = Collections.emptySet()
   }
 }

@@ -22,8 +22,7 @@ class EnumGenerator(domain: Domain, entity: Entity, property: Property, mode: Mo
       builder.append(s"      } else {\n")
       builder.append(s"         None\n")
       builder.append(s"      }\n")
-    }
-    else {
+    } else {
       builder.append(s"   override def ${name}(): ${constraint} = {\n")
       builder.append(s"      // ${origin}\n")
       builder.append("      this.buffer.setCount(this.offset + this.required);\n")
@@ -32,11 +31,31 @@ class EnumGenerator(domain: Domain, entity: Entity, property: Property, mode: Mo
     builder.append("   }\n")
   }
 
-  def generateSetter(builder: SourceBuilder): Unit = {}
+  def generateSetter(builder: SourceBuilder): Unit = {
+  }
 
-  def generateGetterSignature(builder: SourceBuilder): Unit = {}
+  def generateGetterSignature(builder: SourceBuilder): Unit = {
+    val constraint = property.getConstraint(mode)
+    val name = property.getName()
 
-  def generateSetterSignature(builder: SourceBuilder): Unit = {}
+    if (property.isOptional) {
+      builder.append(s"   def ${name}(): OptionBuilder[${constraint}]\n")
+    } else {
+      builder.append(s"   def ${name}(): ${constraint}\n")
+    }
+  }
+
+  def generateSetterSignature(builder: SourceBuilder): Unit = {
+    val constraint = property.getConstraint(mode)
+    val name = property.getName()
+    val parent = entity.getName(mode)
+
+    if(property.isOptional()) {
+      builder.append(s"   def ${name}(${name}: Option[${constraint}]): ${parent}Builder\n")
+    } else {
+      builder.append(s"   def ${name}(${name}: ${constraint}): ${parent}Builder\n")
+    }
+  }
 
   def generateComparisonField(builder: SourceBuilder): Unit = {}
 

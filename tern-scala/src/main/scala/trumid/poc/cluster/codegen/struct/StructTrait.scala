@@ -34,6 +34,9 @@ class StructTrait(domain: Domain, entity: Entity, mode: Mode) extends Template(d
 
   private def generateGetterMethods(): Unit = {
     builder.append("\n")
+    properties.create(entity).stream.forEach(generator => {
+      generator.generateGetterSignature(builder)
+    })
   }
 
   private def generateValidationMethod(): Unit = {

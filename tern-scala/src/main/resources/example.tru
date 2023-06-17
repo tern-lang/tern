@@ -6,25 +6,10 @@ import {String, Blah} from "foo/x.tru";
 
 const DEFAULT_VALUE = 0.0;
 
-interface Price {
-
-    @PositiveOrZero
+type Foo {
     price: Double;
 }
 
-/**
- * This represents a struct that is generated in to a codec
- * that aligns by data in to a single byte buffer.
- */
-type IndexPrice extends Price {
-
-   @NotBlank
-   symbol: String;
-   convention: PriceConvention;
-
-   // inner enum to define price convention
-   enum PriceConvention {
-      Spread,
-      Price
-   }
+type Blah {
+  foo: Foo;
 }

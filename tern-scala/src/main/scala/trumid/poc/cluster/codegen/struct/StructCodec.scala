@@ -48,6 +48,8 @@ class StructCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(d
     properties.create(entity).stream.forEach(generator => {
       builder.append("\n")
       generator.generateGetter(builder)
+      builder.append("\n")
+      generator.generateSetter(builder)
     })
   }
 

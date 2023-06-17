@@ -38,7 +38,7 @@ class StructValidator(domain: Domain, entity: Entity, mode: Mode) extends Templa
 
     builder.append("\n")
     builder.append(s"   def validate(${identifier}: ${name}): ResultCode = {\n")
-    builder.append(s"      null\n")
+    builder.append("      ResultCode.success(\"Ok\")\n")
     builder.append(s"   }\n")
   }
 }

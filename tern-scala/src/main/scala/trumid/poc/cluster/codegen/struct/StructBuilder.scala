@@ -20,9 +20,15 @@ class StructBuilder(domain: Domain, entity: Entity, mode: Mode)  extends Templat
 
   override protected def generateBody(): Unit = {
     builder.append("\n")
+    generateSetterMethods()
     generateDefaultsMethod()
     generateClearMethod()
+  }
 
+  private def generateSetterMethods(): Unit = {
+    properties.create(entity).stream.forEach(generator => {
+      generator.generateSetterSignature(builder)
+    })
   }
 
   private def generateDefaultsMethod(): Unit = {

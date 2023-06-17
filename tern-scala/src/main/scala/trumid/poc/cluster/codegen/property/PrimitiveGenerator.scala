@@ -34,9 +34,28 @@ class PrimitiveGenerator(domain: Domain, entity: Entity, property: Property, mod
 
   def generateSetter(builder: SourceBuilder): Unit = {}
 
-  def generateGetterSignature(builder: SourceBuilder): Unit = {}
+  def generateGetterSignature(builder: SourceBuilder): Unit = {
+    val constraint = property.getConstraint(mode)
+    val name = property.getName()
 
-  def generateSetterSignature(builder: SourceBuilder): Unit = {}
+    if (property.isOptional) {
+      builder.append(s"   def ${name}(): Option[${constraint}]\n")
+    } else {
+      builder.append(s"   def ${name}(): ${constraint}\n")
+    }
+  }
+
+  def generateSetterSignature(builder: SourceBuilder): Unit = {
+    val constraint = property.getConstraint(mode)
+    val name = property.getName()
+    val parent = entity.getName(mode)
+
+    if(property.isOptional()) {
+      builder.append(s"   def ${name}(${name}: Option[${constraint}]): ${parent}Builder\n")
+    } else {
+      builder.append(s"   def ${name}(${name}: ${constraint}): ${parent}Builder\n")
+    }
+  }
 
   def generateComparisonField(builder: SourceBuilder): Unit = {}
 

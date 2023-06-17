@@ -36,7 +36,7 @@ class AliasReference(constraint: TextLiteral, optional: Optional) {
           alias.getAnnotations.forEach((name, annotation) => {
             property.getAnnotations.putIfAbsent(name, annotation)
           })
-          property.getMask().add(if (alias.isOptional || optional == null) 0 else Property.OPTIONAL)
+          property.getMask().add(if (alias.isOptional || optional == null) Property.BLANK else Property.OPTIONAL)
           property.setConstraint(alias.getConstraint)
         }
       }

@@ -34,7 +34,7 @@ class EntityConstraint(identifier: TextLiteral, optional: Optional) extends Cons
 
       property.getMask()
         .add(if (primitive.isDefined) Property.PRIMITIVE else Property.ENTITY)
-        .add(if (optional == null) Property.OPTIONAL else Property.BLANK)
+        .add(if (optional == null) Property.BLANK else Property.OPTIONAL)
 
       property.setConstraint(constraint)
     } else {

@@ -2,6 +2,7 @@ package trumid.poc.cluster.codegen.property
 
 import trumid.poc.codegen.common.SourceBuilder
 import trumid.poc.common.Primitive
+import trumid.poc.common.message.ByteSize
 import trumid.poc.model._
 
 class PrimitiveArrayGenerator(domain: Domain, entity: Entity, property: Property, mode: Mode) extends PropertyGenerator(domain, entity, property, mode) {
@@ -23,9 +24,13 @@ class PrimitiveArrayGenerator(domain: Domain, entity: Entity, property: Property
     if (property.isOptional) {
       builder.append(s"   override def ${name}(): Option[${constraint}Array] = {\n")
       builder.append(s"      // ${origin}\n")
-      builder.append("      this.buffer.setCount(this.offset + this.required)\n")
+      builder.append(s"      this.buffer.setCount(this.offset + this.required)\n")
       builder.append(s"      if (this.buffer.getBoolean(this.offset + this.offset + ${offset})) {\n")
-      builder.append(s"         Some(this.${name}Codec.assign(this.buffer, this.offset + ${offset}, this.length - ${offset}))\n")
+      builder.append(s"         Some(this.${name}Codec.assign(\n")
+      builder.append(s"            this.buffer,\n")
+      builder.append(s"            this.offset + (${offset} + this.buffer.getByte(this.offset + ${offset} + ${ByteSize.BYTE_SIZE})),\n")
+      builder.append(s"            this.length - (${offset} + this.buffer.getByte(this.offset + ${offset} + ${ByteSize.BYTE_SIZE}))\n")
+      builder.append(s"         ))\n")
       builder.append(s"      } else {\n")
       builder.append(s"         None\n")
       builder.append(s"      }\n")
@@ -33,8 +38,12 @@ class PrimitiveArrayGenerator(domain: Domain, entity: Entity, property: Property
     else {
       builder.append(s"   override def ${name}(): ${constraint}Array = {\n")
       builder.append(s"      // ${origin}\n")
-      builder.append("      this.buffer.setCount(this.offset + this.required);\n")
-      builder.append(s"      this.${name}Codec.assign(this.buffer, this.offset + ${offset}, this.length - ${offset})\n")
+      builder.append(s"      this.buffer.setCount(this.offset + this.required);\n")
+      builder.append(s"      this.${name}Codec.assign(\n")
+      builder.append(s"         this.buffer,\n")
+      builder.append(s"         this.offset + (${offset} + this.buffer.getByte(this.offset + ${offset} + ${ByteSize.BYTE_SIZE})),\n")
+      builder.append(s"         this.length - (${offset} + this.buffer.getByte(this.offset + ${offset} + ${ByteSize.BYTE_SIZE}))\n")
+      builder.append(s"      )\n")
     }
     builder.append("   }\n")
   }
@@ -48,19 +57,39 @@ class PrimitiveArrayGenerator(domain: Domain, entity: Entity, property: Property
     val offset = getOffset()
 
     if (property.isOptional) {
-      builder.append(s"   override def ${name}(${name}: (OptionBuilder[${constraint}ArrayBuilder]) => Unit): ${parent}Builder = {\n")
-      builder.append(s"      // ${origin}\n")
-      builder.append(s"      ${name}.apply(OptionBuilder[${constraint}ArrayBuilder](\n")
-      builder.append(s"        some = () => {\n")
-      builder.append(s"           this.buffer.setCount(this.offset + this.required)\n")
-      builder.append(s"           this.buffer.setBoolean(this.offset + ${offset}, true)\n")
-      builder.append(s"           this.${name}Codec.assign(this.buffer, this.offset + ${offset}, this.length - ${offset})\n")
-      builder.append(s"        },\n")
-      builder.append(s"        none = () => {\n")
-      builder.append(s"           this.buffer.setCount(this.offset + this.required)\n")
-      builder.append(s"           this.buffer.setBoolean(this.offset + ${offset}, false)\n")
-      builder.append(s"        }\n")
-      builder.append(s"      ))\n")
+      if(property.isArray() && primitive.contains(Primitive.CHAR)) {
+        builder.append(s"   override def ${name}(${name}: Option[CharSequence]): ${parent}Builder = {\n")
+        builder.append(s"      // ${origin}\n")
+        builder.append(s"      this.buffer.setCount(this.offset + this.required)\n")
+        builder.append(s"      this.buffer.setBoolean(this.offset + ${offset}, ${name}.isDefined)\n")
+        builder.append(s"      if (${name}.isDefined) {\n")
+        builder.append(s"         this.${name}Codec.assign(\n")
+        builder.append(s"            this.buffer,\n")
+        builder.append(s"            this.offset + (${offset} + this.buffer.getByte(this.offset + ${offset} + ${ByteSize.BYTE_SIZE})),\n")
+        builder.append(s"            this.length - (${offset} + this.buffer.getByte(this.offset + ${offset} + ${ByteSize.BYTE_SIZE}))\n")
+        builder.append(s"         )\n")
+        builder.append(s"         .clear()\n")
+        builder.append(s"         .append(${name}.get)\n")
+        builder.append(s"      }\n")
+      } else {
+        builder.append(s"   override def ${name}(${name}: (OptionBuilder[${constraint}ArrayBuilder]) => Unit): ${parent}Builder = {\n")
+        builder.append(s"      // ${origin}\n")
+        builder.append(s"      ${name}.apply(OptionBuilder[${constraint}ArrayBuilder](\n")
+        builder.append(s"        some = () => {\n")
+        builder.append(s"           this.buffer.setCount(this.offset + this.required)\n")
+        builder.append(s"           this.buffer.setBoolean(this.offset + ${offset}, true)\n")
+        builder.append(s"           this.${name}Codec.assign(\n")
+        builder.append(s"              this.buffer,\n")
+        builder.append(s"              this.offset + (${offset} + this.buffer.getByte(this.offset + ${offset} + ${ByteSize.BYTE_SIZE})),\n")
+        builder.append(s"              this.length - (${offset} + this.buffer.getByte(this.offset + ${offset} + ${ByteSize.BYTE_SIZE}))\n")
+        builder.append(s"           )\n")
+        builder.append(s"        },\n")
+        builder.append(s"        none = () => {\n")
+        builder.append(s"           this.buffer.setCount(this.offset + this.required)\n")
+        builder.append(s"           this.buffer.setBoolean(this.offset + ${offset}, false)\n")
+        builder.append(s"        }\n")
+        builder.append(s"      ))\n")
+      }
       builder.append(s"      this\n")
     }
     else {

@@ -10,6 +10,7 @@ object OrderCodecTest extends App {
     .price(11.2)
     .quantity(1000)
     .symbol("BTC")
+    .description(Some("foo"))
 
 
   if(codec.price() != 11.2) {
@@ -37,5 +38,10 @@ object OrderCodecTest extends App {
   if(codec.quantity() != 1000) {
     throw new Error("Quantity")
   }
+  if(codec.description().get.toString() != "foo") {
+    throw new Error("Description")
+  }
+  println(codec.description())
+  println(codec.symbol())
   println(buffer.length())
 }

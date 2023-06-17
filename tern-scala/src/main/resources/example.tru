@@ -3,6 +3,7 @@ namespace trumid.poc.example;
 
 type Order {
    symbol: String;
+   description: String?;
    price: Double;
    quantity: Long;
 }

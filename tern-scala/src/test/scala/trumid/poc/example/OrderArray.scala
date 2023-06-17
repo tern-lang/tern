@@ -1,4 +1,4 @@
-// Generated at Sat Jun 17 19:09:50 BST 2023 (StructArray)
+// Generated at Sat Jun 17 19:31:04 BST 2023 (StructArray)
 package trumid.poc.example
 
 import trumid.poc.common.array._

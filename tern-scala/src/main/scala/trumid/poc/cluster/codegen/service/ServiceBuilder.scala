@@ -30,7 +30,6 @@ class ServiceBuilder(domain: Domain, entity: Entity, mode: Mode) extends Templat
       val method: String = PascalCaseStyle.toCase(identifier)
 
       builder.append(s"   override def ${identifier}(): ${constraint}Builder\n")
-      builder.append(s"   override def if${method}(${identifier}: (${constraint}) => Unit): Unit\n")
     })
     generateDefaultsMethod()
     generateClearMethod()

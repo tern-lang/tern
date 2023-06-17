@@ -1,15 +1,8 @@
 
 namespace foo.bar;
 
-import * from "./other.tru";
-import {String, Blah} from "blah/x.tru";
-
-const DEFAULT_VALUE = 0.0;
-
-type Foo {
-    price: Double;
-}
-
-type Blah {
-  foo: Foo?;
+type Order {
+   symbol: String;
+   price: Double;
+   quantity: Long;
 }

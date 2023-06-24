@@ -5,7 +5,7 @@ import {PlaceOrderCommand, PlaceOrderResponse} from 'commands/place_order_comman
 import {CancelOrderCommand, CancelOrderResponse} from 'commands/cancel_order_command.tru';
 import {CancelAllOrdersCommand, CancelAllOrdersResponse} from 'commands/cancel_all_orders_command.tru';
 
-@Version(version: 1.0)
+@Topic(code: 1)
 service TradingEngine {
 
    /**

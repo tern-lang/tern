@@ -13,6 +13,7 @@ class UnionTrait(domain: Domain, entity: Entity, mode: Mode) extends Template(do
 
   override protected def generateExtraImports(): Unit = {
     builder.append("import trumid.poc.common.array._\n")
+    builder.append("import trumid.poc.common.topic._\n")
     builder.append("import trumid.poc.cluster.ResultCode\n")
   }
 
@@ -37,8 +38,12 @@ class UnionTrait(domain: Domain, entity: Entity, mode: Mode) extends Template(do
       builder.append(s"   def ${identifier}(): ${constraint}\n")
       builder.append(s"   def is${method}(): Boolean\n")
     })
+    generateTopicMethod()
     generateMatchMethod()
     generateValidateMethod()
+  }
+
+  protected def generateTopicMethod(): Unit = {
   }
 
   private def generateMatchMethod(): Unit = {

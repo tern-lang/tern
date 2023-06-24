@@ -13,6 +13,14 @@ class UnionCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(do
 
   override protected def getCategory() = "class"
 
+  override protected def generateExtraImports(): Unit = {
+    builder.append("import trumid.poc.common._\n")
+    builder.append("import trumid.poc.common.topic._\n")
+    builder.append("import trumid.poc.common.message._\n")
+    builder.append("import trumid.poc.common.array._\n")
+    builder.append("import trumid.poc.cluster._\n")
+  }
+
   override protected def generateEntity(): Unit = {
     val category = getCategory()
 
@@ -22,17 +30,11 @@ class UnionCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(do
     builder.append("}\n")
   }
 
-  override protected def generateExtraImports(): Unit = {
-    builder.append("import trumid.poc.common._\n")
-    builder.append("import trumid.poc.common.message._\n")
-    builder.append("import trumid.poc.common.array._\n")
-    builder.append("import trumid.poc.cluster._\n")
-  }
-
   override protected def generateBody(): Unit = {
     generateFields()
     generateDefaultFields()
     generateAssignMethod()
+    generateTopicMethod()
     generateMatchMethod()
     generateGetterMethods()
     generateDefaultsMethod()
@@ -110,6 +112,10 @@ class UnionCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(do
     builder.append("      this.required = required;\n")
     builder.append("      this;\n")
     builder.append("   }\n")
+  }
+
+  protected def generateTopicMethod(): Unit = {
+
   }
 
   private def generateMatchMethod(): Unit = {

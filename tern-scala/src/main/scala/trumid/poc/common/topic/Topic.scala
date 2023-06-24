@@ -2,14 +2,24 @@ package trumid.poc.common.topic
 
 import trumid.poc.common.message._
 import trumid.poc.common.topic.TopicMessageHeader.HEADER_SIZE
-import java.lang.Integer._
 
-object Topic {
-  val MatchingEngine = Topic(1, "matching engine")
-  val MatchingEngineResponse = Topic(2, "matching engine response")
+case class Topic(code: Byte, description: String) {
+
+  def route(handler: (MessageFrame, Fragment) => Unit): TopicRoute = {
+    TopicHandler(this, handler)
+  }
+
+  private case class TopicHandler(topic: Topic, handler: (MessageFrame, Fragment) => Unit) extends TopicRoute {
+
+    override def handle(frame: MessageFrame, payload: Fragment): Unit = {
+      handler.apply(frame, payload)
+    }
+
+    override def getTopic: Topic = {
+      topic
+    }
+  }
 }
-
-case class Topic(code: Byte, description: String)
 
 trait TopicRoute {
   def handle(frame: MessageFrame, payload: Fragment): Unit

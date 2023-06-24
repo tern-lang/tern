@@ -5,7 +5,7 @@ import trumid.poc.example.commands._
 
 import java.util.concurrent.TimeUnit
 
-class MatchingEngine(output: MatchingEngineOutput) extends TradingEngineHandler {
+class TradingServiceHandler(output: TradingServiceOutput) extends TradingEngineHandler {
   var startTime = 0L
   var lastDumpTime = 0L
   var count = 0

@@ -14,7 +14,6 @@ class TopicMessageConsumer(subscriber: TopicMessageSubscriber) extends Publisher
     if (converters(code) != null) {
       throw new IllegalArgumentException(s"Topic $description already registered")
     }
-
     converters(code) = converter
   }
 

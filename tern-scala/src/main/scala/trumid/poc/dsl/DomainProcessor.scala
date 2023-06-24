@@ -9,19 +9,20 @@ class DomainProcessor {
       .stream()
       .filter(entity => entity.getCategory().isService())
       .forEach(service => {
-          val entity = service.getSourceUnit().addEntity(s"${service.getName}Response")
+        val entity = service.getSourceUnit().addEntity(s"${service.getName}Response")
 
-          entity.setCategory(ServiceCategory)
-          service.getProperties().forEach(property => {
-            val identifier = property.getName()
-            val response = property.getResponse()
+        entity.setCategory(ServiceCategory)
+        entity.getAnnotations().putAll(service.getAnnotations())
+        service.getProperties().forEach(property => {
+          val identifier = property.getName()
+          val response = property.getResponse()
 
-            entity.addProperty(identifier + "Response")
-              .setConstraint(response)
-              .setIndex(property.getIndex)
-              .getMask()
-              .add(Property.ENTITY)
-          })
+          entity.addProperty(identifier + "Response")
+            .setConstraint(response)
+            .setIndex(property.getIndex)
+            .getMask()
+            .add(Property.ENTITY)
+        })
       })
   }
 }

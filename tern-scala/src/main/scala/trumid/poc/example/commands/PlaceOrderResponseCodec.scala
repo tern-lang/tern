@@ -1,4 +1,4 @@
-// Generated at Sat Jun 24 16:49:17 BST 2023 (StructCodec)
+// Generated at Sat Jun 24 19:11:13 BST 2023 (StructCodec)
 package trumid.poc.example.commands
 
 import trumid.poc.common._
@@ -8,8 +8,8 @@ import trumid.poc.cluster._
 
 object PlaceOrderResponseCodec {
    val VERSION: Int = 1
-   val REQUIRED_SIZE: Int = 12
-   val TOTAL_SIZE: Int = 12
+   val REQUIRED_SIZE: Int = 20
+   val TOTAL_SIZE: Int = 20
 }
 
 final class PlaceOrderResponseCodec(variable: Boolean = true) extends PlaceOrderResponseBuilder with Flyweight[PlaceOrderResponseCodec] {
@@ -72,6 +72,19 @@ final class PlaceOrderResponseCodec(variable: Boolean = true) extends PlaceOrder
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
       this.buffer.setBoolean(this.offset + 11, success)
+      this
+   }
+
+   override def time(): Long = {
+      // PrimitiveGenerator
+      this.buffer.setCount(this.offset + this.required);
+      this.buffer.getLong(this.offset + 12)
+   }
+
+   override def time(time: Long): PlaceOrderResponseBuilder = {
+      // PrimitiveGenerator
+      this.buffer.setCount(this.offset + this.required);
+      this.buffer.setLong(this.offset + 12, time)
       this
    }
 

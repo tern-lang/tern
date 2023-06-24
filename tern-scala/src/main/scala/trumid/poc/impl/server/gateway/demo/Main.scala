@@ -41,7 +41,7 @@ object Main {
     val subscriber = new TradingTopicSubscriber
     val consumer = new TopicMessageConsumer(subscriber)
     val gatewayClient = new GatewayLauncher(group, mode).launch(
-      handler = new TradingClientAdapter(),
+      handler = new TradingGateway(),
       consumer
     )
     val tradingClient = new TradingEngineClient((frame: MessageFrame, _: Any) => {

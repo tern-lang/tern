@@ -1,4 +1,4 @@
-// Generated at Sat Jun 24 16:49:17 BST 2023 (StructCodec)
+// Generated at Sat Jun 24 19:11:13 BST 2023 (StructCodec)
 package trumid.poc.example.commands
 
 import trumid.poc.common._
@@ -8,8 +8,8 @@ import trumid.poc.cluster._
 
 object CancelOrderCommandCodec {
    val VERSION: Int = 1
-   val REQUIRED_SIZE: Int = 19
-   val TOTAL_SIZE: Int = 19
+   val REQUIRED_SIZE: Int = 27
+   val TOTAL_SIZE: Int = 27
 }
 
 final class CancelOrderCommandCodec(variable: Boolean = true) extends CancelOrderCommandBuilder with Flyweight[CancelOrderCommandCodec] {
@@ -69,16 +69,29 @@ final class CancelOrderCommandCodec(variable: Boolean = true) extends CancelOrde
       this
    }
 
+   override def time(): Long = {
+      // PrimitiveGenerator
+      this.buffer.setCount(this.offset + this.required);
+      this.buffer.getLong(this.offset + 15)
+   }
+
+   override def time(time: Long): CancelOrderCommandBuilder = {
+      // PrimitiveGenerator
+      this.buffer.setCount(this.offset + this.required);
+      this.buffer.setLong(this.offset + 15, time)
+      this
+   }
+
    override def userId(): Int = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.getInt(this.offset + 15)
+      this.buffer.getInt(this.offset + 23)
    }
 
    override def userId(userId: Int): CancelOrderCommandBuilder = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.setInt(this.offset + 15, userId)
+      this.buffer.setInt(this.offset + 23, userId)
       this
    }
 

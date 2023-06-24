@@ -5,7 +5,7 @@ import trumid.poc.example.commands._
 
 import java.util.concurrent.TimeUnit
 
-class TradingClientResponseHandler extends TradingEngineResponseHandler {
+class TradingGatewayResponseHandler extends TradingEngineResponseHandler {
   var count = 0
 
   override def onPlaceOrderResponse(response: PlaceOrderResponse) = {

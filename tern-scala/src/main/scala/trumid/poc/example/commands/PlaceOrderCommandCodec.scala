@@ -1,4 +1,4 @@
-// Generated at Sat Jun 24 16:49:17 BST 2023 (StructCodec)
+// Generated at Sat Jun 24 19:11:13 BST 2023 (StructCodec)
 package trumid.poc.example.commands
 
 import trumid.poc.example.commands._
@@ -9,8 +9,8 @@ import trumid.poc.cluster._
 
 object PlaceOrderCommandCodec {
    val VERSION: Int = 1
-   val REQUIRED_SIZE: Int = 41
-   val TOTAL_SIZE: Int = 41
+   val REQUIRED_SIZE: Int = 49
+   val TOTAL_SIZE: Int = 49
 }
 
 final class PlaceOrderCommandCodec(variable: Boolean = true) extends PlaceOrderCommandBuilder with Flyweight[PlaceOrderCommandCodec] {
@@ -64,16 +64,29 @@ final class PlaceOrderCommandCodec(variable: Boolean = true) extends PlaceOrderC
       this
    }
 
+   override def time(): Long = {
+      // PrimitiveGenerator
+      this.buffer.setCount(this.offset + this.required);
+      this.buffer.getLong(this.offset + 37)
+   }
+
+   override def time(time: Long): PlaceOrderCommandBuilder = {
+      // PrimitiveGenerator
+      this.buffer.setCount(this.offset + this.required);
+      this.buffer.setLong(this.offset + 37, time)
+      this
+   }
+
    override def userId(): Int = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.getInt(this.offset + 37)
+      this.buffer.getInt(this.offset + 45)
    }
 
    override def userId(userId: Int): PlaceOrderCommandBuilder = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.setInt(this.offset + 37, userId)
+      this.buffer.setInt(this.offset + 45, userId)
       this
    }
 

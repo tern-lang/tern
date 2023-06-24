@@ -5,6 +5,7 @@ import java.nio.ByteOrder.LITTLE_ENDIAN
 import trumid.poc.common.message._
 import trumid.poc.common.topic.TopicMessageHeader.HEADER_SIZE
 import java.lang.Integer._
+
 class TopicRouter(venue: Byte) extends MessageHeader {
   val buffer = new DirectByteBuffer(LITTLE_ENDIAN, HEADER_SIZE)
   val routes = new Array[TopicStatus](256)

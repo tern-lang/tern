@@ -23,7 +23,7 @@ object Main {
     //scheduler.scheduleAtFixedRate(() => println(dumper.dumpThreads()), 1, 1, TimeUnit.SECONDS)
 
     ClusterLauncher.launch(ClusterConfiguration(
-      service = MatchingEngineService(
+      service = TradingService(
         member = member,
         clock = new ClusterClock,
         scheduler = new ClusterScheduler),

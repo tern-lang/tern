@@ -3,7 +3,7 @@ package trumid.poc.impl.server.gateway.demo
 import trumid.poc.example.commands._
 import trumid.poc.example.{TradingEngineClient, TradingEngineHandler}
 
-class TradingClientCommandHandler(client: TradingEngineClient) extends TradingEngineHandler {
+class TradingGatewayHandler(client: TradingEngineClient) extends TradingEngineHandler {
 
   override def onPlaceOrder(command: PlaceOrderCommand): Unit = {
     //println(s"TradingClientCommandHandler.onPlaceOrder orderId=${command.getOrderId} instrumentId=${command.getInstrumentId} time=${command.getTime}")

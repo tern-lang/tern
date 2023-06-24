@@ -2,12 +2,20 @@
 namespace trumid.poc.example.commands;
 
 type CancelOrderCommand {
+
+   @Positive
    userId: Int;
+
+   @Positive
    accountId: Int?;
+
+   @NotBlank
    orderId: String;
 }
 
 type CancelOrderResponse {
+
+   @NotBlank
    reason: String?;
    success: Boolean;
 }

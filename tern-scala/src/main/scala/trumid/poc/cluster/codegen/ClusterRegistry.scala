@@ -1,8 +1,9 @@
 package trumid.poc.cluster.codegen
 
 import trumid.poc.cluster.codegen.enumeration.EnumTrait
-import trumid.poc.cluster.codegen.service.{ServiceBuilder, ServiceHandler, ServiceTrait}
-import trumid.poc.cluster.codegen.struct.{StructArray, StructArrayCodec, StructBuilder, StructCodec, StructTrait, StructValidator}
+import trumid.poc.cluster.codegen.service._
+import trumid.poc.cluster.codegen.struct._
+import trumid.poc.cluster.codegen.union._
 import trumid.poc.codegen.common.{Template, TemplateRegistry}
 import trumid.poc.model.{Domain, Entity, Mode}
 
@@ -24,6 +25,9 @@ class ClusterRegistry(domain: Domain, mode: Mode) extends TemplateRegistry {
     }
     if(entity.getCategory.isService()) {
       addServices(entity, templates)
+    }
+    if(entity.getCategory.isUnion()) {
+      addUnions(entity, templates)
     }
     templates
   }
@@ -49,5 +53,13 @@ class ClusterRegistry(domain: Domain, mode: Mode) extends TemplateRegistry {
     templates.add(new ServiceHandler(domain, entity, mode))
     templates.add(new ServiceBuilder(domain, entity, mode))
     templates.add(new ServiceTrait(domain, entity, mode))
+    templates.add(new ServiceCodec(domain, entity, mode))
+  }
+
+  private def addUnions(entity: Entity, templates: util.List[Template]) = {
+    templates.add(new UnionHandler(domain, entity, mode))
+    templates.add(new UnionBuilder(domain, entity, mode))
+    templates.add(new UnionTrait(domain, entity, mode))
+    templates.add(new UnionCodec(domain, entity, mode))
   }
 }

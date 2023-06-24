@@ -3,6 +3,7 @@ package trumid.poc.dsl
 import Documentation._
 
 object AnnotationType {
+  val Version = appply(false, "Version")
   val PositiveOrZero = appply(false, "PositiveOrZero")
   val Positive = appply(false, "Positive")
   val NegativeOrZero = appply(false, "NegativeOrZero")
@@ -36,6 +37,8 @@ object AnnotationType {
 
   def resolve(name: String): Option[AnnotationType] = {
     name match {
+      case "Version" => Some(Version)
+      case "Positive" => Some(Positive)
       case "PositiveOrZero" => Some(PositiveOrZero)
       case "NotBlank" => Some(NotBlank)
     }

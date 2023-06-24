@@ -2,19 +2,33 @@
 namespace trumid.poc.example.commands;
 
 type PlaceOrderCommand {
+
+   @Positive
    userId: Int;
+
+   @Positive
    accountId: Int?;
    order: OrderInfo;
 
    type OrderInfo {
+
+      @NotBlank
       orderId: String;
+
+      @NotBlank
       symbol: String;
+
+      @Positive
       price: Double;
+
+      @Positive
       quantity: Double;
    }
 }
 
 type PlaceOrderResponse {
+
+   @NotBlank
    reason: String?;
    success: Boolean;
 }

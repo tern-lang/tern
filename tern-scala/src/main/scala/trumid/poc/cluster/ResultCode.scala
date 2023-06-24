@@ -7,6 +7,7 @@ trait ResultCode {
 }
 
 object ResultCode {
+  val OK: ResultCode = success("Ok")
 
   def fail(reason: String): ResultCode = {
     BasicResultCode(reason, true)

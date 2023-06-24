@@ -16,12 +16,14 @@ object TradingEngineCodecTest extends App {
     .order(order => {
       order.price(11.2)
         .quantity(1000)
-        .symbol("BTC")
+        .orderId("ABC")
+        .symbol("")
     })
 
   if (!codec.isPlaceOrder()) {
     throw new RuntimeException()
   }
+  println(codec.validate())
   codec.handle(new MockTradingEngineHandler(value => {
     value match {
       case command: PlaceOrderCommand =>

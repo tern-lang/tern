@@ -10,6 +10,9 @@ type PlaceOrderCommand {
    accountId: Int?;
    order: OrderInfo;
 
+   @Positive
+   time: Long;
+
    type OrderInfo {
 
       @NotBlank
@@ -31,4 +34,7 @@ type PlaceOrderResponse {
    @NotBlank
    reason: String?;
    success: Boolean;
+
+   @Positive
+   time: Long;
 }

@@ -1,48 +1,51 @@
 package trumid.poc.dsl
 
-import Documentation._
+sealed trait AnnotationType {
+  def name(): String
+  def attributes(): Seq[String] = Seq.empty
+}
 
 object AnnotationType {
-  val Version = appply(false, "Version")
-  val PositiveOrZero = appply(false, "PositiveOrZero")
-  val Positive = appply(false, "Positive")
-  val NegativeOrZero = appply(false, "NegativeOrZero")
-  val Negative = appply(false, "Negative")
-  val NotZero = appply(false, "NotZero")
-  val NotBlank = appply(false, "NotBlank")
-  val Max = appply(false, "Max", List("value"))
-  val Min = appply(false, "Min", List("value"))
-  val MaxLength = appply(false, "MaxLength", List("length"))
-  val MinLength = appply(false, "MinLength", List("length"))
-  val Charset = appply(false, "Charset", List("name"))
-  val Index = appply(false, "Index")
-  val PrimaryKey = appply(false, "PrimaryKey")
-  val Constant = appply(false, "Constant")
-  val Resource = appply(true, "Resource", List("response"))
-  val Subscription = appply(true, "Subscription", List("event"))
-  val Internal = appply(false, "Internal")
-  val Documentation = appply(false, "Documentation", List(description, summary, example))
-  val Publish = appply(false, "Publish", List("event"))
-  val AccessControl = appply(true, "AccessControl", List("permission"))
-  val Response = appply(true, "Response", List("200", "201", "400", "401", "403", "404", "405", "406", "409", "500"))
-  val Path = appply(false, "Path", List("path", "query"))
-  val GET = appply(false, "GET")
-  val POST = appply(false, "POST")
-  val DELETE = appply(false, "DELETE")
-  val PUT = appply(false, "PUT");
-
-  def appply(reference: Boolean, name: String, attributes: List[String] = List.empty) = {
-    AnnotationType(reference, name, None, attributes)
-  }
 
   def resolve(name: String): Option[AnnotationType] = {
     name match {
       case "Version" => Some(Version)
       case "Positive" => Some(Positive)
       case "PositiveOrZero" => Some(PositiveOrZero)
+      case "Negative" => Some(Negative)
+      case "NegativeOrZero" => Some(NegativeOrZero)
+      case "NotZero" => Some(NotZero)
       case "NotBlank" => Some(NotBlank)
     }
   }
 }
 
-case class AnnotationType(reference: Boolean, name: String, attribute: Option[String], attributes: List[String] = List.empty)
+object Version extends AnnotationType {
+  override def name(): String = "Version"
+  override def attributes(): Seq[String] = Seq("version")
+}
+
+object Positive extends AnnotationType {
+  override def name(): String = "Positive"
+}
+
+object PositiveOrZero extends AnnotationType {
+  override def name(): String = "PositiveOrZero"
+}
+
+object Negative extends AnnotationType {
+  override def name(): String = "Negative"
+}
+
+object NegativeOrZero extends AnnotationType {
+  override def name(): String = "NegativeOrZero"
+}
+
+object NotZero extends AnnotationType {
+  override def name(): String = "NotZero"
+}
+
+object NotBlank extends AnnotationType {
+  override def name(): String = "NotBlank"
+}
+

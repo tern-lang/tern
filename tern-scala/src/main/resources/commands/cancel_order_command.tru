@@ -11,6 +11,9 @@ type CancelOrderCommand {
 
    @NotBlank
    orderId: String;
+
+   @Positive
+   time: Long;
 }
 
 type CancelOrderResponse {
@@ -18,4 +21,7 @@ type CancelOrderResponse {
    @NotBlank
    reason: String?;
    success: Boolean;
+
+   @Positive
+   time: Long;
 }

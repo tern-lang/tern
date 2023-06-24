@@ -35,10 +35,24 @@ class StructValidator(domain: Domain, entity: Entity, mode: Mode) extends Templa
   private def generateValidationMethod(): Unit = {
     val name = entity.getName(mode)
     val identifier = CamelCaseStyle.toCase(name)
+    val properties = entity.getProperties()
+    val parameter = CamelCaseStyle.toCase(entity.getName)
 
     builder.append("\n")
     builder.append(s"   def validate(${identifier}: ${name}): ResultCode = {\n")
-    builder.append("      ResultCode.success(\"Ok\")\n")
+    validations.create(entity).forEach(validation => {
+      validation.generateValidation(builder)
+    })
+    properties.forEach(property => {
+      if(property.isEntity()) {
+        val identifier = property.getName()
+
+        builder.append(s"      if(!${parameter}.${identifier}().validate().success()) {\n")
+        builder.append(s"         return ${parameter}.${identifier}().validate()\n")
+        builder.append(s"      }\n")
+      }
+    })
+    builder.append("      ResultCode.OK\n")
     builder.append(s"   }\n")
   }
 }

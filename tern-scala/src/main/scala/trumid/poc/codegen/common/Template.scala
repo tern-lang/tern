@@ -1,13 +1,14 @@
 package trumid.poc.codegen.common
 
 import trumid.poc.cluster.codegen.property.PropertyGeneratorBuilder
+import trumid.poc.cluster.codegen.validate.ValidateAnnotationBuilder
 import trumid.poc.model._
-import trumid.poc.model.{DeclarationOrder, Domain, Entity, Mode, Namespace, PropertyOrder, SortedOrder}
 
 import java.util
 import java.util.Date
 
 abstract class Template(domain: Domain, entity: Entity, mode: Mode, sorted: Boolean = true) {
+  protected val validations = new ValidateAnnotationBuilder(domain, mode, sorted)
   protected val properties = new PropertyGeneratorBuilder(domain, mode, sorted)
   protected val imports = new util.HashSet[String]
   protected val builder = new SourceBuilder

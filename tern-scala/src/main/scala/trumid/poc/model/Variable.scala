@@ -1,6 +1,7 @@
 package trumid.poc.model
 
 trait Variable {
+  def isEntity(): Boolean = false
   def isComposite(): Boolean = false
   def isArray(): Boolean = false
   def isPrimitive(): Boolean = false

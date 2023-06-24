@@ -66,12 +66,12 @@ class UnionCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(do
       val code = SnakeCaseStyle.toCase(identifier).toUpperCase
       val method: String = PascalCaseStyle.toCase(identifier)
 
-      builder.append(s"   def ${identifier}(): ${constraint}Codec = {\n")
+      builder.append(s"   override def ${identifier}(): ${constraint}Codec = {\n")
       builder.append(s"      this.buffer.setByte(this.offset, ${name}Codec.${code}_ID)\n")
       builder.append(s"      this.buffer.setCount(this.offset + ${name}Codec.HEADER_SIZE + this.required)\n")
       builder.append(s"      this.${identifier}Codec.assign(this.buffer, this.offset + ${name}Codec.HEADER_SIZE, this.length - ${name}Codec.HEADER_SIZE)\n")
       builder.append(s"   }\n\n")
-      builder.append(s"   def is${method}(): Boolean = {\n")
+      builder.append(s"   override def is${method}(): Boolean = {\n")
       builder.append(s"      this.buffer.getByte(this.offset) == ${name}Codec.${code}_ID\n")
       builder.append(s"   }\n\n")
     })

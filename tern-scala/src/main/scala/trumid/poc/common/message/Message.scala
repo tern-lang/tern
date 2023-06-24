@@ -13,7 +13,7 @@ trait MessageHeader {
 }
 
 trait MessageComposer[T] {
-  def compose(code: Byte): T
+  def compose(): T
   def commit(consumer: MessageConsumer[T], userId: Int, correlationId: Long): MessageComposer[T]
 }
 

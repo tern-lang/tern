@@ -97,6 +97,8 @@ class Property(name: String) extends Variable with Annotated {
 
   override def isComposite(): Boolean = Property.isComposite(mask)
 
+  override def isEntity(): Boolean = Property.isEntity(mask)
+
   override def isArray(): Boolean = Property.isArray(mask)
 
   override def isPrimitive(): Boolean = Property.isPrimitive(mask)

@@ -1,7 +1,8 @@
 package trumid.poc.impl.server.gateway
 
 import org.agrona.concurrent.Agent
-import trumid.poc.common.topic.TopicMessageConsumer
+import trumid.poc.common.message.CompletionScheduler
+import trumid.poc.common.topic.TopicCompletionPublisher
 import trumid.poc.impl.server.client.OutputRingBuffer
 
 import java.util.concurrent.TimeUnit
@@ -11,7 +12,7 @@ object ProducerAgent {
   private val RESPONSE_TIME_SAMPLE_SIZE = 100000
 }
 
-class ProducerAgent(consumer: TopicMessageConsumer, output: OutputRingBuffer) extends Agent {
+class ProducerAgent(consumer: TopicCompletionPublisher, output: OutputRingBuffer, scheduler: CompletionScheduler) extends Agent {
   private val poller = new OutputPoller(output, consumer)
   private var maximum = 0L
   private var count = 0L
@@ -44,9 +45,11 @@ class ProducerAgent(consumer: TopicMessageConsumer, output: OutputRingBuffer) ex
   }
 
   private def process(): Int = {
-    val count = poller.poll()
+    var count = 0
+
     try {
-      consumer.flush()
+      count += poller.poll()
+      count += scheduler.poll()
       count
     } catch {
       case e: Exception => println("Error flushing topics");

@@ -1,4 +1,4 @@
-// Generated at Sat Jun 24 19:11:13 BST 2023 (ServiceCodec)
+// Generated at Sun Jun 25 12:15:27 BST 2023 (ServiceCodec)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
@@ -40,12 +40,47 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
       this;
    }
 
+   override def topic(publisher: Publisher): TopicRoute = {
+      Topic(10, "TradingEngine").route((frame, payload) => {
+         publisher.publish(
+            frame.getBody.getBuffer,
+            frame.getBody.getOffset,
+            frame.getBody.getLength)
+      })
+   }
+
    override def topic(handler: TradingEngineHandler): TopicRoute = {
       Topic(10, "TradingEngine").route((frame, payload) => {
          assign(
             payload.getBuffer,
             payload.getOffset,
             payload.getLength).handle(handler)
+      })
+   }
+
+   override def complete(scheduler: CompletionScheduler): TopicCompletionHandler = {
+      Topic(10, "TradingEngine").complete(this, (header) => {
+         val correlationId = header.getCorrelationId
+         val completion = scheduler.stop(correlationId)
+
+         if(completion != null) {
+            val code = buffer.getByte(offset)
+
+            code match {
+               case TradingEngineCodec.CANCEL_ALL_ORDERS_ID => {
+                  completion.complete(this.cancelAllOrdersCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
+               }
+               case TradingEngineCodec.CANCEL_ORDER_ID => {
+                  completion.complete(this.cancelOrderCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
+               }
+               case TradingEngineCodec.PLACE_ORDER_ID => {
+                  completion.complete(this.placeOrderCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
+               }
+               case _ => {
+                  completion.failure(new IllegalStateException("Invalid code " + code))
+               }
+            }
+         }
       })
    }
 

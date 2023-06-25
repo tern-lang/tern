@@ -1,13 +1,14 @@
 package trumid.poc.impl.server.client
 
-import ClusterClientMediaDriver.{DEFAULT_ARCHIVE_PATH, DEFAULT_DRIVER_PATH}
-
 import io.aeron.CommonContext.AERON_DIR_PROP_NAME
 import io.aeron.archive.{Archive, ArchiveThreadingMode, ArchivingMediaDriver}
 import io.aeron.driver.{MediaDriver, ThreadingMode}
 import io.aeron.{Aeron, Image}
 import org.agrona.concurrent.{BackoffIdleStrategy, YieldingIdleStrategy}
+import trumid.poc.common.message.CompletionScheduler
+import trumid.poc.common.topic.TopicCompletionPublisher
 import trumid.poc.impl.server.ClusterMode
+import trumid.poc.impl.server.client.ClusterClientMediaDriver.{DEFAULT_ARCHIVE_PATH, DEFAULT_DRIVER_PATH}
 import trumid.poc.impl.server.group.NodeGroup
 
 import java.io.File
@@ -62,8 +63,10 @@ class ClusterClientMediaDriver(mode: ClusterMode, group: NodeGroup, host: String
 
     val connection = new ClusterConnection(listener, aeron, group, host)
     val poller = new ClusterClientPoller(connection, () => idle)
+    val scheduler = new CompletionScheduler()
+    val consumer = new TopicCompletionPublisher()
 
-    ClusterClient(poller, inputBuffer, outputBuffer)
+    ClusterClient(poller, inputBuffer, outputBuffer, scheduler, consumer)
   }
 
   private def availableImage(image: Image): Unit = {

@@ -13,27 +13,31 @@ import trumid.poc.impl.server.time.{ClusterClock, ClusterScheduler}
 
 object TradingService {
 
-  def apply(member: NodeMember, scheduler: ClusterScheduler, clock: ClusterClock) = {
+  def apply(member: NodeMember, scheduler: ClusterScheduler, clock: ClusterClock): TradingService = {
+    val router = new TopicRouter(0)
     val publisher = new ClientSessionPublisher // publish to connected client
-    new TradingService(
-      new TradingServiceHandler(new TradingServiceOutput(publisher)), publisher, member, scheduler, clock)
+    val output = new TradingServiceOutput(router, publisher)
+    val handler = new TradingServiceHandler(output)
+
+    new TradingService(handler, publisher, router, member, scheduler, clock)
   }
 }
 
 final class TradingService(handler: TradingEngineHandler,
                            publisher: ClientSessionPublisher,
+                           router: TopicRouter,
                            member: NodeMember,
                            scheduler: ClusterScheduler,
                            clock: ClusterClock) extends ManagedService[String] {
 
-  private val router = new TopicRouter(0)
   private val wrapper = new DirectBufferWrapper
+  private val codec = new TradingEngineCodec()
 
   override def onStart(cluster: ManagedCluster, snapshotImage: Image): Unit = {
     clock.start(cluster)
     scheduler.start(cluster)
     publisher.connect(cluster)
-    router.register(new TradingEngineCodec().topic(handler))
+    router.register(codec.topic(handler))
   }
 
   override def onSessionMessage(clientSession: ClientSession,

@@ -12,12 +12,16 @@ final class TradingGateway extends GatewayHandler {
   private val wrapper = new DirectBufferWrapper
 
   override def onStart(context: GatewayContext): Unit = {
+    context.getTopicConsumer
+      .register(new TradingEngineResponseCodec()
+        .complete(context.scheduler))
+
     router.register(new TradingEngineCodec()
-      .topic(new TradingGatewayHandler(
-        new TradingEngineClient(context.getClusterOutput.consume()))))
+      .topic(new TradingGatewayHandler(router,
+        new TradingEnginePublisher(context.getClusterOutput.consume()))))
 
     router.register(new TradingEngineResponseCodec()
-      .topic(new TradingGatewayResponseHandler()))
+      .topic(context.getGatewayOutput))
 
   }
 

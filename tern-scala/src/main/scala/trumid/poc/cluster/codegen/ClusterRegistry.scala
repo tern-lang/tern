@@ -54,6 +54,7 @@ class ClusterRegistry(domain: Domain, mode: Mode) extends TemplateRegistry {
     templates.add(new ServiceBuilder(domain, entity, mode))
     templates.add(new ServiceTrait(domain, entity, mode))
     templates.add(new ServiceCodec(domain, entity, mode))
+    templates.add(new ServicePublisher(domain, entity, mode))
     templates.add(new ServiceClient(domain, entity, mode))
   }
 

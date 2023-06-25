@@ -1,36 +1,50 @@
 package trumid.poc.impl.server.demo
 
 import trumid.poc.common.message._
-import trumid.poc.example.TradingEngineResponseClient
+import trumid.poc.example.TradingEngineResponsePublisher
 import trumid.poc.example.commands._
 
-class TradingServiceOutput(publisher: Publisher) {
-  private val client: TradingEngineResponseClient = new TradingEngineResponseClient(publisher.consume())
+class TradingServiceOutput(header: MessageHeader, publisher: Publisher) {
+  private val client = new TradingEngineResponsePublisher(publisher.consume())
 
   def onPlaceOrderSuccess(command: PlaceOrderCommand) = {
-    client.publish(1,
-      _.placeOrderResponse()
+    client.placeOrderResponse(header,
+      _.time(command.time())
         .success(true)
     )
   }
 
   def onPlaceOrderFailure(command: PlaceOrderCommand) = {
-    client.publish(1,
-      _.placeOrderResponse()
+    client.placeOrderResponse(header,
+      _.time(command.time())
         .success(false)
     )
   }
 
   def onCancelOrderSuccess(command: CancelOrderCommand) = {
-    client.publish(1,
-      _.cancelOrderResponse()
+    client.cancelOrderResponse(header,
+      _.time(command.time())
         .success(true)
     )
   }
 
   def onCancelOrderFailure(command: CancelOrderCommand) = {
-    client.publish(1,
-      _.cancelOrderResponse()
+    client.cancelOrderResponse(header,
+      _.time(command.time())
+        .success(false)
+    )
+  }
+
+  def onCancelAllOrdersSuccess(command: CancelAllOrdersCommand) = {
+    client.cancelAllOrdersResponse(header,
+      _.time(command.time())
+        .success(true)
+    )
+  }
+
+  def onCancelAllOrdersFailure(command: CancelAllOrdersCommand) = {
+    client.cancelAllOrdersResponse(header,
+      _.time(command.time())
         .success(false)
     )
   }

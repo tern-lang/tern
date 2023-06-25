@@ -5,6 +5,7 @@ import org.agrona.DirectBuffer
 import org.agrona.concurrent.ringbuffer.RingBufferDescriptor.TRAILER_LENGTH
 import org.agrona.concurrent.ringbuffer.{OneToOneRingBuffer, RingBuffer}
 import org.agrona.concurrent.{IdleStrategy, MessageHandler, UnsafeBuffer}
+import trumid.poc.common.message._
 import trumid.poc.impl.server.ClusterMode
 
 import java.nio.ByteBuffer.allocateDirect
@@ -23,7 +24,7 @@ object OutputRingBuffer {
     new OutputRingBuffer(idleStrategy, queue)
 }
 
-case class OutputRingBuffer private(idleStrategy: IdleStrategy, queue: RingBuffer) {
+case class OutputRingBuffer private(idleStrategy: IdleStrategy, queue: RingBuffer) extends Publisher {
 
   def consume(handler: MessageHandler, count: Int): Int = {
     queue.read(handler, count)
@@ -35,5 +36,10 @@ case class OutputRingBuffer private(idleStrategy: IdleStrategy, queue: RingBuffe
     while (!queue.write(1, buffer, offset, length)) {
       idleStrategy.idle()
     }
+  }
+
+  override def publish(buffer: ByteBuffer, offset: Int, length: Int): Boolean = {
+    buffer.getBytes(offset, (a, b, c) => publish(a, b, c), length)
+    true
   }
 }

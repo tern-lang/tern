@@ -10,13 +10,6 @@ class TopicMessageComposer[M](body: Flyweight[_ <: M], buffer: ByteBuffer, topic
   private val frame = new TopicFrame
   private var message: Option[M] = None
 
-  override def compose(): M = {
-    buffer.clear()
-    buffer.setCount(HEADER_SIZE)
-    message = Some(body.assign(buffer, HEADER_SIZE + ByteSize.BYTE_SIZE, MAX_VALUE))
-    message.get
-  }
-
   override def commit(consumer: MessageConsumer[M], userId: Int, correlationId: Long): MessageComposer[M] = {
     val length = buffer.length()
 
@@ -36,5 +29,12 @@ class TopicMessageComposer[M](body: Flyweight[_ <: M], buffer: ByteBuffer, topic
     consumer.consume(frame, message.get)
     message = None
     this
+  }
+
+  override def compose(): M = {
+    buffer.clear()
+    buffer.setCount(HEADER_SIZE)
+    message = Some(body.assign(buffer, HEADER_SIZE + ByteSize.BYTE_SIZE, MAX_VALUE))
+    message.get
   }
 }

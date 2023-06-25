@@ -35,6 +35,7 @@ class UnionCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(do
     generateDefaultFields()
     generateAssignMethod()
     generateTopicMethod()
+    generateConvertMethod()
     generateMatchMethod()
     generateGetterMethods()
     generateDefaultsMethod()
@@ -115,6 +116,10 @@ class UnionCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(do
   }
 
   protected def generateTopicMethod(): Unit = {
+
+  }
+
+  protected def generateConvertMethod(): Unit = {
 
   }
 

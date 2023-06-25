@@ -1,20 +1,39 @@
 package trumid.poc.impl.server.gateway.demo
 
+import trumid.poc.common.message._
+import trumid.poc.example._
 import trumid.poc.example.commands._
-import trumid.poc.example.{TradingEngineClient, TradingEngineHandler}
 
-class TradingGatewayHandler(client: TradingEngineClient) extends TradingEngineHandler {
+class TradingGatewayHandler(header: MessageHeader, publisher: TradingEnginePublisher) extends TradingEngineHandler {
 
   override def onPlaceOrder(command: PlaceOrderCommand): Unit = {
-    //println(s"TradingClientCommandHandler.onPlaceOrder orderId=${command.getOrderId} instrumentId=${command.getInstrumentId} time=${command.getTime}")
-    //client.placeOrder(command.getOrderId, command.getInstrumentId, command.getQuantity, command.getPrice, command.getTime)
+    publisher.placeOrder(header,
+      _.userId(command.userId())
+        .accountId(command.accountId())
+        .time(System.nanoTime())
+        .order(
+          _.orderId(command.order().orderId())
+            .symbol(command.order().symbol())
+            .price(command.order().price())
+            .quantity(command.order().quantity())
+        )
+    )
   }
 
   override def onCancelOrder(command: CancelOrderCommand): Unit = {
-    //println(s"TradingClientCommandHandler.onCancelOrder orderId=${command.getOrderId}")
+    publisher.cancelOrder(header,
+      _.userId(command.userId())
+        .accountId(command.accountId())
+        .time(System.nanoTime())
+        .orderId(command.orderId())
+    )
   }
 
-  override def onCancelAllOrders(cancelAllOrders: CancelAllOrdersCommand): Unit = {
-
+  override def onCancelAllOrders(command: CancelAllOrdersCommand): Unit = {
+    publisher.cancelAllOrders(header,
+      _.userId(command.userId())
+        .accountId(command.accountId())
+        .time(System.nanoTime())
+    )
   }
 }

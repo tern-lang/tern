@@ -6,13 +6,37 @@ import trumid.poc.common.topic.TopicMessageHeader.HEADER_SIZE
 case class Topic(code: Byte, description: String) {
 
   def route(handler: (MessageFrame, Fragment) => Unit): TopicRoute = {
-    TopicHandler(this, handler)
+    TopicRouteHandler(this, handler)
   }
 
-  private case class TopicHandler(topic: Topic, handler: (MessageFrame, Fragment) => Unit) extends TopicRoute {
+  def complete[T](flyweight: Flyweight[T], completion: (MessageHeader) => Unit): TopicCompletionHandler = {
+    TopicResponseConverterHandler(this, flyweight, completion)
+  }
+
+  private case class TopicRouteHandler(topic: Topic, handler: (MessageFrame, Fragment) => Unit) extends TopicRoute {
 
     override def handle(frame: MessageFrame, payload: Fragment): Unit = {
       handler.apply(frame, payload)
+    }
+
+    override def getTopic: Topic = {
+      topic
+    }
+  }
+
+  private case class TopicResponseConverterHandler[T](topic: Topic,
+                                                      flyweight: Flyweight[T],
+                                                      completion: (MessageHeader) => Unit) extends TopicCompletionHandler {
+    private val header = new TopicMessageHeader()
+
+    override def complete(buffer: ByteBuffer, offset: Int, length: Int): Unit = {
+      header.assign(buffer, offset, length)
+      flyweight.assign(
+        buffer,
+        offset + TopicMessageHeader.HEADER_SIZE,
+        length - TopicMessageHeader.HEADER_SIZE)
+
+      completion.apply(header)
     }
 
     override def getTopic: Topic = {
@@ -23,6 +47,11 @@ case class Topic(code: Byte, description: String) {
 
 trait TopicRoute {
   def handle(frame: MessageFrame, payload: Fragment): Unit
+  def getTopic: Topic
+}
+
+trait TopicCompletionHandler {
+  def complete(buffer: ByteBuffer, offset: Int, length: Int): Unit
   def getTopic: Topic
 }
 
@@ -67,6 +96,7 @@ object TopicMessageHeader {
 }
 
 class TopicMessageHeader extends MessageHeader with Flyweight[TopicMessageHeader] {
+
   import TopicMessageHeader._
 
   private var buffer: ByteBuffer = _

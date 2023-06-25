@@ -1,4 +1,4 @@
-// Generated at Sat Jun 24 19:11:13 BST 2023 (ServiceCodec)
+// Generated at Sun Jun 25 12:15:27 BST 2023 (ServiceCodec)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
@@ -40,12 +40,47 @@ final class TradingEngineResponseCodec(variable: Boolean = true) extends Trading
       this;
    }
 
+   override def topic(publisher: Publisher): TopicRoute = {
+      Topic(11, "TradingEngineResponse").route((frame, payload) => {
+         publisher.publish(
+            frame.getBody.getBuffer,
+            frame.getBody.getOffset,
+            frame.getBody.getLength)
+      })
+   }
+
    override def topic(handler: TradingEngineResponseHandler): TopicRoute = {
       Topic(11, "TradingEngineResponse").route((frame, payload) => {
          assign(
             payload.getBuffer,
             payload.getOffset,
             payload.getLength).handle(handler)
+      })
+   }
+
+   override def complete(scheduler: CompletionScheduler): TopicCompletionHandler = {
+      Topic(11, "TradingEngineResponse").complete(this, (header) => {
+         val correlationId = header.getCorrelationId
+         val completion = scheduler.stop(correlationId)
+
+         if(completion != null) {
+            val code = buffer.getByte(offset)
+
+            code match {
+               case TradingEngineResponseCodec.CANCEL_ALL_ORDERS_RESPONSE_ID => {
+                  completion.complete(this.cancelAllOrdersResponseCodec.assign(this.buffer, this.offset + TradingEngineResponseCodec.HEADER_SIZE, this.length - TradingEngineResponseCodec.HEADER_SIZE))
+               }
+               case TradingEngineResponseCodec.CANCEL_ORDER_RESPONSE_ID => {
+                  completion.complete(this.cancelOrderResponseCodec.assign(this.buffer, this.offset + TradingEngineResponseCodec.HEADER_SIZE, this.length - TradingEngineResponseCodec.HEADER_SIZE))
+               }
+               case TradingEngineResponseCodec.PLACE_ORDER_RESPONSE_ID => {
+                  completion.complete(this.placeOrderResponseCodec.assign(this.buffer, this.offset + TradingEngineResponseCodec.HEADER_SIZE, this.length - TradingEngineResponseCodec.HEADER_SIZE))
+               }
+               case _ => {
+                  completion.failure(new IllegalStateException("Invalid code " + code))
+               }
+            }
+         }
       })
    }
 

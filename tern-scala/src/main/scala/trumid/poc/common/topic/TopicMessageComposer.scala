@@ -34,7 +34,7 @@ class TopicMessageComposer[M](body: Flyweight[_ <: M], buffer: ByteBuffer, topic
   override def compose(): M = {
     buffer.clear()
     buffer.setCount(HEADER_SIZE)
-    message = Some(body.assign(buffer, HEADER_SIZE + ByteSize.BYTE_SIZE, MAX_VALUE))
+    message = Some(body.assign(buffer, HEADER_SIZE, MAX_VALUE))
     message.get
   }
 }

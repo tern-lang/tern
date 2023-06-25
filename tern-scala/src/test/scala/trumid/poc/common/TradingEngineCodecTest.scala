@@ -16,13 +16,14 @@ object TradingEngineCodecTest extends App {
     .order(order => {
       order.price(11.2)
         .quantity(1000)
-        .orderId("ABC")
+        .orderId("orderId-1123")
         .symbol("")
     })
 
   if (!codec.isPlaceOrder()) {
     throw new RuntimeException()
   }
+  println(codec.placeOrder().order().orderId())
   println(codec.validate())
   codec.handle(new MockTradingEngineHandler(value => {
     value match {

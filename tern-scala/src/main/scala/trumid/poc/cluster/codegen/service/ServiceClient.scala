@@ -43,27 +43,28 @@ class ServiceClient(domain: Domain, entity: Entity, mode: Mode) extends Template
   }
 
   private def generatePublishMethods(): Unit = {
-    val name = entity.getName(mode)
-
     entity.getProperties().forEach(property => {
-      val identifier = property.getName()
       val response = property.getResponse()
-      val constraint = property.getConstraint()
 
-      builder.append("\n")
-      builder.append(s"   def ${identifier}(builder: (${constraint}Builder) => Unit): Future[${response}] = {\n")
-      builder.append(s"      val correlationId = this.counter.getAndIncrement()\n")
-      builder.append(s"      val complete = this.scheduler.start(correlationId, 5000)\n\n")
-      builder.append(s"      try {\n")
-      builder.append(s"         builder.apply(this.composer.compose().${identifier}())\n")
-      builder.append(s"         this.composer.commit(this.consumer, 1, correlationId)\n")
-      builder.append(s"         complete.future()\n")
-      builder.append(s"      } catch {\n")
-      builder.append(s"         case cause: Throwable => {\n")
-      builder.append(s"            complete.failure(cause).future()\n")
-      builder.append(s"         }\n")
-      builder.append(s"      }\n")
-      builder.append(s"   }\n")
+      if(response != null) {
+        val identifier = property.getName()
+        val constraint = property.getConstraint()
+
+        builder.append("\n")
+        builder.append(s"   def ${identifier}(builder: (${constraint}Builder) => Unit): Call[${response}] = {\n")
+        builder.append(s"      val correlationId = this.counter.getAndIncrement()\n")
+        builder.append(s"      this.scheduler.start(correlationId, 5000, completion => {\n")
+        builder.append(s"         try {\n")
+        builder.append(s"            builder.apply(this.composer.compose().${identifier}())\n")
+        builder.append(s"            this.composer.commit(this.consumer, 1, correlationId)\n")
+        builder.append(s"         } catch {\n")
+        builder.append(s"            case cause: Throwable => {\n")
+        builder.append(s"               completion.failure(cause)\n")
+        builder.append(s"            }\n")
+        builder.append(s"         }\n")
+        builder.append(s"      })\n")
+        builder.append(s"   }\n")
+      }
     })
   }
 }

@@ -7,6 +7,7 @@ import trumid.poc.example.commands._
 class TradingGatewayHandler(header: MessageHeader, publisher: TradingEnginePublisher) extends TradingEngineHandler {
 
   override def onPlaceOrder(command: PlaceOrderCommand): Unit = {
+    println("onPlaceOrder userId="+header.getUserId + " corr="+header.getCorrelationId + " order="+command.order().orderId().length())
     publisher.placeOrder(header,
       _.userId(command.userId())
         .accountId(command.accountId())
@@ -21,6 +22,7 @@ class TradingGatewayHandler(header: MessageHeader, publisher: TradingEnginePubli
   }
 
   override def onCancelOrder(command: CancelOrderCommand): Unit = {
+    println("onCancelOrder")
     publisher.cancelOrder(header,
       _.userId(command.userId())
         .accountId(command.accountId())
@@ -30,6 +32,7 @@ class TradingGatewayHandler(header: MessageHeader, publisher: TradingEnginePubli
   }
 
   override def onCancelAllOrders(command: CancelAllOrdersCommand): Unit = {
+    println("onCancelAllOrders")
     publisher.cancelAllOrders(header,
       _.userId(command.userId())
         .accountId(command.accountId())

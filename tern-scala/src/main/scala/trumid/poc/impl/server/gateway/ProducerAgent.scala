@@ -50,11 +50,13 @@ class ProducerAgent(consumer: TopicCompletionPublisher, output: OutputRingBuffer
     try {
       count += poller.poll()
       count += scheduler.poll()
-      count
     } catch {
-      case e: Exception => println("Error flushing topics");
-        count
+      case e: Exception => {
+        e.printStackTrace()
+        println("Error flushing topics")
+      }
     }
+    count
   }
 
 

@@ -12,6 +12,7 @@ final class TradingGateway extends GatewayHandler {
   private val wrapper = new DirectBufferWrapper
 
   override def onStart(context: GatewayContext): Unit = {
+    println("onStart")
     context.getTopicConsumer
       .register(new TradingEngineResponseCodec()
         .complete(context.scheduler))
@@ -22,7 +23,7 @@ final class TradingGateway extends GatewayHandler {
 
     router.register(new TradingEngineResponseCodec()
       .topic(context.getGatewayOutput))
-
+    println("onStart FINI")
   }
 
   override def onContainerMessage(buffer: DirectBuffer, offset: Int, length: Int): Unit = {

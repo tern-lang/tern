@@ -1,5 +1,7 @@
 package trumid.poc.impl.server.gateway.demo
 
+import trumid.poc.common.message.MessageFrame
+import trumid.poc.example.TradingEngineClient
 import trumid.poc.impl.server.gateway.GatewayLauncher
 import trumid.poc.impl.server.group.NodeGroup
 import trumid.poc.impl.server.{ProdMode, TestMode}
@@ -21,10 +23,18 @@ object Main {
       2
     }
     val group = NodeGroup()
-    val gatewayClient = new GatewayLauncher(group, mode).launch(
+    val client = new GatewayLauncher(group, mode).launch(
       handler = new TradingGateway())
 
-    val tradingBot = new TradingBot(gatewayClient)
-    tradingBot.execute(10000)
+    val publisher = new TradingEngineClient((frame: MessageFrame, _: Any) =>
+      frame.getFrame.getBuffer.getBytes(
+        frame.getFrame.getOffset,
+        (buffer, offset, length) => client.input.publish(buffer, offset, length),
+        frame.getFrame.getLength),
+      client.scheduler)
+
+    val tradingBot = new TradingBot(publisher)
+
+    tradingBot.execute(10)
   }
 }

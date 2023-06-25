@@ -1,4 +1,4 @@
-// Generated at Sun Jun 25 12:15:27 BST 2023 (StructArrayCodec)
+// Generated at Sun Jun 25 13:27:11 BST 2023 (StructArrayCodec)
 package trumid.poc.example.commands
 
 import trumid.poc.example.commands._

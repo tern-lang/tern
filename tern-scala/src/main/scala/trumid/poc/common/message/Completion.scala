@@ -1,83 +1,93 @@
 package trumid.poc.common.message
 
+import java.lang.{Long => LongMath}
+import java.util.Map
+import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.{ConcurrentHashMap, DelayQueue, Delayed, TimeUnit}
 import scala.concurrent._
-import java.util.Map
-import java.lang.{Long => LongMath}
 import scala.reflect.ClassTag
 
-trait Completion {
-  def complete(value: Any): Completion
-  def failure(cause: Throwable): Completion
-  def timeout(): Completion
-  def future[T: ClassTag](): Future[T]
+trait Call[T] {
+  def call[R](convert: T => R): Future[R]
+}
+
+trait Completion[T] extends Call[T] {
+  def complete(value: Any): Completion[T]
+
+  def failure(cause: Throwable): Completion[T]
+
+  def timeout(): Completion[T]
 }
 
 class CompletionScheduler {
-  private val completions: Map[Long, Completion] = new ConcurrentHashMap[Long, Completion]()
-  private val queue: DelayQueue[PromiseCompletion] = new DelayQueue[PromiseCompletion]()
+  private val completions: Map[Long, Completion[_]] = new ConcurrentHashMap[Long, Completion[_]]()
+  private val queue: DelayQueue[PromiseCompletion[_]] = new DelayQueue[PromiseCompletion[_]]()
+  private val missing: MissingCompletion = new MissingCompletion()
 
-  def start(correlationId: Long, expiry: Long): Completion = {
-    val completion = PromiseCompletion(correlationId, expiry, completions)
+  def start[T: ClassTag](correlationId: Long, expiry: Long, trigger: (Completion[T]) => Unit): Completion[T] = {
+    val completion = PromiseCompletion[T](correlationId, expiry, trigger, completions)
 
+    completions.put(correlationId, completion)
     queue.offer(completion)
-    completions.computeIfAbsent(correlationId, ignore => completion)
     completion
   }
 
-  def stop(correlationId: Long): Completion = {
-    val completion: Completion = completions.remove(correlationId)
+  def stop(correlationId: Long): Completion[_] = {
+    val completion: Completion[_] = completions.remove(correlationId)
 
-    if(completion == null) {
-      MissingCompletion(correlationId, completions)
+    if (completion == null) {
+      missing
     } else {
       completion
     }
   }
 
   def poll(): Int = {
-    val count = queue.size()
+    var running = true
+    var count = 0
 
-    while(queue.isEmpty) {
-      queue.poll().timeout()
+    while (running) {
+      val next = queue.poll()
+
+      if (next == null) {
+        running = false
+      } else {
+        next.timeout()
+        count += 1
+      }
     }
     count
   }
 
-  private case class MissingCompletion(correlationId: Long,
-                                          completions: Map[Long, Completion])
-        extends Completion {
+  private class MissingCompletion extends Completion[Any] {
 
-    private val promise: Promise[Any] = Promise[Any]
-
-    override def complete(value: Any): Completion = {
-      completions.remove(correlationId)
+    override def complete(value: Any): Completion[Any] = {
       this
     }
 
-    override def failure(cause: Throwable): Completion = {
-      completions.remove(correlationId)
+    override def failure(cause: Throwable): Completion[Any] = {
       this
     }
 
-    override def timeout(): Completion = {
-      completions.remove(correlationId)
+    override def timeout(): Completion[Any] = {
       this
     }
 
-    override def future[T: ClassTag](): Future[T] = {
-      promise.asInstanceOf[Promise[T]].future
+    override def call[R](convert: Any => R): Future[R] = {
+      Future.failed(new Throwable("Invalid completion"))
     }
   }
 
-  private case class PromiseCompletion(correlationId: Long,
-                                          expiry: Long,
-                                          completions: Map[Long, Completion])
-        extends Completion with Delayed {
+  private case class PromiseCompletion[T: ClassTag](correlationId: Long,
+                                                    expiry: Long,
+                                                    trigger: (Completion[T]) => Unit,
+                                                    completions: Map[Long, Completion[_]])
+    extends Completion[T] with Delayed {
 
+    private val reference: AtomicReference[T => Any] = new AtomicReference[T => Any]()
     private val promise: Promise[Any] = Promise[Any]
 
-    override def getDelay(unit: TimeUnit): Long =  {
+    override def getDelay(unit: TimeUnit): Long = {
       unit.convert(expiry, TimeUnit.MILLISECONDS)
     }
 
@@ -85,35 +95,35 @@ class CompletionScheduler {
       LongMath.compare(expiry, other.getDelay(TimeUnit.MILLISECONDS))
     }
 
-    override def complete(value: Any): Completion = {
-      val completion = completions.remove(correlationId)
+    override def complete(value: Any): Completion[T] = {
+      val convert = reference.get()
 
-      if(completion != null) {
-        promise.success(value)
+      value match {
+        case (value: T) => {
+          promise.success(convert.apply(value))
+        }
+        case _ => {
+          promise.failure(new IllegalStateException("Invalid response type"))
+        }
       }
       this
     }
 
-    override def failure(cause: Throwable): Completion = {
-      val completion = completions.remove(correlationId)
-
-      if(completion != null) {
-        promise.failure(cause)
-      }
+    override def failure(cause: Throwable): Completion[T] = {
+      promise.failure(cause)
       this
     }
 
-    override def timeout(): Completion = {
-      val completion = completions.remove(correlationId)
-
-      if(completion != null) {
-        promise.failure(new TimeoutException())
-      }
+    override def timeout(): Completion[T] = {
+      promise.failure(new TimeoutException("Request timed out"))
       this
     }
 
-    override def future[T: ClassTag](): Future[T] = {
-      promise.asInstanceOf[Promise[T]].future
+    override def call[R](convert: T => R): Future[R] = {
+      if (reference.compareAndSet(null, convert)) {
+        trigger.apply(this)
+      }
+      promise.asInstanceOf[Promise[R]].future
     }
   }
 }

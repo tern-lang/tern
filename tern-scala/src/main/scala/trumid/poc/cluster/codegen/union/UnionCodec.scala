@@ -39,6 +39,7 @@ class UnionCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(do
     generateMatchMethod()
     generateGetterMethods()
     generateDefaultsMethod()
+    generateResetMethod()
     generateClearMethod()
     generateValidationMethod()
   }
@@ -169,6 +170,21 @@ class UnionCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(do
     builder.append("      this.buffer.setByte(this.offset, 0)\n")
     builder.append(s"      this\n")
     builder.append(s"   }\n")
+  }
+
+  private def generateResetMethod(): Unit = {
+    builder.append("\n")
+    builder.append(s"   override def reset(): ${getName} = {\n")
+
+    entity.getProperties().forEach(property => {
+      val identifier = property.getName()
+
+      if(property.isEntity()) {
+        builder.append(s"      ${identifier}Codec.reset()\n")
+      }
+    })
+    builder.append("      this\n")
+    builder.append("   }\n")
   }
 
   private def generateValidationMethod(): Unit = {

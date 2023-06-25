@@ -9,14 +9,17 @@ class TradingBot(publisher: TradingEngineClient) {
 
   def execute(count: Int) = {
     for (i <- 1 to count) {
-      val call = publisher.placeOrder(
-        _.userId(i)
+      val call = publisher.placeOrder(x => {
+        x.userId(i)
           .accountId(Some(i))
           .order(
             _.price(11.0)
-              .quantity(11)
+              .quantity(5555)
               .orderId(s"order${i}")
-              .symbol("USD")))
+              .symbol("USD"))
+
+        println(x.order().orderId())
+      })
 
 
       call.call(response => response.time()).onComplete {

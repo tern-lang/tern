@@ -27,8 +27,13 @@ class StructArrayCodec(domain: Domain, entity: Entity, mode: Mode) extends Templ
     with ${name}ArrayBuilder
     with Flyweight[${name}ArrayCodec] {
 
+   override def reset(): ${name}ArrayCodec = {
+      chain.reset()
+      this
+   }
+
    override def clear(): ${name}ArrayCodec = {
-      super.clear()
+      chain.clear()
       this
    }
 }""")

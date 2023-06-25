@@ -13,9 +13,7 @@ trait Call[T] {
 
 trait Completion[T] extends Call[T] {
   def complete(value: Any): Completion[T]
-
   def failure(cause: Throwable): Completion[T]
-
   def timeout(): Completion[T]
 }
 

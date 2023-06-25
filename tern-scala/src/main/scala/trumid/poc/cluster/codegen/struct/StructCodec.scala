@@ -32,6 +32,7 @@ class StructCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(d
     generateGetterMethods()
     generateDefaultsMethod()
     generateClearMethod()
+    generateResetMethod()
     generateValidationMethod()
   }
 
@@ -86,6 +87,14 @@ class StructCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(d
   private def generateDefaultsMethod(): Unit = {
     builder.append("\n")
     builder.append(s"   override def defaults(): ${getName} = {\n")
+
+    entity.getProperties().forEach(property => {
+      val identifier = property.getName()
+
+      if(property.isEntity()) {
+        builder.append(s"      ${identifier}Codec.defaults()\n")
+      }
+    })
     builder.append("      this\n")
     builder.append("   }\n")
   }
@@ -93,6 +102,29 @@ class StructCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(d
   private def generateClearMethod(): Unit = {
     builder.append("\n")
     builder.append(s"   override def clear(): ${getName} = {\n")
+
+    entity.getProperties().forEach(property => {
+      val identifier = property.getName()
+
+      if(property.isEntity() || property.isArray()) {
+        builder.append(s"      ${identifier}Codec.clear()\n")
+      }
+    })
+    builder.append("      this\n")
+    builder.append("   }\n")
+  }
+
+  private def generateResetMethod(): Unit = {
+    builder.append("\n")
+    builder.append(s"   override def reset(): ${getName} = {\n")
+
+    entity.getProperties().forEach(property => {
+      val identifier = property.getName()
+
+      if(property.isEntity() || property.isArray()) {
+        builder.append(s"      ${identifier}Codec.reset()\n")
+      }
+    })
     builder.append("      this\n")
     builder.append("   }\n")
   }

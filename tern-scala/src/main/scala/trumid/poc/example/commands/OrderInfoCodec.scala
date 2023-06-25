@@ -1,4 +1,4 @@
-// Generated at Sun Jun 25 13:27:11 BST 2023 (StructCodec)
+// Generated at Sun Jun 25 16:31:14 BST 2023 (StructCodec)
 package trumid.poc.example.commands
 
 import trumid.poc.common._
@@ -102,6 +102,14 @@ final class OrderInfoCodec(variable: Boolean = true) extends OrderInfoBuilder wi
    }
 
    override def clear(): OrderInfoCodec = {
+      orderIdCodec.clear()
+      symbolCodec.clear()
+      this
+   }
+
+   override def reset(): OrderInfoCodec = {
+      orderIdCodec.reset()
+      symbolCodec.reset()
       this
    }
 

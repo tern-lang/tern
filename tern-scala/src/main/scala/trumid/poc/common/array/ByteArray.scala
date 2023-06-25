@@ -6,6 +6,7 @@ import trumid.poc.common.message.{ByteBuffer, ByteSize, Flyweight}
 trait ByteArray extends GenericArray[Byte] {}
 
 trait ByteArrayBuilder extends ByteArray with GenericArrayBuilder[Byte, ByteValue] {
+  def reset(): ByteArrayBuilder
   def clear(): ByteArrayBuilder
 }
 
@@ -44,8 +45,13 @@ final class ByteArrayCodec
     with ByteArrayBuilder
     with Flyweight[ByteArrayCodec] {
 
+  override def reset(): ByteArrayCodec = {
+    chain.reset()
+    this
+  }
+
   override def clear(): ByteArrayCodec = {
-    super.clear()
+    chain.clear()
     this
   }
 }

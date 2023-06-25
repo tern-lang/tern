@@ -11,13 +11,14 @@ trait GenericArray[G] {
 
 trait GenericArrayBuilder[G, A] extends GenericArray[G] {
   def add(): A
+  def reset(): GenericArrayBuilder[G, A]
   def clear(): GenericArrayBuilder[G, A]
 }
 
 
 abstract class GenericArrayCodec[G, A](factory: () => Flyweight[_ <: A], convert: A => G, dimensions: Int) extends GenericArrayBuilder[G, A] {
-  private val iterable: GenericArrayIterator[G] = new GenericArrayIterator[G]
-  private val chain: Chain[A] = new Chain[A](factory, dimensions)
+  protected val iterable: GenericArrayIterator[G] = new GenericArrayIterator[G]
+  protected val chain: Chain[A] = new Chain[A](factory, dimensions)
 
   def assign(buffer: ByteBuffer, offset: Int, length: Int): this.type = {
     chain.assign(buffer, offset, length)
@@ -40,8 +41,13 @@ abstract class GenericArrayCodec[G, A](factory: () => Flyweight[_ <: A], convert
     chain.size()
   }
 
-  override def clear(): GenericArrayBuilder[G, A] = {
+  override def reset(): GenericArrayBuilder[G, A] = {
     chain.reset()
+    this
+  }
+
+  override def clear(): GenericArrayBuilder[G, A] = {
+    chain.clear()
     this
   }
 

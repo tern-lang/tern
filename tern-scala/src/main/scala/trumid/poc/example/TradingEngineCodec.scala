@@ -1,4 +1,4 @@
-// Generated at Sun Jun 25 13:27:11 BST 2023 (ServiceCodec)
+// Generated at Sun Jun 25 16:31:14 BST 2023 (ServiceCodec)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
@@ -142,6 +142,13 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
 
    override def defaults(): TradingEngineCodec = {
       this.buffer.setByte(this.offset, 0)
+      this
+   }
+
+   override def reset(): TradingEngineCodec = {
+      cancelAllOrdersCodec.reset()
+      cancelOrderCodec.reset()
+      placeOrderCodec.reset()
       this
    }
 

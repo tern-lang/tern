@@ -26,7 +26,12 @@ object CustomArrayTest extends App{
   final class PairArrayCodec
     extends GenericArrayCodec[Pair, PairBuilder](() => new PairCodec, value => value, ByteSize.INT_SIZE * 2)
       with PairArrayBuilder
-      with Flyweight[PairArrayCodec] {}
+      with Flyweight[PairArrayCodec] {
+    override def reset(): PairArrayCodec = {
+      super.reset()
+      this
+    }
+  }
 
   trait Pair {
     def key(): Int

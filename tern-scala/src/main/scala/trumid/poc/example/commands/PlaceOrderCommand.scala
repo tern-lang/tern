@@ -1,4 +1,4 @@
-// Generated at Sun Jun 25 13:27:11 BST 2023 (StructTrait)
+// Generated at Sun Jun 25 16:31:14 BST 2023 (StructTrait)
 package trumid.poc.example.commands
 
 import trumid.poc.example.commands._

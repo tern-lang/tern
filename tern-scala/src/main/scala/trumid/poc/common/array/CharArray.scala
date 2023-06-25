@@ -10,6 +10,7 @@ trait CharArray extends GenericArray[Char] with CharSequence {}
 trait CharArrayBuilder extends CharArray with GenericArrayBuilder[Char, CharValue] {
   def append(value: Char): CharArrayBuilder
   def append(value: CharSequence): CharArrayBuilder
+  def reset(): CharArrayBuilder
   def clear(): CharArrayBuilder
 }
 
@@ -39,6 +40,10 @@ object CharArrayCodec {
     override def set(value: Char): CharValue = {
       buffer.setChar(offset, value)
       this
+    }
+
+    override def toString(): String = {
+      buffer.getChar(offset).toString
     }
   }
 }
@@ -73,8 +78,13 @@ final class CharArrayCodec
     size()
   }
 
+  override def reset(): CharArrayCodec = {
+    chain.reset()
+    this
+  }
+
   override def clear(): CharArrayCodec = {
-    super.clear()
+    chain.clear()
     this
   }
 

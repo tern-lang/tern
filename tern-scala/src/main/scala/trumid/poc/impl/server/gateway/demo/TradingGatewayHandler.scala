@@ -8,6 +8,11 @@ class TradingGatewayHandler(header: MessageHeader, publisher: TradingEnginePubli
 
   override def onPlaceOrder(command: PlaceOrderCommand): Unit = {
     println("onPlaceOrder userId="+header.getUserId + " corr="+header.getCorrelationId + " order="+command.order().orderId().length())
+    println(command.order().symbol().length())
+    println(command.order().symbol())
+    println(command.order().symbol().charAt(0))
+    println(command.order().price())
+    println(command.order().quantity())
     publisher.placeOrder(header,
       _.userId(command.userId())
         .accountId(command.accountId())

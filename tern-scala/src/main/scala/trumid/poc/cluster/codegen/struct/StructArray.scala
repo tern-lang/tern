@@ -22,6 +22,7 @@ class StructArray(domain: Domain, entity: Entity, mode: Mode) extends Template(d
 
     builder.append(s"${category} ${name}Array extends GenericArray[${name}] {}\n\n")
     builder.append(s"${category} ${name}ArrayBuilder extends GenericArrayBuilder[${name}, ${name}Builder] with ${name}Array {\n")
+    builder.append(s"   def reset(): ${name}ArrayBuilder\n")
     builder.append(s"   def clear(): ${name}ArrayBuilder\n")
     builder.append(s"}\n")
   }

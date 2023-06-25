@@ -6,6 +6,7 @@ import trumid.poc.common.message.{ByteBuffer, ByteSize, Flyweight}
 trait BooleanArray extends GenericArray[Boolean] {}
 
 trait BooleanArrayBuilder extends BooleanArray with GenericArrayBuilder[Boolean, BooleanValue] {
+  def reset(): BooleanArrayBuilder
   def clear(): BooleanArrayBuilder
 }
 
@@ -44,8 +45,13 @@ final class BooleanArrayCodec
     with BooleanArrayBuilder
     with Flyweight[BooleanArrayCodec] {
 
+  override def reset(): BooleanArrayCodec = {
+    chain.reset()
+    this
+  }
+
   override def clear(): BooleanArrayCodec = {
-    super.clear()
+    chain.clear()
     this
   }
 }

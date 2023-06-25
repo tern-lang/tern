@@ -1,4 +1,4 @@
-// Generated at Sun Jun 25 13:27:11 BST 2023 (StructArrayCodec)
+// Generated at Sun Jun 25 16:31:14 BST 2023 (StructArrayCodec)
 package trumid.poc.example.commands
 
 import trumid.poc.common._
@@ -10,8 +10,13 @@ final class CancelAllOrdersResponseArrayCodec
     with CancelAllOrdersResponseArrayBuilder
     with Flyweight[CancelAllOrdersResponseArrayCodec] {
 
+   override def reset(): CancelAllOrdersResponseArrayCodec = {
+      chain.reset()
+      this
+   }
+
    override def clear(): CancelAllOrdersResponseArrayCodec = {
-      super.clear()
+      chain.clear()
       this
    }
 }

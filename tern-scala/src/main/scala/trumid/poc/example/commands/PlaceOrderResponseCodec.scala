@@ -1,4 +1,4 @@
-// Generated at Sun Jun 25 13:27:11 BST 2023 (StructCodec)
+// Generated at Sun Jun 25 16:31:14 BST 2023 (StructCodec)
 package trumid.poc.example.commands
 
 import trumid.poc.common._
@@ -93,6 +93,12 @@ final class PlaceOrderResponseCodec(variable: Boolean = true) extends PlaceOrder
    }
 
    override def clear(): PlaceOrderResponseCodec = {
+      reasonCodec.clear()
+      this
+   }
+
+   override def reset(): PlaceOrderResponseCodec = {
+      reasonCodec.reset()
       this
    }
 

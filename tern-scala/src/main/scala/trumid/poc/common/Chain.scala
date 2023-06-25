@@ -23,7 +23,7 @@ final class Chain[T](factory: () => Flyweight[_ <: T], dimensions: Int) {
     this.offset = offset
     this.length = length
     this.tail = head
-    this.index // maybe this should be lazy
+    this.index() // maybe this should be lazy
   }
 
   def size(): Int = {
@@ -55,26 +55,33 @@ final class Chain[T](factory: () => Flyweight[_ <: T], dimensions: Int) {
   def index(): Chain[T] = {
     if (table.isEmpty) {
       val count = buffer.getShort(offset)
-      var prev = head
 
-      for (i <- 0 to count - 1) {
-        val link = pool.allocate()
-        val start = prev.pointer()
+      if(count > 0) {
+        var prev = head
 
-        link.assign(buffer, offset + start, length - start, i)
-        table.put(i, link)
-        prev = link
+        for (i <- 0 to count - 1) {
+          val link = pool.allocate()
+          val start = if(i == 0) ByteSize.SHORT_SIZE else prev.pointer()
+
+          link.assign(buffer, offset + start, length - start, i)
+          table.put(i, link)
+          prev = link
+        }
       }
     }
     this
   }
 
   def reset(): Unit = {
-    buffer.setShort(offset, 0.shortValue)
     pool.collect()
     table.clear()
   }
 
+  def clear(): Unit = {
+    buffer.setShort(offset, 0.shortValue)
+    pool.collect()
+    table.clear()
+  }
 
   final class Link[T](flyweight: Option[Flyweight[_ <: T]]) {
     var value: Option[_ <: T] = None
@@ -88,7 +95,7 @@ final class Chain[T](factory: () => Flyweight[_ <: T], dimensions: Int) {
       this.value
     }
 
-    def pointer(): Int = {
+    def pointer(): Short = {
       buffer.getShort(start)
     }
   }

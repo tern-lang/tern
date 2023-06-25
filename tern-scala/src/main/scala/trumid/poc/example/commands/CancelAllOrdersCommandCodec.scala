@@ -1,4 +1,4 @@
-// Generated at Sun Jun 25 13:27:11 BST 2023 (StructCodec)
+// Generated at Sun Jun 25 16:31:14 BST 2023 (StructCodec)
 package trumid.poc.example.commands
 
 import trumid.poc.common._
@@ -80,6 +80,10 @@ final class CancelAllOrdersCommandCodec(variable: Boolean = true) extends Cancel
    }
 
    override def clear(): CancelAllOrdersCommandCodec = {
+      this
+   }
+
+   override def reset(): CancelAllOrdersCommandCodec = {
       this
    }
 

@@ -1,12 +1,15 @@
 package trumid.poc.common
 
+import trumid.poc.common.CharArrayTest.buffer
 import trumid.poc.common.message.DirectByteBuffer
+import trumid.poc.common.topic.TopicMessageHeader
 import trumid.poc.example.commands.{CancelAllOrdersCommand, CancelOrderCommand, PlaceOrderCommand}
 import trumid.poc.example.{TradingEngineCodec, TradingEngineHandler}
 
 object TradingEngineCodecTest extends App {
   val buffer = DirectByteBuffer()
   val codec = new TradingEngineCodec(true)
+  val codec2 = new TradingEngineCodec(true)
 
   codec.assign(buffer, 0, 8192)
     .defaults()
@@ -16,18 +19,25 @@ object TradingEngineCodecTest extends App {
     .order(order => {
       order.price(11.2)
         .quantity(1000)
-        .orderId("orderId-1123")
+        .orderId("Hello world!")
         .symbol("")
     })
 
   if (!codec.isPlaceOrder()) {
     throw new RuntimeException()
   }
-  println(codec.placeOrder().order().orderId())
   println(codec.validate())
-  codec.handle(new MockTradingEngineHandler(value => {
+  println(TopicMessageHeader.HEADER_SIZE)
+
+  codec2.assign(buffer, 0, 8192)
+
+  val handler = new MockTradingEngineHandler(value => {
     value match {
       case command: PlaceOrderCommand =>
+        println("####################################")
+        println(command.order().orderId())
+        println(command.validate())
+
         if(command.order().price() != 11.2) {
           throw new RuntimeException("Invalid price")
         }
@@ -36,7 +46,10 @@ object TradingEngineCodecTest extends App {
         }
       case _ => throw new RuntimeException("No match")
     }
-  }))
+  })
+
+  codec.handle(handler)
+  codec2.handle(handler)
 
   class MockTradingEngineHandler(validate: (Any) => Unit) extends TradingEngineHandler {
 

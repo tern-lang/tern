@@ -4,7 +4,7 @@ import trumid.poc.common.message._
 import trumid.poc.example.TradingEngineResponsePublisher
 import trumid.poc.example.commands._
 
-class TradingServiceOutput(header: MessageHeader, publisher: Publisher) {
+class TradingServiceResponseOutput(header: MessageHeader, publisher: Publisher) {
   private val client = new TradingEngineResponsePublisher(publisher.consume())
 
   def onPlaceOrderSuccess(command: PlaceOrderCommand) = {

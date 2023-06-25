@@ -22,11 +22,17 @@ class TradingBot(publisher: TradingEngineClient) {
       if(i % 10000 == 0) {
         Thread.`yield`()
       }
-      call.call(response => response.time()).onComplete {
-        case Success(time) => {
-        }
-        case Failure(cause) => cause.printStackTrace()
-      }(ExecutionContext.global)
+      handle(call)
     }
+  }
+
+  private def handle(call: Call[PlaceOrderResponse]) = {
+    call.call(response => response.time()).onComplete {
+      case Success(time) => {
+      }
+      case Failure(cause) => {
+        cause.printStackTrace()
+      }
+    }(ExecutionContext.global)
   }
 }

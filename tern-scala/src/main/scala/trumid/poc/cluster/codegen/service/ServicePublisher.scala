@@ -35,7 +35,7 @@ class ServicePublisher(domain: Domain, entity: Entity, mode: Mode) extends Templ
     builder.append(s"   private val composer = new TopicMessageComposer[${name}Codec](\n")
     builder.append(s"      new ${name}Codec(true),\n")
     builder.append(s"      DirectByteBuffer(),\n")
-    builder.append(s"      0,\n")
+    builder.append(s"      " + ServiceTopic.generateTopicCode(entity, mode) + ",\n")
     builder.append(s"      0)\n")
   }
 
@@ -48,8 +48,14 @@ class ServicePublisher(domain: Domain, entity: Entity, mode: Mode) extends Templ
 
       builder.append("\n")
       builder.append(s"   def ${identifier}(header: MessageHeader, builder: (${constraint}Codec) => Unit): Unit = {\n")
-      builder.append(s"      builder.apply(this.composer.compose().${identifier}())\n")
-      builder.append(s"      this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)\n")
+      builder.append(s"      val ${identifier} = this.composer.compose().${identifier}()\n")
+      builder.append(s"\n")
+      builder.append(s"      try {\n")
+      builder.append(s"         builder.apply(${identifier})\n")
+      builder.append(s"         this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)\n")
+      builder.append(s"      } finally {\n")
+      builder.append(s"         ${identifier}.reset()\n")
+      builder.append(s"      }\n")
       builder.append(s"   }\n")
     })
   }

@@ -1,4 +1,4 @@
-// Generated at Sun Jun 25 16:31:14 BST 2023 (ServicePublisher)
+// Generated at Sun Jun 25 17:46:15 BST 2023 (ServicePublisher)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
@@ -10,21 +10,39 @@ final class TradingEnginePublisher(consumer: MessageConsumer[TradingEngineCodec]
    private val composer = new TopicMessageComposer[TradingEngineCodec](
       new TradingEngineCodec(true),
       DirectByteBuffer(),
-      0,
+      10,
       0)
 
    def cancelAllOrders(header: MessageHeader, builder: (CancelAllOrdersCommandCodec) => Unit): Unit = {
-      builder.apply(this.composer.compose().cancelAllOrders())
-      this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)
+      val cancelAllOrders = this.composer.compose().cancelAllOrders()
+
+      try {
+         builder.apply(cancelAllOrders)
+         this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)
+      } finally {
+         cancelAllOrders.reset()
+      }
    }
 
    def cancelOrder(header: MessageHeader, builder: (CancelOrderCommandCodec) => Unit): Unit = {
-      builder.apply(this.composer.compose().cancelOrder())
-      this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)
+      val cancelOrder = this.composer.compose().cancelOrder()
+
+      try {
+         builder.apply(cancelOrder)
+         this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)
+      } finally {
+         cancelOrder.reset()
+      }
    }
 
    def placeOrder(header: MessageHeader, builder: (PlaceOrderCommandCodec) => Unit): Unit = {
-      builder.apply(this.composer.compose().placeOrder())
-      this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)
+      val placeOrder = this.composer.compose().placeOrder()
+
+      try {
+         builder.apply(placeOrder)
+         this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)
+      } finally {
+         placeOrder.reset()
+      }
    }
 }

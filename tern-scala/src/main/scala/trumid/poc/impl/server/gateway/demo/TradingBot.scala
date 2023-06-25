@@ -8,22 +8,23 @@ import scala.util.{Failure, Success}
 class TradingBot(publisher: TradingEngineClient) {
 
   def execute(count: Int) = {
-    for (i <- 1 to count) {
-      val call = publisher.placeOrder(x => {
-        x.userId(i)
+    for (i: Int <- 1 to count) {
+      val call = publisher.placeOrder(
+        _.userId(i)
           .accountId(Some(i))
+          .time(System.currentTimeMillis())
           .order(
             _.price(11.0)
               .quantity(5555)
               .orderId(s"order${i}")
-              .symbol("USD"))
+              .symbol("USD")))
 
-        println(x.order().orderId())
-      })
-
-
+      if(i % 10000 == 0) {
+        Thread.`yield`()
+      }
       call.call(response => response.time()).onComplete {
-        case Success(time) => println(time)
+        case Success(time) => {
+        }
         case Failure(cause) => cause.printStackTrace()
       }(ExecutionContext.global)
     }

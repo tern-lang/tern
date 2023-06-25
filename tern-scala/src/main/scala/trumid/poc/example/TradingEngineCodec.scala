@@ -1,4 +1,4 @@
-// Generated at Sun Jun 25 16:31:14 BST 2023 (ServiceCodec)
+// Generated at Sun Jun 25 17:46:15 BST 2023 (ServiceCodec)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
@@ -43,9 +43,9 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
    override def topic(publisher: Publisher): TopicRoute = {
       Topic(10, "TradingEngine").route((frame, payload) => {
          publisher.publish(
-            frame.getBody.getBuffer,
-            frame.getBody.getOffset,
-            frame.getBody.getLength)
+            frame.getFrame.getBuffer,
+            frame.getFrame.getOffset,
+            frame.getFrame.getLength)
       })
    }
 
@@ -89,17 +89,17 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
 
       code match {
          case TradingEngineCodec.CANCEL_ALL_ORDERS_ID => {
-            this.cancelAllOrdersCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
+            this.cancelAllOrdersCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
             handler.onCancelAllOrders(this.cancelAllOrdersCodec)
             true
          }
          case TradingEngineCodec.CANCEL_ORDER_ID => {
-            this.cancelOrderCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
+            this.cancelOrderCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
             handler.onCancelOrder(this.cancelOrderCodec)
             true
          }
          case TradingEngineCodec.PLACE_ORDER_ID => {
-            this.placeOrderCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
+            this.placeOrderCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
             handler.onPlaceOrder(this.placeOrderCodec)
             true
          }
@@ -112,7 +112,7 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
    override def cancelAllOrders(): CancelAllOrdersCommandCodec = {
       this.buffer.setByte(this.offset, TradingEngineCodec.CANCEL_ALL_ORDERS_ID)
       this.buffer.setCount(this.offset + TradingEngineCodec.HEADER_SIZE + this.required)
-      this.cancelAllOrdersCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
+      this.cancelAllOrdersCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
    }
 
    override def isCancelAllOrders(): Boolean = {
@@ -122,7 +122,7 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
    override def cancelOrder(): CancelOrderCommandCodec = {
       this.buffer.setByte(this.offset, TradingEngineCodec.CANCEL_ORDER_ID)
       this.buffer.setCount(this.offset + TradingEngineCodec.HEADER_SIZE + this.required)
-      this.cancelOrderCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
+      this.cancelOrderCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
    }
 
    override def isCancelOrder(): Boolean = {
@@ -132,7 +132,7 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
    override def placeOrder(): PlaceOrderCommandCodec = {
       this.buffer.setByte(this.offset, TradingEngineCodec.PLACE_ORDER_ID)
       this.buffer.setCount(this.offset + TradingEngineCodec.HEADER_SIZE + this.required)
-      this.placeOrderCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
+      this.placeOrderCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
    }
 
    override def isPlaceOrder(): Boolean = {

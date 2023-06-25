@@ -6,7 +6,6 @@ import trumid.poc.example.commands._
 class TradingServiceHandler(output: TradingServiceOutput) extends TradingEngineHandler {
 
   override def onPlaceOrder(command: PlaceOrderCommand): Unit = {
-    println("onPlaceOrder")
     output.onPlaceOrderSuccess(command)
   }
 

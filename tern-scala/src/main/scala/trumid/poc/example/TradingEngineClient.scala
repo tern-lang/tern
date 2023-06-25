@@ -1,4 +1,4 @@
-// Generated at Sun Jun 25 16:31:14 BST 2023 (ServiceClient)
+// Generated at Sun Jun 25 17:46:15 BST 2023 (ServiceClient)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
@@ -19,13 +19,17 @@ final class TradingEngineClient(consumer: MessageConsumer[TradingEngineCodec], s
    def cancelAllOrders(builder: (CancelAllOrdersCommandBuilder) => Unit): Call[CancelAllOrdersResponse] = {
       val correlationId = this.counter.getAndIncrement()
       this.scheduler.start(correlationId, 5000, completion => {
+         val cancelAllOrders = this.composer.compose().cancelAllOrders()
+
          try {
-            builder.apply(this.composer.compose().cancelAllOrders())
+            builder.apply(cancelAllOrders)
             this.composer.commit(this.consumer, 1, correlationId)
          } catch {
             case cause: Throwable => {
                completion.failure(cause)
             }
+         } finally {
+            cancelAllOrders.reset()
          }
       })
    }
@@ -33,13 +37,17 @@ final class TradingEngineClient(consumer: MessageConsumer[TradingEngineCodec], s
    def cancelOrder(builder: (CancelOrderCommandBuilder) => Unit): Call[CancelOrderResponse] = {
       val correlationId = this.counter.getAndIncrement()
       this.scheduler.start(correlationId, 5000, completion => {
+         val cancelOrder = this.composer.compose().cancelOrder()
+
          try {
-            builder.apply(this.composer.compose().cancelOrder())
+            builder.apply(cancelOrder)
             this.composer.commit(this.consumer, 1, correlationId)
          } catch {
             case cause: Throwable => {
                completion.failure(cause)
             }
+         } finally {
+            cancelOrder.reset()
          }
       })
    }
@@ -47,13 +55,17 @@ final class TradingEngineClient(consumer: MessageConsumer[TradingEngineCodec], s
    def placeOrder(builder: (PlaceOrderCommandBuilder) => Unit): Call[PlaceOrderResponse] = {
       val correlationId = this.counter.getAndIncrement()
       this.scheduler.start(correlationId, 5000, completion => {
+         val placeOrder = this.composer.compose().placeOrder()
+
          try {
-            builder.apply(this.composer.compose().placeOrder())
+            builder.apply(placeOrder)
             this.composer.commit(this.consumer, 1, correlationId)
          } catch {
             case cause: Throwable => {
                completion.failure(cause)
             }
+         } finally {
+            placeOrder.reset()
          }
       })
    }

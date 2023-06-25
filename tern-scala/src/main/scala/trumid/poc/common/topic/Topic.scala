@@ -80,7 +80,7 @@ class TopicFrame extends MessageFrame {
 
   override def getFrame: Fragment = fragment.assign(buffer, offset, length)
 
-  override def getBody: Fragment = fragment.assign(buffer, HEADER_SIZE, length - HEADER_SIZE)
+  override def getBody: Fragment = fragment.assign(buffer, offset + HEADER_SIZE, length - HEADER_SIZE)
 }
 
 object TopicMessageHeader {

@@ -31,17 +31,22 @@ final class Chain[T](factory: () => Flyweight[_ <: T], dimensions: Int) {
   }
 
   def add(): T = {
+    buffer.setCount(offset + ByteSize.SHORT_SIZE + ByteSize.SHORT_SIZE)
+    append().get
+  }
+
+  private def append(): Option[T] = {
     val distance: Int = (buffer.length - offset) + ByteSize.SHORT_SIZE
     val link: Link[T] = pool.allocate()
     val size: Int = table.size()
     val element = link.assign(buffer, offset + distance, length - distance, size)
 
     buffer.setShort(offset, (size + 1).shortValue)
-    buffer.setShort(tail.start, (offset + distance).shortValue)
+    buffer.setShort(tail.start, distance.shortValue)
     buffer.setCount(offset + distance + ByteSize.SHORT_SIZE + dimensions)
     table.put(size, link)
     tail = link
-    element.get
+    element
   }
 
   def get(index: Int): Option[T] = {
@@ -61,7 +66,7 @@ final class Chain[T](factory: () => Flyweight[_ <: T], dimensions: Int) {
 
         for (i <- 0 to count - 1) {
           val link = pool.allocate()
-          val start = if(i == 0) ByteSize.SHORT_SIZE else prev.pointer()
+          val start = prev.pointer()
 
           link.assign(buffer, offset + start, length - start, i)
           table.put(i, link)
@@ -89,6 +94,9 @@ final class Chain[T](factory: () => Flyweight[_ <: T], dimensions: Int) {
     var index: Int = 0
 
     def assign(buffer: ByteBuffer, start: Int, length: Int, index: Int): Option[T] = {
+      if(start > 200) {
+        println(start)
+      }
       this.value = flyweight.map(_.assign(buffer, start + ByteSize.SHORT_SIZE, length - ByteSize.SHORT_SIZE))
       this.index = index
       this.start = start
@@ -97,6 +105,10 @@ final class Chain[T](factory: () => Flyweight[_ <: T], dimensions: Int) {
 
     def pointer(): Short = {
       buffer.getShort(start)
+    }
+
+    override def toString(): String = {
+      s"${index}@${start}=${value}"
     }
   }
 }

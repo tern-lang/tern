@@ -1,4 +1,4 @@
-// Generated at Sun Jun 25 16:31:14 BST 2023 (ServiceCodec)
+// Generated at Sun Jun 25 17:46:15 BST 2023 (ServiceCodec)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
@@ -43,9 +43,9 @@ final class TradingEngineResponseCodec(variable: Boolean = true) extends Trading
    override def topic(publisher: Publisher): TopicRoute = {
       Topic(11, "TradingEngineResponse").route((frame, payload) => {
          publisher.publish(
-            frame.getBody.getBuffer,
-            frame.getBody.getOffset,
-            frame.getBody.getLength)
+            frame.getFrame.getBuffer,
+            frame.getFrame.getOffset,
+            frame.getFrame.getLength)
       })
    }
 
@@ -89,17 +89,17 @@ final class TradingEngineResponseCodec(variable: Boolean = true) extends Trading
 
       code match {
          case TradingEngineResponseCodec.CANCEL_ALL_ORDERS_RESPONSE_ID => {
-            this.cancelAllOrdersResponseCodec.assign(this.buffer, this.offset + TradingEngineResponseCodec.HEADER_SIZE, this.length - TradingEngineResponseCodec.HEADER_SIZE)
+            this.cancelAllOrdersResponseCodec.reset().assign(this.buffer, this.offset + TradingEngineResponseCodec.HEADER_SIZE, this.length - TradingEngineResponseCodec.HEADER_SIZE)
             handler.onCancelAllOrdersResponse(this.cancelAllOrdersResponseCodec)
             true
          }
          case TradingEngineResponseCodec.CANCEL_ORDER_RESPONSE_ID => {
-            this.cancelOrderResponseCodec.assign(this.buffer, this.offset + TradingEngineResponseCodec.HEADER_SIZE, this.length - TradingEngineResponseCodec.HEADER_SIZE)
+            this.cancelOrderResponseCodec.reset().assign(this.buffer, this.offset + TradingEngineResponseCodec.HEADER_SIZE, this.length - TradingEngineResponseCodec.HEADER_SIZE)
             handler.onCancelOrderResponse(this.cancelOrderResponseCodec)
             true
          }
          case TradingEngineResponseCodec.PLACE_ORDER_RESPONSE_ID => {
-            this.placeOrderResponseCodec.assign(this.buffer, this.offset + TradingEngineResponseCodec.HEADER_SIZE, this.length - TradingEngineResponseCodec.HEADER_SIZE)
+            this.placeOrderResponseCodec.reset().assign(this.buffer, this.offset + TradingEngineResponseCodec.HEADER_SIZE, this.length - TradingEngineResponseCodec.HEADER_SIZE)
             handler.onPlaceOrderResponse(this.placeOrderResponseCodec)
             true
          }
@@ -112,7 +112,7 @@ final class TradingEngineResponseCodec(variable: Boolean = true) extends Trading
    override def cancelAllOrdersResponse(): CancelAllOrdersResponseCodec = {
       this.buffer.setByte(this.offset, TradingEngineResponseCodec.CANCEL_ALL_ORDERS_RESPONSE_ID)
       this.buffer.setCount(this.offset + TradingEngineResponseCodec.HEADER_SIZE + this.required)
-      this.cancelAllOrdersResponseCodec.assign(this.buffer, this.offset + TradingEngineResponseCodec.HEADER_SIZE, this.length - TradingEngineResponseCodec.HEADER_SIZE)
+      this.cancelAllOrdersResponseCodec.reset().assign(this.buffer, this.offset + TradingEngineResponseCodec.HEADER_SIZE, this.length - TradingEngineResponseCodec.HEADER_SIZE)
    }
 
    override def isCancelAllOrdersResponse(): Boolean = {
@@ -122,7 +122,7 @@ final class TradingEngineResponseCodec(variable: Boolean = true) extends Trading
    override def cancelOrderResponse(): CancelOrderResponseCodec = {
       this.buffer.setByte(this.offset, TradingEngineResponseCodec.CANCEL_ORDER_RESPONSE_ID)
       this.buffer.setCount(this.offset + TradingEngineResponseCodec.HEADER_SIZE + this.required)
-      this.cancelOrderResponseCodec.assign(this.buffer, this.offset + TradingEngineResponseCodec.HEADER_SIZE, this.length - TradingEngineResponseCodec.HEADER_SIZE)
+      this.cancelOrderResponseCodec.reset().assign(this.buffer, this.offset + TradingEngineResponseCodec.HEADER_SIZE, this.length - TradingEngineResponseCodec.HEADER_SIZE)
    }
 
    override def isCancelOrderResponse(): Boolean = {
@@ -132,7 +132,7 @@ final class TradingEngineResponseCodec(variable: Boolean = true) extends Trading
    override def placeOrderResponse(): PlaceOrderResponseCodec = {
       this.buffer.setByte(this.offset, TradingEngineResponseCodec.PLACE_ORDER_RESPONSE_ID)
       this.buffer.setCount(this.offset + TradingEngineResponseCodec.HEADER_SIZE + this.required)
-      this.placeOrderResponseCodec.assign(this.buffer, this.offset + TradingEngineResponseCodec.HEADER_SIZE, this.length - TradingEngineResponseCodec.HEADER_SIZE)
+      this.placeOrderResponseCodec.reset().assign(this.buffer, this.offset + TradingEngineResponseCodec.HEADER_SIZE, this.length - TradingEngineResponseCodec.HEADER_SIZE)
    }
 
    override def isPlaceOrderResponse(): Boolean = {

@@ -29,8 +29,6 @@ object TradingEngineCodecTest extends App {
   println(codec.validate())
   println(TopicMessageHeader.HEADER_SIZE)
 
-  codec2.assign(buffer, 0, 8192)
-
   val handler = new MockTradingEngineHandler(value => {
     value match {
       case command: PlaceOrderCommand =>
@@ -49,6 +47,8 @@ object TradingEngineCodecTest extends App {
   })
 
   codec.handle(handler)
+  codec.reset()
+  codec2.assign(buffer, 0, 8192)
   codec2.handle(handler)
 
   class MockTradingEngineHandler(validate: (Any) => Unit) extends TradingEngineHandler {

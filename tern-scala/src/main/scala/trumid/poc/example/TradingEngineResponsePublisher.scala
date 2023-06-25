@@ -1,4 +1,4 @@
-// Generated at Sun Jun 25 16:31:14 BST 2023 (ServicePublisher)
+// Generated at Sun Jun 25 17:46:15 BST 2023 (ServicePublisher)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
@@ -10,21 +10,39 @@ final class TradingEngineResponsePublisher(consumer: MessageConsumer[TradingEngi
    private val composer = new TopicMessageComposer[TradingEngineResponseCodec](
       new TradingEngineResponseCodec(true),
       DirectByteBuffer(),
-      0,
+      11,
       0)
 
    def cancelAllOrdersResponse(header: MessageHeader, builder: (CancelAllOrdersResponseCodec) => Unit): Unit = {
-      builder.apply(this.composer.compose().cancelAllOrdersResponse())
-      this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)
+      val cancelAllOrdersResponse = this.composer.compose().cancelAllOrdersResponse()
+
+      try {
+         builder.apply(cancelAllOrdersResponse)
+         this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)
+      } finally {
+         cancelAllOrdersResponse.reset()
+      }
    }
 
    def cancelOrderResponse(header: MessageHeader, builder: (CancelOrderResponseCodec) => Unit): Unit = {
-      builder.apply(this.composer.compose().cancelOrderResponse())
-      this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)
+      val cancelOrderResponse = this.composer.compose().cancelOrderResponse()
+
+      try {
+         builder.apply(cancelOrderResponse)
+         this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)
+      } finally {
+         cancelOrderResponse.reset()
+      }
    }
 
    def placeOrderResponse(header: MessageHeader, builder: (PlaceOrderResponseCodec) => Unit): Unit = {
-      builder.apply(this.composer.compose().placeOrderResponse())
-      this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)
+      val placeOrderResponse = this.composer.compose().placeOrderResponse()
+
+      try {
+         builder.apply(placeOrderResponse)
+         this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)
+      } finally {
+         placeOrderResponse.reset()
+      }
    }
 }

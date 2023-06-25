@@ -1,6 +1,6 @@
 package trumid.poc.common
 
-import trumid.poc.common.array.{CharArrayCodec, DoubleArrayCodec}
+import trumid.poc.common.array.CharArrayCodec
 import trumid.poc.common.message.DirectByteBuffer
 
 object CharArrayTest extends App {
@@ -17,6 +17,7 @@ object CharArrayTest extends App {
   if(codec.toString != "Hello this is a test") {
     throw new Error
   }
+  codec.reset()
   codec2.assign(buffer, 0, 1024)
   println(codec2)
 }

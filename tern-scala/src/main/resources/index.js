@@ -36,18 +36,19 @@ function createTable(id) {
   createHeading(newTable)
 
   for (i = 0; i < rows; i++) {
-    createRow(newTable, i)
+    createRow(newTable, id, i)
   }
-  body.appendChild(newTable);
+  var parent = document.getElementById("panel-" + id)
+  parent.appendChild(newTable);
 }
 
-function createRow(newTable, index) {
+function createRow(newTable, instrument, index) {
     var newRow = newTable.insertRow();
     var ids = [
-        "bid-" + index + "-qty",
-        "bid-" + index + "-px",
-        "offer-" + index + "-px",
-        "offer-" + index + "-qty",
+        "bid-" + instrument + "-" + index + "-qty",
+        "bid-" + instrument + "-" + index + "-px",
+        "offer-" + instrument + "-" + index + "-px",
+        "offer-" + instrument + "-" + index + "-qty",
     ];
     var align = [
         "left",
@@ -69,7 +70,7 @@ function createRow(newTable, index) {
 
 function createHeading(newTable) {
     var newRow = newTable.insertRow();
-    var headings = ["Quantity", "Bid", "Offer", "Quantity"]
+    var headings = ["Quantity", "Buy", "Sell", "Quantity"]
     var align = [
         "left",
         "left",
@@ -88,51 +89,90 @@ function createHeading(newTable) {
 
 function updateTable(update) {
     var element = document.getElementById(update.id)
-    var orderBook = state[update.id] || {id: update.id, bids: {}, offers: {}}
 
-    for(i = 0; i < update.bids.length; i++) {
-        var newBid = update.bids[i]
+    if(element) {
+        var orderBook = state[update.id] || {id: update.id, bids: {}, offers: {}}
 
-        if(newBid.quantity == 0) {
-           delete orderBook.bids[newBid.px]
-        } else {
-           orderBook.bids[newBid.px] =  newBid
+        for(i = 0; i < update.bids.length; i++) {
+            var newBid = update.bids[i]
+            var oldBid = orderBook.bids[newBid.px] || {...newBid, qty: 0}
+
+            if(newBid.quantity == 0) {
+               delete orderBook.bids[newBid.px]
+            } else {
+               var className = "normal"
+
+               if(newBid.qty > oldBid.qty) {
+                  className = oldBid.className == "flashUp1" ? "flashUp2" : "flashUp1"
+               } else if(newBid.qty < oldBid.qty) {
+                  className = oldBid.className == "flashDown1" ? "flashDown2" : "flashDown1"
+               } else {
+                  className = "normal"
+               }
+               orderBook.bids[newBid.px] =  {
+                 ...newBid,
+                 className: className
+               }
+            }
         }
-    }
-    for(i = 0; i < update.offers.length; i++) {
-        var newOffer = update.offers[i]
+        for(i = 0; i < update.offers.length; i++) {
+            var newOffer = update.offers[i]
+            var oldOffer = orderBook.offers[newOffer.px] || {...newOffer, qty: 0}
 
-        if(newOffer.qty == 0) {
-           delete orderBook.offers[newOffer.px]
-        } else {
-           orderBook.offers[newOffer.px] = newOffer
+            if(newOffer.qty == 0) {
+               delete orderBook.offers[newOffer.px]
+            } else {
+               var className = "normal"
+
+               if(newOffer.qty > oldOffer.qty) {
+                  className = oldOffer.className == "flashUp1" ? "flashUp2" : "flashUp1"
+               } else if(newOffer.qty < oldOffer.qty) {
+                  className = oldOffer.className == "flashDown1" ? "flashDown2" : "flashDown1"
+               } else {
+                  className = "normal"
+               }
+               orderBook.offers[newOffer.px] = {
+                 ...newOffer,
+                 className: className
+               }
+            }
         }
+        state[update.id] = orderBook
+        console.log(JSON.stringify(update, null, 0))
+        console.log(JSON.stringify(state[update.id], null, 2))
+        updateOrders(update.id, orderBook)
     }
-
-    var bids = Object.keys(orderBook.bids).reverse().map(px => ({px: px, qty: orderBook.bids[px].qty}))
-    var offers = Object.keys(orderBook.offers).map(px => ({px: px, qty: orderBook.offers[px].qty}))
-
-    state[update.id] = {id: update.id, bids: bids, offers: offers}
-    console.log(JSON.stringify(state[update.id], null, 2))
-    updateOrders(update.id, state[update.id])
 }
 
 function updateOrders(id, orderBook) {
+    var bids = Object.keys(orderBook.bids).reverse().map(px => ({
+        px: px,
+        qty: orderBook.bids[px].qty,
+        className: orderBook.bids[px].className
+     }))
+    var offers = Object.keys(orderBook.offers).map(px => ({
+        px: px,
+        qty: orderBook.offers[px].qty,
+        className: orderBook.offers[px].className
+     }))
+
     for(i = 0; i < rows; i++) {
-        var bid = orderBook.bids[i] || {px: "", qty: ""}
-        var bidPx = document.getElementById("bid-" + i + "-px")
-        var bidQty = document.getElementById("bid-" + i + "-qty")
+        var bid = bids[i] || {px: "", qty: ""}
+        var bidPx = document.getElementById("bid-" + id + "-" + i + "-px")
+        var bidQty = document.getElementById("bid-" + id + "-" + i + "-qty")
 
         bidPx.innerHTML = ""+ (bid.px / 100.0)
         bidQty.innerHTML = ""+ bid.qty
+        bidQty.className = bid.className
     }
     for(i = 0; i < rows; i++) {
-        var offer = orderBook.offers[i] || {px: "", qty: ""}
-        var offerPx = document.getElementById("offer-" + i + "-px")
-        var offerQty = document.getElementById("offer-" + i + "-qty")
+        var offer = offers[i] || {px: "", qty: ""}
+        var offerPx = document.getElementById("offer-" + id + "-" + i + "-px")
+        var offerQty = document.getElementById("offer-" + id + "-" + i + "-qty")
 
         offerPx.innerHTML = ""+ (offer.px / 100.0)
         offerQty.innerHTML = ""+ offer.qty
+        offerQty.className = offer.className
     }
 }
 

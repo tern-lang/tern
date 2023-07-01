@@ -1,9 +1,166 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <style>
+    @keyframes redFlash1 {
+      0% {
+        background-color: red;
+        color: white;
+        opacity: 0.8;
+      }
+      20% {
+        background-color: red;
+        color: white;
+        opacity: 0.8;
+      }
+      40% {
+        background-color: red;
+        color: white;
+        opacity: 0.6;
+      }
+      60% {
+        background-color: red;
+        opacity: 0.4;
+      }
+      80% {
+        background-color: red;
+        opacity: 0.2;
+      }
+      100% {
+        background-color: red;
+        opacity: 0;
+      }
+    }
+    @keyframes redFlash2 {
+      0% {
+        background-color: red;
+        color: white;
+        opacity: 0.8;
+      }
+      20% {
+        background-color: red;
+        color: white;
+        opacity: 0.8;
+      }
+      40% {
+        background-color: red;
+        color: white;
+        opacity: 0.6;
+      }
+      60% {
+        background-color: red;
+        opacity: 0.4;
+      }
+      80% {
+        background-color: red;
+        opacity: 0.2;
+      }
+      100% {
+        background-color: red;
+        opacity: 0;
+      }
+    }
+
+    @keyframes greenFlash1 {
+      0% {
+        background-color: green;
+        color: white;
+        opacity: 0.8;
+      }
+      20% {
+        background-color: green;
+        color: white;
+        opacity: 0.8;
+      }
+      40% {
+        background-color: green;
+        color: white;
+        opacity: 0.6;
+      }
+      60% {
+        background-color: green;
+        opacity: 0.4;
+      }
+      80% {
+        background-color: green;
+        opacity: 0.2;
+      }
+      100% {
+        background-color: green;
+        opacity: 0;
+      }
+    }
+    @keyframes greenFlash2 {
+      0% {
+        background-color: green;
+        color: white;
+        opacity: 0.8;
+      }
+      20% {
+        background-color: green;
+        color: white;
+        opacity: 0.8;
+      }
+      40% {
+        background-color: green;
+        color: white;
+        opacity: 0.6;
+      }
+      60% {
+        background-color: green;
+        opacity: 0.4;
+      }
+      80% {
+        background-color: green;
+        opacity: 0.2;
+      }
+      100% {
+        background-color: green;
+        opacity: 0;
+      }
+    }
+
+    .flashUp1 {
+      animation: greenFlash1 0.11s;
+    }
+    .flashUp2 {
+      animation: greenFlash2 0.11s;
+    }
+    .flashDown1 {
+      animation: flashRed1 0.11s;
+    }
+    .flashDown2 {
+      animation: flashRed2 0.11s;
+    }
+    .normal {
+    }
+    </style>
+</head>
 <body>
 
-<h1>My First Heading</h1>
-<p>My first paragraph.</p>
+<table border="0" cellpadding="40">
+    <tr>
+        <td id="panel-1"></td>
+        <td id="panel-2"></td>
+        <td id="panel-3"></td>
+        <td id="panel-4"></td>
+        <td id="panel-5"></td>
+    </tr>
+    <tr>
+        <td id="panel-6"></td>
+        <td id="panel-7"></td>
+        <td id="panel-8"></td>
+        <td id="panel-9"></td>
+        <td id="panel-10"></td>
+    </tr>
+    <tr>
+        <td id="panel-11"></td>
+        <td id="panel-12"></td>
+        <td id="panel-13"></td>
+        <td id="panel-14"></td>
+        <td id="panel-15"></td>
+    </tr>
+</table>
 
 <script type="text/javascript" src="/index.js"></script>
 </body>

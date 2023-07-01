@@ -29,7 +29,7 @@ class OrderBookPublisherTest extends FlatSpec with Matchers {
     codec.assign(buffer.clear(), 0, 8192).reset()
       .instrumentId(111)
       .bids(array => {
-        array.add().orderId("order-2").price(12).quantity(11).changeQuantity(-11)
+        array.add().orderId("order-2").price(12).quantity(11).changeQuantity(-12)
       })
     publisher.onFlush()
     publisher.onUpdate(codec)

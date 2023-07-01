@@ -31,10 +31,12 @@ class TradingBot(publisher: TradingEngineClient) {
 
 
   def execute(count: Int) = {
-    Await.result(publisher.createInstrument(_.instrumentId(1).scale(2))
-      .call(_ => {
-        println("Successfully created instrument")
-      }), FiniteDuration(10, TimeUnit.SECONDS))
+    for(i <- 1 to 11) {
+      Await.result(publisher.createInstrument(_.instrumentId(i).scale(2))
+        .call(_ => {
+          println("Successfully created instrument")
+        }), FiniteDuration(10, TimeUnit.SECONDS))
+    }
 
     val jsonPublisher = new JsonPublisher(100)
     val server = new WebServer(4444, jsonPublisher)
@@ -46,7 +48,7 @@ class TradingBot(publisher: TradingEngineClient) {
     for (i: Int <- 1 to count) {
       val call = publisher.placeOrder(
         _.userId(random.nextInt(100)) // 100 users
-          .instrumentId(1)
+          .instrumentId(random.nextInt(10) + 1)
           .time(System.currentTimeMillis())
           .order(
             _.price(random.nextInt(50) + 100)
@@ -56,7 +58,9 @@ class TradingBot(publisher: TradingEngineClient) {
               .orderType(OrderType.LIMIT)))
 
 
-      Thread.sleep(1)
+      if(i % 10 == 0) {
+        Thread.sleep(1)
+      }
       handle(call)
     }
   }

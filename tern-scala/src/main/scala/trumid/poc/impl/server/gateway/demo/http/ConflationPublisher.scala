@@ -10,7 +10,6 @@ import java.util.concurrent.{ConcurrentLinkedQueue, CopyOnWriteArraySet}
 import java.util.{Collections, HashMap, Map}
 
 case class OrderBookState(instrumentId: Int, version: Long, bids: Map[Long, Long], offers: Map[Long, Long])
-
 case class OrderBookUpdate(instrumentId: Int, current: OrderBookState, changes: OrderBookState)
 
 class OrderBookModel(instrumentId: Int, scale: PriceScale) {

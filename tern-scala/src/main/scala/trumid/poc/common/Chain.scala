@@ -78,14 +78,18 @@ final class Chain[T](factory: () => Flyweight[_ <: T], dimensions: Int) {
   }
 
   def reset(): Unit = {
+    table.values().forEach(_.reset())
     pool.collect()
     table.clear()
+    tail = head
   }
 
   def clear(): Unit = {
     buffer.setShort(offset, 0.shortValue)
+    table.values().forEach(_.reset())
     pool.collect()
     table.clear()
+    tail = head
   }
 
   final class Link[T](flyweight: Option[Flyweight[_ <: T]]) {
@@ -105,6 +109,10 @@ final class Chain[T](factory: () => Flyweight[_ <: T], dimensions: Int) {
 
     def pointer(): Short = {
       buffer.getShort(start)
+    }
+
+    def reset(): Unit = {
+      flyweight.map(_.reset())
     }
 
     override def toString(): String = {

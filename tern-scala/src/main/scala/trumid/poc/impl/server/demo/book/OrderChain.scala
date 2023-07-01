@@ -14,7 +14,7 @@ class OrderChain(channel: OrderChannel, side: Side, scale: PriceScale) {
       val passiveOrder = orders.peek()
 
       if (passiveOrder.isDefined && side.compare(aggressiveOrder, passiveOrder.get) >= 0) {
-        val fill = passiveOrder.get.fullOrder(aggressiveOrder)
+        val fill = passiveOrder.get.fillOrder(aggressiveOrder)
 
         if(fill.fillType().isFull()) {
           orders.poll()

@@ -51,7 +51,7 @@ class ServiceCodec(domain: Domain, entity: Entity, mode: Mode) extends UnionCode
       } else {
         builder.append(s"               val completion = scheduler.done(code, header.getCorrelationId)\n")
       }
-      builder.append(s"               completion.complete(this.${identifier}Codec.assign(this.buffer, this.offset + ${name}Codec.HEADER_SIZE, this.length - ${name}Codec.HEADER_SIZE))\n")
+      builder.append(s"               completion.complete(this.${identifier}Codec.reset().assign(this.buffer, this.offset + ${name}Codec.HEADER_SIZE, this.length - ${name}Codec.HEADER_SIZE))\n")
       builder.append(s"            }\n")
     })
     builder.append(s"            case _ => {\n")

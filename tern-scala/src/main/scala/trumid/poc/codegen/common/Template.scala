@@ -133,7 +133,7 @@ abstract class Template(domain: Domain, entity: Entity, mode: Mode, sorted: Bool
     val name = mode.getPackage(namespace, version)
     val origin = getClass.getSimpleName
 
-    builder.append(s"// Generated at ${date} (${origin})\n")
+    builder.append(s"// Generated (${origin})\n")
     builder.append("package ")
     builder.append(name)
     builder.append("\n\n")

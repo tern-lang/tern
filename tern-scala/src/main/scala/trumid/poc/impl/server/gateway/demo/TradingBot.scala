@@ -16,6 +16,28 @@ class TradingBot(publisher: TradingEngineClient) {
 
     override def onUpdate(value: OrderBookUpdateEvent) = {
       println(s"ORDER BOOK UPDATE ${value.instrumentId()}")
+      value.bids().iterator().foreach(order => {
+        println(order.orderId().length())
+        try {
+          println(order.orderId().toString())
+        } catch  {
+          case e: Throwable => {
+            e.printStackTrace()
+          }
+        }
+        println(s"   BID (${order.orderId()} ${order.quantity()}@${order.price()}")
+      })
+      value.offers().iterator().foreach(order => {
+        println(order.orderId().length())
+        try {
+          println(order.orderId().toString())
+        } catch  {
+          case e: Throwable => {
+            e.printStackTrace()
+          }
+        }
+        println(s"   OFFER (${order.orderId()} ${order.quantity()}@${order.price()}")
+      })
     }
 
     override def onFlush() = {
@@ -53,7 +75,7 @@ class TradingBot(publisher: TradingEngineClient) {
 
     publisher.subscribeOrderBook(_.instrumentId(1)).start(new OrderBookConsumer())
     publisher.subscribeExecutionReport(_.instrumentId(1)).start(new ExecutionReportConsumer())
-
+    val random = new java.util.Random()
     for (i: Int <- 1 to count) {
       val call = publisher.placeOrder(
         _.userId(i)
@@ -63,7 +85,7 @@ class TradingBot(publisher: TradingEngineClient) {
             _.price(11.0)
               .quantity(5555)
               .orderId(s"order${i}")
-              .side(Side.BUY)
+              .side(if(random.nextBoolean()) Side.BUY else Side.SELL)
               .orderType(OrderType.LIMIT)))
 
       if (i % 10000 == 0) {

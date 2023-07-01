@@ -1,6 +1,6 @@
 package trumid.poc.common.array
 
-import CharArrayCodec.CharValueCodec
+import trumid.poc.common.array.CharArrayCodec.CharValueCodec
 import trumid.poc.common.message.{ByteBuffer, ByteSize, Flyweight}
 
 import java.lang.{StringBuilder => StringWrapper}
@@ -67,7 +67,13 @@ final class CharArrayCodec
   }
 
   override def charAt(index: Int): Char = {
-    get(index).get
+    val size = length();
+    val next = get(index)
+
+    if(next.isEmpty) {
+      throw new IllegalStateException(s"Character missing at ${index} of ${size}")
+    }
+    next.get
   }
 
   override def subSequence(start: Int, end: Int): CharSequence = {

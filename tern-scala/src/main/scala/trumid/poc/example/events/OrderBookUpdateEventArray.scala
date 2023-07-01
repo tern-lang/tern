@@ -1,4 +1,4 @@
-// Generated at Sat Jul 01 15:12:09 BST 2023 (StructArray)
+// Generated (StructArray)
 package trumid.poc.example.events
 
 import trumid.poc.example.events._

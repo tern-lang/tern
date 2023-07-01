@@ -19,9 +19,9 @@ class TradingServiceEventOutput(header: MessageHeader, publisher: Publisher) ext
 
   def onPassive(order: Order): Unit = {
     if (order.side().isBuy()) {
-      buys.put(order.orderId(), order)
+      buys.put(order.orderId(), order.cancel())
     } else {
-      sells.put(order.orderId(), order)
+      sells.put(order.orderId(), order.cancel())
     }
   }
 

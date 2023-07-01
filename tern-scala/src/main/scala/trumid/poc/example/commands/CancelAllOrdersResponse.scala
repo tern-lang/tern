@@ -1,4 +1,4 @@
-// Generated at Sat Jul 01 15:12:09 BST 2023 (StructTrait)
+// Generated (StructTrait)
 package trumid.poc.example.commands
 
 import trumid.poc.common.array._

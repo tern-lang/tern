@@ -72,7 +72,7 @@ class Order(userId: Int, orderId: String, side: Side, orderType: OrderType, pric
 
   def orderType(): OrderType = orderType
 
-  def fullOrder(agressiveOrder: Order): Fill = {
+  def fillOrder(agressiveOrder: Order): Fill = {
     val availableQuantity = Math.min(agressiveOrder.remainingQuantity, remainingQuantity)
 
     filledQuantity += availableQuantity
@@ -83,6 +83,11 @@ class Order(userId: Int, orderId: String, side: Side, orderType: OrderType, pric
       side,
       price,
       availableQuantity)
+  }
+
+  def cancel(): Order = {
+    filledQuantity = quantity
+    this
   }
 }
 

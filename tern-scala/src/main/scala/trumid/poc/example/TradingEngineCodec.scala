@@ -1,4 +1,4 @@
-// Generated at Sat Jul 01 15:12:09 BST 2023 (ServiceCodec)
+// Generated (ServiceCodec)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
@@ -72,27 +72,27 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
          code match {
             case TradingEngineCodec.CANCEL_ALL_ORDERS_ID => {
                val completion = scheduler.done(code, header.getCorrelationId)
-               completion.complete(this.cancelAllOrdersCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
+               completion.complete(this.cancelAllOrdersCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
             }
             case TradingEngineCodec.CANCEL_ORDER_ID => {
                val completion = scheduler.done(code, header.getCorrelationId)
-               completion.complete(this.cancelOrderCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
+               completion.complete(this.cancelOrderCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
             }
             case TradingEngineCodec.CREATE_INSTRUMENT_ID => {
                val completion = scheduler.done(code, header.getCorrelationId)
-               completion.complete(this.createInstrumentCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
+               completion.complete(this.createInstrumentCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
             }
             case TradingEngineCodec.PLACE_ORDER_ID => {
                val completion = scheduler.done(code, header.getCorrelationId)
-               completion.complete(this.placeOrderCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
+               completion.complete(this.placeOrderCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
             }
             case TradingEngineCodec.SUBSCRIBE_EXECUTION_REPORT_ID => {
                val completion = scheduler.done(code, 10)
-               completion.complete(this.subscribeExecutionReportCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
+               completion.complete(this.subscribeExecutionReportCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
             }
             case TradingEngineCodec.SUBSCRIBE_ORDER_BOOK_ID => {
                val completion = scheduler.done(code, 10)
-               completion.complete(this.subscribeOrderBookCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
+               completion.complete(this.subscribeOrderBookCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
             }
             case _ => {
                val completion = scheduler.done(code, header.getCorrelationId)

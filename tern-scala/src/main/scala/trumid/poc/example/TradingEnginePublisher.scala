@@ -1,7 +1,8 @@
-// Generated at Sun Jun 25 17:46:15 BST 2023 (ServicePublisher)
+// Generated at Sat Jul 01 13:00:12 BST 2023 (ServicePublisher)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
+import trumid.poc.example.events._
 import trumid.poc.common.array._
 import trumid.poc.common.message._
 import trumid.poc.common.topic._
@@ -35,6 +36,17 @@ final class TradingEnginePublisher(consumer: MessageConsumer[TradingEngineCodec]
       }
    }
 
+   def createInstrument(header: MessageHeader, builder: (CreateInstrumentCommandCodec) => Unit): Unit = {
+      val createInstrument = this.composer.compose().createInstrument()
+
+      try {
+         builder.apply(createInstrument)
+         this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)
+      } finally {
+         createInstrument.reset()
+      }
+   }
+
    def placeOrder(header: MessageHeader, builder: (PlaceOrderCommandCodec) => Unit): Unit = {
       val placeOrder = this.composer.compose().placeOrder()
 
@@ -43,6 +55,17 @@ final class TradingEnginePublisher(consumer: MessageConsumer[TradingEngineCodec]
          this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)
       } finally {
          placeOrder.reset()
+      }
+   }
+
+   def subscribeOrderBook(header: MessageHeader, builder: (OrderBookSubscribeCommandCodec) => Unit): Unit = {
+      val subscribeOrderBook = this.composer.compose().subscribeOrderBook()
+
+      try {
+         builder.apply(subscribeOrderBook)
+         this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)
+      } finally {
+         subscribeOrderBook.reset()
       }
    }
 }

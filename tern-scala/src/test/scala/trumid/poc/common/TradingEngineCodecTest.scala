@@ -1,9 +1,9 @@
 package trumid.poc.common
 
-import trumid.poc.common.CharArrayTest.buffer
 import trumid.poc.common.message.DirectByteBuffer
 import trumid.poc.common.topic.TopicMessageHeader
-import trumid.poc.example.commands.{CancelAllOrdersCommand, CancelOrderCommand, PlaceOrderCommand}
+import trumid.poc.example.commands.{CancelAllOrdersCommand, CancelOrderCommand, CreateInstrumentCommand, PlaceOrderCommand}
+import trumid.poc.example.events.OrderBookSubscribeCommand
 import trumid.poc.example.{TradingEngineCodec, TradingEngineHandler}
 
 object TradingEngineCodecTest extends App {
@@ -15,12 +15,11 @@ object TradingEngineCodecTest extends App {
     .defaults()
     .placeOrder()
     .userId(1)
-    .accountId(Some(2))
+    .instrumentId(2)
     .order(order => {
       order.price(11.2)
         .quantity(1000)
         .orderId("Hello world!")
-        .symbol("")
     })
 
   if (!codec.isPlaceOrder()) {
@@ -53,6 +52,10 @@ object TradingEngineCodecTest extends App {
 
   class MockTradingEngineHandler(validate: (Any) => Unit) extends TradingEngineHandler {
 
+    override def onCreateInstrument(createInstrument: CreateInstrumentCommand): Unit  = {
+      validate(createInstrument)
+    }
+
     override def onCancelAllOrders(cancelAllOrders: CancelAllOrdersCommand): Unit = {
       validate(cancelAllOrders)
     }
@@ -64,5 +67,10 @@ object TradingEngineCodecTest extends App {
     override def onPlaceOrder(placeOrder: PlaceOrderCommand): Unit = {
       validate(placeOrder)
     }
+
+    override def onSubscribeOrderBook(subscribeOrderBook: OrderBookSubscribeCommand): Unit = {
+      validate(subscribeOrderBook)
+    }
+
   }
 }

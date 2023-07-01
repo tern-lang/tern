@@ -7,6 +7,7 @@ trait Variable {
   def isPrimitive(): Boolean = false
   def isString(): Boolean = false
   def isOptional(): Boolean = false
+  def isStreams(): Boolean = false
   def getName(): String
   def getConstraint(): String
 }

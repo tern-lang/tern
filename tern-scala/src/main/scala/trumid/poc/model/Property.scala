@@ -107,6 +107,8 @@ class Property(name: String) extends Variable with Annotated {
 
   override def isOptional(): Boolean = Property.isOptional(mask)
 
+  override def isStreams(): Boolean = Property.isStreams(mask)
+
   def getAttributes(): Map[String, Any] = attributes
 
   def getVersion(): Version = version

@@ -7,25 +7,35 @@ type PlaceOrderCommand {
    userId: Int;
 
    @Positive
-   accountId: Int?;
+   instrumentId: Int;
    order: OrderInfo;
 
    @Positive
    time: Long;
+
+   enum Side {
+      Buy,
+      Sell
+   }
+
+   enum OrderType {
+      Limit,
+      Market
+   }
 
    type OrderInfo {
 
       @NotBlank
       orderId: String;
 
-      @NotBlank
-      symbol: String;
+      side: Side;
+      orderType: OrderType;
 
       @Positive
       price: Double;
 
       @Positive
-      quantity: Double;
+      quantity: Long;
    }
 }
 

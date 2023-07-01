@@ -7,8 +7,8 @@ import scala.util._
 
 object CompletionSchedulerTest extends App {
   val scheduler = new CompletionScheduler()
-  val completion1 = scheduler.start[String](1, 10000, _ => {})
-  val completion2 = scheduler.start[String](2, 10000, _ => {})
+  val completion1 = scheduler.call[String](1, 10000, _ => {})
+  val completion2 = scheduler.call[String](2, 10000, _ => {})
 
   completion1.call[String](a => a).onComplete {
     case Success(x) => println(x)
@@ -20,6 +20,6 @@ object CompletionSchedulerTest extends App {
     case Failure(t) => t.printStackTrace()
   }(ExecutionContext.global)
 
-  scheduler.stop(1).complete("hello")
-  scheduler.stop(2).timeout()
+  scheduler.done(1).complete("hello")
+  scheduler.done(2).timeout()
 }

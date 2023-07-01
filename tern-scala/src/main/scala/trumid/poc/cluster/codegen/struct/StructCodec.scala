@@ -91,8 +91,13 @@ class StructCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(d
     entity.getProperties().forEach(property => {
       val identifier = property.getName()
 
-      if(property.isEntity()) {
-        builder.append(s"      ${identifier}Codec.defaults()\n")
+      if (property.isEntity()) {
+        val constraint = property.getConstraint()
+        val category = entity.getNamespace().getVisibleEntity(constraint).getCategory()
+
+        if (!category.isEnum()) {
+          builder.append(s"      ${identifier}Codec.defaults()\n")
+        }
       }
     })
     builder.append("      this\n")
@@ -106,7 +111,14 @@ class StructCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(d
     entity.getProperties().forEach(property => {
       val identifier = property.getName()
 
-      if(property.isEntity() || property.isArray()) {
+      if (property.isEntity()) {
+        val constraint = property.getConstraint()
+        val category = entity.getNamespace().getVisibleEntity(constraint).getCategory()
+
+        if (!category.isEnum()) {
+          builder.append(s"      ${identifier}Codec.clear()\n")
+        }
+      } else if (property.isArray()) {
         builder.append(s"      ${identifier}Codec.clear()\n")
       }
     })
@@ -121,7 +133,14 @@ class StructCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(d
     entity.getProperties().forEach(property => {
       val identifier = property.getName()
 
-      if(property.isEntity() || property.isArray()) {
+      if (property.isEntity()) {
+        val constraint = property.getConstraint()
+        val category = entity.getNamespace().getVisibleEntity(constraint).getCategory()
+
+        if (!category.isEnum()) {
+          builder.append(s"      ${identifier}Codec.reset()\n")
+        }
+      } else if (property.isArray()) {
         builder.append(s"      ${identifier}Codec.reset()\n")
       }
     })

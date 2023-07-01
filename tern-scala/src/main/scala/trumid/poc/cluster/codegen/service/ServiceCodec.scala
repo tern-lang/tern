@@ -37,7 +37,7 @@ class ServiceCodec(domain: Domain, entity: Entity, mode: Mode) extends UnionCode
     builder.append(s"   override def complete(scheduler: CompletionScheduler): TopicCompletionHandler = {\n")
     builder.append("      Topic(" + ServiceTopic.generateTopicCode(entity, mode) + ", \"" + name + "\").complete(this, (header) => {\n")
     builder.append("         val correlationId = header.getCorrelationId\n")
-    builder.append("         val completion = scheduler.stop(correlationId)\n")
+    builder.append("         val completion = scheduler.done(correlationId)\n")
     builder.append("\n")
     builder.append("         if(completion != null) {\n")
     builder.append("            val code = buffer.getByte(offset)\n")

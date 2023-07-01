@@ -1,4 +1,4 @@
-// Generated at Sun Jun 25 17:46:15 BST 2023 (StructValidator)
+// Generated at Sat Jul 01 13:00:12 BST 2023 (StructValidator)
 package trumid.poc.example.commands
 
 import trumid.poc.cluster.ResultCode

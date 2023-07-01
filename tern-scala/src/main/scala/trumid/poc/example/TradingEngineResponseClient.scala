@@ -1,7 +1,8 @@
-// Generated at Sun Jun 25 17:46:15 BST 2023 (ServiceClient)
+// Generated at Sat Jul 01 13:00:12 BST 2023 (ServiceClient)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
+import trumid.poc.example.events._
 import trumid.poc.common.array._
 import trumid.poc.common.message._
 import trumid.poc.common.topic._

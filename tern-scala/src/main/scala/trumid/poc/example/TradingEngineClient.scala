@@ -1,7 +1,8 @@
-// Generated at Sun Jun 25 17:46:15 BST 2023 (ServiceClient)
+// Generated at Sat Jul 01 13:00:12 BST 2023 (ServiceClient)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
+import trumid.poc.example.events._
 import trumid.poc.common.array._
 import trumid.poc.common.message._
 import trumid.poc.common.topic._
@@ -17,8 +18,8 @@ final class TradingEngineClient(consumer: MessageConsumer[TradingEngineCodec], s
       0)
 
    def cancelAllOrders(builder: (CancelAllOrdersCommandBuilder) => Unit): Call[CancelAllOrdersResponse] = {
-      val correlationId = this.counter.getAndIncrement()
-      this.scheduler.start(correlationId, 5000, completion => {
+      val correlationId = (this.counter.getAndIncrement() * 1000) + 10
+      this.scheduler.call(correlationId, 5000, completion => {
          val cancelAllOrders = this.composer.compose().cancelAllOrders()
 
          try {
@@ -35,8 +36,8 @@ final class TradingEngineClient(consumer: MessageConsumer[TradingEngineCodec], s
    }
 
    def cancelOrder(builder: (CancelOrderCommandBuilder) => Unit): Call[CancelOrderResponse] = {
-      val correlationId = this.counter.getAndIncrement()
-      this.scheduler.start(correlationId, 5000, completion => {
+      val correlationId = (this.counter.getAndIncrement() * 1000) + 10
+      this.scheduler.call(correlationId, 5000, completion => {
          val cancelOrder = this.composer.compose().cancelOrder()
 
          try {
@@ -52,9 +53,27 @@ final class TradingEngineClient(consumer: MessageConsumer[TradingEngineCodec], s
       })
    }
 
+   def createInstrument(builder: (CreateInstrumentCommandBuilder) => Unit): Call[CreateInstrumentResponse] = {
+      val correlationId = (this.counter.getAndIncrement() * 1000) + 10
+      this.scheduler.call(correlationId, 5000, completion => {
+         val createInstrument = this.composer.compose().createInstrument()
+
+         try {
+            builder.apply(createInstrument)
+            this.composer.commit(this.consumer, 1, correlationId)
+         } catch {
+            case cause: Throwable => {
+               completion.failure(cause)
+            }
+         } finally {
+            createInstrument.reset()
+         }
+      })
+   }
+
    def placeOrder(builder: (PlaceOrderCommandBuilder) => Unit): Call[PlaceOrderResponse] = {
-      val correlationId = this.counter.getAndIncrement()
-      this.scheduler.start(correlationId, 5000, completion => {
+      val correlationId = (this.counter.getAndIncrement() * 1000) + 10
+      this.scheduler.call(correlationId, 5000, completion => {
          val placeOrder = this.composer.compose().placeOrder()
 
          try {
@@ -66,6 +85,24 @@ final class TradingEngineClient(consumer: MessageConsumer[TradingEngineCodec], s
             }
          } finally {
             placeOrder.reset()
+         }
+      })
+   }
+
+   def subscribeOrderBook(builder: (OrderBookSubscribeCommandBuilder) => Unit): Stream[OrderBookUpdateEvent] = {
+      val correlationId = (this.counter.getAndIncrement() * 1000) + 10
+      this.scheduler.stream(correlationId, 500000, completion => {
+         val subscribeOrderBook = this.composer.compose().subscribeOrderBook()
+
+         try {
+            builder.apply(subscribeOrderBook)
+            this.composer.commit(this.consumer, 1, correlationId)
+         } catch {
+            case cause: Throwable => {
+               completion.failure(cause)
+            }
+         } finally {
+            subscribeOrderBook.reset()
          }
       })
    }

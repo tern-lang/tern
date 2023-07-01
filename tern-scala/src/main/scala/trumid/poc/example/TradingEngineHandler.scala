@@ -1,12 +1,15 @@
-// Generated at Sun Jun 25 17:46:15 BST 2023 (ServiceHandler)
+// Generated at Sat Jul 01 13:00:12 BST 2023 (ServiceHandler)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
+import trumid.poc.example.events._
 import trumid.poc.common.array._
 import trumid.poc.cluster.ResultCode
 
 trait TradingEngineHandler {
    def onCancelAllOrders(cancelAllOrders: CancelAllOrdersCommand): Unit
    def onCancelOrder(cancelOrder: CancelOrderCommand): Unit
+   def onCreateInstrument(createInstrument: CreateInstrumentCommand): Unit
    def onPlaceOrder(placeOrder: PlaceOrderCommand): Unit
+   def onSubscribeOrderBook(subscribeOrderBook: OrderBookSubscribeCommand): Unit
 }

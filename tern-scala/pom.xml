@@ -19,6 +19,7 @@
         <agrona.version>1.15.1</agrona.version>
         <tern.version>1.4.6</tern.version>
         <typesafe.version>1.4.2</typesafe.version>
+        <scalatest.version>3.0.5</scalatest.version>
     </properties>
 
     <dependencies>
@@ -77,6 +78,12 @@
             <groupId>uk.co.real-logic</groupId>
             <artifactId>artio-core</artifactId>
             <version>${artio.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_2.12</artifactId>
+            <version>${scalatest.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

@@ -48,7 +48,7 @@ class ArrayConstraint(constraint: TextLiteral, dimension: Evaluation, optional: 
     property.setDimension(length)
     property.setConstraint(constraint)
 
-    if (primitive != null) {
+    if (primitive.isDefined) {
       property.getMask()
         .add(if (length == -1) Property.DYNAMIC else Property.BLANK)
         .add(if (primitive.contains(Primitive.STRING)) Property.STRING else Property.BLANK)
@@ -73,7 +73,7 @@ class ArrayConstraint(constraint: TextLiteral, dimension: Evaluation, optional: 
       val value = state.getValue(constraint)
 
       if (value != null) {
-        val resolved = value.getValue()
+        val resolved: Any = value.getValue()
 
         if (resolved.isInstanceOf[Alias]) {
           throw new IllegalStateException(s"Unresolved alias '${constraint}'")

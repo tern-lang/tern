@@ -39,7 +39,8 @@ use trumid.poc.dsl.tree {
 }
 
 use trumid.poc.dsl.tree.constraint {
-   entity-constraint = EntityConstraint
+   entity-constraint = EntityConstraint,
+   array-constraint = ArrayConstraint
 }
 
 use trumid.poc.dsl.tree.enumeration {

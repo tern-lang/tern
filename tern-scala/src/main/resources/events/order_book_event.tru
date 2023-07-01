@@ -1,0 +1,25 @@
+
+namespace trumid.poc.example.events;
+
+type OrderBookSubscribeCommand {
+
+   @Positive
+   instrumentId: Int;
+}
+
+type OrderBookUpdateEvent {
+   bids: Order[];
+   offers: Order[];
+
+   type Order {
+
+      @NotBlank
+      orderId: String;
+
+      @Positive
+      price: Double;
+
+      @Positive
+      quantity: Double;
+   }
+}

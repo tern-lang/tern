@@ -1,7 +1,8 @@
-// Generated at Sun Jun 25 17:46:15 BST 2023 (ServiceCodec)
+// Generated at Sat Jul 01 13:00:12 BST 2023 (ServiceCodec)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
+import trumid.poc.example.events._
 import trumid.poc.common._
 import trumid.poc.common.topic._
 import trumid.poc.common.message._
@@ -10,18 +11,22 @@ import trumid.poc.cluster._
 
 object TradingEngineCodec {
    val VERSION: Int = 1
-   val REQUIRED_SIZE: Int = 97
-   val TOTAL_SIZE: Int = 97
+   val REQUIRED_SIZE: Int = 90
+   val TOTAL_SIZE: Int = 90
    val HEADER_SIZE: Int = 1
    val CANCEL_ALL_ORDERS_ID: Byte = 1
    val CANCEL_ORDER_ID: Byte = 2
-   val PLACE_ORDER_ID: Byte = 3
+   val CREATE_INSTRUMENT_ID: Byte = 3
+   val PLACE_ORDER_ID: Byte = 4
+   val SUBSCRIBE_ORDER_BOOK_ID: Byte = 5
 }
 
 final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBuilder with Flyweight[TradingEngineCodec] {
-   private val cancelAllOrdersCodec: CancelAllOrdersCommandCodec = new CancelAllOrdersCommandCodec(variable) // 21
-   private val cancelOrderCodec: CancelOrderCommandCodec = new CancelOrderCommandCodec(variable) // 27
-   private val placeOrderCodec: PlaceOrderCommandCodec = new PlaceOrderCommandCodec(variable) // 49
+   private val cancelAllOrdersCodec: CancelAllOrdersCommandCodec = new CancelAllOrdersCommandCodec(variable) // 16
+   private val cancelOrderCodec: CancelOrderCommandCodec = new CancelOrderCommandCodec(variable) // 22
+   private val createInstrumentCodec: CreateInstrumentCommandCodec = new CreateInstrumentCommandCodec(variable) // 8
+   private val placeOrderCodec: PlaceOrderCommandCodec = new PlaceOrderCommandCodec(variable) // 40
+   private val subscribeOrderBookCodec: OrderBookSubscribeCommandCodec = new OrderBookSubscribeCommandCodec(variable) // 4
    private var buffer: ByteBuffer = _
    private var offset: Int = _
    private var length: Int = _
@@ -61,7 +66,7 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
    override def complete(scheduler: CompletionScheduler): TopicCompletionHandler = {
       Topic(10, "TradingEngine").complete(this, (header) => {
          val correlationId = header.getCorrelationId
-         val completion = scheduler.stop(correlationId)
+         val completion = scheduler.done(correlationId)
 
          if(completion != null) {
             val code = buffer.getByte(offset)
@@ -73,8 +78,14 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
                case TradingEngineCodec.CANCEL_ORDER_ID => {
                   completion.complete(this.cancelOrderCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
                }
+               case TradingEngineCodec.CREATE_INSTRUMENT_ID => {
+                  completion.complete(this.createInstrumentCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
+               }
                case TradingEngineCodec.PLACE_ORDER_ID => {
                   completion.complete(this.placeOrderCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
+               }
+               case TradingEngineCodec.SUBSCRIBE_ORDER_BOOK_ID => {
+                  completion.complete(this.subscribeOrderBookCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
                }
                case _ => {
                   completion.failure(new IllegalStateException("Invalid code " + code))
@@ -98,9 +109,19 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
             handler.onCancelOrder(this.cancelOrderCodec)
             true
          }
+         case TradingEngineCodec.CREATE_INSTRUMENT_ID => {
+            this.createInstrumentCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
+            handler.onCreateInstrument(this.createInstrumentCodec)
+            true
+         }
          case TradingEngineCodec.PLACE_ORDER_ID => {
             this.placeOrderCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
             handler.onPlaceOrder(this.placeOrderCodec)
+            true
+         }
+         case TradingEngineCodec.SUBSCRIBE_ORDER_BOOK_ID => {
+            this.subscribeOrderBookCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
+            handler.onSubscribeOrderBook(this.subscribeOrderBookCodec)
             true
          }
          case _ => {
@@ -129,6 +150,16 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
       this.buffer.getByte(this.offset) == TradingEngineCodec.CANCEL_ORDER_ID
    }
 
+   override def createInstrument(): CreateInstrumentCommandCodec = {
+      this.buffer.setByte(this.offset, TradingEngineCodec.CREATE_INSTRUMENT_ID)
+      this.buffer.setCount(this.offset + TradingEngineCodec.HEADER_SIZE + this.required)
+      this.createInstrumentCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
+   }
+
+   override def isCreateInstrument(): Boolean = {
+      this.buffer.getByte(this.offset) == TradingEngineCodec.CREATE_INSTRUMENT_ID
+   }
+
    override def placeOrder(): PlaceOrderCommandCodec = {
       this.buffer.setByte(this.offset, TradingEngineCodec.PLACE_ORDER_ID)
       this.buffer.setCount(this.offset + TradingEngineCodec.HEADER_SIZE + this.required)
@@ -137,6 +168,16 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
 
    override def isPlaceOrder(): Boolean = {
       this.buffer.getByte(this.offset) == TradingEngineCodec.PLACE_ORDER_ID
+   }
+
+   override def subscribeOrderBook(): OrderBookSubscribeCommandCodec = {
+      this.buffer.setByte(this.offset, TradingEngineCodec.SUBSCRIBE_ORDER_BOOK_ID)
+      this.buffer.setCount(this.offset + TradingEngineCodec.HEADER_SIZE + this.required)
+      this.subscribeOrderBookCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
+   }
+
+   override def isSubscribeOrderBook(): Boolean = {
+      this.buffer.getByte(this.offset) == TradingEngineCodec.SUBSCRIBE_ORDER_BOOK_ID
    }
 
 
@@ -148,7 +189,9 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
    override def reset(): TradingEngineCodec = {
       cancelAllOrdersCodec.reset()
       cancelOrderCodec.reset()
+      createInstrumentCodec.reset()
       placeOrderCodec.reset()
+      subscribeOrderBookCodec.reset()
       this
    }
 
@@ -167,8 +210,14 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
          case TradingEngineCodec.CANCEL_ORDER_ID => {
             this.cancelOrder().validate()
          }
+         case TradingEngineCodec.CREATE_INSTRUMENT_ID => {
+            this.createInstrument().validate()
+         }
          case TradingEngineCodec.PLACE_ORDER_ID => {
             this.placeOrder().validate()
+         }
+         case TradingEngineCodec.SUBSCRIBE_ORDER_BOOK_ID => {
+            this.subscribeOrderBook().validate()
          }
          case _ => {
             ResultCode.fail("Code not supported")

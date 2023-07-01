@@ -15,7 +15,7 @@ class AliasReference(constraint: TextLiteral, optional: Optional) {
     val value = state.getValue(constraint)
 
     if (value != null) {
-      val resolved = value.getValue()
+      val resolved: Any = value.getValue()
 
       if (resolved.isInstanceOf[Alias]) {
         val alias = resolved.asInstanceOf[Alias]

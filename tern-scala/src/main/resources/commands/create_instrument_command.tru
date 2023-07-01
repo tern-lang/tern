@@ -1,0 +1,18 @@
+
+namespace trumid.poc.example.commands;
+
+type CreateInstrumentCommand {
+
+   @Positive
+   instrumentId: Int;
+
+   @PositiveOrZero
+   scale: Int;
+}
+
+type CreateInstrumentResponse {
+
+   @NotBlank
+   reason: String?;
+   success: Boolean;
+}

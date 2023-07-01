@@ -1,7 +1,8 @@
-// Generated at Sun Jun 25 17:46:15 BST 2023 (ServiceTrait)
+// Generated at Sat Jul 01 13:00:12 BST 2023 (ServiceTrait)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
+import trumid.poc.example.events._
 import trumid.poc.common.array._
 import trumid.poc.common.topic._
 import trumid.poc.common.message._
@@ -12,8 +13,12 @@ trait TradingEngineResponse {
    def isCancelAllOrdersResponse(): Boolean
    def cancelOrderResponse(): CancelOrderResponse
    def isCancelOrderResponse(): Boolean
+   def createInstrumentResponse(): CreateInstrumentResponse
+   def isCreateInstrumentResponse(): Boolean
    def placeOrderResponse(): PlaceOrderResponse
    def isPlaceOrderResponse(): Boolean
+   def subscribeOrderBookResponse(): OrderBookUpdateEvent
+   def isSubscribeOrderBookResponse(): Boolean
    def topic(publisher: Publisher): TopicRoute
    def topic(handler: TradingEngineResponseHandler): TopicRoute
    def complete(scheduler: CompletionScheduler): TopicCompletionHandler

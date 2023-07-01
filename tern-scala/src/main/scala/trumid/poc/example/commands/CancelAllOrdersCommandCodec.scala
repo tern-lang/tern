@@ -1,4 +1,4 @@
-// Generated at Sun Jun 25 17:46:15 BST 2023 (StructCodec)
+// Generated at Sat Jul 01 13:00:12 BST 2023 (StructCodec)
 package trumid.poc.example.commands
 
 import trumid.poc.common._
@@ -8,8 +8,8 @@ import trumid.poc.cluster._
 
 object CancelAllOrdersCommandCodec {
    val VERSION: Int = 1
-   val REQUIRED_SIZE: Int = 21
-   val TOTAL_SIZE: Int = 21
+   val REQUIRED_SIZE: Int = 16
+   val TOTAL_SIZE: Int = 16
 }
 
 final class CancelAllOrdersCommandCodec(variable: Boolean = true) extends CancelAllOrdersCommandBuilder with Flyweight[CancelAllOrdersCommandCodec] {
@@ -31,47 +31,42 @@ final class CancelAllOrdersCommandCodec(variable: Boolean = true) extends Cancel
       this;
    }
 
-   override def accountId(): Option[Int] = {
+   override def instrumentId(): Int = {
       // PrimitiveGenerator
-      this.buffer.setCount(this.offset + this.required)
-      if (this.buffer.getBoolean(this.offset + this.offset + 0)) {
-         Some(this.buffer.getInt(this.offset + 0))
-      } else {
-         None
-      }
+      this.buffer.setCount(this.offset + this.required);
+      this.buffer.getInt(this.offset + 0)
    }
 
-   override def accountId(accountId: Option[Int]): CancelAllOrdersCommandBuilder = {
+   override def instrumentId(instrumentId: Int): CancelAllOrdersCommandBuilder = {
       // PrimitiveGenerator
-      this.buffer.setCount(this.offset + this.required)
-      this.buffer.setBoolean(this.offset + this.offset + 0, accountId.isDefined)
-      if (accountId.isDefined) this.buffer.setInt(this.offset + this.offset + 0, accountId.get)
+      this.buffer.setCount(this.offset + this.required);
+      this.buffer.setInt(this.offset + 0, instrumentId)
       this
    }
 
    override def time(): Long = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.getLong(this.offset + 9)
+      this.buffer.getLong(this.offset + 4)
    }
 
    override def time(time: Long): CancelAllOrdersCommandBuilder = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.setLong(this.offset + 9, time)
+      this.buffer.setLong(this.offset + 4, time)
       this
    }
 
    override def userId(): Int = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.getInt(this.offset + 17)
+      this.buffer.getInt(this.offset + 12)
    }
 
    override def userId(userId: Int): CancelAllOrdersCommandBuilder = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.setInt(this.offset + 17, userId)
+      this.buffer.setInt(this.offset + 12, userId)
       this
    }
 

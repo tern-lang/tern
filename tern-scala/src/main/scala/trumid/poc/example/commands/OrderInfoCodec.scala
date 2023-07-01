@@ -1,6 +1,7 @@
-// Generated at Sun Jun 25 17:46:15 BST 2023 (StructCodec)
+// Generated at Sat Jul 01 13:00:12 BST 2023 (StructCodec)
 package trumid.poc.example.commands
 
+import trumid.poc.example.commands._
 import trumid.poc.common._
 import trumid.poc.common.message._
 import trumid.poc.common.array._
@@ -8,13 +9,12 @@ import trumid.poc.cluster._
 
 object OrderInfoCodec {
    val VERSION: Int = 1
-   val REQUIRED_SIZE: Int = 28
-   val TOTAL_SIZE: Int = 28
+   val REQUIRED_SIZE: Int = 24
+   val TOTAL_SIZE: Int = 24
 }
 
 final class OrderInfoCodec(variable: Boolean = true) extends OrderInfoBuilder with Flyweight[OrderInfoCodec] {
    private val orderIdCodec: CharArrayCodec = new CharArrayCodec() // (0 * (2 + 2)) + 2 + 4
-   private val symbolCodec: CharArrayCodec = new CharArrayCodec() // (0 * (2 + 2)) + 2 + 4
    private var buffer: ByteBuffer = _
    private var offset: Int = _
    private var length: Int = _
@@ -52,48 +52,55 @@ final class OrderInfoCodec(variable: Boolean = true) extends OrderInfoBuilder wi
       this
    }
 
+   override def orderType(): OrderType = {
+      // EnumGenerator
+      this.buffer.setCount(this.offset + this.required);
+      OrderType.resolve(this.buffer.getByte(this.offset + 6))
+   }
+
+   override def orderType(orderType: OrderType): OrderInfoBuilder = {
+      // EnumGenerator
+      this.buffer.setCount(this.offset + this.required);
+      this.buffer.setByte(this.offset + 6, orderType.toCode)
+      this
+   }
+
    override def price(): Double = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.getDouble(this.offset + 6)
+      this.buffer.getDouble(this.offset + 7)
    }
 
    override def price(price: Double): OrderInfoBuilder = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.setDouble(this.offset + 6, price)
+      this.buffer.setDouble(this.offset + 7, price)
       this
    }
 
-   override def quantity(): Double = {
+   override def quantity(): Long = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.getDouble(this.offset + 14)
+      this.buffer.getLong(this.offset + 15)
    }
 
-   override def quantity(quantity: Double): OrderInfoBuilder = {
+   override def quantity(quantity: Long): OrderInfoBuilder = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.setDouble(this.offset + 14, quantity)
+      this.buffer.setLong(this.offset + 15, quantity)
       this
    }
 
-   override def symbol(): CharArray = {
-      // PrimitiveArrayGenerator
+   override def side(): Side = {
+      // EnumGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.symbolCodec.assign(
-         this.buffer,
-         this.offset + (22 + this.buffer.getByte(this.offset + 22 + 1)),
-         this.length - (22 + this.buffer.getByte(this.offset + 22 + 1))
-      )
+      Side.resolve(this.buffer.getByte(this.offset + 23))
    }
 
-   override def symbol(symbol: CharSequence): OrderInfoBuilder = {
-      // PrimitiveArrayGenerator
+   override def side(side: Side): OrderInfoBuilder = {
+      // EnumGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.symbolCodec.assign(this.buffer, this.offset + 22, this.length - 22)
-            .clear()
-            .append(symbol)
+      this.buffer.setByte(this.offset + 23, side.toCode)
       this
    }
 
@@ -103,13 +110,11 @@ final class OrderInfoCodec(variable: Boolean = true) extends OrderInfoBuilder wi
 
    override def clear(): OrderInfoCodec = {
       orderIdCodec.clear()
-      symbolCodec.clear()
       this
    }
 
    override def reset(): OrderInfoCodec = {
       orderIdCodec.reset()
-      symbolCodec.reset()
       this
    }
 

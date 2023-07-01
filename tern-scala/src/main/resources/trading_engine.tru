@@ -1,12 +1,19 @@
 
 namespace trumid.poc.example;
 
+import {CreateInstrumentCommand, CreateInstrumentResponse} from 'commands/create_instrument_command.tru';
 import {PlaceOrderCommand, PlaceOrderResponse} from 'commands/place_order_command.tru';
 import {CancelOrderCommand, CancelOrderResponse} from 'commands/cancel_order_command.tru';
 import {CancelAllOrdersCommand, CancelAllOrdersResponse} from 'commands/cancel_all_orders_command.tru';
+import {OrderBookSubscribeCommand, OrderBookUpdateEvent} from 'events/order_book_event.tru';
 
 @Topic(code: 1)
 service TradingEngine {
+
+   /**
+    * Place and order.
+    */
+   def createInstrument(CreateInstrumentCommand) returns CreateInstrumentResponse;
 
    /**
     * Place and order.
@@ -22,4 +29,9 @@ service TradingEngine {
     * Cancel any live orders on the system.
     */
    def cancelAllOrders(CancelAllOrdersCommand) returns CancelAllOrdersResponse;
+
+   /**
+    * Cancel any live orders on the system.
+    */
+   def subscribeOrderBook(OrderBookSubscribeCommand) streams OrderBookUpdateEvent;
 }

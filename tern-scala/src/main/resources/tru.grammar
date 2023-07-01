@@ -40,9 +40,12 @@ annotation-list = *<annotation-declaration>?_;
 annotation-declaration = '@'<annotation-name>?<annotation-attributes>;
 annotation-attributes = '('?<map-entry-data>')';
 
+array-length = [decimal] | [identifier];
+array-constraint = [identifier] '['?<array-length>']' ?<option>;
+
 entity-constraint = [identifier] ?<option>;
 
-struct-constraint = (<entity-constraint>);
+struct-constraint = (<array-constraint> | <entity-constraint>);
 struct-value = (<literal> | [type]);
 struct-property = ?<annotation-list>[identifier] ':' <struct-constraint> ?('=' <struct-value>) ';';
 struct-extension = [type];

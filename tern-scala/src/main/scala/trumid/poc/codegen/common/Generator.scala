@@ -3,8 +3,7 @@ package trumid.poc.codegen.common
 import trumid.poc.dsl.DomainLoader
 import trumid.poc.model.{Domain, Mode, Version}
 
-import java.io.File
-import java.nio.file.Files
+import java.io._
 import java.util
 
 class Generator(factory: (Domain, Mode) => TemplateRegistry, in: Seq[String], out: File) {
@@ -22,7 +21,11 @@ class Generator(factory: (Domain, Mode) => TemplateRegistry, in: Seq[String], ou
           val file: File = new File(out, path)
 
           file.getParentFile.mkdirs
-          Files.writeString(file.toPath, source)
+
+          val writer = new PrintWriter(file.getCanonicalPath)
+
+          writer.write(source)
+          writer.close()
         } catch {
           case e: Exception =>
             throw new IllegalStateException(s"Could not generate ${path}", e)

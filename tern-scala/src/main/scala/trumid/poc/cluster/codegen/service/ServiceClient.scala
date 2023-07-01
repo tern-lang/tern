@@ -43,6 +43,8 @@ class ServiceClient(domain: Domain, entity: Entity, mode: Mode) extends Template
   }
 
   private def generatePublishMethods(): Unit = {
+    val code = ServiceTopic.generateTopicCode(entity, mode)
+
     entity.getProperties().forEach(property => {
       val response = property.getResponse()
 
@@ -51,9 +53,19 @@ class ServiceClient(domain: Domain, entity: Entity, mode: Mode) extends Template
         val constraint = property.getConstraint()
 
         builder.append("\n")
-        builder.append(s"   def ${identifier}(builder: (${constraint}Builder) => Unit): Call[${response}] = {\n")
-        builder.append(s"      val correlationId = this.counter.getAndIncrement()\n")
-        builder.append(s"      this.scheduler.start(correlationId, 5000, completion => {\n")
+
+        if(property.isStreams()) {
+          builder.append(s"   def ${identifier}(builder: (${constraint}Builder) => Unit): Stream[${response}] = {\n")
+        } else {
+          builder.append(s"   def ${identifier}(builder: (${constraint}Builder) => Unit): Call[${response}] = {\n")
+        }
+        builder.append(s"      val correlationId = (this.counter.getAndIncrement() * 1000) + " + code + "\n")
+
+        if(property.isStreams()) {
+          builder.append(s"      this.scheduler.stream(correlationId, 500000, completion => {\n")
+        } else {
+          builder.append(s"      this.scheduler.call(correlationId, 5000, completion => {\n")
+        }
         builder.append(s"         val ${identifier} = this.composer.compose().${identifier}()\n")
         builder.append(s"\n")
         builder.append(s"         try {\n")

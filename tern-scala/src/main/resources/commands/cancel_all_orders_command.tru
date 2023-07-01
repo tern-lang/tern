@@ -7,7 +7,7 @@ type CancelAllOrdersCommand {
    userId: Int;
 
    @Positive
-   accountId: Int?;
+   instrumentId: Int;
 
    @Positive
    time: Long;

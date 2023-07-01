@@ -231,7 +231,7 @@ class PropertyAligner {
   }
 
   def sizeOfPrimitive(parent: Entity, property: Property, constraint: String): PropertySize = {
-    val primitive: Primitive = Primitive.resolve(constraint).get
+    val primitive: Primitive = Primitive.resolve(constraint).getOrElse(throw new IllegalArgumentException(s"Invalid primitive '${constraint}'"))
     val size: Int = primitive.size()
 
     if (property.isArray) {

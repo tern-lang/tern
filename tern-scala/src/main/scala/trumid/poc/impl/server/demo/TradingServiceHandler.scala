@@ -3,7 +3,7 @@ package trumid.poc.impl.server.demo
 import org.agrona.collections.Int2ObjectHashMap
 import trumid.poc.example.TradingEngineHandler
 import trumid.poc.example.commands._
-import trumid.poc.example.events.OrderBookSubscribeCommand
+import trumid.poc.example.events.{ExecutionReportSubscribeCommand, OrderBookSubscribeCommand}
 import trumid.poc.impl.server.demo.book._
 
 class TradingServiceHandler(response: TradingServiceResponseOutput, event: TradingServiceEventOutput) extends TradingEngineHandler {
@@ -15,6 +15,7 @@ class TradingServiceHandler(response: TradingServiceResponseOutput, event: Tradi
     orderBooks.put(
       instrument.instrumentId,
       new OrderBook(instrument, event))
+    response.onCreateInstrumentSuccess(command)
   }
 
   override def onPlaceOrder(command: PlaceOrderCommand): Unit = {
@@ -30,7 +31,7 @@ class TradingServiceHandler(response: TradingServiceResponseOutput, event: Tradi
 
     orderBook.placeOrder(order)
     response.onPlaceOrderSuccess(command)
-    event.onComplete()
+    event.onComplete(command.instrumentId())
   }
 
   override def onCancelOrder(command: CancelOrderCommand): Unit = {
@@ -38,7 +39,7 @@ class TradingServiceHandler(response: TradingServiceResponseOutput, event: Tradi
 
     orderBook.removeOrder(command.orderId().toString())
     response.onCancelOrderSuccess(command)
-    event.onComplete()
+    event.onComplete(command.instrumentId())
   }
 
   override def onCancelAllOrders(command: CancelAllOrdersCommand): Unit = {
@@ -46,10 +47,18 @@ class TradingServiceHandler(response: TradingServiceResponseOutput, event: Tradi
 
     orderBook.removeAllOrders(command.userId())
     response.onCancelAllOrdersSuccess(command)
-    event.onComplete()
+    event.onComplete(command.instrumentId())
   }
 
-  override def onSubscribeOrderBook(subscribeOrderBook: OrderBookSubscribeCommand): Unit = {
+  override def onSubscribeOrderBook(command: OrderBookSubscribeCommand): Unit = {
+    val orderBook = orderBooks.get(command.instrumentId())
 
+    orderBook.activeOrders(Buy).forEachRemaining(event.onPassive)
+    orderBook.activeOrders(Sell).forEachRemaining(event.onPassive)
+    event.onComplete(command.instrumentId())
+  }
+
+  override def onSubscribeExecutionReport(command: ExecutionReportSubscribeCommand): Unit = {
+    event.onComplete(command.instrumentId())
   }
 }

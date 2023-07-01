@@ -6,6 +6,7 @@ import {PlaceOrderCommand, PlaceOrderResponse} from 'commands/place_order_comman
 import {CancelOrderCommand, CancelOrderResponse} from 'commands/cancel_order_command.tru';
 import {CancelAllOrdersCommand, CancelAllOrdersResponse} from 'commands/cancel_all_orders_command.tru';
 import {OrderBookSubscribeCommand, OrderBookUpdateEvent} from 'events/order_book_event.tru';
+import {ExecutionReportSubscribeCommand, ExecutionReportEvent} from 'events/execution_report_event.tru';
 
 @Topic(code: 1)
 service TradingEngine {
@@ -31,7 +32,12 @@ service TradingEngine {
    def cancelAllOrders(CancelAllOrdersCommand) returns CancelAllOrdersResponse;
 
    /**
-    * Cancel any live orders on the system.
+    * Subscribe for order book updates.
     */
    def subscribeOrderBook(OrderBookSubscribeCommand) streams OrderBookUpdateEvent;
+
+   /**
+    * Subscribe for order book updates.
+    */
+   def subscribeExecutionReport(ExecutionReportSubscribeCommand) streams ExecutionReportEvent;
 }

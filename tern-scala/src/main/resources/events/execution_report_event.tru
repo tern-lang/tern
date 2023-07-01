@@ -1,0 +1,20 @@
+
+namespace trumid.poc.example.events;
+
+type ExecutionReportSubscribeCommand {
+
+   @Positive
+   instrumentId: Int;
+}
+
+type ExecutionReportEvent {
+
+   @Positive
+   instrumentId: Int;
+
+   @Positive
+   price: Double;
+
+   @Positive
+   quantity: Double;
+}

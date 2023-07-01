@@ -2,11 +2,11 @@ package trumid.poc.common.message
 
 import io.aeron.cluster.service.Cluster
 
-class EgressPublisher extends Publisher {
+class BroadcastPublisher extends Publisher {
   private val publisher: ClientSessionPublisher = new ClientSessionPublisher
   private var cluster: Cluster = _
 
-  def connect(cluster: Cluster): EgressPublisher = {
+  def connect(cluster: Cluster): BroadcastPublisher = {
     this.cluster = cluster
     this.publisher.connect(cluster)
     this

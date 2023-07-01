@@ -1,10 +1,10 @@
 package trumid.poc.common.message
 
 import java.lang.{Long => LongMath}
-import java.util.Map
+import java.util._
 import java.util.concurrent.atomic.AtomicReference
-import java.util.concurrent.{ConcurrentHashMap, DelayQueue, Delayed, TimeUnit}
-import scala.concurrent._
+import java.util.concurrent._
+import scala.concurrent.{Future, Promise}
 import scala.reflect.ClassTag
 
 trait Call[T] {
@@ -12,47 +12,92 @@ trait Call[T] {
 }
 
 trait Stream[T] {
-  def start(update: (T) => Unit): Unit
+  def start(consumer: StreamConsumer[T]): Unit
+  def flush(): Unit
+  def close(): Unit
+}
+
+trait StreamConsumer[T] {
+  def onUpdate(value: T)
+  def onFlush()
+  def onClose()
 }
 
 trait Completion[T] {
   def complete(value: Any): Completion[T]
   def failure(cause: Throwable): Completion[T]
   def timeout(): Completion[T]
-  def transient(): Boolean
 }
 
 class CompletionScheduler {
   private val completions: Map[Long, Completion[_]] = new ConcurrentHashMap[Long, Completion[_]]()
+  private val streams: Set[StreamConsumer[_]] = new CopyOnWriteArraySet[StreamConsumer[_]]()
   private val queue: DelayQueue[Completion[_] with Delayed] = new DelayQueue[Completion[_] with Delayed]()
+  private val tasks: Queue[Runnable] = new ArrayDeque[Runnable]()
   private val missing: MissingCompletion = new MissingCompletion()
 
-  def call[T: ClassTag](correlationId: Long, expiry: Long, trigger: (Completion[T]) => Unit): Call[T] with Completion[T] = {
-    val completion = CallCompletion[T](correlationId, expiry, trigger, completions)
+  def call[T: ClassTag](messageId: Byte, correlationId: Long, expiry: Long, trigger: (Completion[T]) => Unit): Call[T] with Completion[T] = {
+    val uniqueId = (correlationId << 8) | messageId
+    val completion = CallCompletion[T](uniqueId, expiry, trigger, completions)
 
-    completions.put(correlationId, completion)
+    println(s"CREATE CALL = ${uniqueId}")
+    completions.put(uniqueId, completion)
     queue.offer(completion)
     completion
   }
 
-  def stream[T: ClassTag](correlationId: Long, expiry: Long, trigger: (Completion[T]) => Unit): Stream[T] with Completion[T] = {
-    val completion = StreamCompletion[T](correlationId, expiry, trigger, completions)
+  def stream[T: ClassTag](messageId: Byte, correlationId: Long, expiry: Long, trigger: (Completion[T]) => Unit): Stream[T] with Completion[T] = {
+    val uniqueId = (correlationId << 8) | messageId
+    val completion = StreamCompletion[T](uniqueId, expiry, trigger, tasks, streams, completions)
 
-    completions.put(correlationId, completion)
+    println(s"CREATE STREAM = ${uniqueId}")
+    completions.put(uniqueId, completion)
     queue.offer(completion)
     completion
   }
 
-  def done(correlationId: Long): Completion[_] = {
-    val completion: Completion[_] = completions.getOrDefault(correlationId, missing)
+  def done(messageId: Byte, correlationId: Long): Completion[_] = {
+    val uniqueId = (correlationId << 8) | messageId
+    val completion: Completion[_] = completions.getOrDefault(uniqueId, missing)
 
-    if (completion.transient()) {
-      completions.remove(correlationId)
+    if (completion.isInstanceOf[Call[_]]) {
+      println(s"DONE CALL = ${uniqueId}")
+      completions.remove(uniqueId)
+    }else if (completion.isInstanceOf[Stream[_]]) {
+      println(s"DONE STREAM = ${uniqueId}")
+    }else {
+      new Exception(s"DONE UNKNOWN = ${uniqueId}").printStackTrace()
     }
     completion
   }
 
   def poll(): Int = {
+    flush()
+    execute() + timeout()
+  }
+
+  private def flush(): Unit = {
+    streams.forEach(_.onFlush())
+  }
+
+  private def execute(): Int = {
+    var running = true
+    var count = 0
+
+    while (running) {
+      val next = tasks.poll()
+
+      if (next == null) {
+        running = false
+      } else {
+        next.run()
+        count += 1
+      }
+    }
+    count
+  }
+
+  private def timeout(): Int = {
     var running = true
     var count = 0
 
@@ -72,6 +117,7 @@ class CompletionScheduler {
   private class MissingCompletion extends Completion[Any] {
 
     override def complete(value: Any): Completion[Any] = {
+      println("MISSING")
       this
     }
 
@@ -82,19 +128,17 @@ class CompletionScheduler {
     override def timeout(): Completion[Any] = {
       this
     }
-
-    override def transient(): Boolean = {
-      true
-    }
   }
 
   private case class StreamCompletion[T: ClassTag](correlationId: Long,
                                                    expiry: Long,
                                                    trigger: (Completion[T]) => Unit,
+                                                   tasks: Queue[Runnable],
+                                                   streams: Set[StreamConsumer[_]],
                                                    completions: Map[Long, Completion[_]])
     extends Completion[T] with Stream[T] with Delayed {
 
-    private val reference: AtomicReference[T => Unit] = new AtomicReference[T => Unit]()
+    private val reference: AtomicReference[StreamConsumer[T]] = new AtomicReference[StreamConsumer[T]]()
 
     override def getDelay(unit: TimeUnit): Long = {
       unit.convert(expiry, TimeUnit.MILLISECONDS)
@@ -105,33 +149,62 @@ class CompletionScheduler {
     }
 
     override def complete(value: Any): Completion[T] = {
-      val convert = reference.get()
+      val consumer = reference.get()
 
-      value match {
-        case (value: T) => {
-          convert.apply(value)
+      if(consumer != null) {
+        value match {
+          case (value: T) => {
+            consumer.onUpdate(value)
+          }
+          case _ =>
         }
-        case _ =>
       }
       this
     }
 
     override def failure(cause: Throwable): Completion[T] = {
-      completions.remove(correlationId)
+      val consumer = reference.getAndSet(null)
+
+      if(consumer != null) {
+        completions.remove(correlationId)
+        streams.remove(consumer)
+        tasks.offer(() => consumer.onClose())
+      }
       this
     }
 
     override def timeout(): Completion[T] = {
-      completions.remove(correlationId)
+      val consumer = reference.getAndSet(null)
+
+      if(consumer != null) {
+        completions.remove(correlationId)
+        streams.remove(consumer)
+        tasks.offer(() => consumer.onClose())
+      }
       this
     }
 
-    override def transient(): Boolean = {
-      false
+    override def flush(): Unit = {
+      val consumer = reference.get()
+
+      if(consumer != null) {
+        tasks.offer(() => consumer.onFlush())
+      }
     }
 
-    override def start(update: (T) => Unit): Unit = {
-      if (reference.compareAndSet(null, update)) {
+    override def close(): Unit = {
+      val consumer = reference.getAndSet(null)
+
+      if(consumer != null) {
+        completions.remove(correlationId)
+        streams.remove(consumer)
+        tasks.offer(() => consumer.onClose())
+      }
+    }
+
+    override def start(consumer: StreamConsumer[T]): Unit = {
+      if (reference.compareAndSet(null, consumer)) {
+        streams.add(consumer)
         trigger.apply(this)
       }
     }
@@ -178,10 +251,6 @@ class CompletionScheduler {
       completions.remove(correlationId)
       promise.failure(new TimeoutException("Request timed out"))
       this
-    }
-
-    override def transient(): Boolean = {
-      true
     }
 
     override def call[R](convert: T => R): Future[R] = {

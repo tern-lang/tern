@@ -1,4 +1,4 @@
-// Generated at Sat Jul 01 13:00:12 BST 2023 (ServiceClient)
+// Generated at Sat Jul 01 15:12:09 BST 2023 (ServiceClient)
 package trumid.poc.example
 
 import trumid.poc.example.commands._

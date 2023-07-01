@@ -48,7 +48,11 @@ class PropertyGeneratorBuilder(domain: Domain, mode: Mode, sorted: Boolean) {
       if (category.isEnum()) {
         return new EnumGenerator(domain, parent, property, mode)
       } else {
-        return new StructGenerator(domain, parent, property, mode)
+        if(property.isArray()) {
+          return new StructArrayGenerator(domain, parent, property, mode)
+        } else {
+          return new StructGenerator(domain, parent, property, mode)
+        }
       }
     }
   }

@@ -1,4 +1,4 @@
-// Generated at Sat Jul 01 13:00:12 BST 2023 (ServicePublisher)
+// Generated at Sat Jul 01 15:12:09 BST 2023 (ServicePublisher)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
@@ -55,6 +55,17 @@ final class TradingEnginePublisher(consumer: MessageConsumer[TradingEngineCodec]
          this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)
       } finally {
          placeOrder.reset()
+      }
+   }
+
+   def subscribeExecutionReport(header: MessageHeader, builder: (ExecutionReportSubscribeCommandCodec) => Unit): Unit = {
+      val subscribeExecutionReport = this.composer.compose().subscribeExecutionReport()
+
+      try {
+         builder.apply(subscribeExecutionReport)
+         this.composer.commit(this.consumer, header.getUserId, header.getCorrelationId)
+      } finally {
+         subscribeExecutionReport.reset()
       }
    }
 

@@ -91,7 +91,7 @@ class StructCodec(domain: Domain, entity: Entity, mode: Mode) extends Template(d
     entity.getProperties().forEach(property => {
       val identifier = property.getName()
 
-      if (property.isEntity()) {
+      if (property.isEntity() && !property.isArray()) {
         val constraint = property.getConstraint()
         val category = entity.getNamespace().getVisibleEntity(constraint).getCategory()
 

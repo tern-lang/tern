@@ -7,6 +7,18 @@ import trumid.poc.example.commands._
 class TradingServiceResponseOutput(header: MessageHeader, publisher: Publisher) {
   private val client = new TradingEngineResponsePublisher(publisher.consume())
 
+  def onCreateInstrumentSuccess(command: CreateInstrumentCommand) = {
+    client.createInstrumentResponse(header,
+      _.success(true)
+    )
+  }
+
+  def onCreateInstrumentFailure(command: CreateInstrumentCommand) = {
+    client.createInstrumentResponse(header,
+      _.success(false)
+    )
+  }
+
   def onPlaceOrderSuccess(command: PlaceOrderCommand) = {
     client.placeOrderResponse(header,
       _.time(command.time())

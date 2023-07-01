@@ -21,7 +21,7 @@ class DomainProcessor {
             .setConstraint(response)
             .setIndex(property.getIndex)
             .getMask()
-            .add(Property.ENTITY)
+            .add(property.getMask())
         })
       })
   }

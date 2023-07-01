@@ -8,6 +8,10 @@ type OrderBookSubscribeCommand {
 }
 
 type OrderBookUpdateEvent {
+
+   @Positive
+   instrumentId: Int;
+
    bids: Order[];
    offers: Order[];
 

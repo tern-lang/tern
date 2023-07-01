@@ -15,19 +15,19 @@ object TradingService {
 
   def apply(member: NodeMember, scheduler: ClusterScheduler, clock: ClusterClock): TradingService = {
     val router = new TopicRouter(0)
-    val egress = new EgressPublisher() // this is a mock of a real egress
+    val broadcast = new BroadcastPublisher() // this is a mock of a real egress
     val publisher = new ClientSessionPublisher() // publish to connected client
     val responseOutput = new TradingServiceResponseOutput(router, publisher)
-    val eventOutput = new TradingServiceEventOutput(router, publisher)
+    val eventOutput = new TradingServiceEventOutput(router, broadcast)
     val handler = new TradingServiceHandler(responseOutput, eventOutput)
 
-    new TradingService(handler, publisher, egress, router, member, scheduler, clock)
+    new TradingService(handler, publisher, broadcast, router, member, scheduler, clock)
   }
 }
 
 final class TradingService(handler: TradingEngineHandler,
                            publisher: ClientSessionPublisher,
-                           egress: EgressPublisher,
+                           broadcast: BroadcastPublisher,
                            router: TopicRouter,
                            member: NodeMember,
                            scheduler: ClusterScheduler,
@@ -40,7 +40,7 @@ final class TradingService(handler: TradingEngineHandler,
     clock.start(cluster)
     scheduler.start(cluster)
     publisher.connect(cluster)
-    egress.connect(cluster)
+    broadcast.connect(cluster)
     router.register(codec.topic(handler))
   }
 

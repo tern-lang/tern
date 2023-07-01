@@ -1,4 +1,4 @@
-// Generated at Sat Jul 01 13:00:12 BST 2023 (ServiceTrait)
+// Generated at Sat Jul 01 15:12:09 BST 2023 (ServiceTrait)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
@@ -17,6 +17,8 @@ trait TradingEngineResponse {
    def isCreateInstrumentResponse(): Boolean
    def placeOrderResponse(): PlaceOrderResponse
    def isPlaceOrderResponse(): Boolean
+   def subscribeExecutionReportResponse(): ExecutionReportEvent
+   def isSubscribeExecutionReportResponse(): Boolean
    def subscribeOrderBookResponse(): OrderBookUpdateEvent
    def isSubscribeOrderBookResponse(): Boolean
    def topic(publisher: Publisher): TopicRoute

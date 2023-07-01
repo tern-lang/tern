@@ -1,5 +1,7 @@
 package trumid.poc.impl.server.demo.book
 
+import java.util.Iterator
+
 trait OrderBookImage {
   def saveOrder(order: Order): Unit
   def loadOrders(consumer: (Order) => Unit)
@@ -53,6 +55,14 @@ class OrderBook(instrument: Instrument, channel: OrderChannel) {
   def removeAllOrders(userId: Int): Unit = {
     buyChain.removeAllOrders(userId)
     sellChain.removeAllOrders(userId)
+  }
+
+  def activeOrders(side: Side): Iterator[Order] = {
+    if(side.isBuy()) {
+      buyChain.activeOrders()
+    } else {
+      sellChain.activeOrders()
+    }
   }
 
   def instrument(): Instrument = {

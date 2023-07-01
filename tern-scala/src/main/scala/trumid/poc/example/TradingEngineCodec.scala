@@ -1,4 +1,4 @@
-// Generated at Sat Jul 01 13:00:12 BST 2023 (ServiceCodec)
+// Generated at Sat Jul 01 15:12:09 BST 2023 (ServiceCodec)
 package trumid.poc.example
 
 import trumid.poc.example.commands._
@@ -11,14 +11,15 @@ import trumid.poc.cluster._
 
 object TradingEngineCodec {
    val VERSION: Int = 1
-   val REQUIRED_SIZE: Int = 90
-   val TOTAL_SIZE: Int = 90
+   val REQUIRED_SIZE: Int = 94
+   val TOTAL_SIZE: Int = 94
    val HEADER_SIZE: Int = 1
    val CANCEL_ALL_ORDERS_ID: Byte = 1
    val CANCEL_ORDER_ID: Byte = 2
    val CREATE_INSTRUMENT_ID: Byte = 3
    val PLACE_ORDER_ID: Byte = 4
-   val SUBSCRIBE_ORDER_BOOK_ID: Byte = 5
+   val SUBSCRIBE_EXECUTION_REPORT_ID: Byte = 5
+   val SUBSCRIBE_ORDER_BOOK_ID: Byte = 6
 }
 
 final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBuilder with Flyweight[TradingEngineCodec] {
@@ -26,6 +27,7 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
    private val cancelOrderCodec: CancelOrderCommandCodec = new CancelOrderCommandCodec(variable) // 22
    private val createInstrumentCodec: CreateInstrumentCommandCodec = new CreateInstrumentCommandCodec(variable) // 8
    private val placeOrderCodec: PlaceOrderCommandCodec = new PlaceOrderCommandCodec(variable) // 40
+   private val subscribeExecutionReportCodec: ExecutionReportSubscribeCommandCodec = new ExecutionReportSubscribeCommandCodec(variable) // 4
    private val subscribeOrderBookCodec: OrderBookSubscribeCommandCodec = new OrderBookSubscribeCommandCodec(variable) // 4
    private var buffer: ByteBuffer = _
    private var offset: Int = _
@@ -65,31 +67,36 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
 
    override def complete(scheduler: CompletionScheduler): TopicCompletionHandler = {
       Topic(10, "TradingEngine").complete(this, (header) => {
-         val correlationId = header.getCorrelationId
-         val completion = scheduler.done(correlationId)
+         val code = buffer.getByte(offset)
 
-         if(completion != null) {
-            val code = buffer.getByte(offset)
-
-            code match {
-               case TradingEngineCodec.CANCEL_ALL_ORDERS_ID => {
-                  completion.complete(this.cancelAllOrdersCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
-               }
-               case TradingEngineCodec.CANCEL_ORDER_ID => {
-                  completion.complete(this.cancelOrderCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
-               }
-               case TradingEngineCodec.CREATE_INSTRUMENT_ID => {
-                  completion.complete(this.createInstrumentCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
-               }
-               case TradingEngineCodec.PLACE_ORDER_ID => {
-                  completion.complete(this.placeOrderCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
-               }
-               case TradingEngineCodec.SUBSCRIBE_ORDER_BOOK_ID => {
-                  completion.complete(this.subscribeOrderBookCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
-               }
-               case _ => {
-                  completion.failure(new IllegalStateException("Invalid code " + code))
-               }
+         code match {
+            case TradingEngineCodec.CANCEL_ALL_ORDERS_ID => {
+               val completion = scheduler.done(code, header.getCorrelationId)
+               completion.complete(this.cancelAllOrdersCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
+            }
+            case TradingEngineCodec.CANCEL_ORDER_ID => {
+               val completion = scheduler.done(code, header.getCorrelationId)
+               completion.complete(this.cancelOrderCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
+            }
+            case TradingEngineCodec.CREATE_INSTRUMENT_ID => {
+               val completion = scheduler.done(code, header.getCorrelationId)
+               completion.complete(this.createInstrumentCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
+            }
+            case TradingEngineCodec.PLACE_ORDER_ID => {
+               val completion = scheduler.done(code, header.getCorrelationId)
+               completion.complete(this.placeOrderCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
+            }
+            case TradingEngineCodec.SUBSCRIBE_EXECUTION_REPORT_ID => {
+               val completion = scheduler.done(code, 10)
+               completion.complete(this.subscribeExecutionReportCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
+            }
+            case TradingEngineCodec.SUBSCRIBE_ORDER_BOOK_ID => {
+               val completion = scheduler.done(code, 10)
+               completion.complete(this.subscribeOrderBookCodec.assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE))
+            }
+            case _ => {
+               val completion = scheduler.done(code, header.getCorrelationId)
+               completion.failure(new IllegalStateException("Invalid code " + code))
             }
          }
       })
@@ -117,6 +124,11 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
          case TradingEngineCodec.PLACE_ORDER_ID => {
             this.placeOrderCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
             handler.onPlaceOrder(this.placeOrderCodec)
+            true
+         }
+         case TradingEngineCodec.SUBSCRIBE_EXECUTION_REPORT_ID => {
+            this.subscribeExecutionReportCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
+            handler.onSubscribeExecutionReport(this.subscribeExecutionReportCodec)
             true
          }
          case TradingEngineCodec.SUBSCRIBE_ORDER_BOOK_ID => {
@@ -170,6 +182,16 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
       this.buffer.getByte(this.offset) == TradingEngineCodec.PLACE_ORDER_ID
    }
 
+   override def subscribeExecutionReport(): ExecutionReportSubscribeCommandCodec = {
+      this.buffer.setByte(this.offset, TradingEngineCodec.SUBSCRIBE_EXECUTION_REPORT_ID)
+      this.buffer.setCount(this.offset + TradingEngineCodec.HEADER_SIZE + this.required)
+      this.subscribeExecutionReportCodec.reset().assign(this.buffer, this.offset + TradingEngineCodec.HEADER_SIZE, this.length - TradingEngineCodec.HEADER_SIZE)
+   }
+
+   override def isSubscribeExecutionReport(): Boolean = {
+      this.buffer.getByte(this.offset) == TradingEngineCodec.SUBSCRIBE_EXECUTION_REPORT_ID
+   }
+
    override def subscribeOrderBook(): OrderBookSubscribeCommandCodec = {
       this.buffer.setByte(this.offset, TradingEngineCodec.SUBSCRIBE_ORDER_BOOK_ID)
       this.buffer.setCount(this.offset + TradingEngineCodec.HEADER_SIZE + this.required)
@@ -191,6 +213,7 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
       cancelOrderCodec.reset()
       createInstrumentCodec.reset()
       placeOrderCodec.reset()
+      subscribeExecutionReportCodec.reset()
       subscribeOrderBookCodec.reset()
       this
    }
@@ -215,6 +238,9 @@ final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBu
          }
          case TradingEngineCodec.PLACE_ORDER_ID => {
             this.placeOrder().validate()
+         }
+         case TradingEngineCodec.SUBSCRIBE_EXECUTION_REPORT_ID => {
+            this.subscribeExecutionReport().validate()
          }
          case TradingEngineCodec.SUBSCRIBE_ORDER_BOOK_ID => {
             this.subscribeOrderBook().validate()

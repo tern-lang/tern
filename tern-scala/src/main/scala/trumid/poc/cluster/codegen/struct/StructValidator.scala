@@ -44,7 +44,7 @@ class StructValidator(domain: Domain, entity: Entity, mode: Mode) extends Templa
       validation.generateValidation(builder)
     })
     properties.forEach(property => {
-      if(property.isEntity()) {
+      if(property.isEntity() && !property.isArray()) {
         val constraint = property.getConstraint()
         val category = entity.getNamespace().getVisibleEntity(constraint).getCategory()
 

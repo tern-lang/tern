@@ -1,4 +1,4 @@
-// Generated at Sat Jul 01 13:00:12 BST 2023 (StructCodec)
+// Generated at Sat Jul 01 15:12:09 BST 2023 (StructCodec)
 package trumid.poc.example.events
 
 import trumid.poc.example.events._
@@ -9,13 +9,13 @@ import trumid.poc.cluster._
 
 object OrderBookUpdateEventCodec {
    val VERSION: Int = 1
-   val REQUIRED_SIZE: Int = 12
-   val TOTAL_SIZE: Int = 12
+   val REQUIRED_SIZE: Int = 16
+   val TOTAL_SIZE: Int = 16
 }
 
 final class OrderBookUpdateEventCodec(variable: Boolean = true) extends OrderBookUpdateEventBuilder with Flyweight[OrderBookUpdateEventCodec] {
-   private val bidsCodec: OrderCodec = new OrderCodec(variable) // (26 x 0) + 2
-   private val offersCodec: OrderCodec = new OrderCodec(variable) // (26 x 0) + 2
+   private val bidsCodec: OrderArrayCodec = new OrderArrayCodec() // (26 x 0) + 2
+   private val offersCodec: OrderArrayCodec = new OrderArrayCodec() // (26 x 0) + 2
    private var buffer: ByteBuffer = _
    private var offset: Int = _
    private var length: Int = _
@@ -34,35 +34,54 @@ final class OrderBookUpdateEventCodec(variable: Boolean = true) extends OrderBoo
       this;
    }
 
-   override def bids(): Order = {
-      // StructGenerator
+   override def bids(): OrderArray = {
+      // StructArrayGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.bidsCodec.assign(this.buffer, this.offset + 0, this.length - 0)
+      this.bidsCodec.assign(
+         this.buffer,
+         this.offset + (0 + this.buffer.getByte(this.offset + 0 + 1)),
+         this.length - (0 + this.buffer.getByte(this.offset + 0 + 1))
+      )
    }
 
-   override def bids(bids: (OrderBuilder) => Unit): OrderBookUpdateEventBuilder = {
-      // StructGenerator
+   override def bids(bids: (OrderArrayBuilder) => Unit): OrderBookUpdateEventBuilder = {
+      // StructArrayGenerator
       this.buffer.setCount(this.offset + this.required);
-      bids.apply(this.bidsCodec.assign(this.buffer, this.offset + 0, this.length - 0).defaults())
+      bids.apply(this.bidsCodec.assign(this.buffer, this.offset + 0, this.length - 0))
       this
    }
 
-   override def offers(): Order = {
-      // StructGenerator
+   override def instrumentId(): Int = {
+      // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.offersCodec.assign(this.buffer, this.offset + 6, this.length - 6)
+      this.buffer.getInt(this.offset + 6)
    }
 
-   override def offers(offers: (OrderBuilder) => Unit): OrderBookUpdateEventBuilder = {
-      // StructGenerator
+   override def instrumentId(instrumentId: Int): OrderBookUpdateEventBuilder = {
+      // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      offers.apply(this.offersCodec.assign(this.buffer, this.offset + 6, this.length - 6).defaults())
+      this.buffer.setInt(this.offset + 6, instrumentId)
+      this
+   }
+
+   override def offers(): OrderArray = {
+      // StructArrayGenerator
+      this.buffer.setCount(this.offset + this.required);
+      this.offersCodec.assign(
+         this.buffer,
+         this.offset + (10 + this.buffer.getByte(this.offset + 10 + 1)),
+         this.length - (10 + this.buffer.getByte(this.offset + 10 + 1))
+      )
+   }
+
+   override def offers(offers: (OrderArrayBuilder) => Unit): OrderBookUpdateEventBuilder = {
+      // StructArrayGenerator
+      this.buffer.setCount(this.offset + this.required);
+      offers.apply(this.offersCodec.assign(this.buffer, this.offset + 10, this.length - 10))
       this
    }
 
    override def defaults(): OrderBookUpdateEventCodec = {
-      bidsCodec.defaults()
-      offersCodec.defaults()
       this
    }
 

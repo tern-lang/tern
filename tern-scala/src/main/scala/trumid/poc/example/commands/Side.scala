@@ -1,4 +1,4 @@
-// Generated at Sat Jul 01 13:00:12 BST 2023 (EnumTrait)
+// Generated at Sat Jul 01 15:12:09 BST 2023 (EnumTrait)
 package trumid.poc.example.commands
 
 import trumid.poc.example.commands._

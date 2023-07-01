@@ -3,17 +3,61 @@ package trumid.poc.impl.server.gateway.demo
 import trumid.poc.common.message._
 import trumid.poc.example.TradingEngineClient
 import trumid.poc.example.commands._
+import trumid.poc.example.events._
 
-import scala.concurrent.ExecutionContext
+import java.util.concurrent.TimeUnit
+import scala.concurrent.duration.FiniteDuration
+import scala.concurrent.{Await, ExecutionContext}
 import scala.util.{Failure, Success}
 
 class TradingBot(publisher: TradingEngineClient) {
 
+  class OrderBookConsumer extends StreamConsumer[OrderBookUpdateEvent] {
+
+    override def onUpdate(value: OrderBookUpdateEvent) = {
+      println(s"ORDER BOOK UPDATE ${value.instrumentId()}")
+    }
+
+    override def onFlush() = {
+      //println(s"onFlush()")
+
+    }
+
+    override def onClose() = {
+
+    }
+  }
+
+  class ExecutionReportConsumer extends StreamConsumer[ExecutionReportEvent] {
+
+    override def onUpdate(value: ExecutionReportEvent) = {
+      println(s"EXECUTION REPORT UPDATE ${value.instrumentId()}")
+    }
+
+    override def onFlush() = {
+      //println(s"onFlush()")
+
+    }
+
+    override def onClose() = {
+
+    }
+  }
+
+
   def execute(count: Int) = {
+    Await.result(publisher.createInstrument(_.instrumentId(1).scale(2))
+      .call(_ => {
+        println("Successfully created instrument")
+      }), FiniteDuration(10, TimeUnit.SECONDS))
+
+    publisher.subscribeOrderBook(_.instrumentId(1)).start(new OrderBookConsumer())
+    publisher.subscribeExecutionReport(_.instrumentId(1)).start(new ExecutionReportConsumer())
+
     for (i: Int <- 1 to count) {
       val call = publisher.placeOrder(
         _.userId(i)
-          .instrumentId(i)
+          .instrumentId(1)
           .time(System.currentTimeMillis())
           .order(
             _.price(11.0)
@@ -32,6 +76,7 @@ class TradingBot(publisher: TradingEngineClient) {
   private def handle(call: Call[PlaceOrderResponse]) = {
     call.call(response => response.time()).onComplete {
       case Success(time) => {
+        println(s"response OK")
       }
       case Failure(cause) => {
         cause.printStackTrace()

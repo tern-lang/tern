@@ -3,7 +3,7 @@ package trumid.poc.impl.server.gateway.demo
 import trumid.poc.common.message._
 import trumid.poc.example._
 import trumid.poc.example.commands._
-import trumid.poc.example.events.OrderBookSubscribeCommand
+import trumid.poc.example.events.{ExecutionReportSubscribeCommand, OrderBookSubscribeCommand}
 
 class TradingGatewayHandler(header: MessageHeader, publisher: TradingEnginePublisher) extends TradingEngineHandler {
 
@@ -47,6 +47,12 @@ class TradingGatewayHandler(header: MessageHeader, publisher: TradingEnginePubli
 
   override def onSubscribeOrderBook(command: OrderBookSubscribeCommand): Unit = {
     publisher.subscribeOrderBook(header,
+      _.instrumentId(command.instrumentId())
+    )
+  }
+
+  override def onSubscribeExecutionReport(command: ExecutionReportSubscribeCommand): Unit = {
+    publisher.subscribeExecutionReport(header,
       _.instrumentId(command.instrumentId())
     )
   }

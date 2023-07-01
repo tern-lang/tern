@@ -3,7 +3,7 @@ package trumid.poc.common
 import trumid.poc.common.message.DirectByteBuffer
 import trumid.poc.common.topic.TopicMessageHeader
 import trumid.poc.example.commands.{CancelAllOrdersCommand, CancelOrderCommand, CreateInstrumentCommand, PlaceOrderCommand}
-import trumid.poc.example.events.OrderBookSubscribeCommand
+import trumid.poc.example.events.{ExecutionReportSubscribeCommand, OrderBookSubscribeCommand}
 import trumid.poc.example.{TradingEngineCodec, TradingEngineHandler}
 
 object TradingEngineCodecTest extends App {
@@ -70,6 +70,10 @@ object TradingEngineCodecTest extends App {
 
     override def onSubscribeOrderBook(subscribeOrderBook: OrderBookSubscribeCommand): Unit = {
       validate(subscribeOrderBook)
+    }
+
+    override def onSubscribeExecutionReport(subscribeExecutionReport: ExecutionReportSubscribeCommand): Unit = {
+      validate(subscribeExecutionReport)
     }
 
   }

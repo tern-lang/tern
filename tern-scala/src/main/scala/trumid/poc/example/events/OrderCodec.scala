@@ -8,8 +8,8 @@ import trumid.poc.cluster._
 
 object OrderCodec {
    val VERSION: Int = 1
-   val REQUIRED_SIZE: Int = 22
-   val TOTAL_SIZE: Int = 22
+   val REQUIRED_SIZE: Int = 30
+   val TOTAL_SIZE: Int = 30
 }
 
 final class OrderCodec(variable: Boolean = true) extends OrderBuilder with Flyweight[OrderCodec] {
@@ -32,20 +32,33 @@ final class OrderCodec(variable: Boolean = true) extends OrderBuilder with Flywe
       this;
    }
 
+   override def changeQuantity(): Long = {
+      // PrimitiveGenerator
+      this.buffer.setCount(this.offset + this.required);
+      this.buffer.getLong(this.offset + 0)
+   }
+
+   override def changeQuantity(changeQuantity: Long): OrderBuilder = {
+      // PrimitiveGenerator
+      this.buffer.setCount(this.offset + this.required);
+      this.buffer.setLong(this.offset + 0, changeQuantity)
+      this
+   }
+
    override def orderId(): CharArray = {
       // PrimitiveArrayGenerator
       this.buffer.setCount(this.offset + this.required);
       this.orderIdCodec.assign(
          this.buffer,
-         this.offset + (0 + this.buffer.getByte(this.offset + 0 + 1)),
-         this.length - (0 + this.buffer.getByte(this.offset + 0 + 1))
+         this.offset + (8 + this.buffer.getByte(this.offset + 8 + 1)),
+         this.length - (8 + this.buffer.getByte(this.offset + 8 + 1))
       )
    }
 
    override def orderId(orderId: CharSequence): OrderBuilder = {
       // PrimitiveArrayGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.orderIdCodec.assign(this.buffer, this.offset + 0, this.length - 0)
+      this.orderIdCodec.assign(this.buffer, this.offset + 8, this.length - 8)
             .clear()
             .append(orderId)
       this
@@ -54,26 +67,26 @@ final class OrderCodec(variable: Boolean = true) extends OrderBuilder with Flywe
    override def price(): Double = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.getDouble(this.offset + 6)
+      this.buffer.getDouble(this.offset + 14)
    }
 
    override def price(price: Double): OrderBuilder = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.setDouble(this.offset + 6, price)
+      this.buffer.setDouble(this.offset + 14, price)
       this
    }
 
-   override def quantity(): Double = {
+   override def quantity(): Long = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.getDouble(this.offset + 14)
+      this.buffer.getLong(this.offset + 22)
    }
 
-   override def quantity(quantity: Double): OrderBuilder = {
+   override def quantity(quantity: Long): OrderBuilder = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.setDouble(this.offset + 14, quantity)
+      this.buffer.setLong(this.offset + 22, quantity)
       this
    }
 

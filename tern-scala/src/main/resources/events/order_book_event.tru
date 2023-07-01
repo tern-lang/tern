@@ -24,6 +24,7 @@ type OrderBookUpdateEvent {
       price: Double;
 
       @Positive
-      quantity: Double;
+      quantity: Long;
+      changeQuantity: Long;
    }
 }

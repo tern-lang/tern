@@ -98,9 +98,6 @@ final class Chain[T](factory: () => Flyweight[_ <: T], dimensions: Int) {
     var index: Int = 0
 
     def assign(buffer: ByteBuffer, start: Int, length: Int, index: Int): Option[T] = {
-      if(start > 200) {
-        println(start)
-      }
       this.value = flyweight.map(_.assign(buffer, start + ByteSize.SHORT_SIZE, length - ByteSize.SHORT_SIZE))
       this.index = index
       this.start = start

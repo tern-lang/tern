@@ -57,6 +57,7 @@ case class Price(value: Long, scale: PriceScale) {
 
 class Order(userId: Int, orderId: String, side: Side, orderType: OrderType, price: Price, quantity: Long) {
   private var filledQuantity: Long = 0
+  private var cancelled: Boolean = false
 
   def userId(): Int = userId
 
@@ -85,8 +86,12 @@ class Order(userId: Int, orderId: String, side: Side, orderType: OrderType, pric
       availableQuantity)
   }
 
+  def active(): Boolean = {
+    !cancelled
+  }
+
   def cancel(): Order = {
-    filledQuantity = quantity
+    cancelled = true
     this
   }
 }

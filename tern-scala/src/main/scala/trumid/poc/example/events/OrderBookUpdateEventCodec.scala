@@ -14,8 +14,8 @@ object OrderBookUpdateEventCodec {
 }
 
 final class OrderBookUpdateEventCodec(variable: Boolean = true) extends OrderBookUpdateEventBuilder with Flyweight[OrderBookUpdateEventCodec] {
-   private val bidsCodec: OrderArrayCodec = new OrderArrayCodec() // (26 x 0) + 2
-   private val offersCodec: OrderArrayCodec = new OrderArrayCodec() // (26 x 0) + 2
+   private val bidsCodec: OrderArrayCodec = new OrderArrayCodec() // (34 x 0) + 2
+   private val offersCodec: OrderArrayCodec = new OrderArrayCodec() // (34 x 0) + 2
    private var buffer: ByteBuffer = _
    private var offset: Int = _
    private var length: Int = _

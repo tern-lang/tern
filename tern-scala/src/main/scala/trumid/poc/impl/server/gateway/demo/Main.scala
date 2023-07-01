@@ -35,6 +35,6 @@ object Main {
 
     val tradingBot = new TradingBot(publisher)
 
-    tradingBot.execute(20)
+    tradingBot.execute(100000)
   }
 }

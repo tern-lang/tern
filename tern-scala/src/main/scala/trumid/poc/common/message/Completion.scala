@@ -33,7 +33,7 @@ class CompletionScheduler {
   private val completions: Map[Long, Completion[_]] = new ConcurrentHashMap[Long, Completion[_]]()
   private val streams: Set[StreamConsumer[_]] = new CopyOnWriteArraySet[StreamConsumer[_]]()
   private val queue: DelayQueue[Completion[_] with Delayed] = new DelayQueue[Completion[_] with Delayed]()
-  private val tasks: Queue[Runnable] = new ArrayDeque[Runnable]()
+  private val tasks: Queue[Runnable] = new ConcurrentLinkedQueue[Runnable]()
   private val missing: MissingCompletion = new MissingCompletion()
 
   def call[T: ClassTag](messageId: Byte, correlationId: Long, expiry: Long, trigger: (Completion[T]) => Unit): Call[T] with Completion[T] = {

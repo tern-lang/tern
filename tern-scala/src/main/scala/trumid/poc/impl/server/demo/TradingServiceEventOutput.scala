@@ -19,17 +19,17 @@ class TradingServiceEventOutput(header: MessageHeader, publisher: Publisher) ext
 
   def onPassive(order: Order): Unit = {
     if (order.side().isBuy()) {
-      buys.put(order.orderId(), order.cancel())
+      buys.put(order.orderId(), order)
     } else {
-      sells.put(order.orderId(), order.cancel())
+      sells.put(order.orderId(), order)
     }
   }
 
   def onCancel(order: Order): Unit = {
     if (order.side().isBuy()) {
-      buys.put(order.orderId(), order)
+      buys.put(order.orderId(), order.cancel())
     } else {
-      sells.put(order.orderId(), order)
+      sells.put(order.orderId(), order.cancel())
     }
   }
 
@@ -42,7 +42,13 @@ class TradingServiceEventOutput(header: MessageHeader, publisher: Publisher) ext
               array.add()
                 .orderId(order.orderId())
                 .price(order.price().toDouble())
-                .quantity(order.remainingQuantity())
+                .quantity(order.quantity())
+                .changeQuantity(if(order.active()) {
+                  order.remainingQuantity()
+                } else {
+                  -order.remainingQuantity()
+                })
+
             })
           })
           .offers(array => {
@@ -50,7 +56,12 @@ class TradingServiceEventOutput(header: MessageHeader, publisher: Publisher) ext
               array.add()
                 .orderId(order.orderId())
                 .price(order.price().toDouble())
-                .quantity(order.remainingQuantity())
+                .quantity(order.quantity())
+                .changeQuantity(if(order.active()) {
+                  order.remainingQuantity()
+                } else {
+                  -order.remainingQuantity()
+                })
             })
           })
         )

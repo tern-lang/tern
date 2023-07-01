@@ -20,10 +20,10 @@
         <tern.version>1.4.6</tern.version>
         <typesafe.version>1.4.2</typesafe.version>
         <scalatest.version>3.0.5</scalatest.version>
+        <simpleframework.version>6.0.1</simpleframework.version>
     </properties>
 
     <dependencies>
-        <!-- scala-maven-plugin determines the Scala version to use from this dependency -->
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
@@ -33,6 +33,11 @@
             <groupId>org.ternlang</groupId>
             <artifactId>tern-compile</artifactId>
             <version>${tern.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.simpleframework</groupId>
+            <artifactId>simple-http</artifactId>
+            <version>${simpleframework.version}</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe</groupId>
@@ -89,7 +94,6 @@
 
     <build>
         <plugins>
-            <!-- Configure maven-compiler-plugin to use the desired Java version -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

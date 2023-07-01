@@ -18,7 +18,6 @@ class TradingServiceEventOutput(header: MessageHeader, publisher: Publisher) ext
   }
 
   def onPassive(order: Order): Unit = {
-    println(">>>>>>>>>>>>>>>>>>> onPassive")
     if (order.side().isBuy()) {
       buys.put(order.orderId(), order)
     } else {
@@ -27,7 +26,6 @@ class TradingServiceEventOutput(header: MessageHeader, publisher: Publisher) ext
   }
 
   def onCancel(order: Order): Unit = {
-    println(">>>>>>>>>>>>>>>>>>> onCancel")
     if (order.side().isBuy()) {
       buys.put(order.orderId(), order)
     } else {
@@ -36,9 +34,7 @@ class TradingServiceEventOutput(header: MessageHeader, publisher: Publisher) ext
   }
 
   def onComplete(instrumentId: Int): Unit = {
-    println(">>>>>>>>>>>>>>>>>>> onComplete")
     if (!buys.isEmpty() || !sells.isEmpty()) {
-      println(">>>>>>>>>>>>>>>>>>> subscribeOrderBookResponse")
       client.subscribeOrderBookResponse(header,
         _.instrumentId(instrumentId)
           .bids(array => {
@@ -60,7 +56,6 @@ class TradingServiceEventOutput(header: MessageHeader, publisher: Publisher) ext
         )
     }
     if(!fills.isEmpty()) {
-      println(">>>>>>>>>>>>>>>>>>> subscribeExecutionReportResponse")
       fills.forEach(fill => {
         client.subscribeExecutionReportResponse(header,
           _.instrumentId(instrumentId)

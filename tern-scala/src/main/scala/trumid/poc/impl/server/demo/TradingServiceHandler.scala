@@ -4,30 +4,44 @@ import org.agrona.collections.Int2ObjectHashMap
 import trumid.poc.example.TradingEngineHandler
 import trumid.poc.example.commands._
 import trumid.poc.example.events.{ExecutionReportSubscribeCommand, OrderBookSubscribeCommand}
+import trumid.poc.impl.server.demo.TradingServiceHandler.newOrderBook
 import trumid.poc.impl.server.demo.book._
+
+
+object TradingServiceHandler {
+
+  def newOrderBook(command: CreateInstrumentCommand, channel: OrderChannel): OrderBook = {
+    val instrumentId = command.instrumentId()
+    val scale = PriceScale(command.scale())
+    val instrument = Instrument(instrumentId, scale)
+
+    new OrderBook(instrument, channel)
+  }
+
+  def newOrder(command: PlaceOrderCommand, instrument: Instrument): Order = {
+    val order = command.order()
+    val orderId = s"${order.orderId}"
+    val userId = command.userId()
+    val side = if (order.side().isSell()) Sell else Buy
+    val orderType = if (order.orderType().isLimit()) Limit else Market
+    val price = instrument.scale.toPrice(order.price())
+    val quantity = order.quantity()
+
+    new Order(userId, orderId, side, orderType, price, quantity)
+  }
+}
 
 class TradingServiceHandler(response: TradingServiceResponseOutput, event: TradingServiceEventOutput) extends TradingEngineHandler {
   private val orderBooks = new Int2ObjectHashMap[OrderBook]()
 
   override def onCreateInstrument(command: CreateInstrumentCommand): Unit = {
-    val instrument = Instrument(command.instrumentId(), PriceScale(command.scale()))
-
-    orderBooks.put(
-      instrument.instrumentId,
-      new OrderBook(instrument, event))
-    response.onCreateInstrumentSuccess(command)
+    val orderBook = TradingServiceHandler.newOrderBook(command, event)
+    orderBooks.put(orderBook.instrument.instrumentId, orderBook)
   }
 
   override def onPlaceOrder(command: PlaceOrderCommand): Unit = {
-    val orderInfo = command.order()
-    val orderBook = orderBooks.get(command.instrumentId())
-    val order = new Order(
-      command.userId(),
-      orderInfo.orderId().toString(),
-      if (orderInfo.side().isSell()) Sell else Buy,
-      if (orderInfo.orderType().isLimit()) Limit else Market,
-      orderBook.instrument().scale.toPrice(orderInfo.price()),
-      command.order().quantity().longValue())
+    val orderBook = orderBooks.get(command.instrumentId)
+    val order = TradingServiceHandler.newOrder(command, orderBook.instrument())
 
     orderBook.placeOrder(order)
     response.onPlaceOrderSuccess(command)

@@ -40,7 +40,6 @@ class CompletionScheduler {
     val uniqueId = (correlationId << 8) | messageId
     val completion = CallCompletion[T](uniqueId, expiry, trigger, completions)
 
-    println(s"CREATE CALL = ${uniqueId}")
     completions.put(uniqueId, completion)
     queue.offer(completion)
     completion
@@ -50,7 +49,6 @@ class CompletionScheduler {
     val uniqueId = (correlationId << 8) | messageId
     val completion = StreamCompletion[T](uniqueId, expiry, trigger, tasks, streams, completions)
 
-    println(s"CREATE STREAM = ${uniqueId}")
     completions.put(uniqueId, completion)
     queue.offer(completion)
     completion
@@ -61,12 +59,7 @@ class CompletionScheduler {
     val completion: Completion[_] = completions.getOrDefault(uniqueId, missing)
 
     if (completion.isInstanceOf[Call[_]]) {
-      println(s"DONE CALL = ${uniqueId}")
       completions.remove(uniqueId)
-    }else if (completion.isInstanceOf[Stream[_]]) {
-      println(s"DONE STREAM = ${uniqueId}")
-    }else {
-      new Exception(s"DONE UNKNOWN = ${uniqueId}").printStackTrace()
     }
     completion
   }

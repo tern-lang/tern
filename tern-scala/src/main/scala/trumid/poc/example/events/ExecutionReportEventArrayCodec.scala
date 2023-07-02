@@ -1,6 +1,7 @@
 // Generated (StructArrayCodec)
 package trumid.poc.example.events
 
+import trumid.poc.example.events._
 import trumid.poc.common._
 import trumid.poc.common.array._
 import trumid.poc.common.message._

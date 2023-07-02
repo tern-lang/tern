@@ -7,7 +7,7 @@ import trumid.poc.cluster.OptionBuilder
 
 trait PlaceOrderCommandBuilder extends PlaceOrderCommand {
    def instrumentId(instrumentId: Int): PlaceOrderCommandBuilder // PrimitiveGenerator
-   def order(order: (OrderInfoBuilder) => Unit): PlaceOrderCommandBuilder // StructGenerator
+   def order(order: (OrderBuilder) => Unit): PlaceOrderCommandBuilder // StructGenerator
    def time(time: Long): PlaceOrderCommandBuilder // PrimitiveGenerator
    def userId(userId: Int): PlaceOrderCommandBuilder // PrimitiveGenerator
    def defaults(): PlaceOrderCommandBuilder

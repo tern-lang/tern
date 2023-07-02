@@ -6,7 +6,7 @@ import trumid.poc.cluster.ResultCode
 
 trait CancelOrderCommand {
    def instrumentId(): Int // PrimitiveGenerator
-   def orderId(): CharSequence // PrimitiveArrayGenerator
+   def orderId(): Long // PrimitiveGenerator
    def time(): Long // PrimitiveGenerator
    def userId(): Int // PrimitiveGenerator
    def validate(): ResultCode

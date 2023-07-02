@@ -11,8 +11,8 @@ import trumid.poc.cluster._
 
 object TradingEngineCodec {
    val VERSION: Int = 1
-   val REQUIRED_SIZE: Int = 94
-   val TOTAL_SIZE: Int = 94
+   val REQUIRED_SIZE: Int = 98
+   val TOTAL_SIZE: Int = 98
    val HEADER_SIZE: Int = 1
    val CANCEL_ALL_ORDERS_ID: Byte = 1
    val CANCEL_ORDER_ID: Byte = 2
@@ -24,9 +24,9 @@ object TradingEngineCodec {
 
 final class TradingEngineCodec(variable: Boolean = true) extends TradingEngineBuilder with Flyweight[TradingEngineCodec] {
    private val cancelAllOrdersCodec: CancelAllOrdersCommandCodec = new CancelAllOrdersCommandCodec(variable) // 16
-   private val cancelOrderCodec: CancelOrderCommandCodec = new CancelOrderCommandCodec(variable) // 22
+   private val cancelOrderCodec: CancelOrderCommandCodec = new CancelOrderCommandCodec(variable) // 24
    private val createInstrumentCodec: CreateInstrumentCommandCodec = new CreateInstrumentCommandCodec(variable) // 8
-   private val placeOrderCodec: PlaceOrderCommandCodec = new PlaceOrderCommandCodec(variable) // 40
+   private val placeOrderCodec: PlaceOrderCommandCodec = new PlaceOrderCommandCodec(variable) // 42
    private val subscribeExecutionReportCodec: ExecutionReportSubscribeCommandCodec = new ExecutionReportSubscribeCommandCodec(variable) // 4
    private val subscribeOrderBookCodec: OrderBookSubscribeCommandCodec = new OrderBookSubscribeCommandCodec(variable) // 4
    private var buffer: ByteBuffer = _

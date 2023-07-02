@@ -9,8 +9,8 @@ object CancelOrderCommandValidator {
       if(cancelOrderCommand.instrumentId() <= 0) {
          return ResultCode.fail("Invalid value for 'instrumentId'") // ValidatePositive
       }
-      if(cancelOrderCommand.orderId().length() == 0) {
-         return ResultCode.fail("Invalid value for 'orderId'") // ValidateNotBlank
+      if(cancelOrderCommand.orderId() <= 0) {
+         return ResultCode.fail("Invalid value for 'orderId'") // ValidatePositive
       }
       if(cancelOrderCommand.time() <= 0) {
          return ResultCode.fail("Invalid value for 'time'") // ValidatePositive

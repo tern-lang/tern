@@ -1,6 +1,7 @@
 // Generated (StructCodec)
 package trumid.poc.example.events
 
+import trumid.poc.example.events._
 import trumid.poc.common._
 import trumid.poc.common.message._
 import trumid.poc.common.array._
@@ -8,8 +9,8 @@ import trumid.poc.cluster._
 
 object ExecutionReportEventCodec {
    val VERSION: Int = 1
-   val REQUIRED_SIZE: Int = 20
-   val TOTAL_SIZE: Int = 20
+   val REQUIRED_SIZE: Int = 21
+   val TOTAL_SIZE: Int = 21
 }
 
 final class ExecutionReportEventCodec(variable: Boolean = true) extends ExecutionReportEventBuilder with Flyweight[ExecutionReportEventCodec] {
@@ -31,42 +32,55 @@ final class ExecutionReportEventCodec(variable: Boolean = true) extends Executio
       this;
    }
 
+   override def fillType(): FillType = {
+      // EnumGenerator
+      this.buffer.setCount(this.offset + this.required);
+      FillType.resolve(this.buffer.getByte(this.offset + 0))
+   }
+
+   override def fillType(fillType: FillType): ExecutionReportEventBuilder = {
+      // EnumGenerator
+      this.buffer.setCount(this.offset + this.required);
+      this.buffer.setByte(this.offset + 0, fillType.toCode)
+      this
+   }
+
    override def instrumentId(): Int = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.getInt(this.offset + 0)
+      this.buffer.getInt(this.offset + 1)
    }
 
    override def instrumentId(instrumentId: Int): ExecutionReportEventBuilder = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.setInt(this.offset + 0, instrumentId)
+      this.buffer.setInt(this.offset + 1, instrumentId)
       this
    }
 
    override def price(): Double = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.getDouble(this.offset + 4)
+      this.buffer.getDouble(this.offset + 5)
    }
 
    override def price(price: Double): ExecutionReportEventBuilder = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.setDouble(this.offset + 4, price)
+      this.buffer.setDouble(this.offset + 5, price)
       this
    }
 
    override def quantity(): Double = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.getDouble(this.offset + 12)
+      this.buffer.getDouble(this.offset + 13)
    }
 
    override def quantity(quantity: Double): ExecutionReportEventBuilder = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.setDouble(this.offset + 12, quantity)
+      this.buffer.setDouble(this.offset + 13, quantity)
       this
    }
 

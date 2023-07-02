@@ -2,6 +2,7 @@ package trumid.poc.impl.server.gateway.demo.http
 
 import org.agrona.collections._
 import trumid.poc.common.message._
+import trumid.poc.example.commands.Side
 import trumid.poc.example.events.OrderBookUpdateEvent
 import trumid.poc.impl.server.demo.book._
 
@@ -62,8 +63,16 @@ class OrderBookModel(instrumentId: Int, scale: PriceScale) {
     update(offers, state.offers, updatedOffers)
     OrderBookUpdate(
       instrumentId,
-      OrderBookState(instrumentId, version, newBids, newOffers),
-      OrderBookState(instrumentId, version, updatedBids, updatedOffers))
+      OrderBookState(
+        instrumentId,
+        version,
+        Collections.unmodifiableMap(newBids),
+        Collections.unmodifiableMap(newOffers)),
+      OrderBookState(
+        instrumentId,
+        version,
+        Collections.unmodifiableMap(updatedBids),
+        Collections.unmodifiableMap(updatedOffers)))
   }
 }
 
@@ -72,28 +81,27 @@ object ConflationPublisher {
   val empty = OrderBookState(0, 0, Collections.emptyMap(), Collections.emptyMap())
 }
 
-class ConflationPublisher[T](throttle: Long, scale: PriceScale, transformer: OrderBookState => T) extends StreamConsumer[OrderBookUpdateEvent] {
+class ConflationPublisher(throttle: Long, scale: PriceScale) extends StreamConsumer[OrderBookUpdateEvent] {
   private val tasks = new ConcurrentLinkedQueue[Runnable]()
-  private val listeners = new CopyOnWriteArraySet[T => Unit]()
+  private val listeners = new CopyOnWriteArraySet[OrderBookState => Unit]()
   private val models = new Int2ObjectHashMap[OrderBookModel]()
   private val states = new Int2ObjectHashMap[OrderBookState]()
   private val counter = new AtomicLong(0)
   private val next = new AtomicLong(0)
 
-  def onJoin(channel: T => Unit): Unit = {
-    val version = counter.get()
-
+  def onJoin(channel: OrderBookState => Unit): Unit = {
     tasks.offer(() => {
       try {
         models.forEach((instrumentId, model) => {
+          val version = counter.get()
           val state = states.get(instrumentId)
           val snapshot = model.difference(version, ConflationPublisher.empty)
           val update = model.difference(version, state)
 
-          channel.apply(transformer.apply(snapshot.changes))
+          channel.apply(snapshot.changes)
 
           if (!update.changes.bids.isEmpty || !update.changes.offers.isEmpty) {
-            channel.apply(transformer.apply(update.changes))
+            channel.apply(update.changes)
           }
         })
         listeners.add(channel)
@@ -105,7 +113,7 @@ class ConflationPublisher[T](throttle: Long, scale: PriceScale, transformer: Ord
     })
   }
 
-  def onLeave(channel: T => Unit): Unit = {
+  def onLeave(channel: OrderBookState => Unit): Unit = {
     tasks.offer(() => listeners.remove(channel))
   }
 
@@ -119,8 +127,8 @@ class ConflationPublisher[T](throttle: Long, scale: PriceScale, transformer: Ord
       models.put(instrumentId, model)
     }
     counter.getAndIncrement()
-    event.bids().iterator().foreach(order => model.update(Buy, scale.toPrice(order.price()), order.changeQuantity()))
-    event.offers().iterator().foreach(order => model.update(Sell, scale.toPrice(order.price()), order.changeQuantity()))
+    event.bids().iterator().foreach(order => model.update(Side.BUY, scale.toPrice(order.price()), order.changeQuantity()))
+    event.offers().iterator().foreach(order => model.update(Side.SELL, scale.toPrice(order.price()), order.changeQuantity()))
   }
 
   override def onFlush() = {
@@ -154,11 +162,9 @@ class ConflationPublisher[T](throttle: Long, scale: PriceScale, transformer: Ord
         states.put(instrumentId, update.current)
 
         if (!update.changes.bids.isEmpty() || !update.changes.offers.isEmpty()) {
-          val message: T = transformer.apply(update.changes)
-
           listeners.forEach(listener => {
             try {
-              listener.apply(message)
+              listener.apply(update.changes)
             } catch {
               case cause: Throwable => {
                 cause.printStackTrace()

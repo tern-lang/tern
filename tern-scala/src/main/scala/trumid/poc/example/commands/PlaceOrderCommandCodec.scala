@@ -9,12 +9,12 @@ import trumid.poc.cluster._
 
 object PlaceOrderCommandCodec {
    val VERSION: Int = 1
-   val REQUIRED_SIZE: Int = 40
-   val TOTAL_SIZE: Int = 40
+   val REQUIRED_SIZE: Int = 42
+   val TOTAL_SIZE: Int = 42
 }
 
 final class PlaceOrderCommandCodec(variable: Boolean = true) extends PlaceOrderCommandBuilder with Flyweight[PlaceOrderCommandCodec] {
-   private val orderCodec: OrderInfoCodec = new OrderInfoCodec(variable) // 24
+   private val orderCodec: OrderCodec = new OrderCodec(variable) // 26
    private var buffer: ByteBuffer = _
    private var offset: Int = _
    private var length: Int = _
@@ -46,13 +46,13 @@ final class PlaceOrderCommandCodec(variable: Boolean = true) extends PlaceOrderC
       this
    }
 
-   override def order(): OrderInfo = {
+   override def order(): Order = {
       // StructGenerator
       this.buffer.setCount(this.offset + this.required);
       this.orderCodec.assign(this.buffer, this.offset + 4, this.length - 4)
    }
 
-   override def order(order: (OrderInfoBuilder) => Unit): PlaceOrderCommandBuilder = {
+   override def order(order: (OrderBuilder) => Unit): PlaceOrderCommandBuilder = {
       // StructGenerator
       this.buffer.setCount(this.offset + this.required);
       order.apply(this.orderCodec.assign(this.buffer, this.offset + 4, this.length - 4).defaults())
@@ -62,26 +62,26 @@ final class PlaceOrderCommandCodec(variable: Boolean = true) extends PlaceOrderC
    override def time(): Long = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.getLong(this.offset + 28)
+      this.buffer.getLong(this.offset + 30)
    }
 
    override def time(time: Long): PlaceOrderCommandBuilder = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.setLong(this.offset + 28, time)
+      this.buffer.setLong(this.offset + 30, time)
       this
    }
 
    override def userId(): Int = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.getInt(this.offset + 36)
+      this.buffer.getInt(this.offset + 38)
    }
 
    override def userId(userId: Int): PlaceOrderCommandBuilder = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.setInt(this.offset + 36, userId)
+      this.buffer.setInt(this.offset + 38, userId)
       this
    }
 

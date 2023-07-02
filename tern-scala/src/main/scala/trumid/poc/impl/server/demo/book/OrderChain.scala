@@ -1,10 +1,14 @@
 package trumid.poc.impl.server.demo.book
 
+import trumid.poc.example.commands.Side
+import trumid.poc.example.events.FillType
+
 import java.util.Iterator
 import java.util.stream.Collectors
 
 class OrderChain(channel: OrderChannel, side: Side, scale: PriceScale) {
-  private val orders = new OrderHeap(side.compare)
+  private val comparator = new OrderComparator(side)
+  private val orders = new OrderHeap(comparator)
 
   def processOrder(aggressiveOrder: Order): FillType = {
     var fillPrice = 0l;
@@ -13,7 +17,7 @@ class OrderChain(channel: OrderChannel, side: Side, scale: PriceScale) {
     while (aggressiveOrder.remainingQuantity() > 0) {
       val passiveOrder = orders.peek()
 
-      if (passiveOrder.isDefined && side.compare(aggressiveOrder, passiveOrder.get) >= 0) {
+      if (passiveOrder.isDefined && comparator.compare(aggressiveOrder, passiveOrder.get) >= 0) {
         val fill = passiveOrder.get.fillOrder(aggressiveOrder)
 
         if(fill.fillType().isFull()) {
@@ -25,7 +29,7 @@ class OrderChain(channel: OrderChannel, side: Side, scale: PriceScale) {
       } else {
         if(aggressiveOrder.quantity > aggressiveOrder.remainingQuantity) {
           val fill = new Fill(
-            Partial,
+            FillType.PARTIAL,
             aggressiveOrder,
             Price(fillPrice / fillQuantity, scale),
             fillQuantity,
@@ -33,11 +37,11 @@ class OrderChain(channel: OrderChannel, side: Side, scale: PriceScale) {
 
           channel.onFill(fill)
         }
-        return Partial
+        return FillType.PARTIAL
       }
     }
     val fill = new Fill(
-      Full,
+      FillType.FULL,
       aggressiveOrder,
       aggressiveOrder.price,
       aggressiveOrder.quantity,
@@ -52,7 +56,7 @@ class OrderChain(channel: OrderChannel, side: Side, scale: PriceScale) {
     orders.offer(order)
   }
 
-  def removeOrder(orderId: String) = {
+  def removeOrder(orderId: Long) = {
     orders.remove(orderId).map(channel.onCancel)
   }
 
@@ -65,7 +69,7 @@ class OrderChain(channel: OrderChannel, side: Side, scale: PriceScale) {
 
   def activeOrders(): Iterator[Order] = {
     orders.stream()
-      .sorted(side.compare)
+      .sorted(comparator)
       .collect(Collectors.toList())
       .iterator()
   }

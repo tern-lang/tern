@@ -28,7 +28,7 @@ class TradingServiceHandler(response: TradingServiceResponseOutput, event: Tradi
   override def onCancelOrder(command: CancelOrderCommand): Unit = {
     val orderBook = orderBooks.get(command.instrumentId())
 
-    orderBook.removeOrder(command.orderId().toString())
+    orderBook.removeOrder(command.orderId())
     response.onCancelOrderSuccess(command)
     event.onComplete(command.instrumentId())
   }
@@ -44,8 +44,8 @@ class TradingServiceHandler(response: TradingServiceResponseOutput, event: Tradi
   override def onSubscribeOrderBook(command: OrderBookSubscribeCommand): Unit = {
     val orderBook = orderBooks.get(command.instrumentId())
 
-    orderBook.activeOrders(Buy).forEachRemaining(event.onPassive)
-    orderBook.activeOrders(Sell).forEachRemaining(event.onPassive)
+    orderBook.activeOrders(Side.BUY).forEachRemaining(event.onPassive)
+    orderBook.activeOrders(Side.SELL).forEachRemaining(event.onPassive)
     event.onComplete(command.instrumentId())
   }
 
@@ -64,15 +64,15 @@ object TradingServiceHandler {
     new OrderBook(instrument, channel)
   }
 
-  def newOrder(command: PlaceOrderCommand, instrument: Instrument): Order = {
+  def newOrder(command: PlaceOrderCommand, instrument: Instrument): trumid.poc.impl.server.demo.book.Order = {
     val order = command.order()
-    val orderId = s"${order.orderId}"
+    val orderId = order.orderId()
     val userId = command.userId()
-    val side = if (order.side().isSell()) Sell else Buy
-    val orderType = if (order.orderType().isLimit()) Limit else Market
+    val side = order.side()
+    val orderType = order.orderType()
     val price = instrument.scale.toPrice(order.price())
     val quantity = order.quantity()
 
-    new Order(userId, orderId, side, orderType, price, quantity)
+    new trumid.poc.impl.server.demo.book.Order(userId, orderId, side, orderType, price, quantity)
   }
 }

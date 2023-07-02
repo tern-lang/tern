@@ -17,4 +17,10 @@ type ExecutionReportEvent {
 
    @Positive
    quantity: Double;
+   fillType: FillType;
+
+   enum FillType {
+      Full,
+      Partial
+   }
 }

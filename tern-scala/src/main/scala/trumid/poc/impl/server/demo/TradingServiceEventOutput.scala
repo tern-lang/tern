@@ -1,6 +1,6 @@
 package trumid.poc.impl.server.demo
 
-import org.agrona.collections.Object2ObjectHashMap
+import org.agrona.collections.Long2ObjectHashMap
 import trumid.poc.common.message._
 import trumid.poc.example.TradingEngineResponsePublisher
 import trumid.poc.impl.server.demo.book._
@@ -9,8 +9,8 @@ import java.util.ArrayDeque
 
 class TradingServiceEventOutput(header: MessageHeader, publisher: Publisher) extends OrderChannel {
   private val client = new TradingEngineResponsePublisher(publisher.consume())
-  private val buys = new Object2ObjectHashMap[String, OrderChange]()
-  private val sells = new Object2ObjectHashMap[String, OrderChange]()
+  private val buys = new Long2ObjectHashMap[OrderChange]()
+  private val sells = new Long2ObjectHashMap[OrderChange]()
   private val fills = new ArrayDeque[Fill]()
 
   def onFill(fill: Fill): Unit = {
@@ -78,6 +78,7 @@ class TradingServiceEventOutput(header: MessageHeader, publisher: Publisher) ext
           _.instrumentId(instrumentId)
             .price(fill.price().toDouble())
             .quantity(fill.quantity())
+            .fillType(fill.fillType())
         )
       })
     }

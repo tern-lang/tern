@@ -7,7 +7,7 @@ import trumid.poc.cluster.ResultCode
 
 trait PlaceOrderCommand {
    def instrumentId(): Int // PrimitiveGenerator
-   def order(): OrderInfo // StructGenerator
+   def order(): Order // StructGenerator
    def time(): Long // PrimitiveGenerator
    def userId(): Int // PrimitiveGenerator
    def validate(): ResultCode

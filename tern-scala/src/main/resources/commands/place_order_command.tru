@@ -8,7 +8,7 @@ type PlaceOrderCommand {
 
    @Positive
    instrumentId: Int;
-   order: OrderInfo;
+   order: Order;
 
    @Positive
    time: Long;
@@ -23,10 +23,10 @@ type PlaceOrderCommand {
       Market
    }
 
-   type OrderInfo {
+   type Order {
 
-      @NotBlank
-      orderId: String;
+      @Positive
+      orderId: Long;
 
       side: Side;
       orderType: OrderType;

@@ -6,8 +6,6 @@ import org.simpleframework.http.socket._
 import org.simpleframework.http.socket.service._
 import org.simpleframework.transport.connect.SocketConnection
 
-import java.io.File
-import java.io.FileInputStream
 import java.net.InetSocketAddress
 
 class WebServer(port: Int, publisher: JsonPublisher) extends Container with Service {

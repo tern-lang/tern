@@ -8,12 +8,11 @@ import trumid.poc.cluster._
 
 object CancelOrderCommandCodec {
    val VERSION: Int = 1
-   val REQUIRED_SIZE: Int = 22
-   val TOTAL_SIZE: Int = 22
+   val REQUIRED_SIZE: Int = 24
+   val TOTAL_SIZE: Int = 24
 }
 
 final class CancelOrderCommandCodec(variable: Boolean = true) extends CancelOrderCommandBuilder with Flyweight[CancelOrderCommandCodec] {
-   private val orderIdCodec: CharArrayCodec = new CharArrayCodec() // (0 * (2 + 2)) + 2 + 4
    private var buffer: ByteBuffer = _
    private var offset: Int = _
    private var length: Int = _
@@ -45,48 +44,42 @@ final class CancelOrderCommandCodec(variable: Boolean = true) extends CancelOrde
       this
    }
 
-   override def orderId(): CharArray = {
-      // PrimitiveArrayGenerator
+   override def orderId(): Long = {
+      // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.orderIdCodec.assign(
-         this.buffer,
-         this.offset + (4 + this.buffer.getByte(this.offset + 4 + 1)),
-         this.length - (4 + this.buffer.getByte(this.offset + 4 + 1))
-      )
+      this.buffer.getLong(this.offset + 4)
    }
 
-   override def orderId(orderId: CharSequence): CancelOrderCommandBuilder = {
-      // PrimitiveArrayGenerator
+   override def orderId(orderId: Long): CancelOrderCommandBuilder = {
+      // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.orderIdCodec.assign(this.buffer, this.offset + 4, this.length - 4)
-            .clear()
-            .append(orderId)
+      this.buffer.setLong(this.offset + 4, orderId)
       this
    }
 
    override def time(): Long = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.getLong(this.offset + 10)
+      this.buffer.getLong(this.offset + 12)
    }
 
    override def time(time: Long): CancelOrderCommandBuilder = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.setLong(this.offset + 10, time)
+      this.buffer.setLong(this.offset + 12, time)
       this
    }
 
    override def userId(): Int = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.getInt(this.offset + 18)
+      this.buffer.getInt(this.offset + 20)
    }
 
    override def userId(userId: Int): CancelOrderCommandBuilder = {
       // PrimitiveGenerator
       this.buffer.setCount(this.offset + this.required);
-      this.buffer.setInt(this.offset + 18, userId)
+      this.buffer.setInt(this.offset + 20, userId)
       this
    }
 
@@ -95,12 +88,10 @@ final class CancelOrderCommandCodec(variable: Boolean = true) extends CancelOrde
    }
 
    override def clear(): CancelOrderCommandCodec = {
-      orderIdCodec.clear()
       this
    }
 
    override def reset(): CancelOrderCommandCodec = {
-      orderIdCodec.reset()
       this
    }
 

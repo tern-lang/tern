@@ -1,6 +1,7 @@
 package trumid.poc.impl.server.demo.book
 
 import org.scalatest._
+import trumid.poc.example.commands.{OrderType, Side}
 
 import scala.collection.mutable
 
@@ -17,8 +18,8 @@ class OrderBookTest extends FlatSpec with Matchers {
     )
 
     val book = new OrderBook(instrument, listener)
-    val buyPassiveOrder = new Order(1, "order-1", Buy, Limit, Price(100.1), 10)
-    val sellAgressiveOrder = new Order(2, "order-2", Sell, Limit, Price(100.1), 10)
+    val buyPassiveOrder = new Order(1, 2, Side.BUY, OrderType.LIMIT, Price(100.1), 10)
+    val sellAgressiveOrder = new Order(2, 2, Side.SELL, OrderType.LIMIT, Price(100.1), 10)
 
     book.placeOrder(buyPassiveOrder)
     book.placeOrder(sellAgressiveOrder)
@@ -37,9 +38,9 @@ class OrderBookTest extends FlatSpec with Matchers {
     )
 
     val book = new OrderBook(instrument, listener)
-    val buyPassiveOrder1 = new Order(1, "order-1", Buy, Limit, Price(100.0), 1)
-    val buyPassiveOrder2 = new Order(2, "order-2", Buy, Limit, Price(90.0), 2)
-    val sellAgressiveOrder = new Order(3, "order-3", Sell, Limit, Price(80), 10)
+    val buyPassiveOrder1 = new Order(1, 1, Side.BUY, OrderType.LIMIT, Price(100.0), 1)
+    val buyPassiveOrder2 = new Order(2, 2, Side.BUY, OrderType.LIMIT, Price(90.0), 2)
+    val sellAgressiveOrder = new Order(3, 3, Side.SELL, OrderType.LIMIT, Price(80), 10)
 
     book.placeOrder(buyPassiveOrder1)
     book.placeOrder(buyPassiveOrder2)
@@ -59,9 +60,9 @@ class OrderBookTest extends FlatSpec with Matchers {
     )
 
     val book = new OrderBook(instrument, listener)
-    val buyPassiveOrder1 = new Order(1, "order-1", Buy, Limit, Price(100.0), 1)
-    val buyPassiveOrder2 = new Order(2, "order-2", Buy, Limit, Price(90.0), 2)
-    val sellAgressiveOrder = new Order(3, "order-3", Sell, Market, Price(80), 10)
+    val buyPassiveOrder1 = new Order(1, 1, Side.BUY, OrderType.LIMIT, Price(100.0), 1)
+    val buyPassiveOrder2 = new Order(2, 2, Side.BUY, OrderType.LIMIT, Price(90.0), 2)
+    val sellAgressiveOrder = new Order(3, 3, Side.SELL, OrderType.MARKET, Price(80), 10)
 
     book.placeOrder(buyPassiveOrder1)
     book.placeOrder(buyPassiveOrder2)
@@ -80,9 +81,9 @@ class OrderBookTest extends FlatSpec with Matchers {
     )
 
     val book = new OrderBook(instrument, listener)
-    val buyPassiveOrder1 = new Order(1, "order-1", Buy, Limit, Price(100.0), 1)
-    val buyPassiveOrder2 = new Order(2, "order-2", Buy, Limit, Price(90.0), 2)
-    val buyPassiveOrder3 = new Order(2, "order-3", Buy, Limit, Price(80.0), 2)
+    val buyPassiveOrder1 = new Order(1, 1, Side.BUY, OrderType.LIMIT, Price(100.0), 1)
+    val buyPassiveOrder2 = new Order(2, 2, Side.BUY, OrderType.LIMIT, Price(90.0), 2)
+    val buyPassiveOrder3 = new Order(2, 3, Side.BUY, OrderType.LIMIT, Price(80.0), 2)
 
     book.placeOrder(buyPassiveOrder1)
     book.placeOrder(buyPassiveOrder2)

@@ -1,6 +1,7 @@
 // Generated (StructValidator)
 package trumid.poc.example.events
 
+import trumid.poc.example.events._
 import trumid.poc.cluster.ResultCode
 
 object ExecutionReportEventValidator {

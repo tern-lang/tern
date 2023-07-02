@@ -12,8 +12,8 @@ object OrderHeap {
 }
 
 class OrderHeap(val comparator: Comparator[Order]) {
-  private val orders = new Object2ObjectHashMap[String, OrderEntry](OrderHeap.DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, true)
-  private val users = new Object2ObjectHashMap[Int, ObjectHashSet[String]](OrderHeap.DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, true)
+  private val orders = new Long2ObjectHashMap[OrderEntry](OrderHeap.DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, true)
+  private val users = new Int2ObjectHashMap[LongHashSet](OrderHeap.DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, true)
   private var queue = new Array[OrderEntry](OrderHeap.DEFAULT_INITIAL_CAPACITY)
   private var count = 0
 
@@ -48,7 +48,7 @@ class OrderHeap(val comparator: Comparator[Order]) {
     }
   }
 
-  def get(orderId: String): Option[Order] = {
+  def get(orderId: Long): Option[Order] = {
     val entry = orders.get(orderId)
 
     if (entry != null) {
@@ -58,7 +58,7 @@ class OrderHeap(val comparator: Comparator[Order]) {
     }
   }
 
-  def remove(orderId: String): Option[Order] = {
+  def remove(orderId: Long): Option[Order] = {
     val entry = orders.remove(orderId)
 
     if (entry != null) {
@@ -84,7 +84,7 @@ class OrderHeap(val comparator: Comparator[Order]) {
     orders(userId).stream().map(orderId => orders.get(orderId).get())
   }
 
-  def contains(orderId: String): Boolean = {
+  def contains(orderId: Long): Boolean = {
     orders.containsKey(orderId)
   }
 
@@ -100,16 +100,21 @@ class OrderHeap(val comparator: Comparator[Order]) {
 
     queue(index) = entry
 
-    if(orders.put(entry.get.orderId, entry) == null) {
+    if (orders.put(entry.get.orderId, entry) == null) {
       orders(entry.get.userId).add(entry.get.orderId)
     }
   }
 
-  private def orders(userId: Int): ObjectHashSet[String] = {
-    users.computeIfAbsent(userId, _ => new ObjectHashSet[String](
-      OrderHeap.DEFAULT_INITIAL_CAPACITY,
-      DEFAULT_LOAD_FACTOR,
-      true))
+  private def orders(userId: Int): LongHashSet = {
+    var orderIds = users.get(userId)
+
+    if (orderIds == null) {
+      orderIds = new LongHashSet(OrderHeap.DEFAULT_INITIAL_CAPACITY,
+        DEFAULT_LOAD_FACTOR,
+        true)
+      users.put(userId, orderIds)
+    }
+    orderIds
   }
 
   private def expandCapacity(): Unit = {

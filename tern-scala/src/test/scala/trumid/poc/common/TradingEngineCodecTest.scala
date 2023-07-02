@@ -19,7 +19,7 @@ object TradingEngineCodecTest extends App {
     .order(order => {
       order.price(11.2)
         .quantity(1000)
-        .orderId("Hello world!")
+        .orderId(111)
     })
 
   if (!codec.isPlaceOrder()) {

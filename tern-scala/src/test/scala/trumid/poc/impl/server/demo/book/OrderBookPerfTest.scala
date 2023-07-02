@@ -1,7 +1,10 @@
 package trumid.poc.impl.server.demo.book
 
 import org.scalatest.{FlatSpec, Matchers}
-
+import trumid.poc.example.commands.{OrderType,Side}
+import trumid.poc.example.events.FillType
+import java.lang.{Long => LongMath}
+import java.util.Comparator
 import java.util.Random
 import java.util.concurrent.TimeUnit
 
@@ -13,20 +16,20 @@ class OrderBookPerfTest extends FlatSpec with Matchers {
 
     book.placeOrder(new Order(
       0,
-      s"order-0",
-      if(random.nextBoolean()) Buy else Sell,
-      Limit,
+      0,
+      if(random.nextBoolean()) Side.BUY else Side.SELL,
+      OrderType.LIMIT,
       Price(random.nextInt(100) + 100), 10))
 
     val start = System.nanoTime()
-    val count = 1000000
+    val count = 2000000
 
     for(i <- 1 to count) {
       book.placeOrder(new Order(
         random.nextInt(100),
-        s"order-${i}",
-        if(random.nextBoolean()) Buy else Sell,
-        Limit,
+        i,
+        if(random.nextBoolean()) Side.BUY else Side.SELL,
+        OrderType.LIMIT,
         Price(random.nextInt(100) + 100), 10))
     }
     val micros = TimeUnit.NANOSECONDS.toMicros(System.nanoTime() - start)

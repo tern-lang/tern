@@ -9,8 +9,8 @@ type CancelOrderCommand {
    @Positive
    instrumentId: Int;
 
-   @NotBlank
-   orderId: String;
+   @Positive
+   orderId: Long;
 
    @Positive
    time: Long;

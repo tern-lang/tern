@@ -1,5 +1,8 @@
 package trumid.poc.impl.server.demo.book
 
+import trumid.poc.example.commands.Side
+import trumid.poc.example.events.FillType
+
 import java.util.Iterator
 
 trait OrderBookImage {
@@ -8,8 +11,8 @@ trait OrderBookImage {
 }
 
 class OrderBook(instrument: Instrument, channel: OrderChannel) {
-  private val buyChain = new OrderChain(channel, Buy, instrument.scale)
-  private val sellChain = new OrderChain(channel, Sell, instrument.scale)
+  private val buyChain = new OrderChain(channel, Side.BUY, instrument.scale)
+  private val sellChain = new OrderChain(channel, Side.SELL, instrument.scale)
 
   def takeSnapshot(image: OrderBookImage): Unit = {
     buyChain.activeOrders.forEachRemaining(image.saveOrder)
@@ -47,7 +50,7 @@ class OrderBook(instrument: Instrument, channel: OrderChannel) {
     }
   }
 
-  def removeOrder(orderId: String): Unit = {
+  def removeOrder(orderId: Long): Unit = {
     buyChain.removeOrder(orderId)
     sellChain.removeOrder(orderId)
   }

@@ -4,14 +4,18 @@ import trumid.poc.common.message.StreamConsumer
 import trumid.poc.example.events.OrderBookUpdateEvent
 import trumid.poc.impl.server.demo.book.PriceScale
 
+import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.{Iterator, Map}
 
 class JsonPublisher(throttle: Long) extends StreamConsumer[OrderBookUpdateEvent] {
-  private val writer = new JsonWriter()
-  private val publisher = new ConflationPublisher[String](throttle, PriceScale.DEFAULT, writer.write)
+  private val publisher = new ConflationPublisher(throttle, PriceScale.DEFAULT)
 
   def onJoin(update: String => Unit) = {
-    publisher.onJoin(update)
+    val worker = new Worker(update)
+
+    worker.start()
+    publisher.onJoin(worker.consume)
   }
 
   override def onUpdate(event: OrderBookUpdateEvent) = {
@@ -24,6 +28,44 @@ class JsonPublisher(throttle: Long) extends StreamConsumer[OrderBookUpdateEvent]
 
   override def onClose() = {
     publisher.onClose()
+  }
+
+  private class Worker(update: String => Unit) extends Runnable {
+    private val messages = new ConcurrentLinkedQueue[OrderBookState]()
+    private val writer = new JsonWriter()
+    private val active = new AtomicBoolean()
+
+    def consume(state: OrderBookState): Unit = {
+      if (active.get()) {
+        messages.offer(state)
+      }
+    }
+
+    def start(): Unit = {
+      if (active.compareAndSet(false, true)) {
+        val thread = new Thread(this)
+
+        thread.setDaemon(true)
+        thread.start()
+      }
+    }
+
+    override def run(): Unit = {
+      try {
+        while (active.get()) {
+          val message = messages.poll()
+
+          if (message != null) {
+            update.apply(writer.write(message))
+          } else {
+            Thread.sleep(100)
+          }
+        }
+      } finally {
+        active.set(false)
+      }
+    }
+
   }
 }
 

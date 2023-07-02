@@ -20,7 +20,7 @@ object Main {
     val throttle = if (args.length > 1) {
       Integer.parseInt(args(1))
     } else {
-      2
+      20
     }
     val source = getClass.getResourceAsStream("/index.html")
 
@@ -42,6 +42,6 @@ object Main {
 
     val tradingBot = new TradingBot(publisher)
 
-    tradingBot.execute(1000000)
+    tradingBot.execute(Integer.MAX_VALUE, throttle)
   }
 }

@@ -17,8 +17,8 @@ type OrderBookUpdateEvent {
 
    type Order {
 
-      @NotBlank
-      orderId: String;
+      @Positive
+      orderId: Long;
 
       @Positive
       price: Double;

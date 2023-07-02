@@ -12,7 +12,7 @@ class OrderBookUpdateEventTest extends FlatSpec with Matchers {
     val reader = new OrderBookUpdateEventCodec(true)
 
     writer.assign(buffer.clear(), 0, 8192).bids(array => {
-      array.add().orderId("order1").price(11).quantity(11)
+      array.add().orderId(1).price(11).quantity(11)
     })
 
     reader.assign(buffer, 0, 8192)
@@ -21,7 +21,7 @@ class OrderBookUpdateEventTest extends FlatSpec with Matchers {
       .iterator().foreach(bid => println(bid.orderId()))
 
     writer.assign(buffer.clear(), 0, 8192).reset().bids(array => {
-      array.add().orderId("order111").price(11).quantity(11)
+      array.add().orderId(111).price(11).quantity(11)
     })
 
     reader.assign(buffer, 0, 8192)

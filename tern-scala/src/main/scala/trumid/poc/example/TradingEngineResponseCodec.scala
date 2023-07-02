@@ -11,8 +11,8 @@ import trumid.poc.cluster._
 
 object TradingEngineResponseCodec {
    val VERSION: Int = 1
-   val REQUIRED_SIZE: Int = 108
-   val TOTAL_SIZE: Int = 108
+   val REQUIRED_SIZE: Int = 109
+   val TOTAL_SIZE: Int = 109
    val HEADER_SIZE: Int = 1
    val CANCEL_ALL_ORDERS_RESPONSE_ID: Byte = 1
    val CANCEL_ORDER_RESPONSE_ID: Byte = 2
@@ -27,7 +27,7 @@ final class TradingEngineResponseCodec(variable: Boolean = true) extends Trading
    private val cancelOrderResponseCodec: CancelOrderResponseCodec = new CancelOrderResponseCodec(variable) // 20
    private val createInstrumentResponseCodec: CreateInstrumentResponseCodec = new CreateInstrumentResponseCodec(variable) // 12
    private val placeOrderResponseCodec: PlaceOrderResponseCodec = new PlaceOrderResponseCodec(variable) // 20
-   private val subscribeExecutionReportResponseCodec: ExecutionReportEventCodec = new ExecutionReportEventCodec(variable) // 20
+   private val subscribeExecutionReportResponseCodec: ExecutionReportEventCodec = new ExecutionReportEventCodec(variable) // 21
    private val subscribeOrderBookResponseCodec: OrderBookUpdateEventCodec = new OrderBookUpdateEventCodec(variable) // 16
    private var buffer: ByteBuffer = _
    private var offset: Int = _

@@ -110,7 +110,6 @@ class CompletionScheduler {
   private class MissingCompletion extends Completion[Any] {
 
     override def complete(value: Any): Completion[Any] = {
-      println("MISSING")
       this
     }
 

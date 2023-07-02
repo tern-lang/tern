@@ -1,6 +1,7 @@
 // Generated (StructValidator)
-package trumid.poc.example.events
+package trumid.poc.example.commands
 
+import trumid.poc.example.commands._
 import trumid.poc.cluster.ResultCode
 
 object OrderValidator {

@@ -26,9 +26,10 @@ class OrderChain(channel: OrderChannel, side: Side, scale: PriceScale) {
         if(aggressiveOrder.quantity > aggressiveOrder.remainingQuantity) {
           val fill = new Fill(
             Partial,
-            aggressiveOrder.side,
+            aggressiveOrder,
             Price(fillPrice / fillQuantity, scale),
-            fillQuantity)
+            fillQuantity,
+            true)
 
           channel.onFill(fill)
         }
@@ -37,9 +38,10 @@ class OrderChain(channel: OrderChannel, side: Side, scale: PriceScale) {
     }
     val fill = new Fill(
       Full,
-      aggressiveOrder.side,
+      aggressiveOrder,
       aggressiveOrder.price,
-      aggressiveOrder.quantity)
+      aggressiveOrder.quantity,
+      true)
 
     channel.onFill(fill)
     fill.fillType()

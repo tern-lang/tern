@@ -2,6 +2,15 @@
 <html>
 <head>
     <style>
+    body {
+        font: normal 13px Verdana, Arial, sans-serif;
+        color: #aaaaaa;
+        background-color: #222222;
+    }
+    .center {
+      margin-left: auto;
+      margin-right: auto;
+    }
     @keyframes redFlash1 {
       0% {
         background-color: red;
@@ -11,20 +20,20 @@
       20% {
         background-color: red;
         color: white;
-        opacity: 0.8;
+        opacity: 0.4;
       }
       40% {
         background-color: red;
         color: white;
-        opacity: 0.6;
+        opacity: 0.3;
       }
       60% {
         background-color: red;
-        opacity: 0.4;
+        opacity: 0.2;
       }
       80% {
         background-color: red;
-        opacity: 0.2;
+        opacity: 0.1;
       }
       100% {
         background-color: red;
@@ -40,20 +49,20 @@
       20% {
         background-color: red;
         color: white;
-        opacity: 0.8;
+        opacity: 0.4;
       }
       40% {
         background-color: red;
         color: white;
-        opacity: 0.6;
+        opacity: 0.3;
       }
       60% {
         background-color: red;
-        opacity: 0.4;
+        opacity: 0.2;
       }
       80% {
         background-color: red;
-        opacity: 0.2;
+        opacity: 0.1;
       }
       100% {
         background-color: red;
@@ -70,20 +79,20 @@
       20% {
         background-color: green;
         color: white;
-        opacity: 0.8;
+        opacity: 0.4;
       }
       40% {
         background-color: green;
         color: white;
-        opacity: 0.6;
+        opacity: 0.3;
       }
       60% {
         background-color: green;
-        opacity: 0.4;
+        opacity: 0.2;
       }
       80% {
         background-color: green;
-        opacity: 0.2;
+        opacity: 0.1;
       }
       100% {
         background-color: green;
@@ -99,20 +108,20 @@
       20% {
         background-color: green;
         color: white;
-        opacity: 0.8;
+        opacity: 0.4;
       }
       40% {
         background-color: green;
         color: white;
-        opacity: 0.6;
+        opacity: 0.3;
       }
       60% {
         background-color: green;
-        opacity: 0.4;
+        opacity: 0.2;
       }
       80% {
         background-color: green;
-        opacity: 0.2;
+        opacity: 0.1;
       }
       100% {
         background-color: green;
@@ -121,24 +130,22 @@
     }
 
     .flashUp1 {
-      animation: greenFlash1 0.11s;
+      animation: greenFlash1 0.1s;
     }
     .flashUp2 {
-      animation: greenFlash2 0.11s;
+      animation: greenFlash2 0.1s;
     }
     .flashDown1 {
-      animation: flashRed1 0.11s;
+      animation: redFlash1 0.1s;
     }
     .flashDown2 {
-      animation: flashRed2 0.11s;
-    }
-    .normal {
+      animation: redFlash2 0.1s;
     }
     </style>
 </head>
 <body>
-
-<table border="0" cellpadding="40">
+<table border="0" cellpadding="40" class="center">
+    <tr><td cellspan="5" id="version"></td></tr>
     <tr>
         <td id="panel-1"></td>
         <td id="panel-2"></td>

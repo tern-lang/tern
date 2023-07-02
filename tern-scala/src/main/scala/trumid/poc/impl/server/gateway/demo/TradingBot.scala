@@ -31,41 +31,40 @@ class TradingBot(publisher: TradingEngineClient) {
 
 
   def execute(count: Int) = {
+    val jsonPublisher = new JsonPublisher(200)
+    val server = new WebServer(4444, jsonPublisher)
+
+    server.start()
+    println("Server started!!!")
+
     for(i <- 1 to 11) {
       Await.result(publisher.createInstrument(_.instrumentId(i).scale(2))
         .call(_ => {
           println("Successfully created instrument")
         }), FiniteDuration(10, TimeUnit.SECONDS))
     }
-
-    val jsonPublisher = new JsonPublisher(100)
-    val server = new WebServer(4444, jsonPublisher)
-
-    server.start()
     publisher.subscribeOrderBook(_.instrumentId(1)).start(jsonPublisher)
     publisher.subscribeExecutionReport(_.instrumentId(1)).start(new ExecutionReportConsumer())
     val random = new java.util.Random()
     for (i: Int <- 1 to count) {
-      val call = publisher.placeOrder(
-        _.userId(random.nextInt(100)) // 100 users
-          .instrumentId(random.nextInt(10) + 1)
-          .time(System.currentTimeMillis())
-          .order(
-            _.price(random.nextInt(50) + 100)
-              .quantity(random.nextInt(50) + 100)
-              .orderId(s"order${i}")
-              .side(if(random.nextBoolean()) Side.BUY else Side.SELL)
-              .orderType(OrderType.LIMIT)))
+      placeOrder(i, random)
 
-
-      if(i % 10 == 0) {
-        Thread.sleep(1)
+      if(i % 20 == 0) {
+        cancelAllOrders(i, random)
       }
-      handle(call)
     }
   }
 
-  private def handle(call: Call[PlaceOrderResponse]) = {
+  private def cancelAllOrders(i: Int, random: java.util.Random): Unit = {
+    val call = publisher.cancelAllOrders(
+      _.userId(random.nextInt(100)) // 100 users
+        .instrumentId(random.nextInt(10) + 1)
+        .time(System.currentTimeMillis()))
+
+
+    if(i % 10 == 0) {
+      Thread.sleep(1)
+    }
     call.call(response => response.time()).onComplete {
       case Success(time) => {
         //println(s"response OK")
@@ -75,4 +74,31 @@ class TradingBot(publisher: TradingEngineClient) {
       }
     }(ExecutionContext.global)
   }
+
+  private def placeOrder(i: Int, random: java.util.Random): Unit = {
+    val call = publisher.placeOrder(
+      _.userId(random.nextInt(100)) // 100 users
+        .instrumentId(random.nextInt(10) + 1)
+        .time(System.currentTimeMillis())
+        .order(
+          _.price(random.nextInt(100) + 2)
+            .quantity(random.nextInt(50) + 2)
+            .orderId(s"order${i}")
+            .side(if(random.nextBoolean()) Side.BUY else Side.SELL)
+            .orderType(OrderType.LIMIT)))
+
+
+    if(i % 100 == 0) {
+      Thread.sleep(1)
+    }
+    call.call(response => response.time()).onComplete {
+      case Success(time) => {
+        //println(s"response OK")
+      }
+      case Failure(cause) => {
+        cause.printStackTrace()
+      }
+    }(ExecutionContext.global)
+  }
+
 }

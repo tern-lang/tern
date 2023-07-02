@@ -9,27 +9,41 @@ import java.util.ArrayDeque
 
 class TradingServiceEventOutput(header: MessageHeader, publisher: Publisher) extends OrderChannel {
   private val client = new TradingEngineResponsePublisher(publisher.consume())
-  private val buys = new Object2ObjectHashMap[String, Order]()
-  private val sells = new Object2ObjectHashMap[String, Order]()
+  private val buys = new Object2ObjectHashMap[String, OrderChange]()
+  private val sells = new Object2ObjectHashMap[String, OrderChange]()
   private val fills = new ArrayDeque[Fill]()
 
   def onFill(fill: Fill): Unit = {
+    if(!fill.isAggressive()) {
+      val order = fill.order()
+      val change = OrderChange(order, -fill.quantity())
+
+      if (order.side().isBuy()) {
+        buys.put(order.orderId(), change)
+      } else {
+        sells.put(order.orderId(), change)
+      }
+    }
     fills.offer(fill)
   }
 
   def onPassive(order: Order): Unit = {
+    val change = OrderChange(order, order.remainingQuantity())
+
     if (order.side().isBuy()) {
-      buys.put(order.orderId(), order)
+      buys.put(order.orderId(), change)
     } else {
-      sells.put(order.orderId(), order)
+      sells.put(order.orderId(), change)
     }
   }
 
   def onCancel(order: Order): Unit = {
+    val change = OrderChange(order, -order.remainingQuantity())
+
     if (order.side().isBuy()) {
-      buys.put(order.orderId(), order.cancel())
+      buys.put(order.orderId(), change)
     } else {
-      sells.put(order.orderId(), order.cancel())
+      sells.put(order.orderId(), change)
     }
   }
 
@@ -43,11 +57,7 @@ class TradingServiceEventOutput(header: MessageHeader, publisher: Publisher) ext
                 .orderId(order.orderId())
                 .price(order.price().toDouble())
                 .quantity(order.quantity())
-                .changeQuantity(if(order.active()) {
-                  order.remainingQuantity()
-                } else {
-                  -order.remainingQuantity()
-                })
+                .changeQuantity(order.changeQuantity())
 
             })
           })
@@ -57,11 +67,7 @@ class TradingServiceEventOutput(header: MessageHeader, publisher: Publisher) ext
                 .orderId(order.orderId())
                 .price(order.price().toDouble())
                 .quantity(order.quantity())
-                .changeQuantity(if(order.active()) {
-                  order.remainingQuantity()
-                } else {
-                  -order.remainingQuantity()
-                })
+                .changeQuantity(order.changeQuantity())
             })
           })
         )

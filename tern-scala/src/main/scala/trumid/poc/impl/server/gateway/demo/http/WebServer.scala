@@ -25,6 +25,7 @@ class WebServer(port: Int, publisher: JsonPublisher) extends Container with Serv
   override def handle(request: Request, response: Response): Unit = {
     val time = System.currentTimeMillis()
 
+    println(request)
     response.setStatus(Status.OK)
     response.setLong(Protocol.DATE, time)
     request.getPath.getPath match {
@@ -47,26 +48,34 @@ class WebServer(port: Int, publisher: JsonPublisher) extends Container with Serv
   }
 
   private def handle(path: String, response: Response) = {
-    val file = new File("C:/Work/development/tern-lang/tern/tern-scala/src/main/resources", path)
-    val source = new FileInputStream(file)
-    //val source = new File(getClass.getResourceAsStream(path)
-    val out = response.getOutputStream()
-
+    //val file = new File("C:/Work/development/tern-lang/tern/tern-scala/src/main/resources", path)
+    //val source = new FileInputStream(file)
     try {
-      var running = true
+      val source = getClass.getResourceAsStream(path)
+      val out = response.getOutputStream(1024)
 
-      while (running) {
-        val octet = source.read()
+      try {
+        var running = true
 
-        if(octet <= -1) {
-          running = false
-        } else {
-          out.write(octet)
+        while (running) {
+          val octet = source.read()
+
+          if (octet <= -1) {
+            running = false
+          } else {
+            out.write(octet)
+          }
         }
+      } finally {
+        source.close()
+        out.close()
       }
-    } finally {
-      source.close()
-      out.close()
+    } catch {
+      case e: Throwable => {
+        val out = response.getPrintStream()
+        e.printStackTrace(out)
+        out.close()
+      }
     }
   }
 }

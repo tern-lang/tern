@@ -39,6 +39,12 @@ class JsonWriter {
       .append(":")
       .append(state.instrumentId)
       .append(",")
+      .append('"')
+      .append("version")
+      .append('"')
+      .append(":")
+      .append(state.version)
+      .append(",")
 
     write("bids", state.bids.entrySet().iterator())
     builder.append(",")

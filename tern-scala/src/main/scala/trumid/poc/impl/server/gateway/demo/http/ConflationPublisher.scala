@@ -118,9 +118,9 @@ class ConflationPublisher[T](throttle: Long, scale: PriceScale, transformer: Ord
       states.put(instrumentId, ConflationPublisher.empty)
       models.put(instrumentId, model)
     }
+    counter.getAndIncrement()
     event.bids().iterator().foreach(order => model.update(Buy, scale.toPrice(order.price()), order.changeQuantity()))
     event.offers().iterator().foreach(order => model.update(Sell, scale.toPrice(order.price()), order.changeQuantity()))
-    counter.getAndIncrement()
   }
 
   override def onFlush() = {
@@ -148,13 +148,14 @@ class ConflationPublisher[T](throttle: Long, scale: PriceScale, transformer: Ord
       next.set(timeMillis + throttle)
       models.forEach((instrumentId, model) => {
         val version = counter.get()
-        val state = states.get(instrumentId)
-        val update = model.difference(version, state)
+        val previous = states.get(instrumentId)
+        val update = model.difference(version, previous)
 
-        if (!update.changes.bids.isEmpty || !update.changes.offers.isEmpty) {
+        states.put(instrumentId, update.current)
+
+        if (!update.changes.bids.isEmpty() || !update.changes.offers.isEmpty()) {
           val message: T = transformer.apply(update.changes)
 
-          states.put(instrumentId, update.current)
           listeners.forEach(listener => {
             try {
               listener.apply(message)

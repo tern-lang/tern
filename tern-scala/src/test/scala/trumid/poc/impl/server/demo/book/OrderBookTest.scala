@@ -95,7 +95,7 @@ class OrderBookTest extends FlatSpec with Matchers {
     private val queue = new mutable.Queue[String]() ++ assertions
 
     override def onFill(fill: Fill): Unit = {
-      val action = s"${fill.fillType} FILL: ${fill.side} ${fill.quantity}@${fill.price}"
+      val action = s"${fill.fillType} FILL: ${fill.order.side} ${fill.quantity}@${fill.price}"
 
       println(action)
       queue.dequeue() shouldBe action

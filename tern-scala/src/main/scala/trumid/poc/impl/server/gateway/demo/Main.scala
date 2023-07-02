@@ -22,6 +22,13 @@ object Main {
     } else {
       2
     }
+    val source = getClass.getResourceAsStream("/index.html")
+
+    if(source == null) {
+      throw new IllegalStateException("Could not find index.html")
+    }
+    Thread.setDefaultUncaughtExceptionHandler((thread, cause) => cause.printStackTrace())
+
     val group = NodeGroup()
     val client = new GatewayLauncher(group, mode).launch(
       handler = new TradingGateway())

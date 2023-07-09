@@ -3,11 +3,6 @@ package org.ternlang.core.type.index;
 import static java.util.Collections.EMPTY_LIST;
 import static org.ternlang.core.function.Origin.PLATFORM;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.ternlang.core.annotation.Annotation;
 import org.ternlang.core.annotation.AnnotationConverter;
 import org.ternlang.core.constraint.Constraint;
@@ -20,6 +15,11 @@ import org.ternlang.core.function.Signature;
 import org.ternlang.core.module.Module;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.type.Type;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SignatureGenerator {
    
@@ -39,9 +39,10 @@ public class SignatureGenerator {
       Constraint[] generics = extractor.extractGenerics(method);
       Constraint[] parameters = extractor.extractParameters(method);
       Object[][] annotations = method.getParameterAnnotations();
+      Alignment alignment = Alignment.resolve(method);
       Scope scope = type.getScope();
       Module module = type.getModule();
-      boolean variable = method.isVarArgs();      
+      boolean variable = alignment.isVariable();
       
       try {
          List<Parameter> signature = new ArrayList<Parameter>();
@@ -81,8 +82,9 @@ public class SignatureGenerator {
    public Signature generate(Type type, Constructor constructor) {
       Constraint[] constraints = extractor.extractParameters(constructor);
       Object[][] annotations = constructor.getParameterAnnotations();
+      Alignment alignment = Alignment.resolve(constructor);
       Module module = type.getModule();
-      boolean variable = constructor.isVarArgs();
+      boolean variable = alignment.isVariable();
       
       try {
          List<Parameter> parameters = new ArrayList<Parameter>();

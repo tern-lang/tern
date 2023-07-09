@@ -1,11 +1,13 @@
 package org.ternlang.tree;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.ternlang.core.Context;
+import org.ternlang.core.error.InternalStateException;
 import org.ternlang.core.type.Type;
 import org.ternlang.core.type.TypeLoader;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class InstructionBuilder {
    
@@ -20,11 +22,13 @@ public class InstructionBuilder {
    public Map<String, Operation> create() throws Exception{
       Map<String, Operation> table = new HashMap<String, Operation>();   
       
-      for(Instruction instruction : reader){
-         Operation operation = create(instruction);
-         String grammar = instruction.getName();
-         
-         table.put(grammar, operation);
+      for(Set<Instruction> instructions : reader){
+         for(Instruction instruction : instructions) {
+            Operation operation = create(instruction);
+            String grammar = instruction.getName();
+
+            table.put(grammar, operation);
+         }
       } 
       return table;
    }
@@ -34,7 +38,10 @@ public class InstructionBuilder {
       String value = instruction.getType();
       Type type = loader.loadType(value);
       String name = instruction.getName();
-      
+
+      if(type == null) {
+         throw new InternalStateException("Instruction '" + name + "' bound to missing type '" + value + "'");
+      }
       return new Operation(type, name);
    }
 }

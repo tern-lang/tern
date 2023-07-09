@@ -12,7 +12,7 @@ public class JvmVersion {
       int index = version.indexOf(".");
 
       if(index != -1) {
-         return Integer.parseInt(version.substring(index));
+         return Integer.parseInt(version.substring(index + 1));
       }
       return Integer.parseInt(version);
    }

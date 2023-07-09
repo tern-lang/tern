@@ -1,5 +1,5 @@
 
-namespace trumid.poc.example.commands;
+namespace trumid.ats.cluster.demo.api.commands;
 
 type CancelOrderCommand {
 

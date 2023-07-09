@@ -3,7 +3,7 @@
   <groupId>org.ternlang</groupId>
   <artifactId>tern-compile</artifactId>
   <packaging>jar</packaging>
-  <version>1.4.6</version>
+  <version>1.4.7</version>
   <url>http://tern-lang.org</url>
   <name>Tern Compiler Framework</name>
   <description>Framework for compiling programs</description>
@@ -30,17 +30,17 @@
     <dependency>
       <groupId>org.ternlang</groupId>
       <artifactId>tern-tree</artifactId>
-      <version>1.4.6</version>
+      <version>1.4.7</version>
     </dependency>  
     <dependency>
       <groupId>org.ternlang</groupId>
       <artifactId>tern-core</artifactId>
-      <version>1.4.6</version>
+      <version>1.4.7</version>
     </dependency>
     <dependency>
       <groupId>org.ternlang</groupId>
       <artifactId>tern-parse</artifactId>
-      <version>1.4.6</version>
+      <version>1.4.7</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

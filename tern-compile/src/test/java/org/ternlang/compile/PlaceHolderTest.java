@@ -44,10 +44,12 @@ public class PlaceHolderTest extends ScriptTestCase {
    "['hello', 'world'].forEach(printf('%s-%s%n', _[0], _[1].toUpperCase()));\n";
 
    public void testPlaceHolder() throws Exception {
-      Compiler compiler = ClassPathCompilerBuilder.createCompiler();
-      Executable executable = compiler.compile(SOURCE_1);
-      System.err.println(SOURCE_1);
-      executable.execute();
+      if(JvmVersion.getVersion() >= 9) {
+         Compiler compiler = ClassPathCompilerBuilder.createCompiler();
+         Executable executable = compiler.compile(SOURCE_1);
+         System.err.println(SOURCE_1);
+         executable.execute();
+      }
    }
 
    public void testPlaceHolderMap() throws Exception {

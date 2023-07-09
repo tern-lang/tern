@@ -1,5 +1,5 @@
 
-namespace trumid.poc.example;
+namespace trumid.ats.cluster.demo.api;
 
 import {CreateInstrumentCommand, CreateInstrumentResponse} from 'commands/create_instrument_command.tru';
 import {PlaceOrderCommand, PlaceOrderResponse} from 'commands/place_order_command.tru';

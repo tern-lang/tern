@@ -4,7 +4,7 @@
   <groupId>org.ternlang</groupId>
   <artifactId>tern-tree</artifactId>
   <packaging>jar</packaging>
-  <version>1.4.6</version>
+  <version>1.4.7</version>
   <url>http://tern-lang.org</url>
   <name>Tern Tree Framework</name>
   <description>Framework for defining the execution tree</description>
@@ -31,12 +31,12 @@
     <dependency>
       <groupId>org.ternlang</groupId>
       <artifactId>tern-core</artifactId>
-      <version>1.4.6</version>
+      <version>1.4.7</version>
     </dependency>
     <dependency>
       <groupId>org.ternlang</groupId>
       <artifactId>tern-parse</artifactId>
-      <version>1.4.6</version>
+      <version>1.4.7</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

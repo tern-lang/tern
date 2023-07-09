@@ -1,7 +1,7 @@
 package trumid.poc.codegen.common
 
-import trumid.poc.cluster.codegen.property.PropertyGeneratorBuilder
-import trumid.poc.cluster.codegen.validate.ValidateAnnotationBuilder
+import trumid.ats.dsl.codgen.cluster.property.PropertyGeneratorBuilder
+import trumid.ats.dsl.codgen.cluster.validate.ValidateAnnotationBuilder
 import trumid.poc.model._
 
 import java.util

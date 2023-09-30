@@ -1,9 +1,5 @@
 package org.ternlang.core.type.extend;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.Callable;
-
 import org.ternlang.common.command.CommandBuilder;
 import org.ternlang.common.command.Console;
 import org.ternlang.core.Context;
@@ -17,6 +13,8 @@ import org.ternlang.core.module.Module;
 import org.ternlang.core.module.ModuleRegistry;
 import org.ternlang.core.scope.Scope;
 import org.ternlang.core.type.TypeLoader;
+
+import java.util.Map;
 
 public class ScopeExtension {
 
@@ -61,32 +59,20 @@ public class ScopeExtension {
       return registry.getModule(name);
    }
    
-   public Iterator<String> exec(Scope scope, String command) throws Exception {
-      Callable<Console> task = builder.create(command);
-      Console console = task.call();
-      
-      return console.iterator();
+   public Console exec(Scope scope, String command) throws Exception {
+      return builder.create(command).call();
    }
    
-   public Iterator<String> exec(Scope scope, String command, String directory) throws Exception {
-      Callable<Console> task = builder.create(command, directory);
-      Console console = task.call();
-      
-      return console.iterator();
+   public Console exec(Scope scope, String command, String directory) throws Exception {
+      return builder.create(command, directory).call();
    }
    
-   public Iterator<String> exec(Scope scope, String command, Map<String, String> environment) throws Exception {
-      Callable<Console> task = builder.create(command, environment);
-      Console console = task.call();
-      
-      return console.iterator();
+   public Console exec(Scope scope, String command, Map<String, String> environment) throws Exception {
+      return builder.create(command, environment).call();
    }
    
-   public Iterator<String> exec(Scope scope, String command, String directory, Map<String, String> environment) throws Exception {
-      Callable<Console> task = builder.create(command, directory, environment);
-      Console console = task.call();
-      
-      return console.iterator();
+   public Console exec(Scope scope, String command, String directory, Map<String, String> environment) throws Exception {
+      return builder.create(command, directory, environment).call();
    }
    
    public void printf(Scope scope, Object value, Object... values)  throws Exception{

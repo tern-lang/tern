@@ -2,6 +2,7 @@ package org.ternlang.common.command;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 public class ProcessCommand implements Command {
@@ -54,11 +55,12 @@ public class ProcessCommand implements Command {
          }
          Process process = builder.start();
          InputStream input = process.getInputStream();
+         OutputStream output = process.getOutputStream();
 
          if (wait) {
             process.waitFor();
          }
-         return new Console(input);
+         return new Console(input, output);
       } catch (Exception e) {
          throw new CommandException("Error executing " + original + " in directory " + path, e);
       }
